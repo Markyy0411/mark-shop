@@ -17,6 +17,11 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
   radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
 
+button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
+    -webkit-tap-highlight-color: transparent; 
+    user-select: none; 
+}
+
 /* HEADER */
 .hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
   border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
@@ -26,8 +31,8 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
 .gcash-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.12);
   border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:3px 12px;margin-top:6px;
-  font-size:.72rem;color:var(--bl);font-weight:500}
-.gcash-pill span{opacity:.7}
+  font-size:.72rem;color:var(--tx);font-weight:500}
+.gcash-pill span{color:var(--bl);font-weight:700}
 
 /* GAME TABS */
 .gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
@@ -54,11 +59,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
 .ctab:hover{border-color:var(--or);color:var(--tx)}
 .ctab.active{background:var(--or);border-color:var(--or);color:#fff;font-weight:600}
-
-/* CATEGORY PANELS */
 .cpanel{display:none}.cpanel.active{display:block}
-
-/* SECTION LABEL */
 .slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;
   text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);
   padding-left:8px;margin-bottom:10px;margin-top:6px}
@@ -92,8 +93,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   letter-spacing:.5px;color:var(--tx)}
 .netcard.active .nn{color:var(--bl)}
 .netcard .nd{font-size:.62rem;color:var(--mx);margin-top:2px}
-
-/* LOAD PROMO PANEL */
 .lpanel{display:none}.lpanel.active{display:block}
 
 /* ORDER FORM */
@@ -117,7 +116,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--or)}
-/* Adjust file input specifically */
 .fg input[type="file"]{padding:6px; cursor:pointer;}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--dk5)}
 .fg textarea{resize:vertical;min-height:65px}
@@ -174,16 +172,17 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
   <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
-  <div class="gcash-pill"><span>💳 GCash</span> 9288978005 <span>· Mark Guevarra</span></div>
+  <!-- UPDATED: Showing multiple payment methods -->
+  <div class="gcash-pill"><span>💳 Accepts:</span> GCash · Maya · PayPal · GoTyme</div>
 </div>
 
 <div class="gtabs" id="gtabs">
-  <div class="gtab active" data-g="mlbb"><span class="ico">🎮</span> MLBB</div>
-  <div class="gtab" data-g="cod"><span class="ico">🎯</span> Garena CoD</div>
-  <div class="gtab" data-g="roblox"><span class="ico">🟥</span> Roblox</div>
-  <div class="gtab" data-g="bs"><span class="ico">🔫</span> Bloodstrike</div>
-  <div class="gtab" data-g="load"><span class="ico">📱</span> Load</div>
-  <div class="gtab custom-tab" data-g="custom"><span class="ico">✏️</span> Custom Order</div>
+  <div class="gtab active" data-g="mlbb" tabindex="0" role="button"><span class="ico">🎮</span> MLBB</div>
+  <div class="gtab" data-g="cod" tabindex="0" role="button"><span class="ico">🎯</span> Garena CoD</div>
+  <div class="gtab" data-g="roblox" tabindex="0" role="button"><span class="ico">🟥</span> Roblox</div>
+  <div class="gtab" data-g="bs" tabindex="0" role="button"><span class="ico">🔫</span> Bloodstrike</div>
+  <div class="gtab" data-g="load" tabindex="0" role="button"><span class="ico">📱</span> Load</div>
+  <div class="gtab custom-tab" data-g="custom" tabindex="0" role="button"><span class="ico">✏️</span> Custom Order</div>
 </div>
 
 <div class="main">
@@ -192,25 +191,24 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
-      <div class="ctab active" data-c="mlbb-dias">💎 Diamonds</div>
-      <div class="ctab" data-c="mlbb-denom">📦 Denom. Dias</div>
-      <div class="ctab" data-c="mlbb-combo">🔢 Combinations</div>
-      <div class="ctab" data-c="mlbb-dd">2x Diamond</div>
-      <div class="ctab" data-c="mlbb-bundles">🎁 Bundles & WDP</div>
-      <div class="ctab" data-c="mlbb-skins">🎨 Skins & Events</div>
-      <div class="ctab" data-c="mlbb-starlight">⭐ Starlight</div>
+      <div class="ctab active" data-c="mlbb-dias" tabindex="0" role="button">💎 Diamonds</div>
+      <div class="ctab" data-c="mlbb-denom" tabindex="0" role="button">📦 Denom. Dias</div>
+      <div class="ctab" data-c="mlbb-combo" tabindex="0" role="button">🔢 Combinations</div>
+      <div class="ctab" data-c="mlbb-dd" tabindex="0" role="button">2x Diamond</div>
+      <div class="ctab" data-c="mlbb-bundles" tabindex="0" role="button">🎁 Bundles & WDP</div>
+      <div class="ctab" data-c="mlbb-skins" tabindex="0" role="button">🎨 Skins & Events</div>
+      <div class="ctab" data-c="mlbb-starlight" tabindex="0" role="button">⭐ Starlight</div>
     </div>
   </div>
 
-  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"></div></div>
-  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds (Single Purchase)</div><div class="pgrid" id="grid-mlbb-denom"></div></div>
-  <div class="cpanel" id="mlbb-combo"><div class="slbl">Diamond Denomination Combinations</div><div class="alert-box">💡 These use multiple denomination purchases to get the exact diamond count at a better price.</div><div class="pgrid" id="grid-mlbb-combo"></div></div>
-  <div class="cpanel" id="mlbb-dd"><div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div><div class="alert-box">💡 During Double Diamond events, you receive 2x the listed diamonds!</div><div class="pgrid" id="grid-mlbb-dd"></div></div>
-  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & Weekly Diamond Pass</div><div class="pgrid" id="grid-mlbb-bundles"></div></div>
-  <div class="cpanel" id="mlbb-skins"><div class="slbl">Shop / Event Skins — CosmoBit Pricing</div><div class="pgrid" id="grid-mlbb-skins-cosmo"></div><div class="slbl">Skin Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"></div></div>
+  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds</div><div class="pgrid" id="grid-mlbb-dias"></div></div>
+  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds</div><div class="pgrid" id="grid-mlbb-denom"></div></div>
+  <div class="cpanel" id="mlbb-combo"><div class="slbl">Combinations</div><div class="pgrid" id="grid-mlbb-combo"></div></div>
+  <div class="cpanel" id="mlbb-dd"><div class="slbl">Double Diamond Tier</div><div class="pgrid" id="grid-mlbb-dd"></div></div>
+  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & WDP</div><div class="pgrid" id="grid-mlbb-bundles"></div></div>
+  <div class="cpanel" id="mlbb-skins"><div class="slbl">Skins</div><div class="pgrid" id="grid-mlbb-skins-cosmo"></div><div class="slbl">Skin Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"></div></div>
   <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes</div><div class="pgrid" id="grid-mlbb-starlight"></div></div>
 
-  <!-- MLBB Order Form -->
   <div class="oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="mlbb-sel-box" style="display:none">
@@ -226,26 +224,46 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="mlbb-zid" placeholder="e.g. 1234 (4-5 digits after your ID)"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="mlbb-ign" placeholder="Your MLBB username"></div>
-    <div class="fg"><label>Server</label>
-      <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
+    <div class="fg"><label>Server / Region <span class="req">*</span></label>
+      <select id="mlbb-server">
+        <option value="Philippines (PH)">Philippines (PH)</option>
+        <option value="Indonesia (ID)">Indonesia (ID)</option>
+        <option value="Malaysia (MY)">Malaysia (MY)</option>
+        <option value="Singapore (SG)">Singapore (SG)</option>
+        <option value="Myanmar (MM)">Myanmar (MM)</option>
+        <option value="Cambodia (KH)">Cambodia (KH)</option>
+        <option value="North America (NA)">North America (NA)</option>
+        <option value="South America (SA)">South America (SA)</option>
+        <option value="Europe (EU)">Europe (EU)</option>
+        <option value="MENA">Middle East / North Africa (MENA)</option>
+        <option value="Other / Global">Other / Global</option>
+      </select></div>
+      
+    <!-- FULLY UPDATED PAYMENT DROPDOWN -->
+    <div class="fg"><label>Pay Via <span class="req">*</span></label>
+      <select id="mlbb-payment">
+        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
+        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
+        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
+        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
+      </select></div>
+
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="mlbb-notes" placeholder="Any special requests or notes..."></textarea></div>
-    
-    <!-- NEW: File Upload -->
     <div class="fg">
-      <label>Payment Screenshot (GCash) <span class="req">*</span></label>
+      <label>Payment Screenshot <span class="req">*</span></label>
       <input type="file" id="mlbb-screenshot" accept="image/*">
     </div>
 
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) before submitting.</div>
+    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
 <!-- ===== GARENA CoD ===== -->
 <div class="gpanel" id="g-cod">
-  <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
+  <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile</div>
   <div class="pgrid" id="grid-cod"></div>
   <div class="oform">
     <h3>📋 Place Order</h3>
@@ -260,18 +278,32 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="cod-pid" placeholder="Your Garena Player ID"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="cod-ign" placeholder="Your IGN"></div>
+    <div class="fg"><label>Server / Region <span class="req">*</span></label>
+      <select id="cod-server">
+        <option value="Philippines (PH)">Philippines (PH)</option>
+        <option value="Singapore / Malaysia (MYSG)">Singapore / Malaysia (MYSG)</option>
+        <option value="Indonesia (ID)">Indonesia (ID)</option>
+        <option value="Taiwan (TW)">Taiwan (TW)</option>
+      </select></div>
+
+    <div class="fg"><label>Pay Via <span class="req">*</span></label>
+      <select id="cod-payment">
+        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
+        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
+        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
+        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
+      </select></div>
+
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
-
-    <!-- NEW: File Upload -->
     <div class="fg">
-      <label>Payment Screenshot (GCash) <span class="req">*</span></label>
+      <label>Payment Screenshot <span class="req">*</span></label>
       <input type="file" id="cod-screenshot" accept="image/*">
     </div>
 
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) before submitting.</div>
+    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
@@ -294,18 +326,25 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
     <div class="fg"><label>Roblox Username <span class="req">*</span></label>
       <input type="text" id="roblox-user" placeholder="Your Roblox username"></div>
+      
+    <div class="fg"><label>Pay Via <span class="req">*</span></label>
+      <select id="roblox-payment">
+        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
+        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
+        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
+        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
+      </select></div>
+
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="roblox-notes" placeholder="Any special requests..."></textarea></div>
-
-    <!-- NEW: File Upload -->
     <div class="fg">
-      <label>Payment Screenshot (GCash) <span class="req">*</span></label>
+      <label>Payment Screenshot <span class="req">*</span></label>
       <input type="file" id="roblox-screenshot" accept="image/*">
     </div>
 
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) before submitting.</div>
+    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
@@ -326,18 +365,33 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="bs-pid" placeholder="Your Bloodstrike Player ID"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
+    <div class="fg"><label>Server / Region <span class="req">*</span></label>
+      <select id="bs-server">
+        <option value="Asia">Asia</option>
+        <option value="North America (NA)">North America (NA)</option>
+        <option value="Latin America (LATAM)">Latin America (LATAM)</option>
+        <option value="Europe (EU)">Europe (EU)</option>
+        <option value="MENA">Middle East / North Africa (MENA)</option>
+      </select></div>
+
+    <div class="fg"><label>Pay Via <span class="req">*</span></label>
+      <select id="bs-payment">
+        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
+        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
+        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
+        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
+      </select></div>
+
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="bs-notes" placeholder="Any special requests..."></textarea></div>
-
-    <!-- NEW: File Upload -->
     <div class="fg">
-      <label>Payment Screenshot (GCash) <span class="req">*</span></label>
+      <label>Payment Screenshot <span class="req">*</span></label>
       <input type="file" id="bs-screenshot" accept="image/*">
     </div>
 
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) before submitting.</div>
+    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
@@ -374,7 +428,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
   </div>
 
-  <!-- Panels remain exactly the same... -->
   <div class="lpanel" id="lp-globe-reg"><div class="slbl">Globe Regular Load</div><div class="pgrid" id="grid-globe-reg"></div></div>
   <div class="lpanel" id="lp-tm-reg"><div class="slbl">TM Regular Load</div><div class="pgrid" id="grid-tm-reg"></div></div>
   <div class="lpanel" id="lp-globe-promo"><div class="slbl">Globe Promo B</div><div class="pgrid" id="grid-globe-promo"></div></div>
@@ -385,7 +438,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <div class="lpanel" id="lp-smart"><div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div></div>
   <div class="lpanel" id="lp-dito"><div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div></div>
 
-  <!-- Load Order Form -->
   <div class="oform">
     <h3>📋 Load Order</h3>
     <div class="sel-box" id="load-sel-box" style="display:none">
@@ -400,24 +452,30 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="fg"><label>Mobile Number <span class="req">*</span></label>
       <input type="tel" id="load-number" placeholder="09XXXXXXXXX (no 0 if using +63)">
       <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check your number — wrong number = lost load</div></div>
+      
+    <div class="fg"><label>Pay Via <span class="req">*</span></label>
+      <select id="load-payment">
+        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
+        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
+        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
+        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
+      </select></div>
+
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="load-notes" placeholder="Any special requests..."></textarea></div>
-      
-    <!-- NEW: File Upload -->
     <div class="fg">
-      <label>Payment Screenshot (GCash) <span class="req">*</span></label>
+      <label>Payment Screenshot <span class="req">*</span></label>
       <input type="file" id="load-screenshot" accept="image/*">
     </div>
 
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) before submitting.</div>
+    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
 <!-- ===== CUSTOM ORDER ===== -->
 <div class="gpanel" id="g-custom">
-
   <div class="custom-hero" style="margin-top:12px">
     <div class="ch-ico">🛎️</div>
     <h2>Custom Order Request</h2>
@@ -486,6 +544,14 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'">
     </div>
 
+    <div class="fg"><label>Preferred Payment Method <span class="req">*</span></label>
+      <select id="custom-payment">
+        <option value="GCash">💳 GCash</option>
+        <option value="Maya">🟣 Maya</option>
+        <option value="PayPal">🔵 PayPal</option>
+        <option value="GoTyme">🏦 GoTyme</option>
+      </select></div>
+
     <div class="fg">
       <label>Additional Notes</label>
       <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea>
@@ -503,11 +569,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
 <!-- SUCCESS (shared) -->
 <div class="ok-msg" id="ok-msg">
-  <div class="ok-ico">✅</div>
-  <h4>ORDER SUBMITTED!</h4>
-  <p>Your order and payment screenshot have been successfully received!<br>
-  Please wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
-  <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
+  <!-- Content updated dynamically by JavaScript -->
 </div>
 
 </div><!-- /main -->
@@ -657,14 +719,13 @@ function selectCC(card){
   document.getElementById('custom-game').value = card.dataset.cc;
 }
 
-// ===================== NEW: SECURITY & VALIDATION RULES =====================
+// ===================== SECURITY & VALIDATION RULES =====================
 const validationRules = {
-  numericOnly: /^\d+$/, // Strictly numbers 0-9
-  robloxUser: /^[a-zA-Z0-9_]{3,20}$/, // Roblox usernames allow letters, numbers, underscores (3-20 chars)
-  phMobile: /^(09|\+639)\d{9}$/ // Must be a valid PH mobile number
+  numericOnly: /^\d+$/,
+  robloxUser: /^[a-zA-Z0-9_]{3,20}$/,
+  phMobile: /^(09|\+639)\d{9}$/
 };
 
-// Protects Formspree emails from malicious HTML injections
 function sanitizeText(str) {
   if (!str) return '';
   const temp = document.createElement('div');
@@ -682,7 +743,6 @@ async function submitOrder(game){
   let missingFields = [];
   let formatErrors = [];
   
-  // Get the uploaded screenshot file
   let screenshotFile = null;
   if(game !== 'custom') {
     screenshotFile = document.getElementById(game+'-screenshot')?.files[0];
@@ -695,6 +755,7 @@ async function submitOrder(game){
     const zid = document.getElementById('mlbb-zid').value.trim();
     const ign = sanitizeText(document.getElementById('mlbb-ign').value.trim());
     const server = document.getElementById('mlbb-server').value;
+    const payment = document.getElementById('mlbb-payment').value;
     const notes = sanitizeText(document.getElementById('mlbb-notes').value.trim());
 
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
@@ -707,12 +768,14 @@ async function submitOrder(game){
     if(!zid) missingFields.push('Zone ID');
     else if(!validationRules.numericOnly.test(zid)) formatErrors.push('Zone ID must be numbers only.');
 
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,paymentMethod:payment,notes};
   
   } else if(game==='cod'){
     const order = document.getElementById('cod-order-display').value;
     const pid = document.getElementById('cod-pid').value.trim();
     const ign = sanitizeText(document.getElementById('cod-ign').value.trim());
+    const server = document.getElementById('cod-server').value;
+    const payment = document.getElementById('cod-payment').value;
     const notes = sanitizeText(document.getElementById('cod-notes').value.trim());
 
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
@@ -722,13 +785,14 @@ async function submitOrder(game){
     if(!pid) missingFields.push('Player ID');
     else if(!validationRules.numericOnly.test(pid)) formatErrors.push('Garena Player ID must be numbers only.');
 
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Garena Call of Duty',order,playerID:pid,ign,server,paymentMethod:payment,notes};
   
   } else if(game==='roblox'){
     const order = document.getElementById('roblox-order-display').value;
     const gpid = sanitizeText(document.getElementById('roblox-gpid').value.trim());
     const gpname = sanitizeText(document.getElementById('roblox-gpname').value.trim());
     const user = document.getElementById('roblox-user').value.trim();
+    const payment = document.getElementById('roblox-payment').value;
     const notes = sanitizeText(document.getElementById('roblox-notes').value.trim());
 
     if(!order||order.includes('Select')) missingFields.push('Robux Amount');
@@ -739,12 +803,14 @@ async function submitOrder(game){
     if(!user) missingFields.push('Roblox Username');
     else if(!validationRules.robloxUser.test(user)) formatErrors.push('Invalid Roblox Username format.');
 
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,paymentMethod:payment,notes};
   
   } else if(game==='bs'){
     const order = document.getElementById('bs-order-display').value;
     const pid = document.getElementById('bs-pid').value.trim();
     const ign = sanitizeText(document.getElementById('bs-ign').value.trim());
+    const server = document.getElementById('bs-server').value;
+    const payment = document.getElementById('bs-payment').value;
     const notes = sanitizeText(document.getElementById('bs-notes').value.trim());
 
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
@@ -754,12 +820,13 @@ async function submitOrder(game){
     if(!pid) missingFields.push('Player ID');
     else if(!validationRules.numericOnly.test(pid)) formatErrors.push('Bloodstrike Player ID must be numbers only.');
 
-    fields={game:'Bloodstrike',order,playerID:pid,ign,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Bloodstrike',order,playerID:pid,ign,server,paymentMethod:payment,notes};
   
   } else if(game==='load'){
     const order = document.getElementById('load-order-display').value;
     const network = document.getElementById('load-network-display').value;
     const number = document.getElementById('load-number').value.trim();
+    const payment = document.getElementById('load-payment').value;
     const notes = sanitizeText(document.getElementById('load-notes').value.trim());
 
     if(!order||order.includes('Select')) missingFields.push('Promo/Load');
@@ -768,7 +835,7 @@ async function submitOrder(game){
     if(!number) missingFields.push('Mobile Number');
     else if(!validationRules.phMobile.test(number)) formatErrors.push('Mobile number must be a valid 11-digit PH number (e.g. 09123456789).');
 
-    fields={game:'Load',order,network,mobileNumber:number,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Load',order,network,mobileNumber:number,paymentMethod:payment,notes};
   
   } else if(game==='custom'){
     const gameField = document.getElementById('custom-game').value.trim();
@@ -777,6 +844,7 @@ async function submitOrder(game){
     const contact = sanitizeText(document.getElementById('custom-contact').value.trim());
     const pid = sanitizeText(document.getElementById('custom-pid').value.trim());
     const budget = sanitizeText(document.getElementById('custom-budget').value.trim());
+    const payment = document.getElementById('custom-payment').value;
     const notes = sanitizeText(document.getElementById('custom-notes').value.trim());
     
     if(!desc) missingFields.push('Order Description');
@@ -784,16 +852,15 @@ async function submitOrder(game){
     if(!contact) missingFields.push('Contact Number / FB Name');
     
     fields={
-      orderType:'🛎️ CUSTOM / UNLISTED ORDER — Needs Personal Handling',
+      orderType:'🛎️ CUSTOM / UNLISTED ORDER',
       game: gameField,
       orderDescription: desc,
       customerName: name,
       contactNumberOrFB: contact,
       playerID_username: pid || 'Not provided',
       budget: budget || 'Not specified',
-      additionalNotes: notes,
-      importantNote:'⚠️ This item/offer was NOT found on the website. Please handle this personally.',
-      gcash:'9288978005 (Mark Guevarra)'
+      preferredPayment: payment,
+      additionalNotes: notes
     };
   }
 
@@ -812,13 +879,11 @@ async function submitOrder(game){
   btn.disabled=true; btn.textContent='Submitting...';
 
   try{
-    // Use FormData to allow file uploads to be sent to Formspree
     const body = new FormData();
     Object.entries(fields).forEach(([k,v])=>{ if(v) body.append(k,v); });
     
-    body.append('_subject', isCustom ? '🛎️ CUSTOM ORDER — Not Listed on Website' : 'New Order — Mark\'s Game Shop');
+    body.append('_subject', isCustom ? '🛎️ CUSTOM ORDER — Not Listed' : 'New Order — Mark\'s Game Shop');
 
-    // Attach the screenshot file if it exists
     if(screenshotFile) {
         body.append('Payment_Screenshot', screenshotFile);
     }
@@ -830,7 +895,10 @@ async function submitOrder(game){
     if(res.ok){
       document.querySelector(`#g-${game}`).style.display='none';
       document.querySelector('.gtabs').style.display='none';
+      
       const ok = document.getElementById('ok-msg');
+      const selectedPayment = document.getElementById(game+'-payment').value;
+
       ok.innerHTML = isCustom ? `
         <div class="ok-ico">🛎️</div>
         <h4 style="color:#a78bfa">CUSTOM REQUEST SENT!</h4>
@@ -838,13 +906,15 @@ async function submitOrder(game){
         He will personally reach out to you at<br>
         <b style="color:#a78bfa">${document.getElementById('custom-contact').value}</b><br>
         to confirm availability and price. Please wait for his reply!</p>
-        <p style="margin-top:8px;font-size:.7rem;color:#7c6fa0">⚠️ Do NOT send payment yet until Mark confirms.</p>
+        <p style="margin-top:8px;font-size:.7rem;color:#7c6fa0">⚠️ You selected <b>${selectedPayment}</b>, but do NOT send payment yet until Mark confirms.</p>
         <button class="btn-sub custom-btn" style="margin-top:14px" onclick="resetAll()">Go Back to Shop</button>
       ` : `
         <div class="ok-ico">✅</div>
         <h4>ORDER SUBMITTED!</h4>
-        <p>Your order and payment screenshot have been successfully received!<br>
-        Please wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
+        <p>Your order and payment screenshot have been successfully received!<br><br>
+        Please ensure your payment was sent to:<br>
+        <b style="color:var(--bl); font-size: 1.1em;">${selectedPayment}</b><br><br>
+        Wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
         <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
       `;
       ok.style.display='block';
@@ -853,14 +923,14 @@ async function submitOrder(game){
       throw new Error('Server error');
     }
   } catch(e){
-    errEl.textContent='❌ Submission failed. Please try again or message Mark directly on GCash 9288978005.';
+    errEl.textContent='❌ Submission failed. Please try again or message Mark directly on GCash.';
     errEl.style.display='block';
     btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
   }
 }
 
 function resetAll(){
-  location.reload(); // Quickest way to clear all selections and file inputs reliably
+  location.reload(); 
 }
 
 buildAll();
