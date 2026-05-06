@@ -6,10 +6,11 @@
 <title>Mark Guevarra | Game Top-Up Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<!-- PWA Manifest & App Icons -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f97316">
 <link rel="apple-touch-icon" href="icon-192.png">
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
 :root{
@@ -177,13 +178,13 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
 
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
-  <div class="hdr-sub">Affordable Top-Ups · Global Servers · Free Attachments</div>
+  <div class="hdr-sub">Affordable Top-Ups · Global Servers · Secure Checkout</div>
   <div class="gcash-pill"><span>💳 Accepts:</span> GCash · Maya · PayPal · GoTyme</div>
 </div>
 
 <div class="gtabs" id="gtabs">
   <div class="gtab active" data-g="mlbb" tabindex="0" role="button"><span class="ico">🎮</span> MLBB</div>
-  <div class="gtab" data-g="cod" tabindex="0" role="button"><span class="ico">🎯</span> CoD</div>
+  <div class="gtab" data-g="cod" tabindex="0" role="button"><span class="ico">🎯</span> Garena CoD</div>
   <div class="gtab" data-g="roblox" tabindex="0" role="button"><span class="ico">🟥</span> Roblox</div>
   <div class="gtab" data-g="bs" tabindex="0" role="button"><span class="ico">🔫</span> Bloodstrike</div>
   <div class="gtab" data-g="load" tabindex="0" role="button"><span class="ico">📱</span> Load</div>
@@ -192,7 +193,6 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
 
 <div class="main">
 
-<!-- ===== MLBB ===== -->
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
@@ -259,13 +259,14 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="file" id="mlbb-screenshot" accept="image/*">
     </div>
 
+    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
+
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
     <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
-<!-- ===== GARENA CoD ===== -->
 <div class="gpanel" id="g-cod">
   <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile</div>
   <div class="pgrid" id="grid-cod"></div>
@@ -305,13 +306,14 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="file" id="cod-screenshot" accept="image/*">
     </div>
 
+    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
+
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
     <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
-<!-- ===== ROBLOX ===== -->
 <div class="gpanel" id="g-roblox">
   <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
   <div class="pgrid" id="grid-roblox"></div>
@@ -346,13 +348,14 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="file" id="roblox-screenshot" accept="image/*">
     </div>
 
+    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
+
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
     <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
-<!-- ===== BLOODSTRIKE ===== -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
   <div class="pgrid" id="grid-bs"></div>
@@ -393,13 +396,14 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="file" id="bs-screenshot" accept="image/*">
     </div>
 
+    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
+
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
     <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
-<!-- ===== LOAD ===== -->
 <div class="gpanel" id="g-load">
   <div class="slbl" style="margin:12px 0 8px">Choose Network / Type</div>
   <div class="netgrid">
@@ -472,13 +476,14 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="file" id="load-screenshot" accept="image/*">
     </div>
 
+    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
+
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
     <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
   </div>
 </div>
 
-<!-- ===== CUSTOM ORDER ===== -->
 <div class="gpanel" id="g-custom">
   <div class="custom-hero" style="margin-top:12px">
     <div class="ch-ico">🛎️</div>
@@ -561,6 +566,8 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea>
     </div>
 
+    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
+
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">
       🛎️ Send Custom Request
     </button>
@@ -571,14 +578,10 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
   </div>
 </div>
 
-<!-- SUCCESS (shared) -->
 <div class="ok-msg" id="ok-msg">
-  <!-- Content updated dynamically by JavaScript -->
-</div>
+  </div>
 
-</div><!-- /main -->
-
-<script>
+</div><script>
 // ===================== DATA =====================
 const DATA = {
   mlbb:{
@@ -868,6 +871,18 @@ async function submitOrder(game){
     };
   }
 
+  // --- RECAPTCHA CAPTURE ---
+  let recaptchaToken = '';
+  document.querySelectorAll('#g-' + game + ' [name="g-recaptcha-response"]').forEach(el => {
+      if(el.value) recaptchaToken = el.value;
+  });
+
+  if (!recaptchaToken) {
+      missingFields.push('reCAPTCHA ("I am not a robot") check');
+  } else {
+      fields.recaptchaToken = recaptchaToken;
+  }
+
   // --- SHOW ERRORS IF VALIDATION FAILED ---
   if(missingFields.length || formatErrors.length){
     let errorHTML = '';
@@ -892,7 +907,7 @@ async function submitOrder(game){
   // Function to process the API call and show the UI
   const processCheckout = async (finalPayload) => {
     
-    // THE GOOGLE SCRIPT URL YOU PROVIDED
+    // YOUR GOOGLE SCRIPT URL
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
 
     try {
@@ -950,6 +965,10 @@ async function submitOrder(game){
       `;
       ok.style.display='block';
       ok.scrollIntoView({behavior:'smooth'});
+
+      // Reset the reCAPTCHA for the next transaction
+      if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+
     } catch(e) {
       errEl.textContent='❌ Submission failed. Please check your internet connection.';
       errEl.style.display='block';
