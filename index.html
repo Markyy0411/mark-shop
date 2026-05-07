@@ -938,7 +938,10 @@ async function submitOrder(game){
             <div><b>Date & Time:</b> <span style="color:var(--tx)">${dateStr}</span></div>
             <div><b>Game / Type:</b> <span style="color:var(--tx)">${fields.game}</span></div>
             <div><b>Order Details:</b> <span style="color:var(--or)">${orderName}</span></div>
-            ${identifier ? `<div><b>Account / ID:</b> <span style="color:var(--tx)">${identifier}</span></div>` : ''}
+            ${fields.ign ? `<div><b>IGN:</b> <span style="color:var(--tx)">${fields.ign}</span></div>` : ''}
+            ${fields.playerID ? `<div><b>Player ID:</b> <span style="color:var(--tx)">${fields.playerID}</span></div>` : ''}
+            ${fields.zoneID ? `<div><b>Zone ID:</b> <span style="color:var(--tx)">${fields.zoneID}</span></div>` : ''}
+            ${fields.mobileNumber ? `<div><b>Mobile Number:</b> <span style="color:var(--tx)">${fields.mobileNumber}</span></div>` : ''}
             <div><b>Pay Via:</b> <span style="color:var(--bl)">${selectedPayment || fields.preferredPayment}</span></div>
           </div>
         </div>
