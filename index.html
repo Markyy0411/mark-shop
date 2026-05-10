@@ -5,13 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mark Guevarra | Game Top-Up Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#f97316">
-<link rel="apple-touch-icon" href="icon-192.png">
-
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
 :root{
   --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
@@ -24,11 +17,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
   radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
 
-button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
-    -webkit-tap-highlight-color: transparent; 
-    user-select: none; 
-}
-
 /* HEADER */
 .hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
   border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
@@ -38,8 +26,8 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
 .hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
 .gcash-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.12);
   border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:3px 12px;margin-top:6px;
-  font-size:.72rem;color:var(--tx);font-weight:500}
-.gcash-pill span{color:var(--bl);font-weight:700}
+  font-size:.72rem;color:var(--bl);font-weight:500}
+.gcash-pill span{opacity:.7}
 
 /* GAME TABS */
 .gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
@@ -66,7 +54,11 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
   color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
 .ctab:hover{border-color:var(--or);color:var(--tx)}
 .ctab.active{background:var(--or);border-color:var(--or);color:#fff;font-weight:600}
+
+/* CATEGORY PANELS */
 .cpanel{display:none}.cpanel.active{display:block}
+
+/* SECTION LABEL */
 .slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;
   text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);
   padding-left:8px;margin-bottom:10px;margin-top:6px}
@@ -100,6 +92,8 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
   letter-spacing:.5px;color:var(--tx)}
 .netcard.active .nn{color:var(--bl)}
 .netcard .nd{font-size:.62rem;color:var(--mx);margin-top:2px}
+
+/* LOAD PROMO PANEL */
 .lpanel{display:none}.lpanel.active{display:block}
 
 /* ORDER FORM */
@@ -123,7 +117,6 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
 .fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--or)}
-.fg input[type="file"]{padding:6px; cursor:pointer;}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--dk5)}
 .fg textarea{resize:vertical;min-height:65px}
 .fg select option{background:var(--dk3);color:var(--tx)}
@@ -178,42 +171,82 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
 
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
-  <div class="hdr-sub">Affordable Top-Ups · Global Servers · Secure Checkout</div>
-  <div class="gcash-pill"><span>💳 Accepts:</span> GCash · Maya · PayPal · GoTyme</div>
+  <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
+  <div class="gcash-pill"><span>💳 GCash</span> 9288978005 <span>· Mark Guevarra</span></div>
 </div>
 
 <div class="gtabs" id="gtabs">
-  <div class="gtab active" data-g="mlbb" tabindex="0" role="button"><span class="ico">🎮</span> MLBB</div>
-  <div class="gtab" data-g="cod" tabindex="0" role="button"><span class="ico">🎯</span> Garena CoD</div>
-  <div class="gtab" data-g="roblox" tabindex="0" role="button"><span class="ico">🟥</span> Roblox</div>
-  <div class="gtab" data-g="bs" tabindex="0" role="button"><span class="ico">🔫</span> Bloodstrike</div>
-  <div class="gtab" data-g="load" tabindex="0" role="button"><span class="ico">📱</span> Load</div>
-  <div class="gtab custom-tab" data-g="custom" tabindex="0" role="button"><span class="ico">✏️</span> Custom Order</div>
+  <div class="gtab active" data-g="mlbb"><span class="ico">🎮</span> MLBB</div>
+  <div class="gtab" data-g="cod"><span class="ico">🎯</span> Garena CoD</div>
+  <div class="gtab" data-g="roblox"><span class="ico">🟥</span> Roblox</div>
+  <div class="gtab" data-g="bs"><span class="ico">🔫</span> Bloodstrike</div>
+  <div class="gtab" data-g="load"><span class="ico">📱</span> Load</div>
+  <div class="gtab custom-tab" data-g="custom"><span class="ico">✏️</span> Custom Order</div>
 </div>
 
 <div class="main">
 
+<!-- ===== MLBB ===== -->
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
-      <div class="ctab active" data-c="mlbb-dias" tabindex="0" role="button">💎 Diamonds</div>
-      <div class="ctab" data-c="mlbb-denom" tabindex="0" role="button">📦 Denom. Dias</div>
-      <div class="ctab" data-c="mlbb-combo" tabindex="0" role="button">🔢 Combinations</div>
-      <div class="ctab" data-c="mlbb-dd" tabindex="0" role="button">2x Diamond</div>
-      <div class="ctab" data-c="mlbb-bundles" tabindex="0" role="button">🎁 Bundles & WDP</div>
-      <div class="ctab" data-c="mlbb-skins" tabindex="0" role="button">🎨 Skins & Events</div>
-      <div class="ctab" data-c="mlbb-starlight" tabindex="0" role="button">⭐ Starlight</div>
+      <div class="ctab active" data-c="mlbb-dias">💎 Diamonds</div>
+      <div class="ctab" data-c="mlbb-denom">📦 Denom. Dias</div>
+      <div class="ctab" data-c="mlbb-combo">🔢 Combinations</div>
+      <div class="ctab" data-c="mlbb-dd">2x Diamond</div>
+      <div class="ctab" data-c="mlbb-bundles">🎁 Bundles & WDP</div>
+      <div class="ctab" data-c="mlbb-skins">🎨 Skins & Events</div>
+      <div class="ctab" data-c="mlbb-starlight">⭐ Starlight</div>
     </div>
   </div>
 
-  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds</div><div class="pgrid" id="grid-mlbb-dias"></div></div>
-  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds</div><div class="pgrid" id="grid-mlbb-denom"></div></div>
-  <div class="cpanel" id="mlbb-combo"><div class="slbl">Combinations</div><div class="pgrid" id="grid-mlbb-combo"></div></div>
-  <div class="cpanel" id="mlbb-dd"><div class="slbl">Double Diamond Tier</div><div class="pgrid" id="grid-mlbb-dd"></div></div>
-  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & WDP</div><div class="pgrid" id="grid-mlbb-bundles"></div></div>
-  <div class="cpanel" id="mlbb-skins"><div class="slbl">Skins</div><div class="pgrid" id="grid-mlbb-skins-cosmo"></div><div class="slbl">Skin Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"></div></div>
-  <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes</div><div class="pgrid" id="grid-mlbb-starlight"></div></div>
+  <!-- Diamonds -->
+  <div class="cpanel active" id="mlbb-dias">
+    <div class="slbl">Direct Top-Up Diamonds (PH Server)</div>
+    <div class="pgrid" id="grid-mlbb-dias"></div>
+  </div>
 
+  <!-- Denomination Diamonds -->
+  <div class="cpanel" id="mlbb-denom">
+    <div class="slbl">Denomination Diamonds (Single Purchase)</div>
+    <div class="pgrid" id="grid-mlbb-denom"></div>
+  </div>
+
+  <!-- Combinations -->
+  <div class="cpanel" id="mlbb-combo">
+    <div class="slbl">Diamond Denomination Combinations</div>
+    <div class="alert-box">💡 These use multiple denomination purchases to get the exact diamond count at a better price.</div>
+    <div class="pgrid" id="grid-mlbb-combo"></div>
+  </div>
+
+  <!-- Double Diamond -->
+  <div class="cpanel" id="mlbb-dd">
+    <div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div>
+    <div class="alert-box">💡 During Double Diamond events, you receive 2x the listed diamonds!</div>
+    <div class="pgrid" id="grid-mlbb-dd"></div>
+  </div>
+
+  <!-- Bundles & WDP -->
+  <div class="cpanel" id="mlbb-bundles">
+    <div class="slbl">Bundles & Weekly Diamond Pass</div>
+    <div class="pgrid" id="grid-mlbb-bundles"></div>
+  </div>
+
+  <!-- Skins & Events -->
+  <div class="cpanel" id="mlbb-skins">
+    <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div>
+    <div class="pgrid" id="grid-mlbb-skins-cosmo"></div>
+    <div class="slbl">Skin Direct Purchase Pricing</div>
+    <div class="pgrid" id="grid-mlbb-skins-direct"></div>
+  </div>
+
+  <!-- Starlight -->
+  <div class="cpanel" id="mlbb-starlight">
+    <div class="slbl">Starlight Passes</div>
+    <div class="pgrid" id="grid-mlbb-starlight"></div>
+  </div>
+
+  <!-- MLBB Order Form -->
   <div class="oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="mlbb-sel-box" style="display:none">
@@ -229,46 +262,19 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="text" id="mlbb-zid" placeholder="e.g. 1234 (4-5 digits after your ID)"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="mlbb-ign" placeholder="Your MLBB username"></div>
-    <div class="fg"><label>Server / Region <span class="req">*</span></label>
-      <select id="mlbb-server">
-        <option value="Philippines (PH)">Philippines (PH)</option>
-        <option value="Indonesia (ID)">Indonesia (ID)</option>
-        <option value="Malaysia (MY)">Malaysia (MY)</option>
-        <option value="Singapore (SG)">Singapore (SG)</option>
-        <option value="Myanmar (MM)">Myanmar (MM)</option>
-        <option value="Cambodia (KH)">Cambodia (KH)</option>
-        <option value="North America (NA)">North America (NA)</option>
-        <option value="South America (SA)">South America (SA)</option>
-        <option value="Europe (EU)">Europe (EU)</option>
-        <option value="MENA">Middle East / North Africa (MENA)</option>
-        <option value="Other / Global">Other / Global</option>
-      </select></div>
-      
-    <div class="fg"><label>Pay Via <span class="req">*</span></label>
-      <select id="mlbb-payment">
-        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
-        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
-        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
-        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
-      </select></div>
-
+    <div class="fg"><label>Server</label>
+      <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="mlbb-notes" placeholder="Any special requests or notes..."></textarea></div>
-    <div class="fg">
-      <label>Payment Screenshot <span class="req">*</span></label>
-      <input type="file" id="mlbb-screenshot" accept="image/*">
-    </div>
-
-    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
-
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
-    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
+    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting. Include screenshot in notes if possible.</div>
   </div>
 </div>
 
+<!-- ===== GARENA CoD ===== -->
 <div class="gpanel" id="g-cod">
-  <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile</div>
+  <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
   <div class="pgrid" id="grid-cod"></div>
   <div class="oform">
     <h3>📋 Place Order</h3>
@@ -283,37 +289,15 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="text" id="cod-pid" placeholder="Your Garena Player ID"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="cod-ign" placeholder="Your IGN"></div>
-    <div class="fg"><label>Server / Region <span class="req">*</span></label>
-      <select id="cod-server">
-        <option value="Philippines (PH)">Philippines (PH)</option>
-        <option value="Singapore / Malaysia (MYSG)">Singapore / Malaysia (MYSG)</option>
-        <option value="Indonesia (ID)">Indonesia (ID)</option>
-        <option value="Taiwan (TW)">Taiwan (TW)</option>
-      </select></div>
-
-    <div class="fg"><label>Pay Via <span class="req">*</span></label>
-      <select id="cod-payment">
-        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
-        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
-        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
-        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
-      </select></div>
-
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
-    <div class="fg">
-      <label>Payment Screenshot <span class="req">*</span></label>
-      <input type="file" id="cod-screenshot" accept="image/*">
-    </div>
-
-    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
-
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
-    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
+    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
+<!-- ===== ROBLOX ===== -->
 <div class="gpanel" id="g-roblox">
   <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
   <div class="pgrid" id="grid-roblox"></div>
@@ -332,30 +316,15 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
     <div class="fg"><label>Roblox Username <span class="req">*</span></label>
       <input type="text" id="roblox-user" placeholder="Your Roblox username"></div>
-      
-    <div class="fg"><label>Pay Via <span class="req">*</span></label>
-      <select id="roblox-payment">
-        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
-        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
-        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
-        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
-      </select></div>
-
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="roblox-notes" placeholder="Any special requests..."></textarea></div>
-    <div class="fg">
-      <label>Payment Screenshot <span class="req">*</span></label>
-      <input type="file" id="roblox-screenshot" accept="image/*">
-    </div>
-
-    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
-
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
-    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
+    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
+<!-- ===== BLOODSTRIKE ===== -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
   <div class="pgrid" id="grid-bs"></div>
@@ -372,38 +341,15 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="text" id="bs-pid" placeholder="Your Bloodstrike Player ID"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
-    <div class="fg"><label>Server / Region <span class="req">*</span></label>
-      <select id="bs-server">
-        <option value="Asia">Asia</option>
-        <option value="North America (NA)">North America (NA)</option>
-        <option value="Latin America (LATAM)">Latin America (LATAM)</option>
-        <option value="Europe (EU)">Europe (EU)</option>
-        <option value="MENA">Middle East / North Africa (MENA)</option>
-      </select></div>
-
-    <div class="fg"><label>Pay Via <span class="req">*</span></label>
-      <select id="bs-payment">
-        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
-        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
-        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
-        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
-      </select></div>
-
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="bs-notes" placeholder="Any special requests..."></textarea></div>
-    <div class="fg">
-      <label>Payment Screenshot <span class="req">*</span></label>
-      <input type="file" id="bs-screenshot" accept="image/*">
-    </div>
-
-    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
-
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
-    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
+    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
+<!-- ===== LOAD ===== -->
 <div class="gpanel" id="g-load">
   <div class="slbl" style="margin:12px 0 8px">Choose Network / Type</div>
   <div class="netgrid">
@@ -436,16 +382,50 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
     </div>
   </div>
 
-  <div class="lpanel" id="lp-globe-reg"><div class="slbl">Globe Regular Load</div><div class="pgrid" id="grid-globe-reg"></div></div>
-  <div class="lpanel" id="lp-tm-reg"><div class="slbl">TM Regular Load</div><div class="pgrid" id="grid-tm-reg"></div></div>
-  <div class="lpanel" id="lp-globe-promo"><div class="slbl">Globe Promo B</div><div class="pgrid" id="grid-globe-promo"></div></div>
-  <div class="lpanel" id="lp-homesurf"><div class="slbl">Fr WiFi / Home Surf</div><div class="pgrid" id="grid-homesurf"></div></div>
-  <div class="lpanel" id="lp-famsurf"><div class="slbl">FamSurf Plans</div><div class="pgrid" id="grid-famsurf"></div></div>
-  <div class="lpanel" id="lp-tm-promo"><div class="slbl">TM Promo & ALL-NET</div><div class="pgrid" id="grid-tm-promo"></div></div>
-  <div class="lpanel" id="lp-gfiber"><div class="slbl">GFiber Prepaid</div><div class="pgrid" id="grid-gfiber"></div></div>
-  <div class="lpanel" id="lp-smart"><div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div></div>
-  <div class="lpanel" id="lp-dito"><div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div></div>
+  <!-- Globe Regular -->
+  <div class="lpanel" id="lp-globe-reg">
+    <div class="slbl">Globe Regular Load</div>
+    <div class="pgrid" id="grid-globe-reg"></div>
+  </div>
+  <!-- TM Regular -->
+  <div class="lpanel" id="lp-tm-reg">
+    <div class="slbl">TM Regular Load</div>
+    <div class="pgrid" id="grid-tm-reg"></div>
+  </div>
+  <!-- Globe Promo B -->
+  <div class="lpanel" id="lp-globe-promo">
+    <div class="slbl">Globe Promo B</div>
+    <div class="pgrid" id="grid-globe-promo"></div>
+  </div>
+  <!-- HomeSurf -->
+  <div class="lpanel" id="lp-homesurf">
+    <div class="slbl">Fr WiFi / Home Surf</div>
+    <div class="pgrid" id="grid-homesurf"></div>
+  </div>
+  <!-- FamSurf -->
+  <div class="lpanel" id="lp-famsurf">
+    <div class="slbl">FamSurf Plans</div>
+    <div class="pgrid" id="grid-famsurf"></div>
+  </div>
+  <!-- TM Promo & ALL-NET -->
+  <div class="lpanel" id="lp-tm-promo">
+    <div class="slbl">TM Promo & ALL-NET</div>
+    <div class="pgrid" id="grid-tm-promo"></div>
+  </div>
+  <!-- GFiber -->
+  <div class="lpanel" id="lp-gfiber">
+    <div class="slbl">GFiber Prepaid</div>
+    <div class="pgrid" id="grid-gfiber"></div>
+  </div>
+  <!-- Smart/DITO -->
+  <div class="lpanel" id="lp-smart">
+    <div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div>
+  </div>
+  <div class="lpanel" id="lp-dito">
+    <div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div>
+  </div>
 
+  <!-- Load Order Form -->
   <div class="oform">
     <h3>📋 Load Order</h3>
     <div class="sel-box" id="load-sel-box" style="display:none">
@@ -460,31 +440,17 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
     <div class="fg"><label>Mobile Number <span class="req">*</span></label>
       <input type="tel" id="load-number" placeholder="09XXXXXXXXX (no 0 if using +63)">
       <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check your number — wrong number = lost load</div></div>
-      
-    <div class="fg"><label>Pay Via <span class="req">*</span></label>
-      <select id="load-payment">
-        <option value="GCash (0928 897 8005 - Mark Guevarra)">💳 GCash (0928 897 8005 - Mark Guevarra)</option>
-        <option value="Maya (0928 897 8005 - Mark Angel Guevarra)">🟣 Maya (0928 897 8005 - Mark Angel G.)</option>
-        <option value="PayPal (marcangelguevarra@gmail.com)">🔵 PayPal (marcangelguevarra@gmail.com)</option>
-        <option value="GoTyme (0143 6865 8424 - Mark Guevarra)">🏦 GoTyme (0143 6865 8424 - Mark Guevarra)</option>
-      </select></div>
-
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="load-notes" placeholder="Any special requests..."></textarea></div>
-    <div class="fg">
-      <label>Payment Screenshot <span class="req">*</span></label>
-      <input type="file" id="load-screenshot" accept="image/*">
-    </div>
-
-    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
-
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
-    <div class="notice">⚠️ Send your payment to your <b>selected method</b> before submitting.</div>
+    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
+<!-- ===== CUSTOM ORDER ===== -->
 <div class="gpanel" id="g-custom">
+
   <div class="custom-hero" style="margin-top:12px">
     <div class="ch-ico">🛎️</div>
     <h2>Custom Order Request</h2>
@@ -530,7 +496,7 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
     <div class="fg">
       <label>What exactly do you want? <span class="req">*</span></label>
       <textarea id="custom-desc" rows="4"
-        placeholder="e.g. 'I want the Kagura Zodiac skin from the current event' or 'I need 570 diamonds but want to use a different method'..."></textarea>
+        placeholder="Example format:&#10;Monthly Starlight (NSL) — June 2026&#10;Quantity: 1&#10;&#10;Or: Monthly Starlight (NSL) — July 2026&#10;Quantity: 2"></textarea>
     </div>
 
     <div class="fg">
@@ -553,20 +519,10 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
       <input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'">
     </div>
 
-    <div class="fg"><label>Preferred Payment Method <span class="req">*</span></label>
-      <select id="custom-payment">
-        <option value="GCash">💳 GCash</option>
-        <option value="Maya">🟣 Maya</option>
-        <option value="PayPal">🔵 PayPal</option>
-        <option value="GoTyme">🏦 GoTyme</option>
-      </select></div>
-
     <div class="fg">
       <label>Additional Notes</label>
       <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea>
     </div>
-
-    <div class="fg g-recaptcha" data-sitekey="6LenwtwsAAAAAHpx4XKAA71yOTLOaZfUoAcbXWf9" style="margin-bottom:15px;"></div>
 
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">
       🛎️ Send Custom Request
@@ -578,36 +534,165 @@ button, .gtab, .ctab, .pcard, .netcard, .custom-cat {
   </div>
 </div>
 
+<!-- SUCCESS (shared) -->
 <div class="ok-msg" id="ok-msg">
-  </div>
+  <div class="ok-ico">✅</div>
+  <h4>ORDER SUBMITTED!</h4>
+  <p>Your order has been received. Please send your GCash payment to<br>
+  <b style="color:var(--bl)">9288978005 (Mark Guevarra)</b><br>
+  and wait for confirmation. Thank you! 🎮</p>
+  <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
+</div>
 
-</div><script>
+</div><!-- /main -->
+
+<script>
 // ===================== DATA =====================
+
 const DATA = {
   mlbb:{
-    dias:[ {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:20},{n:"56 Diamonds",p:50}, {n:"112 Diamonds",p:100},{n:"168 Diamonds",p:150},{n:"225 Diamonds",p:205}, {n:"278 Diamonds",p:255},{n:"301 Diamonds",p:275},{n:"338 Diamonds",p:305}, {n:"448 Diamonds",p:410},{n:"570 Diamonds",p:510},{n:"626 Diamonds",p:570}, {n:"682 Diamonds",p:620},{n:"738 Diamonds",p:670},{n:"749 Diamonds",p:660}, {n:"785 Diamonds",p:720},{n:"946 Diamonds",p:860},{n:"1018 Diamonds",p:920}, {n:"1163 Diamonds",p:1050},{n:"1733 Diamonds",p:1550},{n:"2398 Diamonds",p:2150}, {n:"3581 Diamonds",p:3150},{n:"4131 Diamonds",p:3700}, {n:"6132 Diamonds",p:4500},{n:"8042 Diamonds",p:5200} ],
-    denom:[ {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:21},{n:"56 Diamonds",p:51}, {n:"112 Diamonds",p:100},{n:"223 Diamonds",p:200},{n:"336 Diamonds",p:300}, {n:"570 Diamonds",p:495},{n:"1163 Diamonds",p:985}, {n:"2398 Diamonds",p:1960},{n:"5942 Diamonds",p:4900} ],
-    combo:[ {n:"168 Diamonds",d:"112 + 56",p:152},{n:"279 Diamonds",d:"223 + 56",p:250}, {n:"301 Diamonds",d:"223 + 56 + 22",p:270},{n:"448 Diamonds",d:"336 + 112",p:395}, {n:"626 Diamonds",d:"570 + 56",p:545},{n:"682 Diamonds",d:"570 + 112",p:595}, {n:"738 Diamonds",d:"570 + 112 + 56",p:645},{n:"749 Diamonds",d:"570 + 112 + 56 + 22",p:665}, {n:"793 Diamonds",d:"570 + 223",p:695},{n:"849 Diamonds",d:"570 + 223 + 56",p:745}, {n:"906 Diamonds",d:"570 + 336",p:795},{n:"1018 Diamonds",d:"570 + 336 + 112",p:890}, {n:"1733 Diamonds",d:"1163 + 570",p:1475},{n:"3561 Diamonds",d:"2398 + 1163",p:2950}, {n:"4131 Diamonds",d:"2398 + 1163 + 570",p:3450},{n:"5132 Diamonds",d:"2398×2 + 336",p:4250} ],
-    dd:[ {n:"50 & 50 Bonus",d:"= 100 Total Diamonds",p:65}, {n:"150 & 150 Bonus",d:"= 300 Total Diamonds",p:200}, {n:"250 & 250 Bonus",d:"= 500 Total Diamonds",p:350}, {n:"500 & 500 Bonus",d:"= 1000 Total Diamonds",p:650}, {n:"Starlight (Monthly)",d:"During Double Diamond",p:160} ],
-    bundles:[ {n:"Weekly Diamond Pass",d:"220 Dias/7 Days + Perks (WDP)",p:98}, {n:"Weekly Elite Bundle",d:"55 Dias + 20 CoA + Rare Frags",p:70}, {n:"Monthly Epic Bundle",d:"275 Dias + 180 CoA + Rare Frags",p:300}, {n:"Twilight Pass",d:"Progressive Tickets + Exclusive Skins",p:500} ],
-    skinsC:[ {n:"1089 Dia Skin",d:"Shop/Event — CosmoBit",p:590}, {n:"888–879 Dia Skin",d:"Shop/Event — CosmoBit",p:480}, {n:"782 Dia Skin",d:"Shop/Event — CosmoBit",p:380}, {n:"748–729 Dia Skin",d:"Shop/Event — CosmoBit",p:370}, {n:"649 Dia Skin",d:"Shop/Event — CosmoBit",p:325}, {n:"828–688 Dia Skin",d:"Shop/Event — CosmoBit",p:310}, {n:"386 Dia Skin",d:"Shop/Event — CosmoBit",p:195}, {n:"288–269 Dia Skin",d:"Shop/Event — CosmoBit",p:155}, {n:"Emote (109 Dias)",d:"In-Game Emote",p:65}, {n:"Emote (78 Dias)",d:"In-Game Emote",p:50} ],
-    skinsD:[ {n:"1089 Dia Skin",d:"Direct Purchase",p:680}, {n:"899–879 Dia Skin",d:"Direct Purchase",p:550}, {n:"782 Dia Skin",d:"Direct Purchase",p:440}, {n:"749–729 Dia Skin",d:"Direct Purchase",p:430}, {n:"649 Dia Skin",d:"Direct Purchase",p:380}, {n:"629–599 Dia Skin",d:"Direct Purchase",p:360}, {n:"399 Dia Skin",d:"Direct Purchase",p:230}, {n:"299–269 Dia Skin",d:"Direct Purchase",p:180}, {n:"Painted Skins",d:"Direct Purchase",p:120} ],
-    starlight:[ {n:"Normal Starlight (NSL)",d:"Current Month",p:160}, {n:"Premium Starlight (PSL)",d:"Current Month",p:320}, {n:"Normal Starlight — Table 6",d:"Alternative Rate",p:180}, {n:"Premium Starlight — Table 6",d:"Alternative Rate",p:360}, {n:"Normal Starlight (March)",d:"Month-Specific",p:145}, {n:"Premium Starlight (March)",d:"Month-Specific",p:290}, {n:"Normal Starlight (April)",d:"Month-Specific",p:145}, {n:"Premium Starlight (April)",d:"Month-Specific",p:290} ]
+    dias:[
+      {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:20},{n:"56 Diamonds",p:50},
+      {n:"112 Diamonds",p:100},{n:"168 Diamonds",p:150},{n:"225 Diamonds",p:205},
+      {n:"278 Diamonds",p:255},{n:"301 Diamonds",p:275},{n:"338 Diamonds",p:305},
+      {n:"448 Diamonds",p:410},{n:"570 Diamonds",p:510},{n:"626 Diamonds",p:570},
+      {n:"682 Diamonds",p:620},{n:"738 Diamonds",p:670},{n:"749 Diamonds",p:660},
+      {n:"785 Diamonds",p:720},{n:"946 Diamonds",p:860},{n:"1018 Diamonds",p:920},
+      {n:"1163 Diamonds",p:1050},{n:"1733 Diamonds",p:1550},{n:"2398 Diamonds",p:2150},
+      {n:"3581 Diamonds",p:3150},{n:"4131 Diamonds",p:3700},
+      {n:"6132 Diamonds",p:4500},{n:"8042 Diamonds",p:5200}
+    ],
+    denom:[
+      {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:21},{n:"56 Diamonds",p:51},
+      {n:"112 Diamonds",p:100},{n:"223 Diamonds",p:200},{n:"336 Diamonds",p:300},
+      {n:"570 Diamonds",p:495},{n:"1163 Diamonds",p:985},
+      {n:"2398 Diamonds",p:1960},{n:"5942 Diamonds",p:4900}
+    ],
+    combo:[
+      {n:"168 Diamonds",d:"112 + 56",p:152},{n:"279 Diamonds",d:"223 + 56",p:250},
+      {n:"301 Diamonds",d:"223 + 56 + 22",p:270},{n:"448 Diamonds",d:"336 + 112",p:395},
+      {n:"626 Diamonds",d:"570 + 56",p:545},{n:"682 Diamonds",d:"570 + 112",p:595},
+      {n:"738 Diamonds",d:"570 + 112 + 56",p:645},{n:"749 Diamonds",d:"570 + 112 + 56 + 22",p:665},
+      {n:"793 Diamonds",d:"570 + 223",p:695},{n:"849 Diamonds",d:"570 + 223 + 56",p:745},
+      {n:"906 Diamonds",d:"570 + 336",p:795},{n:"1018 Diamonds",d:"570 + 336 + 112",p:890},
+      {n:"1733 Diamonds",d:"1163 + 570",p:1475},{n:"3561 Diamonds",d:"2398 + 1163",p:2950},
+      {n:"4131 Diamonds",d:"2398 + 1163 + 570",p:3450},{n:"5132 Diamonds",d:"2398×2 + 336",p:4250}
+    ],
+    dd:[
+      {n:"50 & 50 Bonus",d:"= 100 Total Diamonds",p:65},
+      {n:"150 & 150 Bonus",d:"= 300 Total Diamonds",p:200},
+      {n:"250 & 250 Bonus",d:"= 500 Total Diamonds",p:350},
+      {n:"500 & 500 Bonus",d:"= 1000 Total Diamonds",p:650},
+      {n:"Starlight (Monthly)",d:"During Double Diamond",p:160}
+    ],
+    bundles:[
+      {n:"Weekly Diamond Pass",d:"220 Dias/7 Days + Perks (WDP)",p:98},
+      {n:"Weekly Elite Bundle",d:"55 Dias + 20 CoA + Rare Frags",p:70},
+      {n:"Monthly Epic Bundle",d:"275 Dias + 180 CoA + Rare Frags",p:300},
+      {n:"Twilight Pass",d:"Progressive Tickets + Exclusive Skins",p:500}
+    ],
+    skinsC:[
+      {n:"1089 Dia Skin",d:"Shop/Event — CosmoBit",p:590},
+      {n:"888–879 Dia Skin",d:"Shop/Event — CosmoBit",p:480},
+      {n:"782 Dia Skin",d:"Shop/Event — CosmoBit",p:380},
+      {n:"748–729 Dia Skin",d:"Shop/Event — CosmoBit",p:370},
+      {n:"649 Dia Skin",d:"Shop/Event — CosmoBit",p:325},
+      {n:"828–688 Dia Skin",d:"Shop/Event — CosmoBit",p:310},
+      {n:"386 Dia Skin",d:"Shop/Event — CosmoBit",p:195},
+      {n:"288–269 Dia Skin",d:"Shop/Event — CosmoBit",p:155},
+      {n:"Emote (109 Dias)",d:"In-Game Emote",p:65},
+      {n:"Emote (78 Dias)",d:"In-Game Emote",p:50}
+    ],
+    skinsD:[
+      {n:"1089 Dia Skin",d:"Direct Purchase",p:680},
+      {n:"899–879 Dia Skin",d:"Direct Purchase",p:550},
+      {n:"782 Dia Skin",d:"Direct Purchase",p:440},
+      {n:"749–729 Dia Skin",d:"Direct Purchase",p:430},
+      {n:"649 Dia Skin",d:"Direct Purchase",p:380},
+      {n:"629–599 Dia Skin",d:"Direct Purchase",p:360},
+      {n:"399 Dia Skin",d:"Direct Purchase",p:230},
+      {n:"299–269 Dia Skin",d:"Direct Purchase",p:180},
+      {n:"Painted Skins",d:"Direct Purchase",p:120}
+    ],
+    starlight:[
+      {n:"Normal Starlight (NSL)",d:"Current Month",p:160},
+      {n:"Premium Starlight (PSL)",d:"Current Month",p:320},
+      {n:"Normal Starlight — Table 6",d:"Alternative Rate",p:180},
+      {n:"Premium Starlight — Table 6",d:"Alternative Rate",p:360},
+      {n:"Normal Starlight (March)",d:"Month-Specific",p:145},
+      {n:"Premium Starlight (March)",d:"Month-Specific",p:290},
+      {n:"Normal Starlight (April)",d:"Month-Specific",p:145},
+      {n:"Premium Starlight (April)",d:"Month-Specific",p:290}
+    ]
   },
-  cod:[ {n:"10 Garena Shells",p:13},{n:"20 Garena Shells",p:24},{n:"50 Garena Shells",p:55}, {n:"100 Garena Shells",p:100},{n:"200 Garena Shells",p:200},{n:"300 Garena Shells",p:300}, {n:"500 Garena Shells",p:500},{n:"1000 Garena Shells",p:1000} ],
-  roblox:[ {n:"100 Robux",p:65},{n:"200 Robux",p:115},{n:"300 Robux",p:165}, {n:"400 Robux",p:215},{n:"500 Robux",p:250},{n:"600 Robux",p:295}, {n:"700 Robux",p:340},{n:"800 Robux",p:390},{n:"900 Robux",p:435}, {n:"1000 Robux",p:480} ],
-  bs:[ {n:"100 + 5 Golds",p:45},{n:"300 + 20 Golds",p:130},{n:"500 + 40 Golds",p:218}, {n:"600 + 45 Golds",p:260},{n:"800 + 60 Golds",p:344},{n:"1000 + 100 Golds",p:437}, {n:"1200 + 110 Golds",p:520},{n:"1500 + 140 Golds",p:655}, {n:"2000 + 260 Golds",p:884},{n:"2500 + 300 Golds",p:1144}, {n:"3000 + 360 Golds",p:1302},{n:"4000 + 520 Golds",p:1868}, {n:"5000 + 800 Golds",p:2387} ],
+  cod:[
+    {n:"10 Garena Shells",p:13},{n:"20 Garena Shells",p:24},{n:"50 Garena Shells",p:55},
+    {n:"100 Garena Shells",p:100},{n:"200 Garena Shells",p:200},{n:"300 Garena Shells",p:300},
+    {n:"500 Garena Shells",p:500},{n:"1000 Garena Shells",p:1000}
+  ],
+  roblox:[
+    {n:"100 Robux",p:65},{n:"200 Robux",p:115},{n:"300 Robux",p:165},
+    {n:"400 Robux",p:215},{n:"500 Robux",p:250},{n:"600 Robux",p:295},
+    {n:"700 Robux",p:340},{n:"800 Robux",p:390},{n:"900 Robux",p:435},
+    {n:"1000 Robux",p:480}
+  ],
+  bs:[
+    {n:"100 + 5 Golds",p:45},{n:"300 + 20 Golds",p:130},{n:"500 + 40 Golds",p:218},
+    {n:"600 + 45 Golds",p:260},{n:"800 + 60 Golds",p:344},{n:"1000 + 100 Golds",p:437},
+    {n:"1200 + 110 Golds",p:520},{n:"1500 + 140 Golds",p:655},
+    {n:"2000 + 260 Golds",p:884},{n:"2500 + 300 Golds",p:1144},
+    {n:"3000 + 360 Golds",p:1302},{n:"4000 + 520 Golds",p:1868},
+    {n:"5000 + 800 Golds",p:2387}
+  ],
   load:{
-    "globe-reg":{net:"Globe (Regular)",items:[ {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36}, {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180}, {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435} ]},
-    "tm-reg":{net:"TM (Regular)",items:[ {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36}, {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180}, {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435} ]},
-    "globe-promo":{net:"Globe Promo B",items:[ {n:"UnliS680",p:70},{n:"GO59",p:53},{n:"GO59 (Students)",p:53}, {n:"UnliGO99 (FB/TikTok/IG)",p:89},{n:"Go+99",p:90},{n:"Go+109",p:99}, {n:"Go+120",p:109},{n:"Go+149",p:135},{n:"Go+179",p:162}, {n:"GoExtra59",p:54},{n:"GoExtra89",p:80},{n:"GoExtra109",p:96}, {n:"GoExtra179",p:162},{n:"GoExtra199",p:179}, {n:"Surf4all09",p:8},{n:"Surf4all249",p:217}, {n:"GOUNLI20",p:19},{n:"GOUNLI30",p:28},{n:"GOUNLI50",p:45}, {n:"GOUNLI95",p:86},{n:"GOUNLI180",p:165},{n:"GOUNLI350",p:307} ]},
-    "homesurf":{net:"Fr WiFi / Home Surf",items:[ {n:"HomeSurf50",p:46},{n:"HomeSurf199",p:178}, {n:"HomeSurf599",p:519},{n:"HomeSurf1489",p:1264} ]},
-    "famsurf":{net:"FamSurf",items:[ {n:"FamSurf50",p:45},{n:"FamSurf198",p:178}, {n:"FamSurf299",p:264},{n:"FamSurf998",p:568} ]},
-    "tm-promo":{net:"TM Promo & ALL-NET",items:[ {n:"SURF20",p:19},{n:"ALL-NET SURF30",p:28},{n:"AN20",p:19}, {n:"BigBenta",p:19},{n:"Combo10",p:8},{n:"Combo15",p:14}, {n:"Combo20",p:19},{n:"PowerSurf20",p:19},{n:"PowerSurf59",p:56}, {n:"FEML16",p:15},{n:"EZ50",p:46},{n:"EZ70",p:62}, {n:"EZ98",p:88},{n:"EZ110",p:98},{n:"EZ76",p:66}, {n:"EZ140",p:129},{n:"EZ299",p:264},{n:"EZ589",p:519}, {n:"SurfBest69",p:57},{n:"SurfBest249",p:215}, {n:"AllSurf59",p:56},{n:"AllSurf110",p:96}, {n:"AllSurf149",p:128},{n:"EasyPlan168",p:148},{n:"EasyPlan350",p:295} ]},
-    "gfiber":{net:"GFiber Prepaid",items:[ {n:"UnliSurf249",p:221},{n:"UnliSurf299",p:265}, {n:"UnliSurf699",p:619},{n:"UnliSurf999",p:869}, {n:"UnliSurf1499",p:1284} ]}
+    "globe-reg":{net:"Globe (Regular)",items:[
+      {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36},
+      {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180},
+      {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435}
+    ]},
+    "tm-reg":{net:"TM (Regular)",items:[
+      {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36},
+      {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180},
+      {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435}
+    ]},
+    "globe-promo":{net:"Globe Promo B",items:[
+      {n:"UnliS680",p:70},{n:"GO59",p:53},{n:"GO59 (Students)",p:53},
+      {n:"UnliGO99 (FB/TikTok/IG)",p:89},{n:"Go+99",p:90},{n:"Go+109",p:99},
+      {n:"Go+120",p:109},{n:"Go+149",p:135},{n:"Go+179",p:162},
+      {n:"GoExtra59",p:54},{n:"GoExtra89",p:80},{n:"GoExtra109",p:96},
+      {n:"GoExtra179",p:162},{n:"GoExtra199",p:179},
+      {n:"Surf4all09",p:8},{n:"Surf4all249",p:217},
+      {n:"GOUNLI20",p:19},{n:"GOUNLI30",p:28},{n:"GOUNLI50",p:45},
+      {n:"GOUNLI95",p:86},{n:"GOUNLI180",p:165},{n:"GOUNLI350",p:307}
+    ]},
+    "homesurf":{net:"Fr WiFi / Home Surf",items:[
+      {n:"HomeSurf50",p:46},{n:"HomeSurf199",p:178},
+      {n:"HomeSurf599",p:519},{n:"HomeSurf1489",p:1264}
+    ]},
+    "famsurf":{net:"FamSurf",items:[
+      {n:"FamSurf50",p:45},{n:"FamSurf198",p:178},
+      {n:"FamSurf299",p:264},{n:"FamSurf998",p:568}
+    ]},
+    "tm-promo":{net:"TM Promo & ALL-NET",items:[
+      {n:"SURF20",p:19},{n:"ALL-NET SURF30",p:28},{n:"AN20",p:19},
+      {n:"BigBenta",p:19},{n:"Combo10",p:8},{n:"Combo15",p:14},
+      {n:"Combo20",p:19},{n:"PowerSurf20",p:19},{n:"PowerSurf59",p:56},
+      {n:"FEML16",p:15},{n:"EZ50",p:46},{n:"EZ70",p:62},
+      {n:"EZ98",p:88},{n:"EZ110",p:98},{n:"EZ76",p:66},
+      {n:"EZ140",p:129},{n:"EZ299",p:264},{n:"EZ589",p:519},
+      {n:"SurfBest69",p:57},{n:"SurfBest249",p:215},
+      {n:"AllSurf59",p:56},{n:"AllSurf110",p:96},
+      {n:"AllSurf149",p:128},{n:"EasyPlan168",p:148},{n:"EasyPlan350",p:295}
+    ]},
+    "gfiber":{net:"GFiber Prepaid",items:[
+      {n:"UnliSurf249",p:221},{n:"UnliSurf299",p:265},
+      {n:"UnliSurf699",p:619},{n:"UnliSurf999",p:869},
+      {n:"UnliSurf1499",p:1284}
+    ]}
   }
 };
 
+// ===================== STATE =====================
 let selected = {game:null, item:null, price:null, network:null};
 
 // ===================== RENDER GRIDS =====================
@@ -644,11 +729,15 @@ function buildAll(){
   makeGrid('grid-cod', DATA.cod,'cod','main');
   makeGrid('grid-roblox', DATA.roblox,'roblox','main');
   makeGrid('grid-bs', DATA.bs,'bs','main');
-  Object.keys(DATA.load).forEach(net=>{ makeGrid('grid-'+net, DATA.load[net].items,'load',net); });
+  // Load grids
+  Object.keys(DATA.load).forEach(net=>{
+    makeGrid('grid-'+net, DATA.load[net].items,'load',net);
+  });
 }
 
 // ===================== SELECTION =====================
 function selectItem(card, game){
+  // Deselect all in same game
   document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
   card.classList.add('sel');
   const name = card.dataset.name;
@@ -685,6 +774,7 @@ function selectItem(card, game){
     document.getElementById('load-network-display').value=netName;
     selected.network=netName;
   }
+  // Scroll to form
   setTimeout(()=>{
     const formId = game==='load'?'load':'mlbb'===game?'mlbb':game;
     const form = document.querySelector(`#g-${game} .oform`);
@@ -692,7 +782,7 @@ function selectItem(card, game){
   },100);
 }
 
-// UI TABS Logic
+// ===================== GAME TABS =====================
 document.querySelectorAll('.gtab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
@@ -703,6 +793,7 @@ document.querySelectorAll('.gtab').forEach(t=>{
   });
 });
 
+// ===================== MLBB CATEGORY TABS =====================
 document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('#mlbb-ctabs .ctab').forEach(x=>x.classList.remove('active'));
@@ -712,6 +803,7 @@ document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>{
   });
 });
 
+// ===================== NETWORK SELECT =====================
 function selectNet(card, netKey){
   document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active'));
   card.classList.add('active');
@@ -720,176 +812,105 @@ function selectNet(card, netKey){
   if(panel) panel.classList.add('active');
 }
 
+// ===================== CUSTOM CATEGORY =====================
 function selectCC(card){
   document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
   card.classList.add('active');
   document.getElementById('custom-game').value = card.dataset.cc;
 }
 
-// ===================== SECURITY & VALIDATION RULES =====================
-const validationRules = {
-  numericOnly: /^\d+$/,
-  robloxUser: /^[a-zA-Z0-9_]{3,20}$/,
-  phMobile: /^(09|\+639)\d{9}$/
-};
-
-function sanitizeText(str) {
-  if (!str) return '';
-  const temp = document.createElement('div');
-  temp.textContent = str;
-  return temp.innerHTML;
-}
-
-// ===================== SUBMIT ORDER =====================
+// ===================== SUBMIT =====================
 async function submitOrder(game){
   const btn = document.getElementById(game+'-btn');
   const errEl = document.getElementById(game+'-err');
   errEl.style.display='none';
 
   let fields = {};
+  let valid = true;
   let missingFields = [];
-  let formatErrors = [];
-  
-  let screenshotFile = null;
-  if(game !== 'custom') {
-    screenshotFile = document.getElementById(game+'-screenshot')?.files[0];
-  }
 
-  // --- VALIDATION BY GAME ---
   if(game==='mlbb'){
     const order = document.getElementById('mlbb-order-display').value;
     const pid = document.getElementById('mlbb-pid').value.trim();
     const zid = document.getElementById('mlbb-zid').value.trim();
-    const ign = sanitizeText(document.getElementById('mlbb-ign').value.trim());
+    const ign = document.getElementById('mlbb-ign').value.trim();
     const server = document.getElementById('mlbb-server').value;
-    const payment = document.getElementById('mlbb-payment').value;
-    const notes = sanitizeText(document.getElementById('mlbb-notes').value.trim());
-
+    const notes = document.getElementById('mlbb-notes').value.trim();
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!ign) missingFields.push('IGN');
-    if(!screenshotFile) missingFields.push('Payment Screenshot');
-
     if(!pid) missingFields.push('Player ID');
-    else if(!validationRules.numericOnly.test(pid)) formatErrors.push('Player ID must be numbers only.');
-
     if(!zid) missingFields.push('Zone ID');
-    else if(!validationRules.numericOnly.test(zid)) formatErrors.push('Zone ID must be numbers only.');
-
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,paymentMethod:payment,notes};
-  
+    if(!ign) missingFields.push('IGN');
+    if(missingFields.length){valid=false;}
+    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes,gcash:'9288978005 (Mark Guevarra)'};
   } else if(game==='cod'){
     const order = document.getElementById('cod-order-display').value;
     const pid = document.getElementById('cod-pid').value.trim();
-    const ign = sanitizeText(document.getElementById('cod-ign').value.trim());
-    const server = document.getElementById('cod-server').value;
-    const payment = document.getElementById('cod-payment').value;
-    const notes = sanitizeText(document.getElementById('cod-notes').value.trim());
-
+    const ign = document.getElementById('cod-ign').value.trim();
+    const notes = document.getElementById('cod-notes').value.trim();
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!ign) missingFields.push('IGN');
-    if(!screenshotFile) missingFields.push('Payment Screenshot');
-
     if(!pid) missingFields.push('Player ID');
-    else if(!validationRules.numericOnly.test(pid)) formatErrors.push('Garena Player ID must be numbers only.');
-
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,server,paymentMethod:payment,notes};
-  
+    if(!ign) missingFields.push('IGN');
+    if(missingFields.length){valid=false;}
+    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes,gcash:'9288978005 (Mark Guevarra)'};
   } else if(game==='roblox'){
     const order = document.getElementById('roblox-order-display').value;
-    const gpid = sanitizeText(document.getElementById('roblox-gpid').value.trim());
-    const gpname = sanitizeText(document.getElementById('roblox-gpname').value.trim());
+    const gpid = document.getElementById('roblox-gpid').value.trim();
+    const gpname = document.getElementById('roblox-gpname').value.trim();
     const user = document.getElementById('roblox-user').value.trim();
-    const payment = document.getElementById('roblox-payment').value;
-    const notes = sanitizeText(document.getElementById('roblox-notes').value.trim());
-
+    const notes = document.getElementById('roblox-notes').value.trim();
     if(!order||order.includes('Select')) missingFields.push('Robux Amount');
     if(!gpid) missingFields.push('Gamepass ID');
     if(!gpname) missingFields.push('Gamepass Name');
-    if(!screenshotFile) missingFields.push('Payment Screenshot');
-
     if(!user) missingFields.push('Roblox Username');
-    else if(!validationRules.robloxUser.test(user)) formatErrors.push('Invalid Roblox Username format.');
-
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,paymentMethod:payment,notes};
-  
+    if(missingFields.length){valid=false;}
+    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes,gcash:'9288978005 (Mark Guevarra)'};
   } else if(game==='bs'){
     const order = document.getElementById('bs-order-display').value;
     const pid = document.getElementById('bs-pid').value.trim();
-    const ign = sanitizeText(document.getElementById('bs-ign').value.trim());
-    const server = document.getElementById('bs-server').value;
-    const payment = document.getElementById('bs-payment').value;
-    const notes = sanitizeText(document.getElementById('bs-notes').value.trim());
-
+    const ign = document.getElementById('bs-ign').value.trim();
+    const notes = document.getElementById('bs-notes').value.trim();
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!ign) missingFields.push('IGN');
-    if(!screenshotFile) missingFields.push('Payment Screenshot');
-
     if(!pid) missingFields.push('Player ID');
-    else if(!validationRules.numericOnly.test(pid)) formatErrors.push('Bloodstrike Player ID must be numbers only.');
-
-    fields={game:'Bloodstrike',order,playerID:pid,ign,server,paymentMethod:payment,notes};
-  
+    if(!ign) missingFields.push('IGN');
+    if(missingFields.length){valid=false;}
+    fields={game:'Bloodstrike',order,playerID:pid,ign,notes,gcash:'9288978005 (Mark Guevarra)'};
   } else if(game==='load'){
     const order = document.getElementById('load-order-display').value;
     const network = document.getElementById('load-network-display').value;
     const number = document.getElementById('load-number').value.trim();
-    const payment = document.getElementById('load-payment').value;
-    const notes = sanitizeText(document.getElementById('load-notes').value.trim());
-
+    const notes = document.getElementById('load-notes').value.trim();
     if(!order||order.includes('Select')) missingFields.push('Promo/Load');
-    if(!screenshotFile) missingFields.push('Payment Screenshot');
-
     if(!number) missingFields.push('Mobile Number');
-    else if(!validationRules.phMobile.test(number)) formatErrors.push('Mobile number must be a valid 11-digit PH number (e.g. 09123456789).');
-
-    fields={game:'Load',order,network,mobileNumber:number,paymentMethod:payment,notes};
-  
+    if(missingFields.length){valid=false;}
+    fields={game:'Load',order,network,mobileNumber:number,notes,gcash:'9288978005 (Mark Guevarra)'};
   } else if(game==='custom'){
     const gameField = document.getElementById('custom-game').value.trim();
-    const desc = sanitizeText(document.getElementById('custom-desc').value.trim());
-    const name = sanitizeText(document.getElementById('custom-name').value.trim());
-    const contact = sanitizeText(document.getElementById('custom-contact').value.trim());
-    const pid = sanitizeText(document.getElementById('custom-pid').value.trim());
-    const budget = sanitizeText(document.getElementById('custom-budget').value.trim());
-    const payment = document.getElementById('custom-payment').value;
-    const notes = sanitizeText(document.getElementById('custom-notes').value.trim());
-    
+    const desc = document.getElementById('custom-desc').value.trim();
+    const name = document.getElementById('custom-name').value.trim();
+    const contact = document.getElementById('custom-contact').value.trim();
+    const pid = document.getElementById('custom-pid').value.trim();
+    const budget = document.getElementById('custom-budget').value.trim();
+    const notes = document.getElementById('custom-notes').value.trim();
     if(!desc) missingFields.push('Order Description');
     if(!name) missingFields.push('Your Name');
     if(!contact) missingFields.push('Contact Number / FB Name');
-    
+    if(missingFields.length){valid=false;}
     fields={
-      orderType:'🛎️ CUSTOM / UNLISTED ORDER',
+      orderType:'🛎️ CUSTOM / UNLISTED ORDER — Needs Personal Handling',
       game: gameField,
       orderDescription: desc,
       customerName: name,
       contactNumberOrFB: contact,
       playerID_username: pid || 'Not provided',
       budget: budget || 'Not specified',
-      preferredPayment: payment,
-      additionalNotes: notes
+      additionalNotes: notes,
+      importantNote:'⚠️ This item/offer was NOT found on the website. Please handle this personally.',
+      gcash:'9288978005 (Mark Guevarra)'
     };
   }
 
-  // --- RECAPTCHA CAPTURE ---
-  let recaptchaToken = '';
-  document.querySelectorAll('#g-' + game + ' [name="g-recaptcha-response"]').forEach(el => {
-      if(el.value) recaptchaToken = el.value;
-  });
-
-  if (!recaptchaToken) {
-      missingFields.push('reCAPTCHA ("I am not a robot") check');
-  } else {
-      fields.recaptchaToken = recaptchaToken;
-  }
-
-  // --- SHOW ERRORS IF VALIDATION FAILED ---
-  if(missingFields.length || formatErrors.length){
-    let errorHTML = '';
-    if (missingFields.length) errorHTML += '⚠️ Missing: ' + missingFields.join(', ') + '<br>';
-    if (formatErrors.length) errorHTML += '🛑 ' + formatErrors.join('<br>🛑 ');
-    
-    errEl.innerHTML = errorHTML;
+  if(!valid){
+    errEl.textContent='⚠️ Please fill in: '+missingFields.join(', ');
     errEl.style.display='block';
     return;
   }
@@ -897,123 +918,538 @@ async function submitOrder(game){
   const isCustom = game==='custom';
   btn.disabled=true; btn.textContent='Submitting...';
 
-  // --- GENERATE RECEIPT DATA ---
-  const txnId = 'TXN-' + Math.random().toString(36).substring(2, 9).toUpperCase(); 
-  const dateStr = new Date().toLocaleString('en-PH'); 
+  try{
+    const body = new FormData();
+    Object.entries(fields).forEach(([k,v])=>{ if(v) body.append(k,v); });
+    body.append('_subject', isCustom
+      ? '🛎️ CUSTOM ORDER — Not Listed on Website'
+      : 'New Order — Mark\'s Game Shop');
 
-  fields.transactionID = txnId;
-  fields.dateTime = dateStr;
+    const res = await fetch('https://formspree.io/f/mjglrepo',{
+      method:'POST', body, headers:{Accept:'application/json'}
+    });
 
-  // Function to process the API call and show the UI
-  const processCheckout = async (finalPayload) => {
-    
-    // YOUR GOOGLE SCRIPT URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
-
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', 
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(finalPayload)
-      });
-
+    if(res.ok){
       document.querySelector(`#g-${game}`).style.display='none';
       document.querySelector('.gtabs').style.display='none';
-      
       const ok = document.getElementById('ok-msg');
-      const selectedPayment = document.getElementById(game+'-payment').value;
-
-      const orderName = isCustom ? fields.orderDescription : fields.order;
-      const identifier = fields.playerID || fields.mobileNumber || fields.username || fields.playerID_username;
-
-      // --- NEW: DETAILED RECEIPT HTML TEMPLATE ---
-      const receiptHTML = `
-        <div style="background:var(--dk2); border:1px dashed var(--bdr); border-radius:8px; padding:15px; margin:15px 0; text-align:left;">
-          <h5 style="color:var(--tx); margin-bottom:10px; border-bottom:1px solid var(--bdr); padding-bottom:5px; font-family:'Rajdhani',sans-serif; font-size:1.1rem; letter-spacing:1px;">
-            🧾 TRANSACTION RECEIPT
-          </h5>
-          <div style="font-size:0.85rem; color:var(--mx); line-height:1.8;">
-            <div><b>Transaction ID:</b> <span style="color:#fbbf24">${txnId}</span></div>
-            <div><b>Date & Time:</b> <span style="color:var(--tx)">${dateStr}</span></div>
-            <div><b>Game / Type:</b> <span style="color:var(--tx)">${fields.game}</span></div>
-            <div><b>Order Details:</b> <span style="color:var(--or)">${orderName}</span></div>
-            ${fields.ign ? `<div><b>IGN:</b> <span style="color:var(--tx)">${fields.ign}</span></div>` : ''}
-            ${fields.playerID ? `<div><b>Player ID:</b> <span style="color:var(--tx)">${fields.playerID}</span></div>` : ''}
-            ${fields.zoneID ? `<div><b>Zone ID:</b> <span style="color:var(--tx)">${fields.zoneID}</span></div>` : ''}
-            ${fields.mobileNumber ? `<div><b>Mobile Number:</b> <span style="color:var(--tx)">${fields.mobileNumber}</span></div>` : ''}
-            <div><b>Pay Via:</b> <span style="color:var(--bl)">${selectedPayment || fields.preferredPayment}</span></div>
-          </div>
-        </div>
-        <p style="font-size:0.75rem; color:var(--or); font-weight:bold; margin-bottom:10px;">
-          📸 PLEASE SCREENSHOT THIS RECEIPT FOR YOUR RECORDS!
-        </p>
-      `;
-
       ok.innerHTML = isCustom ? `
         <div class="ok-ico">🛎️</div>
         <h4 style="color:#a78bfa">CUSTOM REQUEST SENT!</h4>
-        ${receiptHTML}
-        <p style="font-size: 0.8rem; color:var(--mx)">Mark has been notified. He will personally reach out to you at<br>
-        <b style="color:#a78bfa">${fields.contactNumberOrFB}</b><br>
+        <p>Mark has been notified about your unlisted order.<br>
+        He will personally reach out to you at<br>
+        <b style="color:#a78bfa">${document.getElementById('custom-contact').value}</b><br>
         to confirm availability and price. Please wait for his reply!</p>
+        <p style="margin-top:8px;font-size:.7rem;color:#7c6fa0">⚠️ Do NOT send payment yet until Mark confirms.</p>
         <button class="btn-sub custom-btn" style="margin-top:14px" onclick="resetAll()">Go Back to Shop</button>
       ` : `
         <div class="ok-ico">✅</div>
         <h4>ORDER SUBMITTED!</h4>
-        ${receiptHTML}
-        <p style="font-size: 0.8rem; color:var(--mx)">Your order and payment screenshot have been successfully received!<br>
-        Wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
+        <p>Your order has been received. Please send your GCash payment to<br>
+        <b style="color:var(--bl)">9288978005 (Mark Guevarra)</b><br>
+        and wait for confirmation. Thank you! 🎮</p>
         <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
       `;
       ok.style.display='block';
       ok.scrollIntoView({behavior:'smooth'});
-
-      // Reset the reCAPTCHA for the next transaction
-      if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-
-    } catch(e) {
-      errEl.textContent='❌ Submission failed. Please check your internet connection.';
-      errEl.style.display='block';
-      btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+    } else {
+      throw new Error('Server error');
     }
-  };
-
-  // Convert the image to data text so Google Drive can save it
-  if (screenshotFile) {
-    const reader = new FileReader();
-    reader.onload = function() {
-      fields.fileData = reader.result.split(',')[1];
-      fields.mimeType = screenshotFile.type;
-      fields.fileName = txnId + "_" + screenshotFile.name;
-      processCheckout(fields); // Run checkout after conversion
-    };
-    reader.readAsDataURL(screenshotFile);
-  } else {
-    processCheckout(fields); // Run checkout directly if no file (Custom Order)
+  } catch(e){
+    errEl.textContent='❌ Submission failed. Please try again or message Mark directly on GCash 9288978005.';
+    errEl.style.display='block';
+    btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
   }
 }
 
 function resetAll(){
-  location.reload(); 
+  document.querySelector('.gtabs').style.display='flex';
+  document.getElementById('ok-msg').style.display='none';
+  document.querySelectorAll('.gpanel').forEach(p=>{p.style.display='';p.classList.remove('active')});
+  document.getElementById('g-mlbb').classList.add('active');
+  document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.gtab[data-g="mlbb"]').classList.add('active');
+  // Reset form fields
+  document.querySelectorAll('input[type=text],input[type=tel],textarea').forEach(i=>i.value='');
+  document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.sel-box').forEach(b=>b.style.display='none');
+  document.querySelectorAll('.err-msg').forEach(e=>e.style.display='none');
+  document.querySelectorAll('.btn-sub').forEach(b=>{
+    b.disabled=false;
+    if(b.id==='custom-btn') b.textContent='🛎️ Send Custom Request';
+    else b.textContent='Submit Order';
+  });
+  selected={game:null,item:null,price:null,network:null};
 }
 
 buildAll();
 </script>
 
+<!-- ===== FLOATING NOTIFICATION ===== -->
+<style>
+/* BELL BUTTON */
+.notif-bell{
+  position:fixed;bottom:22px;right:18px;z-index:999;
+  width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#f59e0b,#f97316);
+  box-shadow:0 4px 18px rgba(249,115,22,.5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;transition:transform .2s;
+  animation:bellWiggle 3s ease-in-out infinite}
+.notif-bell:hover{transform:scale(1.1)}
+@keyframes bellWiggle{
+  0%,100%{transform:rotate(0)}
+  10%{transform:rotate(-18deg)}
+  20%{transform:rotate(18deg)}
+  30%{transform:rotate(-12deg)}
+  40%{transform:rotate(12deg)}
+  50%{transform:rotate(0)}
+}
+.notif-badge{
+  position:absolute;top:-3px;right:-3px;
+  background:#ef4444;color:#fff;border-radius:50%;
+  width:19px;height:19px;font-size:.62rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid #09090f;font-family:'Exo 2',sans-serif}
+
+/* MODAL OVERLAY */
+.notif-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;
+  padding-bottom:0}
+.notif-overlay.open{display:flex}
+
+/* MODAL SHEET */
+.notif-sheet{
+  background:var(--dk2);border:1px solid rgba(251,191,36,.2);
+  border-radius:20px 20px 0 0;width:100%;max-width:580px;
+  padding:0 0 30px;max-height:90vh;overflow-y:auto;
+  animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.notif-drag{width:40px;height:4px;border-radius:4px;
+  background:rgba(255,255,255,.2);margin:12px auto 0}
+
+/* SHEET HEADER */
+.notif-hdr{
+  background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(249,115,22,.1));
+  border-bottom:1px solid rgba(251,191,36,.15);
+  padding:16px 18px 14px;display:flex;align-items:flex-start;justify-content:space-between}
+.notif-hdr-left h3{
+  font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;
+  color:#fbbf24;letter-spacing:2px;text-transform:uppercase;
+  display:flex;align-items:center;gap:7px}
+.notif-hdr-left p{font-size:.72rem;color:var(--mx);margin-top:3px}
+.notif-close{
+  background:rgba(255,255,255,.08);border:none;border-radius:50%;
+  width:30px;height:30px;color:var(--mx);font-size:1rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-left:10px;transition:background .18s}
+.notif-close:hover{background:rgba(255,255,255,.16)}
+
+/* WARN BANNER */
+.notif-warn{
+  margin:14px 18px 0;background:rgba(239,68,68,.1);
+  border:1px solid rgba(239,68,68,.3);border-radius:10px;
+  padding:10px 14px;display:flex;gap:10px;align-items:flex-start}
+.notif-warn .wi{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.notif-warn p{font-size:.75rem;color:#fca5a5;line-height:1.6}
+.notif-warn b{color:#f87171}
+
+/* OFFER CARDS */
+.notif-offers{padding:14px 18px 0;display:flex;flex-direction:column;gap:10px}
+.offer-card{
+  background:var(--dk3);border:1.5px solid rgba(251,191,36,.2);
+  border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.offer-card::before{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#f59e0b,#f97316)}
+.offer-card .oc-top{display:flex;justify-content:space-between;align-items:flex-start}
+.offer-card .oc-name{
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;
+  color:#fbbf24;letter-spacing:.5px}
+.offer-card .oc-price{
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or)}
+.offer-card .oc-sub{font-size:.72rem;color:var(--mx);margin-top:4px;line-height:1.6}
+.offer-card .oc-sub b{color:var(--tx)}
+.slots-row{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.slot-dot{
+  width:13px;height:13px;border-radius:50%;
+  border:1.5px solid rgba(251,191,36,.4);background:rgba(251,191,36,.12)}
+.slot-dot.filled{background:#f59e0b;border-color:#f59e0b}
+.slots-label{font-size:.68rem;color:var(--mx)}
+.avail-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);
+  border-radius:20px;padding:2px 9px;font-size:.65rem;color:#4ade80;
+  font-weight:600;letter-spacing:.5px}
+.avail-tag.low{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#f87171}
+.avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;
+  animation:pulseAnim 1.2s ease-in-out infinite}
+
+/* DELIVERY INFO */
+.delivery-box{
+  margin:14px 18px 0;background:rgba(59,130,246,.07);
+  border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px 14px}
+.delivery-box .db-title{
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;
+  color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.delivery-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
+.delivery-row .dr-ico{flex-shrink:0;font-size:.9rem}
+.delivery-row p{font-size:.73rem;color:var(--mx);line-height:1.5}
+.delivery-row p b{color:var(--tx)}
+
+/* CTA */
+.notif-cta{padding:14px 18px 0}
+.notif-cta-btn{
+  width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;transition:all .2s;
+  background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
+.notif-cta-btn:hover{opacity:.9;transform:translateY(-1px);
+  box-shadow:0 5px 20px rgba(139,92,246,.4)}
+.notif-cta-note{font-size:.68rem;color:var(--mx);text-align:center;margin-top:8px;line-height:1.5}
+</style>
+
+<!-- Bell Button -->
+<button class="notif-bell" onclick="openNotif()" title="May & June Starlight Offers" style="bottom:86px">
+  🔔
+  <div class="notif-badge">2</div>
+</button>
+
+<!-- Skins Fire Button -->
+<button class="notif-bell" onclick="openSkins()" title="Upcoming Skins & Pre-Orders"
+  style="background:linear-gradient(135deg,#dc2626,#f97316);box-shadow:0 4px 18px rgba(220,38,38,.5);animation:none">
+  🔥
+  <div class="notif-badge" style="background:#f59e0b">5</div>
+</button>
+
+<!-- Modal -->
+<div class="notif-overlay" id="notif-overlay" onclick="overlayClick(event)">
+  <div class="notif-sheet" id="notif-sheet">
+    <div class="notif-drag"></div>
+
+    <div class="notif-hdr">
+      <div class="notif-hdr-left">
+        <h3>🌟 Monthly Offers</h3>
+        <p>Special Starlight deals — May & June 2026</p>
+      </div>
+      <button class="notif-close" onclick="closeNotif()">✕</button>
+    </div>
+
+    <!-- Warning Banner -->
+    <div class="notif-warn">
+      <div class="wi">⚠️</div>
+      <p><b>Limited Supply!</b> Only <b>5 slots per month</b> available. These are <b>not own supply</b> — orders go through a gifter. Once slots are full, no more orders until next restock.</p>
+    </div>
+
+    <!-- Offer Cards -->
+    <div class="notif-offers">
+
+      <!-- May NSL - SOLD OUT -->
+      <div class="offer-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8)">
+        <div class="oc-top">
+          <div>
+            <div class="oc-name">⭐ May NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
+            <div class="slots-row">
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <span class="slots-label">5/5 slots taken</span>
+              <span class="avail-tag low" style="background:rgba(100,100,100,.15);border-color:rgba(150,150,150,.3);color:#6b7280">⛔ SOLD OUT</span>
+            </div>
+          </div>
+          <div class="oc-price" style="color:#6b7280;text-decoration:line-through">₱165</div>
+        </div>
+        <div class="oc-sub">No more slots available for May 2026.</div>
+      </div>
+
+      <!-- June NSL - 1 REMAINING -->
+      <div class="offer-card" style="border-color:rgba(239,68,68,.4)">
+        <div class="oc-top">
+          <div>
+            <div class="oc-name">⭐ June NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
+            <div class="slots-row">
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot filled"></div>
+              <div class="slot-dot"></div>
+              <span class="slots-label">4/5 slots taken</span>
+              <span class="avail-tag low"><span class="avail-dot"></span> 1 SLOT LEFT</span>
+            </div>
+          </div>
+          <div class="oc-price">₱160</div>
+        </div>
+        <div class="oc-sub">
+          <b>Normal Starlight</b> for June 2026 · Not own supply<br>
+          Processed via gifter — see delivery info below
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Delivery Info -->
+    <div class="delivery-box">
+      <div class="db-title">📦 How Delivery Works</div>
+      <div class="delivery-row">
+        <div class="dr-ico">⏳</div>
+        <p>Processing takes <b>24–48 hours</b> before the gifter sends your order.</p>
+      </div>
+      <div class="delivery-row">
+        <div class="dr-ico">📅</div>
+        <p>Gifter sends the NSL within <b>8–9 days</b> after payment confirmation.</p>
+      </div>
+      <div class="delivery-row">
+        <div class="dr-ico">🎁</div>
+        <p><b>NSL = Normal Starlight</b> — the monthly in-game pass that gives skins, emotes, and exclusive rewards.</p>
+      </div>
+      <div class="delivery-row">
+        <div class="dr-ico">💳</div>
+        <p>Pay via <b>GCash 9288978005 (Mark Guevarra)</b> after your slot is confirmed.</p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="notif-cta">
+      <button class="notif-cta-btn" onclick="goToCustomOrder()">
+        ✏️ Order Here (Custom Request)
+      </button>
+      <div class="notif-cta-note">
+        Tap above → fills out the Custom Order form → Mark confirms your slot within 24hrs
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== SKINS PRE-ORDER MODAL ===== -->
+<style>
+.skin-card{
+  background:var(--dk3);border:1.5px solid rgba(220,38,38,.2);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden}
+.skin-card::before{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#dc2626,#f97316)}
+.skin-card .sk-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.skin-card .sk-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.98rem;
+  color:#fca5a5;letter-spacing:.5px;line-height:1.3}
+.skin-card .sk-release{font-size:.65rem;color:var(--mx);margin-top:2px}
+.skin-card .sk-prices{margin-top:9px;display:flex;flex-direction:column;gap:4px}
+.sk-price-row{display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.04);border-radius:6px;padding:5px 10px}
+.sk-price-row .spr-label{font-size:.72rem;color:var(--mx)}
+.sk-price-row .spr-val{font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:.95rem;color:var(--or)}
+.sk-price-row .spr-save{font-size:.62rem;color:#4ade80;margin-left:4px}
+.sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;
+  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);
+  border-radius:6px;padding:5px 10px;font-size:.7rem;color:#fbbf24}
+.legend-card{border-color:rgba(251,191,36,.4)!important}
+.legend-card::before{background:linear-gradient(180deg,#f59e0b,#ef4444)!important}
+.legend-card .sk-name{color:#fbbf24!important}
+.legend-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.15);
+  border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:2px 8px;
+  font-size:.62rem;color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:6px;vertical-align:middle}
+.skins-note{margin:4px 18px 14px;background:rgba(239,68,68,.08);
+  border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:9px 13px;
+  font-size:.72rem;color:#fca5a5;line-height:1.6;text-align:center}
+.skins-note b{color:#f87171}
+</style>
+
+<div class="notif-overlay" id="skins-overlay" onclick="skinsOverlayClick(event)">
+  <div class="notif-sheet" id="skins-sheet">
+    <div class="notif-drag"></div>
+
+    <div class="notif-hdr" style="background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(249,115,22,.1));border-color:rgba(220,38,38,.2)">
+      <div class="notif-hdr-left">
+        <h3 style="color:#f87171">🔥 Upcoming Skins & Pre-Orders</h3>
+        <p>Way cheaper than buying diamonds! Secure your slot now.</p>
+      </div>
+      <button class="notif-close" onclick="closeSkins()">✕</button>
+    </div>
+
+    <div style="padding:14px 18px 0">
+
+      <!-- OBSIDIA -->
+      <div class="skin-card" onclick="orderSkin('🌑 OBSIDIA (Premium Starlight)','₱420','8th Day of May Release')" style="cursor:pointer">
+        <div class="sk-head">
+          <div>
+            <div class="sk-name">🌑 OBSIDIA <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
+            <div class="sk-release">Gifting: 8th Day of May Release</div>
+          </div>
+          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
+        </div>
+        <div class="sk-prices">
+          <div class="sk-price-row">
+            <span class="spr-label">Price</span>
+            <span class="spr-val">₱420 <span class="spr-save">Save ₱300+!</span></span>
+          </div>
+        </div>
+        <div class="sk-schedule">📅 Gifting Schedule: 8th Day of May Release</div>
+      </div>
+
+      <!-- PHARSA ALL-STAR -->
+      <div class="skin-card" style="cursor:pointer">
+        <div class="sk-head">
+          <div>
+            <div class="sk-name">🦋 PHARSA ALL-STAR</div>
+            <div class="sk-release">Release: May 17 · Gifting: May 20</div>
+          </div>
+          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
+        </div>
+        <div class="sk-prices">
+          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱275','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+            <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
+            <span class="spr-val">₱275</span>
+          </div>
+          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱410','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+            <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
+            <span class="spr-val">₱410</span>
+          </div>
+        </div>
+        <div class="sk-schedule">📅 Gifting Schedule: May 20</div>
+      </div>
+
+      <!-- KARINA ZODIAC -->
+      <div class="skin-card" onclick="orderSkin('♋ KARINA ZODIAC (Original Value: 899 💎)','₱495','May 21')" style="cursor:pointer">
+        <div class="sk-head">
+          <div>
+            <div class="sk-name">♋ KARINA ZODIAC</div>
+            <div class="sk-release">Release: May 21 · Original Value: 899 💎</div>
+          </div>
+          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
+        </div>
+        <div class="sk-prices">
+          <div class="sk-price-row">
+            <span class="spr-label">Price (Save 400+ in diamonds!)</span>
+            <span class="spr-val">₱495</span>
+          </div>
+        </div>
+        <div class="sk-schedule">📅 Gifting Schedule: May 21</div>
+      </div>
+
+      <!-- LING ALL-STAR -->
+      <div class="skin-card" onclick="orderSkin('⚔️ LING ALL-STAR (Original Value: 762 💎)','₱495','June 26')" style="cursor:pointer">
+        <div class="sk-head">
+          <div>
+            <div class="sk-name">⚔️ LING ALL-STAR</div>
+            <div class="sk-release">Release: June 24 · Original Value: 762 💎</div>
+          </div>
+          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
+        </div>
+        <div class="sk-prices">
+          <div class="sk-price-row">
+            <span class="spr-label">Price</span>
+            <span class="spr-val">₱495</span>
+          </div>
+        </div>
+        <div class="sk-schedule">📅 Gifting Schedule: June 26</div>
+      </div>
+
+      <!-- LEGEND LESLEY -->
+      <div class="skin-card legend-card" style="cursor:pointer">
+        <div class="sk-head">
+          <div>
+            <div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div>
+            <div class="sk-release">Original Value: 10,000 💎 — Choose your gifting phase below</div>
+          </div>
+          <div style="font-size:.7rem;color:#f59e0b;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
+        </div>
+        <div class="sk-prices">
+          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400','8th Day Gifting Phase')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+            <span class="spr-label">8th Day Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
+            <span class="spr-val">₱6,400</span>
+          </div>
+          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250','Phase 2 Gifting')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+            <span class="spr-label">Phase 2 Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
+            <span class="spr-val">₱6,250</span>
+          </div>
+          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Last Day Gifting (Best Deal!)','₱6,150','Last Day Gifting')" style="cursor:pointer;border:1px solid rgba(245,158,11,.25);transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+            <span class="spr-label">Last Day Gifting <span style="color:#4ade80;font-size:.62rem">Best deal · Tap to order</span></span>
+            <span class="spr-val" style="color:#fbbf24">₱6,150</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="skins-note">
+      ⚠️ <b>Payment strictly required to reserve your slot!</b><br>
+      These are scheduled gifts — your item is sent on the gifting date listed above.
+    </div>
+
+    <div class="notif-cta">
+      <button class="notif-cta-btn" style="background:linear-gradient(135deg,#dc2626,#f97316)" onclick="goToSkinsOrder()">
+        🔥 Pre-Order / Reserve a Slot
+      </button>
+      <div class="notif-cta-note">
+        Tap above → fills out the Custom Order form → Mark confirms and collects payment
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Register the Service Worker (PWA)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(registration => {
-          console.log('ServiceWorker registration successful');
-        })
-        .catch(err => {
-          console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-  }
+function openNotif(){ document.getElementById('notif-overlay').classList.add('open'); }
+function closeNotif(){ document.getElementById('notif-overlay').classList.remove('open'); }
+function overlayClick(e){ if(e.target===document.getElementById('notif-overlay')) closeNotif(); }
+
+function openSkins(){ document.getElementById('skins-overlay').classList.add('open'); }
+function closeSkins(){ document.getElementById('skins-overlay').classList.remove('open'); }
+function skinsOverlayClick(e){ if(e.target===document.getElementById('skins-overlay')) closeSkins(); }
+
+function goToCustomOrder(){
+  closeNotif();
+  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
+  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
+  document.getElementById('g-custom').classList.add('active');
+  document.getElementById('ok-msg').style.display='none';
+  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+  document.getElementById('custom-desc').value='Monthly Starlight (NSL) — [June / July 2026]\nQuantity: ';
+  setTimeout(()=>{
+    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('custom-desc').focus();
+  },200);
+}
+
+function goToSkinsOrder(){
+  closeSkins();
+  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
+  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
+  document.getElementById('g-custom').classList.add('active');
+  document.getElementById('ok-msg').style.display='none';
+  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+  document.getElementById('custom-desc').value='Skin Pre-Order\nSkin Name: \nVersion (if applicable): Normal / Premium\nGifting Phase (for Legend): ';
+  setTimeout(()=>{
+    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('custom-desc').focus();
+  },200);
+}
+
+function orderSkin(skinName, price, schedule){
+  closeSkins();
+  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
+  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
+  document.getElementById('g-custom').classList.add('active');
+  document.getElementById('ok-msg').style.display='none';
+  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+  document.getElementById('custom-desc').value=
+    'Skin Pre-Order\n' +
+    'Skin: ' + skinName + '\n' +
+    'Price: ' + price + '\n' +
+    'Gifting Schedule: ' + schedule;
+  document.getElementById('custom-budget').value=price;
+  setTimeout(()=>{
+    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('custom-name').focus();
+  },200);
+}
 </script>
 </body>
 </html>
