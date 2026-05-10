@@ -1035,6 +1035,27 @@ async function submitOrder(game){
   // ⚠️ HERE IS YOUR DEPLOYED GOOGLE URL:
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec";
 
+  // 🛡️ SECURITY GATEKEEPER: Check File Type & Size
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+  const maxSize = 3 * 1024 * 1024; // 3MB limit (Perfect for screenshots)
+
+  // 1. Block non-images (mp4, doc, exe, etc.)
+  if(!allowedTypes.includes(file.type)) {
+    errEl.textContent='❌ Security Block: Only images (JPG, PNG, WEBP) are allowed.';
+    errEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+    return;
+  }
+
+  // 2. Block huge files to save your Google Drive storage
+  if(file.size > maxSize) {
+    errEl.textContent='❌ File too large! Please use a screenshot under 3MB.';
+    errEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+    return;
+  }
   const file = fileInput.files[0];
   const reader = new FileReader();
 
