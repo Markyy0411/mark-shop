@@ -297,6 +297,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="mlbb-notes" placeholder="Any special requests or notes..."></textarea></div>
+    <div class="fg">
+   <label>Upload GCash Screenshot <span class="req">*</span></label>
+   <input type="file" id="mlbb-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+ </div>
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
     <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting. Include screenshot in notes if possible.</div>
@@ -322,6 +326,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="cod-ign" placeholder="Your IGN"></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg">
+   <label>Upload GCash Screenshot <span class="req">*</span></label>
+   <input type="file" id="cod-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+ </div>
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
     <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
@@ -349,6 +357,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="roblox-user" placeholder="Your Roblox username"></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="roblox-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg">
+   <label>Upload GCash Screenshot <span class="req">*</span></label>
+   <input type="file" id="roblox-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+ </div>
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
     <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
@@ -374,6 +386,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="bs-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg">
+   <label>Upload GCash Screenshot <span class="req">*</span></label>
+   <input type="file" id="bs-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+ </div>
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
     <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
@@ -473,6 +489,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check your number — wrong number = lost load</div></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="load-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg">
+   <label>Upload GCash Screenshot <span class="req">*</span></label>
+   <input type="file" id="load-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+ </div>
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
     <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
@@ -554,6 +574,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <label>Additional Notes</label>
       <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea>
     </div>
+    <div class="fg">
+   <label>Upload GCash Screenshot <span class="req">*</span></label>
+   <input type="file" id="custom-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+ </div>
 
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">
       🛎️ Send Custom Request
