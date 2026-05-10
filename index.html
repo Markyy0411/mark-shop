@@ -889,6 +889,7 @@ async function verifyMLBB() {
   
   
 // ===================== SUBMIT =====================
+// ===================== SUBMIT =====================
 async function submitOrder(game){
   const btn = document.getElementById(game+'-btn');
   const errEl = document.getElementById(game+'-err');
@@ -898,6 +899,13 @@ async function submitOrder(game){
   let valid = true;
   let missingFields = [];
 
+  // 1. Check if they uploaded a screenshot!
+  const fileInput = document.getElementById(game+'-screenshot');
+  if(!fileInput || fileInput.files.length === 0) {
+    missingFields.push('GCash Screenshot');
+  }
+
+  // 2. Game Logic
   if(game==='mlbb'){
     const order = document.getElementById('mlbb-order-display').value;
     const pid = document.getElementById('mlbb-pid').value.trim();
@@ -910,7 +918,7 @@ async function submitOrder(game){
     if(!zid) missingFields.push('Zone ID');
     if(!ign) missingFields.push('IGN');
     if(missingFields.length){valid=false;}
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes};
   } else if(game==='cod'){
     const order = document.getElementById('cod-order-display').value;
     const pid = document.getElementById('cod-pid').value.trim();
@@ -920,7 +928,7 @@ async function submitOrder(game){
     if(!pid) missingFields.push('Player ID');
     if(!ign) missingFields.push('IGN');
     if(missingFields.length){valid=false;}
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes};
   } else if(game==='roblox'){
     const order = document.getElementById('roblox-order-display').value;
     const gpid = document.getElementById('roblox-gpid').value.trim();
@@ -932,7 +940,7 @@ async function submitOrder(game){
     if(!gpname) missingFields.push('Gamepass Name');
     if(!user) missingFields.push('Roblox Username');
     if(missingFields.length){valid=false;}
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes};
   } else if(game==='bs'){
     const order = document.getElementById('bs-order-display').value;
     const pid = document.getElementById('bs-pid').value.trim();
@@ -942,7 +950,7 @@ async function submitOrder(game){
     if(!pid) missingFields.push('Player ID');
     if(!ign) missingFields.push('IGN');
     if(missingFields.length){valid=false;}
-    fields={game:'Bloodstrike',order,playerID:pid,ign,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Bloodstrike',order,playerID:pid,ign,notes};
   } else if(game==='load'){
     const order = document.getElementById('load-order-display').value;
     const network = document.getElementById('load-network-display').value;
@@ -951,7 +959,7 @@ async function submitOrder(game){
     if(!order||order.includes('Select')) missingFields.push('Promo/Load');
     if(!number) missingFields.push('Mobile Number');
     if(missingFields.length){valid=false;}
-    fields={game:'Load',order,network,mobileNumber:number,notes,gcash:'9288978005 (Mark Guevarra)'};
+    fields={game:'Load',order,network,mobileNumber:number,notes};
   } else if(game==='custom'){
     const gameField = document.getElementById('custom-game').value.trim();
     const desc = document.getElementById('custom-desc').value.trim();
@@ -964,18 +972,7 @@ async function submitOrder(game){
     if(!name) missingFields.push('Your Name');
     if(!contact) missingFields.push('Contact Number / FB Name');
     if(missingFields.length){valid=false;}
-    fields={
-      orderType:'🛎️ CUSTOM / UNLISTED ORDER — Needs Personal Handling',
-      game: gameField,
-      orderDescription: desc,
-      customerName: name,
-      contactNumberOrFB: contact,
-      playerID_username: pid || 'Not provided',
-      budget: budget || 'Not specified',
-      additionalNotes: notes,
-      importantNote:'⚠️ This item/offer was NOT found on the website. Please handle this personally.',
-      gcash:'9288978005 (Mark Guevarra)'
-    };
+    fields={game: gameField, orderDescription: desc, customerName: name, contactNumberOrFB: contact, playerID_username: pid || 'Not provided', budget: budget || 'Not specified', notes: notes};
   }
 
   if(!valid){
@@ -985,52 +982,72 @@ async function submitOrder(game){
   }
 
   const isCustom = game==='custom';
-  btn.disabled=true; btn.textContent='Submitting...';
+  btn.disabled=true; 
+  btn.textContent='Uploading Screenshot... Please Wait';
 
-  try{
-    const body = new FormData();
-    Object.entries(fields).forEach(([k,v])=>{ if(v) body.append(k,v); });
-    body.append('_subject', isCustom
-      ? '🛎️ CUSTOM ORDER — Not Listed on Website'
-      : 'New Order — Mark\'s Game Shop');
+  // 3. Generate a beautiful Transaction ID for their receipt!
+  fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
+  fields.dateTime = new Date().toLocaleString();
 
-    const res = await fetch('https://formspree.io/f/mjglrepo',{
-      method:'POST', body, headers:{Accept:'application/json'}
-    });
+  // ⚠️ HERE IS YOUR DEPLOYED GOOGLE URL:
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec";
 
-    if(res.ok){
-      document.querySelector(`#g-${game}`).style.display='none';
-      document.querySelector('.gtabs').style.display='none';
-      const ok = document.getElementById('ok-msg');
-      ok.innerHTML = isCustom ? `
-        <div class="ok-ico">🛎️</div>
-        <h4 style="color:#a78bfa">CUSTOM REQUEST SENT!</h4>
-        <p>Mark has been notified about your unlisted order.<br>
-        He will personally reach out to you at<br>
-        <b style="color:#a78bfa">${document.getElementById('custom-contact').value}</b><br>
-        to confirm availability and price. Please wait for his reply!</p>
-        <p style="margin-top:8px;font-size:.7rem;color:#7c6fa0">⚠️ Do NOT send payment yet until Mark confirms.</p>
-        <button class="btn-sub custom-btn" style="margin-top:14px" onclick="resetAll()">Go Back to Shop</button>
-      ` : `
-        <div class="ok-ico">✅</div>
-        <h4>ORDER SUBMITTED!</h4>
-        <p>Your order has been received. Please send your GCash payment to<br>
-        <b style="color:var(--bl)">9288978005 (Mark Guevarra)</b><br>
-        and wait for confirmation. Thank you! 🎮</p>
-        <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
-      `;
-      ok.style.display='block';
-      ok.scrollIntoView({behavior:'smooth'});
-    } else {
-      throw new Error('Server error');
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+
+  reader.onload = async function(e) {
+    // Extract just the raw Base64 data from the image
+    fields.fileData = e.target.result.split(',')[1];
+    fields.mimeType = file.type;
+    fields.fileName = file.name;
+
+    try {
+      const res = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(fields),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' } // text/plain fixes CORS issues!
+      });
+
+      const responseText = await res.text();
+
+      if(responseText.includes("Success")){
+        document.querySelector(`#g-${game}`).style.display='none';
+        document.querySelector('.gtabs').style.display='none';
+        const ok = document.getElementById('ok-msg');
+        
+        // Show them a professional receipt on screen
+        ok.innerHTML = `
+          <div class="ok-ico">✅</div>
+          <h4>ORDER SUBMITTED!</h4>
+          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--dk5); border-radius:10px; padding:15px; margin:15px 0; text-align:left; font-size:0.85rem;">
+            <b style="color:var(--or);">🧾 TRANSACTION RECEIPT</b><br><br>
+            <b>Transaction ID:</b> <span style="color:#fbbf24">${fields.transactionID}</span><br>
+            <b>Date & Time:</b> ${fields.dateTime}<br>
+            <b>Game:</b> ${fields.game}<br>
+            <b>Order Details:</b> ${fields.order || fields.orderDescription}<br>
+            ${fields.playerID ? `<b>Player ID:</b> ${fields.playerID}<br>` : ''}
+            ${fields.zoneID ? `<b>Zone ID:</b> ${fields.zoneID}<br>` : ''}
+            ${fields.ign ? `<b>IGN:</b> ${fields.ign}<br>` : ''}
+          </div>
+          <p>Your order and payment screenshot have been successfully received!<br>Wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
+          <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
+        `;
+        ok.style.display='block';
+        ok.scrollIntoView({behavior:'smooth'});
+      } else {
+        throw new Error('Server error');
+      }
+    } catch(err) {
+      errEl.textContent='❌ Upload failed. Please check your internet or try a smaller image size.';
+      errEl.style.display='block';
+      btn.disabled=false; 
+      btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
     }
-  } catch(e){
-    errEl.textContent='❌ Submission failed. Please try again or message Mark directly on GCash 9288978005.';
-    errEl.style.display='block';
-    btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
-  }
-}
+  };
 
+  reader.readAsDataURL(file); // This triggers the upload process
+}
+  
 function resetAll(){
   document.querySelector('.gtabs').style.display='flex';
   document.getElementById('ok-msg').style.display='none';
