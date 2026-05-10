@@ -222,7 +222,27 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <!-- Double Diamond -->
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div>
-    <div class="alert-box">💡 During Double Diamond events, you receive 2x the listed diamonds!</div>
+
+    <!-- Main Warning Banner -->
+    <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);
+      border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font-size:1.2rem">🚫</span>
+        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;
+          color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span>
+      </div>
+      <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">
+        Each Double Diamond tier can only be purchased <b style="color:#f87171">ONCE per account</b>.
+        If you have already bought a tier before, <b style="color:#f87171">it will not appear</b> in your shop again.
+        Please make sure you have <b style="color:#f87171">never purchased</b> this tier before ordering.
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;
+        background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px">
+        <span>💡</span>
+        <span style="font-size:.71rem;color:#fca5a5">During Double Diamond events, you get <b style="color:#fff">2x the listed diamonds</b> — but only if this tier is still available on your account.</span>
+      </div>
+    </div>
+
     <div class="pgrid" id="grid-mlbb-dd"></div>
   </div>
 
@@ -712,7 +732,10 @@ function makeGrid(containerId, items, game, cat){
       <div class="pn">${it.n}</div>
       ${it.d?`<div class="pd">${it.d}</div>`:''}
       <div class="pp">${ph(it.p)}</div>`;
-    c.onclick=()=>selectItem(c,game);
+    c.onclick=()=>{
+      if(game==='mlbb' && cat==='dd') openDDConfirm(c);
+      else selectItem(c,game);
+    };
     el.appendChild(c);
   });
 }
@@ -800,6 +823,8 @@ document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>{
     document.querySelectorAll('#g-mlbb .cpanel').forEach(x=>x.classList.remove('active'));
     t.classList.add('active');
     document.getElementById(t.dataset.c).classList.add('active');
+    // Show/hide DD warning fab
+    if(t.dataset.c === 'mlbb-dd') showDDFab(); else hideDDFab();
   });
 });
 
@@ -1109,7 +1134,114 @@ buildAll();
 .notif-cta-btn:hover{opacity:.9;transform:translateY(-1px);
   box-shadow:0 5px 20px rgba(139,92,246,.4)}
 .notif-cta-note{font-size:.68rem;color:var(--mx);text-align:center;margin-top:8px;line-height:1.5}
+
+/* DD FLOATING WARNING FAB */
+.dd-warn-fab{
+  position:fixed;bottom:150px;left:18px;z-index:998;
+  display:none;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#dc2626,#b91c1c);
+  border:1px solid rgba(239,68,68,.5);border-radius:14px;
+  padding:9px 14px;box-shadow:0 4px 20px rgba(220,38,38,.5);
+  cursor:pointer;animation:ddPulse 2s ease-in-out infinite}
+.dd-warn-fab.show{display:flex}
+@keyframes ddPulse{
+  0%,100%{box-shadow:0 4px 20px rgba(220,38,38,.5)}
+  50%{box-shadow:0 4px 28px rgba(220,38,38,.85)}}
+.dd-warn-fab .dwf-ico{font-size:1.1rem}
+.dd-warn-fab .dwf-txt{font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:.78rem;color:#fff;letter-spacing:.5px;line-height:1.3}
+.dd-warn-fab .dwf-sub{font-size:.62rem;color:rgba(255,255,255,.7);margin-top:1px}
+
+/* DD CONFIRM MODAL */
+.dd-confirm-overlay{position:fixed;inset:0;z-index:1100;
+  background:rgba(0,0,0,.8);backdrop-filter:blur(5px);
+  display:none;align-items:center;justify-content:center;padding:20px}
+.dd-confirm-overlay.open{display:flex}
+.dd-confirm-box{background:var(--dk2);border:1.5px solid rgba(239,68,68,.4);
+  border-radius:18px;padding:24px 20px;max-width:360px;width:100%;
+  animation:popIn .25s ease}
+@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.dd-confirm-box .dcb-ico{font-size:2.4rem;text-align:center;margin-bottom:10px}
+.dd-confirm-box h3{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;
+  color:#f87171;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:12px}
+.dd-confirm-box .dcb-item{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
+  border-radius:10px;padding:10px 14px;margin-bottom:14px;text-align:center}
+.dd-confirm-box .dcb-item .di-name{font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:1rem;color:var(--tx)}
+.dd-confirm-box .dcb-item .di-price{font-family:'Rajdhani',sans-serif;font-weight:700;
+  font-size:1.2rem;color:var(--or);margin-top:2px}
+.dd-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.dd-check-item{display:flex;align-items:flex-start;gap:9px;
+  background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px}
+.dd-check-item input[type=checkbox]{width:16px;height:16px;flex-shrink:0;
+  accent-color:#ef4444;margin-top:2px;cursor:pointer}
+.dd-check-item label{font-size:.74rem;color:var(--mx);line-height:1.5;cursor:pointer}
+.dd-check-item label b{color:#fca5a5}
+.dd-confirm-btns{display:flex;flex-direction:column;gap:8px}
+.dd-btn-confirm{width:100%;padding:12px;background:#dc2626;color:#fff;border:none;
+  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;
+  opacity:.4;pointer-events:none}
+.dd-btn-confirm.ready{opacity:1;pointer-events:all}
+.dd-btn-confirm.ready:hover{background:#b91c1c;transform:translateY(-1px)}
+.dd-btn-cancel{width:100%;padding:10px;background:transparent;color:var(--mx);
+  border:1px solid var(--dk5);border-radius:10px;font-family:'Rajdhani',sans-serif;
+  font-size:.88rem;cursor:pointer;transition:all .2s}
+.dd-btn-cancel:hover{border-color:var(--mx);color:var(--tx)}
 </style>
+
+<!-- DD Floating Warning Badge -->
+<div class="dd-warn-fab" id="dd-warn-fab" onclick="openDDInfo()">
+  <div class="dwf-ico">🚫</div>
+  <div>
+    <div class="dwf-txt">ONE-TIME ONLY</div>
+    <div class="dwf-sub">Tap to learn more</div>
+  </div>
+</div>
+
+<!-- DD Info Modal (tap the fab) -->
+<div class="dd-confirm-overlay" id="dd-info-overlay" onclick="if(event.target===this)closeDDInfo()">
+  <div class="dd-confirm-box">
+    <div class="dcb-ico">🚫</div>
+    <h3>One-Time Purchase Warning</h3>
+    <div style="font-size:.78rem;color:var(--mx);line-height:1.8;margin-bottom:16px">
+      Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>
+      Once you have bought a specific tier (e.g. 50 & 50 Bonus), <b style="color:#f87171">that tier disappears permanently from your shop</b> and can <b style="color:#f87171">never be purchased again</b> — even during the next Double Diamond event.<br><br>
+      Please <b style="color:#fff">check your in-game shop first</b> to confirm the tier is still available before placing an order!
+    </div>
+    <button class="dd-btn-cancel" onclick="closeDDInfo()">Got it, go back</button>
+  </div>
+</div>
+
+<!-- DD Confirm Modal (tap a card) -->
+<div class="dd-confirm-overlay" id="dd-confirm-overlay">
+  <div class="dd-confirm-box">
+    <div class="dcb-ico">⚠️</div>
+    <h3>Confirm Your Order</h3>
+    <div class="dcb-item">
+      <div class="di-name" id="dd-confirm-name">—</div>
+      <div class="di-price" id="dd-confirm-price">—</div>
+    </div>
+    <div class="dd-checks">
+      <div class="dd-check-item">
+        <input type="checkbox" id="dd-chk1" onchange="checkDDReady()">
+        <label for="dd-chk1">I confirm this tier is <b>still available</b> in my in-game shop and has <b>never been purchased</b> before.</label>
+      </div>
+      <div class="dd-check-item">
+        <input type="checkbox" id="dd-chk2" onchange="checkDDReady()">
+        <label for="dd-chk2">I understand that once purchased, <b>this tier will be gone permanently</b> and cannot be bought again on my account.</label>
+      </div>
+      <div class="dd-check-item">
+        <input type="checkbox" id="dd-chk3" onchange="checkDDReady()">
+        <label for="dd-chk3">I am ordering during an <b>active Double Diamond event</b> or I accept the current pricing.</label>
+      </div>
+    </div>
+    <div class="dd-confirm-btns">
+      <button class="dd-btn-confirm" id="dd-btn-confirm" onclick="confirmDDOrder()">✅ I Understand — Proceed</button>
+      <button class="dd-btn-cancel" onclick="cancelDDOrder()">Cancel — Go Back</button>
+    </div>
+  </div>
+</div>
 
 <!-- Bell Button -->
 <button class="notif-bell" onclick="openNotif()" title="May & June Starlight Offers" style="bottom:86px">
@@ -1393,11 +1525,69 @@ buildAll();
 </div>
 
 <script>
-function openNotif(){ document.getElementById('notif-overlay').classList.add('open'); }
+// ===================== DD WARNING FAB =====================
+let pendingDDCard = null;
+
+function showDDFab(){ document.getElementById('dd-warn-fab').classList.add('show'); }
+function hideDDFab(){ document.getElementById('dd-warn-fab').classList.remove('show'); }
+function openDDInfo(){ document.getElementById('dd-info-overlay').classList.add('open'); }
+function closeDDInfo(){
+  document.getElementById('dd-info-overlay').classList.remove('open');
+  hideDDFab();
+}
+
+function openDDConfirm(card){
+  pendingDDCard = card;
+  document.getElementById('dd-confirm-name').textContent = card.dataset.name;
+  document.getElementById('dd-confirm-price').textContent = '₱' + parseInt(card.dataset.price).toLocaleString('en-PH');
+  document.getElementById('dd-chk1').checked = false;
+  document.getElementById('dd-chk2').checked = false;
+  document.getElementById('dd-chk3').checked = false;
+  document.getElementById('dd-btn-confirm').classList.remove('ready');
+  document.getElementById('dd-confirm-overlay').classList.add('open');
+}
+function checkDDReady(){
+  const all = document.getElementById('dd-chk1').checked &&
+              document.getElementById('dd-chk2').checked &&
+              document.getElementById('dd-chk3').checked;
+  document.getElementById('dd-btn-confirm').classList.toggle('ready', all);
+}
+function cancelDDOrder(){
+  document.getElementById('dd-confirm-overlay').classList.remove('open');
+  if(pendingDDCard){ pendingDDCard.classList.remove('sel'); pendingDDCard=null; }
+}
+function confirmDDOrder(){
+  document.getElementById('dd-confirm-overlay').classList.remove('open');
+  hideDDFab();
+  if(pendingDDCard){
+    // Finalize selection like normal selectItem
+    document.querySelectorAll('.pcard[data-game="mlbb"]').forEach(c=>c.classList.remove('sel'));
+    pendingDDCard.classList.add('sel');
+    const name = pendingDDCard.dataset.name;
+    const price = parseInt(pendingDDCard.dataset.price);
+    selected.game='mlbb'; selected.item=name; selected.price=price;
+    document.getElementById('mlbb-sel-box').style.display='block';
+    document.getElementById('mlbb-sel-item').textContent=name;
+    document.getElementById('mlbb-sel-price').textContent='₱'+price.toLocaleString('en-PH');
+    document.getElementById('mlbb-order-display').value=name+' — ₱'+price.toLocaleString('en-PH');
+    setTimeout(()=>{
+      document.querySelector('#g-mlbb .oform').scrollIntoView({behavior:'smooth',block:'nearest'});
+    },100);
+    pendingDDCard=null;
+  }
+}
+
+function openNotif(){
+  document.getElementById('notif-overlay').classList.add('open');
+  document.querySelector('.notif-bell[onclick="openNotif()"] .notif-badge').style.display='none';
+}
 function closeNotif(){ document.getElementById('notif-overlay').classList.remove('open'); }
 function overlayClick(e){ if(e.target===document.getElementById('notif-overlay')) closeNotif(); }
 
-function openSkins(){ document.getElementById('skins-overlay').classList.add('open'); }
+function openSkins(){
+  document.getElementById('skins-overlay').classList.add('open');
+  document.querySelector('.notif-bell[onclick="openSkins()"] .notif-badge').style.display='none';
+}
 function closeSkins(){ document.getElementById('skins-overlay').classList.remove('open'); }
 function skinsOverlayClick(e){ if(e.target===document.getElementById('skins-overlay')) closeSkins(); }
 
