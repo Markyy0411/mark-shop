@@ -276,12 +276,23 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
-    <div class="fg"><label>Player ID <span class="req">*</span></label>
-      <input type="text" id="mlbb-pid" placeholder="e.g. 123456789"></div>
-    <div class="fg"><label>Zone ID <span class="req">*</span></label>
-      <input type="text" id="mlbb-zid" placeholder="e.g. 1234 (4-5 digits after your ID)"></div>
-    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="mlbb-ign" placeholder="Your MLBB username"></div>
+    <div class="fg">
+      <label>Player ID <span class="req">*</span></label>
+      <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
+    </div>
+    
+    <div class="fg">
+      <label>Zone ID <span class="req">*</span></label>
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="mlbb-zid" placeholder="e.g. 1234" style="flex: 1;">
+        <button type="button" onclick="verifyMLBB()" style="padding: 0 15px; background: var(--bl); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Verify</button>
+      </div>
+    </div>
+    
+    <div class="fg">
+      <label>In-Game Name (IGN) <span class="req">*</span></label>
+      <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+    </div>
     <div class="fg"><label>Server</label>
       <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
     <div class="fg"><label>Notes (optional)</label>
@@ -844,6 +855,39 @@ function selectCC(card){
   document.getElementById('custom-game').value = card.dataset.cc;
 }
 
+// ===================== AUTO-VERIFY MLBB IGN =====================
+async function verifyMLBB() {
+  const pid = document.getElementById('mlbb-pid').value.trim();
+  const zid = document.getElementById('mlbb-zid').value.trim();
+  const ignField = document.getElementById('mlbb-ign');
+  
+  if (!pid || !zid) {
+    alert("Please enter both Player ID and Zone ID first.");
+    return;
+  }
+
+  ignField.value = "Verifying...";
+  ignField.style.borderColor = "var(--or)";
+
+  try {
+    const response = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const data = await response.json();
+
+    if (response.ok && data.ign) {
+      ignField.value = data.ign;
+      ignField.style.borderColor = "var(--gr)";
+    } else {
+      ignField.value = "";
+      ignField.style.borderColor = "#ef4444";
+      alert(data.error || "Player not found.");
+    }
+  } catch (error) {
+    ignField.value = "";
+    alert("Verification service is currently busy. Please try again.");
+  }
+}
+  
+  
 // ===================== SUBMIT =====================
 async function submitOrder(game){
   const btn = document.getElementById(game+'-btn');
