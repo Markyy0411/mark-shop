@@ -923,13 +923,6 @@ async function submitOrder(game){
   let valid = true;
   let missingFields = [];
 
-  // 🛡️ 1. SECURITY: Check if they clicked the reCAPTCHA box!
-  const recaptchaToken = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '';
-  if (!recaptchaToken) {
-    missingFields.push('reCAPTCHA (Please check the box)');
-  } else {
-    fields.recaptchaToken = recaptchaToken; // Save token to send to Google
-  }
 
   // 1. Check if they uploaded a screenshot!
   const fileInput = document.getElementById(game+'-screenshot');
