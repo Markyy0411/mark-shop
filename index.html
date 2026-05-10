@@ -923,10 +923,6 @@ async function submitOrder(game){
   let valid = true;
   let missingFields = [];
 
-
-  // 1. Check if they uploaded a screenshot!
-  const fileInput = document.getElementById(game+'-screenshot');
-
   // 1. Check if they uploaded a screenshot!
   const fileInput = document.getElementById(game+'-screenshot');
   if(!fileInput || fileInput.files.length === 0) {
