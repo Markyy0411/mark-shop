@@ -320,10 +320,18 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
-    <div class="fg"><label>Player ID <span class="req">*</span></label>
-      <input type="text" id="cod-pid" placeholder="Your Garena Player ID"></div>
-    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="cod-ign" placeholder="Your IGN"></div>
+    <div class="fg">
+      <label>Player ID (UID) <span class="req">*</span></label>
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex: 1;">
+        <button type="button" onclick="verifyCOD()" style="padding: 0 15px; background: var(--bl); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Verify</button>
+      </div>
+    </div>
+    
+    <div class="fg">
+      <label>In-Game Name (IGN) <span class="req">*</span></label>
+      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+    </div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
     <div class="fg">
@@ -1724,6 +1732,37 @@ function orderSkin(skinName, price, schedule){
     document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
     document.getElementById('custom-name').focus();
   },200);
+}
+  // ===================== AUTO-VERIFY CODM IGN =====================
+async function verifyCOD() {
+  const pid = document.getElementById('cod-pid').value.trim();
+  const ignField = document.getElementById('cod-ign');
+  
+  if (!pid) {
+    alert("Please enter your Call of Duty Player ID first.");
+    return;
+  }
+
+  ignField.value = "Verifying...";
+  ignField.style.borderColor = "var(--or)";
+
+  try {
+    // Talk to your new CODM backend
+    const response = await fetch(`/api/verify-cod?id=${pid}`);
+    const data = await response.json();
+
+    if (response.ok && data.ign) {
+      ignField.value = data.ign;
+      ignField.style.borderColor = "var(--gr)";
+    } else {
+      ignField.value = "";
+      ignField.style.borderColor = "#ef4444";
+      alert(data.error || "Player not found.");
+    }
+  } catch (error) {
+    ignField.value = "";
+    alert("Verification service is currently busy. Please try again.");
+  }
 }
 </script>
 </body>
