@@ -1,21 +1,23 @@
+// api/verify-cod.js
+// Vercel Serverless Function — Garena CoD Player Verification
+// Note: Garena has no public API. This returns a soft error so IGN can be typed manually.
+
 export default async function handler(req, res) {
-  const { id } = req.query; // CODM only needs Player ID, no Zone ID
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const { id } = req.query;
 
   if (!id) {
-    return res.status(400).json({ error: 'Missing Player ID' });
+    return res.status(400).json({ error: 'Missing Player ID.' });
   }
 
-  try {
-    // Calling the CODM database (Assuming the same provider supports CODM)
-    const response = await fetch(`https://api.isan.eu.org/nickname/codm?id=${id}`);
-    const data = await response.json();
-
-    if (data.success && data.name) {
-      return res.status(200).json({ ign: data.name });
-    } else {
-      return res.status(404).json({ error: 'Player not found. Check ID.' });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: 'Verification server is busy.' });
-  }
+  // Garena does not have a public player lookup API.
+  // Return a graceful error so the frontend unlocks manual IGN entry.
+  return res.status(404).json({
+    error: 'Garena CoD auto-verify is not available. Please type your IGN manually.',
+    manualEntry: true
+  });
 }
