@@ -885,148 +885,30 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
 </div><script>
 // ===================== DATA =====================
-const DATA = {
-  mlbb:{
-    dias:[
-      {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:20},{n:"56 Diamonds",p:50},
-      {n:"112 Diamonds",p:100},{n:"168 Diamonds",p:150},{n:"225 Diamonds",p:205},
-      {n:"278 Diamonds",p:255},{n:"301 Diamonds",p:275},{n:"338 Diamonds",p:305},
-      {n:"448 Diamonds",p:410},{n:"570 Diamonds",p:510},{n:"626 Diamonds",p:570},
-      {n:"682 Diamonds",p:620},{n:"738 Diamonds",p:670},{n:"749 Diamonds",p:660},
-      {n:"785 Diamonds",p:720},{n:"946 Diamonds",p:860},{n:"1018 Diamonds",p:920},
-      {n:"1163 Diamonds",p:1050},{n:"1733 Diamonds",p:1550},{n:"2398 Diamonds",p:2150},
-      {n:"3581 Diamonds",p:3150},{n:"4131 Diamonds",p:3700},
-      {n:"6132 Diamonds",p:4500},{n:"8042 Diamonds",p:5200}
-    ],
-    denom:[
-      {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:21},{n:"56 Diamonds",p:51},
-      {n:"112 Diamonds",p:100},{n:"223 Diamonds",p:200},{n:"336 Diamonds",p:300},
-      {n:"570 Diamonds",p:495},{n:"1163 Diamonds",p:985},
-      {n:"2398 Diamonds",p:1960},{n:"5942 Diamonds",p:4900}
-    ],
-    combo:[
-      {n:"168 Diamonds",d:"112 + 56",p:152},{n:"279 Diamonds",d:"223 + 56",p:250},
-      {n:"301 Diamonds",d:"223 + 56 + 22",p:270},{n:"448 Diamonds",d:"336 + 112",p:395},
-      {n:"626 Diamonds",d:"570 + 56",p:545},{n:"682 Diamonds",d:"570 + 112",p:595},
-      {n:"738 Diamonds",d:"570 + 112 + 56",p:645},{n:"749 Diamonds",d:"570 + 112 + 56 + 22",p:665},
-      {n:"793 Diamonds",d:"570 + 223",p:695},{n:"849 Diamonds",d:"570 + 223 + 56",p:745},
-      {n:"906 Diamonds",d:"570 + 336",p:795},{n:"1018 Diamonds",d:"570 + 336 + 112",p:890},
-      {n:"1733 Diamonds",d:"1163 + 570",p:1475},{n:"3561 Diamonds",d:"2398 + 1163",p:2950},
-      {n:"4131 Diamonds",d:"2398 + 1163 + 570",p:3450},{n:"5132 Diamonds",d:"2398×2 + 336",p:4250}
-    ],
-    dd:[
-      {n:"50 & 50 Bonus",d:"= 100 Total Diamonds",p:65},
-      {n:"150 & 150 Bonus",d:"= 300 Total Diamonds",p:200},
-      {n:"250 & 250 Bonus",d:"= 500 Total Diamonds",p:350},
-      {n:"500 & 500 Bonus",d:"= 1000 Total Diamonds",p:650},
-      {n:"Starlight (Monthly)",d:"During Double Diamond",p:160}
-    ],
-    bundles:[
-      {n:"Weekly Diamond Pass",d:"220 Dias/7 Days + Perks (WDP)",p:98},
-      {n:"Weekly Elite Bundle",d:"55 Dias + 20 CoA + Rare Frags",p:70},
-      {n:"Monthly Epic Bundle",d:"275 Dias + 180 CoA + Rare Frags",p:300},
-      {n:"Twilight Pass",d:"Progressive Tickets + Exclusive Skins",p:500}
-    ],
-    skinsC:[
-      {n:"1089 Dia Skin",d:"Shop/Event — CosmoBit",p:590},
-      {n:"888–879 Dia Skin",d:"Shop/Event — CosmoBit",p:480},
-      {n:"782 Dia Skin",d:"Shop/Event — CosmoBit",p:380},
-      {n:"748–729 Dia Skin",d:"Shop/Event — CosmoBit",p:370},
-      {n:"649 Dia Skin",d:"Shop/Event — CosmoBit",p:325},
-      {n:"828–688 Dia Skin",d:"Shop/Event — CosmoBit",p:310},
-      {n:"386 Dia Skin",d:"Shop/Event — CosmoBit",p:195},
-      {n:"288–269 Dia Skin",d:"Shop/Event — CosmoBit",p:155},
-      {n:"Emote (109 Dias)",d:"In-Game Emote",p:65},
-      {n:"Emote (78 Dias)",d:"In-Game Emote",p:50}
-    ],
-    skinsD:[
-      {n:"1089 Dia Skin",d:"Direct Purchase",p:680},
-      {n:"899–879 Dia Skin",d:"Direct Purchase",p:550},
-      {n:"782 Dia Skin",d:"Direct Purchase",p:440},
-      {n:"749–729 Dia Skin",d:"Direct Purchase",p:430},
-      {n:"649 Dia Skin",d:"Direct Purchase",p:380},
-      {n:"629–599 Dia Skin",d:"Direct Purchase",p:360},
-      {n:"399 Dia Skin",d:"Direct Purchase",p:230},
-      {n:"299–269 Dia Skin",d:"Direct Purchase",p:180},
-      {n:"Painted Skins",d:"Direct Purchase",p:120}
-    ],
-    starlight:[
-      {n:"Normal Starlight (NSL)",d:"Current Month",p:160},
-      {n:"Premium Starlight (PSL)",d:"Current Month",p:320},
-      {n:"Normal Starlight — Table 6",d:"Alternative Rate",p:180},
-      {n:"Premium Starlight — Table 6",d:"Alternative Rate",p:360},
-      {n:"Normal Starlight (March)",d:"Month-Specific",p:145},
-      {n:"Premium Starlight (March)",d:"Month-Specific",p:290},
-      {n:"Normal Starlight (April)",d:"Month-Specific",p:145},
-      {n:"Premium Starlight (April)",d:"Month-Specific",p:290}
-    ]
-  },
-  cod:[
-    {n:"10 Garena Shells",p:13},{n:"20 Garena Shells",p:24},{n:"50 Garena Shells",p:55},
-    {n:"100 Garena Shells",p:100},{n:"200 Garena Shells",p:200},{n:"300 Garena Shells",p:300},
-    {n:"500 Garena Shells",p:500},{n:"1000 Garena Shells",p:1000}
-  ],
-  roblox:[
-    {n:"100 Robux",p:65},{n:"200 Robux",p:115},{n:"300 Robux",p:165},
-    {n:"400 Robux",p:215},{n:"500 Robux",p:250},{n:"600 Robux",p:295},
-    {n:"700 Robux",p:340},{n:"800 Robux",p:390},{n:"900 Robux",p:435},
-    {n:"1000 Robux",p:480}
-  ],
-  bs:[
-    {n:"100 + 5 Golds",p:45},{n:"300 + 20 Golds",p:130},{n:"500 + 40 Golds",p:218},
-    {n:"600 + 45 Golds",p:260},{n:"800 + 60 Golds",p:344},{n:"1000 + 100 Golds",p:437},
-    {n:"1200 + 110 Golds",p:520},{n:"1500 + 140 Golds",p:655},
-    {n:"2000 + 260 Golds",p:884},{n:"2500 + 300 Golds",p:1144},
-    {n:"3000 + 360 Golds",p:1302},{n:"4000 + 520 Golds",p:1868},
-    {n:"5000 + 800 Golds",p:2387}
-  ],
-  load:{
-    "globe-reg":{net:"Globe (Regular)",items:[
-      {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36},
-      {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180},
-      {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435}
-    ]},
-    "tm-reg":{net:"TM (Regular)",items:[
-      {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36},
-      {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180},
-      {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435}
-    ]},
-    "globe-promo":{net:"Globe Promo B",items:[
-      {n:"UnliS680",p:70},{n:"GO59",p:53},{n:"GO59 (Students)",p:53},
-      {n:"UnliGO99 (FB/TikTok/IG)",p:89},{n:"Go+99",p:90},{n:"Go+109",p:99},
-      {n:"Go+120",p:109},{n:"Go+149",p:135},{n:"Go+179",p:162},
-      {n:"GoExtra59",p:54},{n:"GoExtra89",p:80},{n:"GoExtra109",p:96},
-      {n:"GoExtra179",p:162},{n:"GoExtra199",p:179},
-      {n:"Surf4all09",p:8},{n:"Surf4all249",p:217},
-      {n:"GOUNLI20",p:19},{n:"GOUNLI30",p:28},{n:"GOUNLI50",p:45},
-      {n:"GOUNLI95",p:86},{n:"GOUNLI180",p:165},{n:"GOUNLI350",p:307}
-    ]},
-    "homesurf":{net:"Fr WiFi / Home Surf",items:[
-      {n:"HomeSurf50",p:46},{n:"HomeSurf199",p:178},
-      {n:"HomeSurf599",p:519},{n:"HomeSurf1489",p:1264}
-    ]},
-    "famsurf":{net:"FamSurf",items:[
-      {n:"FamSurf50",p:45},{n:"FamSurf198",p:178},
-      {n:"FamSurf299",p:264},{n:"FamSurf998",p:568}
-    ]},
-    "tm-promo":{net:"TM Promo & ALL-NET",items:[
-      {n:"SURF20",p:19},{n:"ALL-NET SURF30",p:28},{n:"AN20",p:19},
-      {n:"BigBenta",p:19},{n:"Combo10",p:8},{n:"Combo15",p:14},
-      {n:"Combo20",p:19},{n:"PowerSurf20",p:19},{n:"PowerSurf59",p:56},
-      {n:"FEML16",p:15},{n:"EZ50",p:46},{n:"EZ70",p:62},
-      {n:"EZ98",p:88},{n:"EZ110",p:98},{n:"EZ76",p:66},
-      {n:"EZ140",p:129},{n:"EZ299",p:264},{n:"EZ589",p:519},
-      {n:"SurfBest69",p:57},{n:"SurfBest249",p:215},
-      {n:"AllSurf59",p:56},{n:"AllSurf110",p:96},
-      {n:"AllSurf149",p:128},{n:"EasyPlan168",p:148},{n:"EasyPlan350",p:295}
-    ]},
-    "gfiber":{net:"GFiber Prepaid",items:[
-      {n:"UnliSurf249",p:221},{n:"UnliSurf299",p:265},
-      {n:"UnliSurf699",p:619},{n:"UnliSurf999",p:869},
-      {n:"UnliSurf1499",p:1284}
-    ]}
+// ===================== DYNAMIC DATA LOADING (Phase 1) =====================
+const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec"; 
+let DATA = {}; // This starts empty and gets filled by your Google Sheet
+
+async function fetchPrices() {
+  try {
+    console.log("Fetching live prices from database...");
+    const response = await fetch(API_URL);
+    
+    if (!response.ok) throw new Error('Database connection failed');
+    
+    DATA = await response.json();
+    
+    // Build the shop grids once data is received from the Google Sheet
+    
+    console.log("Prices loaded successfully!");
+  } catch (error) {
+    console.error("Error loading prices:", error);
+    alert("⚠️ Could not load shop prices. Please refresh the page or check your internet connection.");
   }
-};
+}
+
+// This triggers the fetch as soon as the page loads
+window.onload = fetchPrices;
 
 // ===================== STATE =====================
 let selected = {game:null, item:null, price:null, network:null};
@@ -1496,7 +1378,7 @@ function resetAll(){
   selected={game:null,item:null,price:null,network:null};
 }
 
-buildAll();
+
 </script>
 
 <script>
