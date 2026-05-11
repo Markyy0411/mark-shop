@@ -921,6 +921,10 @@ function makeGrid(containerId, items, game, cat){
   const el = document.getElementById(containerId);
   if(!el) return;
   el.innerHTML = '';
+  
+  // 🛡️ SAFETY CHECK: If the category is missing from the Google Sheet, skip it instead of crashing!
+  if(!items || items.length === 0) return; 
+  
   items.forEach((it,i)=>{
     const c = document.createElement('div');
     c.className='pcard';
@@ -937,6 +941,30 @@ function makeGrid(containerId, items, game, cat){
     };
     el.appendChild(c);
   });
+}
+
+function buildAll(){
+  // 🛡️ SAFETY CHECK: Uses '?.' and '|| []' to prevent crashes if a category is empty
+  makeGrid('grid-mlbb-dias', DATA.mlbb?.dias || [], 'mlbb', 'dias');
+  makeGrid('grid-mlbb-denom', DATA.mlbb?.denom || [], 'mlbb', 'denom');
+  makeGrid('grid-mlbb-combo', DATA.mlbb?.combo || [], 'mlbb', 'combo');
+  makeGrid('grid-mlbb-dd', DATA.mlbb?.dd || [], 'mlbb', 'dd');
+  makeGrid('grid-mlbb-bundles', DATA.mlbb?.bundles || [], 'mlbb', 'bundles');
+  makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb?.skinsC || [], 'mlbb', 'skins');
+  makeGrid('grid-mlbb-skins-direct', DATA.mlbb?.skinsD || [], 'mlbb', 'skins');
+  makeGrid('grid-mlbb-starlight', DATA.mlbb?.starlight || [], 'mlbb', 'starlight');
+  
+  makeGrid('grid-cod', DATA.cod || [], 'cod', 'main');
+  makeGrid('grid-roblox', DATA.roblox || [], 'roblox', 'main');
+  makeGrid('grid-bs', DATA.bs || [], 'bs', 'main');
+  
+  // Load grids
+  if (DATA.load) {
+    Object.keys(DATA.load).forEach(net=>{
+      // 🛡️ FIXED: Removed the old '.items' rule that was crashing the Load section
+      makeGrid('grid-'+net, DATA.load[net] || [], 'load', net);
+    });
+  }
 }
 
 function buildAll(){
