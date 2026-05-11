@@ -885,9 +885,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
 </div><script>
 // ===================== DATA =====================
-// ===================== DYNAMIC DATA LOADING (Phase 1) =====================
-const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec"; 
-let DATA = {}; // This starts empty and gets filled by your Google Sheet
+  
+// ===================== DYNAMIC DATA LOADING =====================
+const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec";
+let DATA = {};
 
 async function fetchPrices() {
   try {
@@ -897,9 +898,9 @@ async function fetchPrices() {
     if (!response.ok) throw new Error('Database connection failed');
     
     DATA = await response.json();
-    
-    // Build the shop grids once data is received from the Google Sheet
-    
+    buildAll();
+    // Build the shop grids ONLY after data is received
+    buildAll();
     console.log("Prices loaded successfully!");
   } catch (error) {
     console.error("Error loading prices:", error);
@@ -907,7 +908,7 @@ async function fetchPrices() {
   }
 }
 
-// This triggers the fetch as soon as the page loads
+// Trigger the fetch as soon as the page loads
 window.onload = fetchPrices;
 
 // ===================== STATE =====================
