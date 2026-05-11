@@ -279,6 +279,9 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="fg">
       <label>Player ID <span class="req">*</span></label>
       <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
+      <div onclick="showIDHelp()" style="font-size:.68rem;color:var(--bl);margin-top:4px;cursor:pointer;display:inline-flex;align-items:center;gap:4px">
+        <span>❓</span> <u>How to find my Player ID & Zone ID?</u>
+      </div>
     </div>
     
     <div class="fg">
@@ -291,7 +294,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     
     <div class="fg">
       <label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+      <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill, or type manually" style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
     </div>
     <div class="fg"><label>Server</label>
       <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
@@ -330,7 +333,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     
     <div class="fg">
       <label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill, or type manually" style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
     </div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
@@ -579,9 +582,34 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up">
     </div>
 
-    <div class="fg">
-      <label>Player ID / Username (if applicable)</label>
-      <input type="text" id="custom-pid" placeholder="Game ID, username, or any account info needed">
+    <!-- MLBB Verify Section (shown only for MLBB orders) -->
+    <div id="custom-verify-section" style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px 14px;margin-bottom:12px">
+      <div style="font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--bl);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+        🔐 Account Verification (MLBB)
+      </div>
+      <div class="fg" style="margin-bottom:10px">
+        <label>Player ID <span class="req">*</span></label>
+        <input type="text" id="custom-pid" placeholder="e.g. 123456789">
+        <div onclick="showIDHelp()" style="font-size:.68rem;color:var(--bl);margin-top:4px;cursor:pointer;display:inline-flex;align-items:center;gap:4px">
+          <span>❓</span> <u>How to find my Player ID & Zone ID?</u>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:10px">
+        <label>Zone ID <span class="req">*</span></label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="custom-zid" placeholder="e.g. 1234" style="flex:1">
+          <button type="button" onclick="verifyCustomMLBB()"
+            style="padding:0 15px;background:var(--bl);color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;white-space:nowrap">
+            Verify
+          </button>
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label>In-Game Name (IGN)</label>
+        <input type="text" id="custom-ign"
+          placeholder="Click 'Verify' to auto-fill, or type manually"
+          style="color:#fbbf24;font-weight:bold;background:rgba(255,255,255,.05);border-color:var(--dk5)">
+      </div>
     </div>
 
     <div class="fg">
@@ -895,7 +923,61 @@ function selectNet(card, netKey){
 function selectCC(card){
   document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
   card.classList.add('active');
-  document.getElementById('custom-game').value = card.dataset.cc;
+  const game = card.dataset.cc;
+  document.getElementById('custom-game').value = game;
+  // Show verify section only for MLBB
+  const vs = document.getElementById('custom-verify-section');
+  if(game === 'Mobile Legends (MLBB)'){
+    vs.style.display = 'block';
+  } else {
+    vs.style.display = 'none';
+    // Clear verify fields when switching away
+    document.getElementById('custom-pid').value = '';
+    document.getElementById('custom-zid').value = '';
+    document.getElementById('custom-ign').value = '';
+  }
+}
+
+// ===================== VERIFY IN CUSTOM FORM =====================
+async function verifyCustomMLBB(){
+  const pid = document.getElementById('custom-pid').value.trim();
+  const zid = document.getElementById('custom-zid').value.trim();
+  const ignField = document.getElementById('custom-ign');
+  const verifyBtn = document.querySelector('button[onclick="verifyCustomMLBB()"]');
+
+  if(!pid || !zid){
+    alert('Please enter both Player ID and Zone ID first.');
+    return;
+  }
+
+  ignField.value = 'Verifying...';
+  ignField.style.borderColor = 'var(--or)';
+  if(verifyBtn){ verifyBtn.disabled=true; verifyBtn.textContent='...'; }
+
+  try{
+    const response = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const data = await response.json();
+
+    if(response.ok && data.ign){
+      ignField.value = data.ign;
+      ignField.style.borderColor = 'var(--gr)';
+      ignField.setAttribute('readonly','');
+      if(verifyBtn){ verifyBtn.textContent='✓ Verified'; verifyBtn.style.background='var(--gr)'; verifyBtn.disabled=true; }
+    } else {
+      ignField.value = '';
+      ignField.style.borderColor = '#ef4444';
+      ignField.removeAttribute('readonly');
+      ignField.placeholder = 'Player not found — type your IGN manually';
+      if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
+      alert(data.error || '⚠️ Player not found. Check your Player ID and Zone ID, or type IGN manually.');
+    }
+  } catch(err){
+    ignField.value = '';
+    ignField.style.borderColor = '#f59e0b';
+    ignField.removeAttribute('readonly');
+    ignField.placeholder = 'Auto-verify unavailable — type your IGN here';
+    if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
+  }
 }
 
 // ===================== AUTO-VERIFY MLBB IGN =====================
@@ -903,7 +985,8 @@ async function verifyMLBB() {
   const pid = document.getElementById('mlbb-pid').value.trim();
   const zid = document.getElementById('mlbb-zid').value.trim();
   const ignField = document.getElementById('mlbb-ign');
-  
+  const verifyBtn = document.querySelector('button[onclick="verifyMLBB()"]');
+
   if (!pid || !zid) {
     alert("Please enter both Player ID and Zone ID first.");
     return;
@@ -911,6 +994,8 @@ async function verifyMLBB() {
 
   ignField.value = "Verifying...";
   ignField.style.borderColor = "var(--or)";
+  ignField.removeAttribute('readonly');
+  if(verifyBtn){ verifyBtn.disabled=true; verifyBtn.textContent='...'; }
 
   try {
     const response = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
@@ -919,14 +1004,24 @@ async function verifyMLBB() {
     if (response.ok && data.ign) {
       ignField.value = data.ign;
       ignField.style.borderColor = "var(--gr)";
+      ignField.setAttribute('readonly','');
+      if(verifyBtn){ verifyBtn.textContent='✓ Verified'; verifyBtn.style.background='var(--gr)'; verifyBtn.disabled=true; }
     } else {
+      // Backend exists but player not found
       ignField.value = "";
       ignField.style.borderColor = "#ef4444";
-      alert(data.error || "Player not found.");
+      ignField.removeAttribute('readonly');
+      ignField.placeholder = "Player not found — type your IGN manually";
+      if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
+      alert("⚠️ Player not found.\nDouble-check your Player ID and Zone ID, or type your IGN manually.");
     }
   } catch (error) {
+    // Backend not set up yet — unlock field for manual entry
     ignField.value = "";
-    alert("Verification service is currently busy. Please try again.");
+    ignField.style.borderColor = "#f59e0b";
+    ignField.removeAttribute('readonly');
+    ignField.placeholder = "Auto-verify unavailable — type your IGN here";
+    if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
   }
 }
   
@@ -1009,13 +1104,32 @@ async function submitOrder(game){
     const name = document.getElementById('custom-name').value.trim();
     const contact = document.getElementById('custom-contact').value.trim();
     const pid = document.getElementById('custom-pid').value.trim();
+    const zid = document.getElementById('custom-zid').value.trim();
+    const ign = document.getElementById('custom-ign').value.trim();
     const budget = document.getElementById('custom-budget').value.trim();
     const notes = document.getElementById('custom-notes').value.trim();
     if(!desc) missingFields.push('Order Description');
     if(!name) missingFields.push('Your Name');
     if(!contact) missingFields.push('Contact Number / FB Name');
+    // For MLBB orders, require Player ID and Zone ID
+    if(gameField === 'Mobile Legends (MLBB)'){
+      if(!pid) missingFields.push('Player ID');
+      if(!zid) missingFields.push('Zone ID');
+    }
     if(missingFields.length){valid=false;}
-    fields={game: gameField, orderDescription: desc, customerName: name, contactNumberOrFB: contact, playerID_username: pid || 'Not provided', budget: budget || 'Not specified', notes: notes};
+    fields={
+      game: gameField,
+      orderType: '🛎️ CUSTOM / UNLISTED ORDER — Needs Personal Handling',
+      orderDescription: desc,
+      customerName: name,
+      contactNumberOrFB: contact,
+      playerID: pid || 'N/A',
+      zoneID: zid || 'N/A',
+      ign: ign || 'Not verified',
+      budget: budget || 'Not specified',
+      notes: notes,
+      importantNote: '⚠️ This item/offer was NOT found on the website. Please handle personally.'
+    };
   }
 
   if(!valid){
@@ -1035,12 +1149,15 @@ async function submitOrder(game){
   // ⚠️ HERE IS YOUR DEPLOYED GOOGLE URL:
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec";
 
+  // 3. Get the actual file object FIRST before checking it
+  const file = fileInput ? fileInput.files[0] : null;
+
   // 🛡️ SECURITY GATEKEEPER: Check File Type & Size
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
   const maxSize = 3 * 1024 * 1024; // 3MB limit (Perfect for screenshots)
 
   // 1. Block non-images (mp4, doc, exe, etc.)
-  if(!allowedTypes.includes(file.type)) {
+  if(file && !allowedTypes.includes(file.type)) {
     errEl.textContent='❌ Security Block: Only images (JPG, PNG, WEBP) are allowed.';
     errEl.style.display='block';
     btn.disabled=false;
@@ -1049,14 +1166,13 @@ async function submitOrder(game){
   }
 
   // 2. Block huge files to save your Google Drive storage
-  if(file.size > maxSize) {
+  if(file && file.size > maxSize) {
     errEl.textContent='❌ File too large! Please use a screenshot under 3MB.';
     errEl.style.display='block';
     btn.disabled=false;
     btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
     return;
   }
-  const file = fileInput.files[0];
   const reader = new FileReader();
 
   reader.onload = async function(e) {
@@ -1121,6 +1237,15 @@ function resetAll(){
   document.querySelector('.gtab[data-g="mlbb"]').classList.add('active');
   // Reset form fields
   document.querySelectorAll('input[type=text],input[type=tel],textarea').forEach(i=>i.value='');
+  // Restore verify fields
+  const customIgn = document.getElementById('custom-ign');
+  if(customIgn){ customIgn.removeAttribute('readonly'); customIgn.style.borderColor=''; customIgn.placeholder='Click \'Verify\' to auto-fill, or type manually'; }
+  const customVerifyBtn = document.querySelector('button[onclick="verifyCustomMLBB()"]');
+  if(customVerifyBtn){ customVerifyBtn.disabled=false; customVerifyBtn.textContent='Verify'; customVerifyBtn.style.background='var(--bl)'; }
+  // Re-show verify section (default MLBB)
+  const vs = document.getElementById('custom-verify-section');
+  if(vs) vs.style.display='block';
+  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
   document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
   document.querySelectorAll('.sel-box').forEach(b=>b.style.display='none');
   document.querySelectorAll('.err-msg').forEach(e=>e.style.display='none');
@@ -1368,6 +1493,58 @@ buildAll();
   </div>
 </div>
 
+<!-- ID HELP MODAL -->
+<style>
+.idhelp-overlay{position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,.82);
+  backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:18px}
+.idhelp-overlay.open{display:flex}
+.idhelp-box{background:var(--dk2);border:1.5px solid rgba(59,130,246,.35);border-radius:18px;
+  padding:22px 18px;max-width:360px;width:100%;animation:popIn .22s ease}
+.idhelp-box h3{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;color:var(--bl);
+  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:7px}
+.id-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:11px}
+.id-step-num{width:22px;height:22px;border-radius:50%;background:var(--bl);color:#fff;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.id-step p{font-size:.78rem;color:var(--mx);line-height:1.6}
+.id-step p b{color:var(--tx)}
+.id-example{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);
+  border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.75rem;line-height:1.8}
+.id-example .ex-id{color:#fbbf24;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem}
+.id-example .ex-zone{color:#4ade80;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem}
+</style>
+
+<div class="idhelp-overlay" id="idhelp-overlay" onclick="if(event.target===this)closeIDHelp()">
+  <div class="idhelp-box">
+    <h3>🔍 How to Find Your IDs</h3>
+    <div class="id-step">
+      <div class="id-step-num">1</div>
+      <p>Open <b>Mobile Legends</b> and tap your <b>profile picture</b> (top-left corner)</p>
+    </div>
+    <div class="id-step">
+      <div class="id-step-num">2</div>
+      <p>Your <b>Player ID</b> is the <b>long number</b> shown below your username</p>
+    </div>
+    <div class="id-step">
+      <div class="id-step-num">3</div>
+      <p>Your <b>Zone ID</b> is the <b>short number in parentheses ( )</b> right after your Player ID</p>
+    </div>
+    <div class="id-example">
+      Example profile shows:<br>
+      <span class="ex-id">123456789</span><span style="color:var(--mx)"> (</span><span class="ex-zone">1234</span><span style="color:var(--mx)">)</span><br>
+      <span style="color:var(--mx);font-size:.68rem">Player ID = <b style="color:#fbbf24">123456789</b> &nbsp;·&nbsp; Zone ID = <b style="color:#4ade80">1234</b></span>
+    </div>
+    <div class="id-step">
+      <div class="id-step-num">4</div>
+      <p>Enter both above, then tap <b style="color:var(--bl)">Verify</b> to confirm your account is real ✅</p>
+    </div>
+    <button onclick="closeIDHelp()" style="width:100%;padding:11px;background:var(--bl);color:#fff;
+      border:none;border-radius:10px;font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.95rem;letter-spacing:1px;cursor:pointer;margin-top:4px">Got it!</button>
+  </div>
+</div>
+
 <!-- Bell Button -->
 <button class="notif-bell" onclick="openNotif()" title="May & June Starlight Offers" style="bottom:86px">
   🔔
@@ -1424,7 +1601,7 @@ buildAll();
       </div>
 
       <!-- June NSL - 1 REMAINING -->
-      <div class="offer-card" style="border-color:rgba(239,68,68,.4)">
+      <div class="offer-card" id="offer-june-nsl" style="border-color:rgba(239,68,68,.4);cursor:pointer" onclick="markNSLRead('june-nsl')">
         <div class="oc-top">
           <div>
             <div class="oc-name">⭐ June NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
@@ -1471,7 +1648,7 @@ buildAll();
 
     <!-- CTA -->
     <div class="notif-cta">
-      <button class="notif-cta-btn" onclick="goToCustomOrder()">
+      <button class="notif-cta-btn" onclick="markNSLRead('june-nsl'); goToCustomOrder()">
         ✏️ Order Here (Custom Request)
       </button>
       <div class="notif-cta-note">
@@ -1531,7 +1708,7 @@ buildAll();
     <div style="padding:14px 18px 0">
 
       <!-- OBSIDIA -->
-      <div class="skin-card" onclick="orderSkin('🌑 OBSIDIA (Premium Starlight)','₱420','8th Day of May Release')" style="cursor:pointer">
+      <div class="skin-card" id="skin-obsidia" onclick="markSkinRead('obsidia'); orderSkin('🌑 OBSIDIA (Premium Starlight)','₱420','8th Day of May Release')" style="cursor:pointer">
         <div class="sk-head">
           <div>
             <div class="sk-name">🌑 OBSIDIA <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
@@ -1549,7 +1726,7 @@ buildAll();
       </div>
 
       <!-- PHARSA ALL-STAR -->
-      <div class="skin-card" style="cursor:pointer">
+      <div class="skin-card" id="skin-pharsa" style="cursor:pointer">
         <div class="sk-head">
           <div>
             <div class="sk-name">🦋 PHARSA ALL-STAR</div>
@@ -1558,11 +1735,11 @@ buildAll();
           <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
         </div>
         <div class="sk-prices">
-          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱275','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+          <div class="sk-price-row" onclick="markSkinRead('pharsa'); orderSkin('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱275','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
             <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
             <span class="spr-val">₱275</span>
           </div>
-          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱410','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+          <div class="sk-price-row" onclick="markSkinRead('pharsa'); orderSkin('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱410','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
             <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
             <span class="spr-val">₱410</span>
           </div>
@@ -1571,7 +1748,7 @@ buildAll();
       </div>
 
       <!-- KARINA ZODIAC -->
-      <div class="skin-card" onclick="orderSkin('♋ KARINA ZODIAC (Original Value: 899 💎)','₱495','May 21')" style="cursor:pointer">
+      <div class="skin-card" id="skin-karina" onclick="markSkinRead('karina'); orderSkin('♋ KARINA ZODIAC (Original Value: 899 💎)','₱495','May 21')" style="cursor:pointer">
         <div class="sk-head">
           <div>
             <div class="sk-name">♋ KARINA ZODIAC</div>
@@ -1589,7 +1766,7 @@ buildAll();
       </div>
 
       <!-- LING ALL-STAR -->
-      <div class="skin-card" onclick="orderSkin('⚔️ LING ALL-STAR (Original Value: 762 💎)','₱495','June 26')" style="cursor:pointer">
+      <div class="skin-card" id="skin-ling" onclick="markSkinRead('ling'); orderSkin('⚔️ LING ALL-STAR (Original Value: 762 💎)','₱495','June 26')" style="cursor:pointer">
         <div class="sk-head">
           <div>
             <div class="sk-name">⚔️ LING ALL-STAR</div>
@@ -1607,7 +1784,7 @@ buildAll();
       </div>
 
       <!-- LEGEND LESLEY -->
-      <div class="skin-card legend-card" style="cursor:pointer">
+      <div class="skin-card legend-card" id="skin-lesley" style="cursor:pointer">
         <div class="sk-head">
           <div>
             <div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div>
@@ -1616,15 +1793,15 @@ buildAll();
           <div style="font-size:.7rem;color:#f59e0b;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
         </div>
         <div class="sk-prices">
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400','8th Day Gifting Phase')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+          <div class="sk-price-row" onclick="markSkinRead('lesley'); orderSkin('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400','8th Day Gifting Phase')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
             <span class="spr-label">8th Day Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
             <span class="spr-val">₱6,400</span>
           </div>
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250','Phase 2 Gifting')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+          <div class="sk-price-row" onclick="markSkinRead('lesley'); orderSkin('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250','Phase 2 Gifting')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
             <span class="spr-label">Phase 2 Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
             <span class="spr-val">₱6,250</span>
           </div>
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Last Day Gifting (Best Deal!)','₱6,150','Last Day Gifting')" style="cursor:pointer;border:1px solid rgba(245,158,11,.25);transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
+          <div class="sk-price-row" onclick="markSkinRead('lesley'); orderSkin('👑 LEGEND LESLEY — Last Day Gifting (Best Deal!)','₱6,150','Last Day Gifting')" style="cursor:pointer;border:1px solid rgba(245,158,11,.25);transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
             <span class="spr-label">Last Day Gifting <span style="color:#4ade80;font-size:.62rem">Best deal · Tap to order</span></span>
             <span class="spr-val" style="color:#fbbf24">₱6,150</span>
           </div>
@@ -1702,8 +1879,82 @@ function confirmDDOrder(){
   }
 }
 
+// ===================== ID HELP MODAL =====================
+function showIDHelp(){ document.getElementById('idhelp-overlay').classList.add('open'); }
+function closeIDHelp(){ document.getElementById('idhelp-overlay').classList.remove('open'); }
+
+// ===================== PER-ITEM NOTIFICATION TRACKING =====================
+const TOTAL_SKINS = 5; // obsidia, pharsa, karina, ling, lesley
+const TOTAL_NSL   = 1; // only june-nsl is active (may is sold out = auto-read)
+
+const skinsRead = new Set();
+const nslRead   = new Set(['may-nsl']); // May NSL auto-read since sold out
+
+function markSkinRead(id){
+  if(skinsRead.has(id)) return;
+  skinsRead.add(id);
+
+  // Visually mark card as read (dim slightly, add checkmark)
+  const card = document.getElementById('skin-'+id);
+  if(card){
+    card.style.opacity = '0.55';
+    card.style.filter  = 'grayscale(0.5)';
+    // Add read tag if not already there
+    if(!card.querySelector('.read-tag')){
+      const tag = document.createElement('div');
+      tag.className = 'read-tag';
+      tag.textContent = '✓ Seen';
+      tag.style.cssText = 'position:absolute;top:7px;right:7px;font-size:.6rem;font-weight:700;' +
+        'color:#4ade80;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);' +
+        'border-radius:10px;padding:2px 7px;letter-spacing:.5px;font-family:Rajdhani,sans-serif';
+      card.style.position='relative';
+      card.appendChild(tag);
+    }
+  }
+
+  // Update badge count
+  const remaining = TOTAL_SKINS - skinsRead.size;
+  const badge = document.querySelector('.notif-bell[onclick="openSkins()"] .notif-badge');
+  if(badge){
+    if(remaining <= 0){
+      badge.style.display='none';
+    } else {
+      badge.textContent = remaining;
+      badge.style.display='flex';
+    }
+  }
+}
+
+function markNSLRead(id){
+  if(nslRead.has(id)) return;
+  nslRead.add(id);
+
+  // Dim the offer card
+  const card = document.getElementById('offer-'+id);
+  if(card){
+    card.style.opacity = '0.5';
+    card.style.filter  = 'grayscale(0.4)';
+    card.style.cursor  = 'default';
+    card.onclick       = null;
+  }
+
+  // Update badge count
+  const remaining = TOTAL_NSL - (nslRead.size - 1); // subtract 1 for may-nsl auto-read
+  const badge = document.querySelector('.notif-bell[onclick="openNotif()"] .notif-badge');
+  if(badge){
+    if(remaining <= 0){
+      badge.style.display='none';
+    } else {
+      badge.textContent = remaining;
+      badge.style.display='flex';
+    }
+  }
+}
+
 function openNotif(){
   document.getElementById('notif-overlay').classList.add('open');
+  // May NSL is sold out → auto-read, no badge to show for it
+  // Badge already hidden on open from before
   document.querySelector('.notif-bell[onclick="openNotif()"] .notif-badge').style.display='none';
 }
 function closeNotif(){ document.getElementById('notif-overlay').classList.remove('open'); }
@@ -1711,7 +1962,7 @@ function overlayClick(e){ if(e.target===document.getElementById('notif-overlay')
 
 function openSkins(){
   document.getElementById('skins-overlay').classList.add('open');
-  document.querySelector('.notif-bell[onclick="openSkins()"] .notif-badge').style.display='none';
+  // Don't hide the fire badge on open — only hide per skin tapped
 }
 function closeSkins(){ document.getElementById('skins-overlay').classList.remove('open'); }
 function skinsOverlayClick(e){ if(e.target===document.getElementById('skins-overlay')) closeSkins(); }
@@ -1724,6 +1975,7 @@ function goToCustomOrder(){
   document.getElementById('g-custom').classList.add('active');
   document.getElementById('ok-msg').style.display='none';
   document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+  document.getElementById('custom-verify-section').style.display='block';
   document.getElementById('custom-desc').value='Monthly Starlight (NSL) — [June / July 2026]\nQuantity: ';
   setTimeout(()=>{
     document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1739,6 +1991,7 @@ function goToSkinsOrder(){
   document.getElementById('g-custom').classList.add('active');
   document.getElementById('ok-msg').style.display='none';
   document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+  document.getElementById('custom-verify-section').style.display='block';
   document.getElementById('custom-desc').value='Skin Pre-Order\nSkin Name: \nVersion (if applicable): Normal / Premium\nGifting Phase (for Legend): ';
   setTimeout(()=>{
     document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1754,6 +2007,7 @@ function orderSkin(skinName, price, schedule){
   document.getElementById('g-custom').classList.add('active');
   document.getElementById('ok-msg').style.display='none';
   document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+  document.getElementById('custom-verify-section').style.display='block';
   document.getElementById('custom-desc').value=
     'Skin Pre-Order\n' +
     'Skin: ' + skinName + '\n' +
@@ -1762,14 +2016,15 @@ function orderSkin(skinName, price, schedule){
   document.getElementById('custom-budget').value=price;
   setTimeout(()=>{
     document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-name').focus();
+    document.getElementById('custom-pid').focus();
   },200);
 }
   // ===================== AUTO-VERIFY CODM IGN =====================
 async function verifyCOD() {
   const pid = document.getElementById('cod-pid').value.trim();
   const ignField = document.getElementById('cod-ign');
-  
+  const verifyBtn = document.querySelector('button[onclick="verifyCOD()"]');
+
   if (!pid) {
     alert("Please enter your Call of Duty Player ID first.");
     return;
@@ -1777,30 +2032,40 @@ async function verifyCOD() {
 
   ignField.value = "Verifying...";
   ignField.style.borderColor = "var(--or)";
+  ignField.removeAttribute('readonly');
+  if(verifyBtn){ verifyBtn.disabled=true; verifyBtn.textContent='...'; }
 
   try {
-    // Talk to your new CODM backend
     const response = await fetch(`/api/verify-cod?id=${pid}`);
     const data = await response.json();
 
     if (response.ok && data.ign) {
       ignField.value = data.ign;
       ignField.style.borderColor = "var(--gr)";
+      ignField.setAttribute('readonly','');
+      if(verifyBtn){ verifyBtn.textContent='✓ Verified'; verifyBtn.style.background='var(--gr)'; verifyBtn.disabled=true; }
     } else {
       ignField.value = "";
       ignField.style.borderColor = "#ef4444";
-      alert(data.error || "Player not found.");
+      ignField.removeAttribute('readonly');
+      ignField.placeholder = "Player not found — type your IGN manually";
+      if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
+      alert(data.error || "Player not found. Check your Player ID.");
     }
   } catch (error) {
     ignField.value = "";
-    alert("Verification service is currently busy. Please try again.");
+    ignField.style.borderColor = "#f59e0b";
+    ignField.removeAttribute('readonly');
+    ignField.placeholder = "Auto-verify unavailable — type your IGN here";
+    if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
   }
 }
   // ===================== AUTO-VERIFY ROBLOX USERNAME =====================
 async function verifyRoblox() {
   const username = document.getElementById('roblox-user').value.trim();
   const dispField = document.getElementById('roblox-dispname');
-  
+  const verifyBtn = document.querySelector('button[onclick="verifyRoblox()"]');
+
   if (!username) {
     alert("Please enter a Roblox Username first.");
     return;
@@ -1808,6 +2073,7 @@ async function verifyRoblox() {
 
   dispField.value = "Verifying...";
   dispField.style.borderColor = "var(--or)";
+  if(verifyBtn){ verifyBtn.disabled=true; verifyBtn.textContent='...'; }
 
   try {
     const response = await fetch(`/api/verify-roblox?username=${encodeURIComponent(username)}`);
@@ -1816,14 +2082,18 @@ async function verifyRoblox() {
     if (response.ok && data.ign) {
       dispField.value = data.ign;
       dispField.style.borderColor = "var(--gr)";
+      if(verifyBtn){ verifyBtn.textContent='✓ Verified'; verifyBtn.style.background='var(--gr)'; verifyBtn.disabled=true; }
     } else {
       dispField.value = "";
       dispField.style.borderColor = "#ef4444";
+      if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
       alert(data.error || "Roblox user not found. Check the spelling.");
     }
   } catch (error) {
     dispField.value = "";
-    alert("Verification service is currently busy. Please try again.");
+    dispField.style.borderColor = "#f59e0b";
+    dispField.placeholder = "Auto-verify unavailable — username noted above";
+    if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
   }
 }
 </script>
