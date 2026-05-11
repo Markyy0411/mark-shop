@@ -889,6 +889,36 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 // ===================== DYNAMIC DATA LOADING =====================
 const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnS962RU_qW32WQs6L5KHtnspTL2HUkKfexFB8lyp_SNssW9DzYGl6udUXZ5CmYutHrcZzMZWh-SbrMI-zOrbO6UwFPgy3Ax-5Z6GH97U4EU5AJ5wsFXtCm9xT1ciI7Q1S0HixBZ0bWQvtxfhKFW6WP1qVeS8ReLckWRCfN3EtE_beoNoQP2BW4ihyphILy77q2jm7M8jWpH5IF3Rp2tBjebxtFeyo4Q-DnUG-SrHIODG8HhRxClejcn3pJJdsqpTo4CTFvlxS1mvGPytAXtJCHYO9razw&lib=MDahD2pwSYaCGiZZQjEgrWZeDXUJWdnCy";
 let DATA = {};
+  // 🛡️ DATA PRIVACY ENGINE
+function maskData(text, type) {
+  if (!text) return "";
+  if (type === 'name') {
+    return text.split(' ').map(p => p[0] + '*'.repeat(p.length - 1)).join(' ');
+  }
+  if (type === 'email') {
+    const [user, domain] = text.split('@');
+    return user[0] + "****" + "@" + domain;
+  }
+  return text.substring(0, 3) + "*******" + text.slice(-3); // Results in: 092*******005
+}
+
+// 🔓 REVEAL FUNCTION (Triggered by button)
+function revealDetails(btn) {
+  const container = btn.parentElement;
+  const nameEl = container.querySelector('.real-name');
+  const infoEl = container.querySelector('.real-info');
+  
+  // These are your actual details that will be revealed
+  const fullName = "Mark Guevarra";
+  const fullNum = "09288978005";
+  const fullEmail = "markguevarra@gmail.com";
+  
+  if(nameEl) nameEl.innerText = fullName;
+  if(infoEl) {
+      infoEl.innerText = (currentPaymentMethod === 'PayPal') ? fullEmail : fullNum;
+  }
+  btn.style.display = 'none'; // Hide the button after info is revealed
+}
 
 async function fetchPrices() {
   try {
@@ -1574,15 +1604,53 @@ let currentPaymentMethod = 'none';
 
 function updatePaymentUI(selectElement) {
   currentPaymentMethod = selectElement.value;
-  const formBox = selectElement.closest('.oform'); 
-  const detailsBox = formBox.querySelector('.payment-details-text');
-  const floatBtn = document.getElementById('floating-qr-btn');
+  const detailsBox = document.getElementById('payment-details-box');
+  if(!detailsBox) return;
 
   if (currentPaymentMethod === 'none') {
     detailsBox.style.display = 'none';
-    floatBtn.style.display = 'none';
     return;
   }
+
+  const name = "Mark Guevarra";
+  const num = "09288978005";
+  const email = "markguevarra@gmail.com";
+
+  let icon = ""; let color = ""; let label = "Number";
+  let maskedValue = maskData(num, 'num');
+
+  if(currentPaymentMethod === 'GCash') { icon="🔵"; color="#3b82f6"; }
+  else if(currentPaymentMethod === 'Maya') { icon="🟢"; color="#22c55e"; }
+  else if(currentPaymentMethod === 'GoTyme') { icon="🟣"; color="#8b5cf6"; label="Account"; }
+  else if(currentPaymentMethod === 'PayPal') { 
+    icon="🟦"; color="#0ea5e9"; label="Email"; 
+    maskedValue = maskData(email, 'email'); 
+  }
+
+  detailsBox.style.display = 'block';
+  detailsBox.innerHTML = `
+    <div style="border-left: 4px solid ${color}; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 0 8px 8px 0; text-align: left;">
+      <span style="color:${color}; font-weight:bold;">${icon} ${currentPaymentMethod} Details</span><br>
+      <div style="margin-top:5px; font-size: 13px;">
+        Name: <b class="real-name">${maskData(name, 'name')}</b><br>
+        ${label}: <b class="real-info">${maskedValue}</b>
+      </div>
+      <button type="button" onclick="revealDetails(this)" 
+        style="margin-top:10px; background:${color}; color:white; border:none; padding:8px 12px; border-radius:5px; font-size:11px; cursor:pointer; font-weight:bold; width:100%;">
+        🔓 CLICK TO SHOW PAYMENT INFO
+      </button>
+    </div>
+  `;
+}
+
+function handlePaymentSelect(method) {
+    // This connects your grid selection to the payment dropdown
+    const selectors = document.querySelectorAll('.payment-method-selector');
+    selectors.forEach(s => {
+        s.value = method;
+        updatePaymentUI(s);
+    });
+}
 
   detailsBox.style.display = 'block';
   if(currentPaymentMethod === 'GCash') {
