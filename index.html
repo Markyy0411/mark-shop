@@ -1033,6 +1033,14 @@ async function submitOrder(game){
   const errEl = document.getElementById(game+'-err');
   errEl.style.display='none';
 
+  // 🛡️ SECURITY: HTML Sanitizer
+function sanitizeHTML(str) {
+  if(!str) return '';
+  const temp = document.createElement('div');
+  temp.textContent = str;
+  return temp.innerHTML;
+}
+
   let fields = {};
   let valid = true;
   let missingFields = [];
@@ -1204,10 +1212,11 @@ async function submitOrder(game){
             <b>Transaction ID:</b> <span style="color:#fbbf24">${fields.transactionID}</span><br>
             <b>Date & Time:</b> ${fields.dateTime}<br>
             <b>Game:</b> ${fields.game}<br>
-            <b>Order Details:</b> ${fields.order || fields.orderDescription}<br>
-            ${fields.playerID ? `<b>Player ID:</b> ${fields.playerID}<br>` : ''}
-            ${fields.zoneID ? `<b>Zone ID:</b> ${fields.zoneID}<br>` : ''}
-            ${fields.ign ? `<b>IGN:</b> ${fields.ign}<br>` : ''}
+            // Example of what to change in the ok.innerHTML block:
+<b>Order Details:</b> ${sanitizeHTML(fields.order || fields.orderDescription)}<br>
+${fields.playerID ? `<b>Player ID:</b> ${sanitizeHTML(fields.playerID)}<br>` : ''}
+${fields.zoneID ? `<b>Zone ID:</b> ${sanitizeHTML(fields.zoneID)}<br>` : ''}
+${fields.ign ? `<b>IGN:</b> ${sanitizeHTML(fields.ign)}<br>` : ''}
           </div>
           <p>Your order and payment screenshot have been successfully received!<br>Wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
           <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
