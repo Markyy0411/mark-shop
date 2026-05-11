@@ -2105,6 +2105,31 @@ async function verifyRoblox() {
     if(verifyBtn){ verifyBtn.textContent='Retry'; verifyBtn.disabled=false; }
   }
 }
+// ... (your verifyRoblox and other javascript code is up here) ...
+  } catch (error) {
+    dispField.value = "";
+    alert("Verification service is currently busy. Please try again.");
+  }
+}
 </script>
+
+<button id="floating-qr-btn" onclick="openQRModal()" style="display:none; position: fixed; bottom: 25px; right: 25px; background: var(--bl); color: white; border: none; border-radius: 50px; padding: 15px 25px; font-weight: bold; font-size: 1.1em; box-shadow: 0 8px 20px rgba(0,0,0,0.6); cursor: pointer; z-index: 998; align-items: center; gap: 10px; transition: 0.3s;">
+  <span style="font-size: 1.3em;">📷</span> View QR Code
+</button>
+
+<div id="qr-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
+  <div style="background: var(--dk2); padding: 25px; border-radius: 16px; border: 1px solid var(--dk5); text-align: center; max-width: 320px; width: 90%; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+    
+    <button onclick="closeQRModal()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: var(--mx); font-size: 2em; cursor: pointer;">&times;</button>
+    
+    <h3 id="qr-modal-title" style="margin-bottom: 20px; font-size: 1.5em;">Scan to Pay</h3>
+    <img id="qr-modal-img" src="" alt="QR Code" style="width: 100%; border-radius: 12px; border: 3px solid var(--bl);">
+    
+    <p style="font-size: 0.95em; color: var(--or); margin-top: 20px; font-weight: bold;">1. Save or screenshot this QR<br>2. Pay using your app<br>3. Upload receipt below!</p>
+    
+    <button onclick="closeQRModal()" style="margin-top: 15px; width: 100%; padding: 12px; background: var(--dk5); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Close Tab</button>
+  </div>
+</div>
+
 </body>
 </html>
