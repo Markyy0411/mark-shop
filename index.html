@@ -1611,6 +1611,57 @@ async function verifyRoblox() {
 
 // ===================== DYNAMIC PAYMENT DETAILS & QR MODAL =====================
 let currentPaymentMethod = 'none'; 
+  // ==========================================
+// 💎 2X DIAMONDS LOGIC (POPULS & BUTTONS)
+// ==========================================
+let selectedDDItem = null;
+
+function openDDConfirm(card) {
+  const name = card.querySelector('.item-name').innerText;
+  const price = card.querySelector('.item-price').innerText;
+  
+  document.getElementById('dd-confirm-name').innerText = name;
+  document.getElementById('dd-confirm-price').innerText = price;
+  
+  // Uncheck boxes and lock button
+  document.getElementById('dd-chk1').checked = false;
+  document.getElementById('dd-chk2').checked = false;
+  document.getElementById('dd-btn-confirm').disabled = true;
+  document.getElementById('dd-btn-confirm').classList.remove('ready');
+  
+  document.getElementById('dd-confirm-overlay').classList.add('open');
+  selectedDDItem = { name, price, el: card };
+}
+
+function checkDDReady() {
+  const chk1 = document.getElementById('dd-chk1').checked;
+  const chk2 = document.getElementById('dd-chk2').checked;
+  const btn = document.getElementById('dd-btn-confirm');
+  
+  if (chk1 && chk2) {
+    btn.disabled = false;
+    btn.classList.add('ready'); // Lights up orange!
+  } else {
+    btn.disabled = true;
+    btn.classList.remove('ready');
+  }
+}
+
+function cancelDDOrder() {
+  document.getElementById('dd-confirm-overlay').classList.remove('open');
+  selectedDDItem = null;
+}
+
+function confirmDDOrder() {
+  document.getElementById('dd-confirm-overlay').classList.remove('open');
+  if(selectedDDItem) {
+    selectItem(selectedDDItem.el, 'mlbb');
+    document.getElementById('item-name').value = "2X BONUS: " + selectedDDItem.name;
+  }
+}
+
+function openDDInfo() { document.getElementById('dd-info-overlay').classList.add('open'); }
+function closeDDInfo() { document.getElementById('dd-info-overlay').classList.remove('open'); }
 
 function updatePaymentUI(selectElement) {
   currentPaymentMethod = selectElement.value;
@@ -1619,6 +1670,7 @@ function updatePaymentUI(selectElement) {
   document.querySelectorAll('.payment-method-selector').forEach(sel => {
     if(sel !== selectElement) sel.value = currentPaymentMethod;
   });
+  
 
   const name = "Mark Guevarra";
   const num = "09288978005";
