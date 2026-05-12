@@ -1498,25 +1498,35 @@ function closeIDHelp(){ document.getElementById('idhelp-overlay').classList.remo
 
 // ===================== PRE-ORDER / PROMO HANDLING =====================
 function orderSkin(itemName, price, schedule){
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-verify-section').style.display='block';
-  document.getElementById('custom-desc').value=
-    'Promo / Pre-Order\n' +
-    'Item: ' + itemName + '\n' +
-    'Price: ' + price + '\n' +
-    'Gifting Schedule: ' + schedule;
-  document.getElementById('custom-budget').value=price;
-  
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-pid').focus();
-  },200);
+  try {
+    // 1. Reset all tabs
+    document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
+    
+    // 2. Safely open the Custom form
+    const customTab = document.querySelector('.gtab[data-g="custom"]');
+    const customPanel = document.getElementById('g-custom');
+    if (customTab) customTab.classList.add('active');
+    if (customPanel) customPanel.classList.add('active');
+    
+    // 3. Fill the form details
+    if (document.getElementById('ok-msg')) document.getElementById('ok-msg').style.display='none';
+    if (document.getElementById('custom-game')) document.getElementById('custom-game').value='Mobile Legends (MLBB)';
+    if (document.getElementById('custom-verify-section')) document.getElementById('custom-verify-section').style.display='block';
+    if (document.getElementById('custom-desc')) {
+      document.getElementById('custom-desc').value= 'Promo / Pre-Order\nItem: ' + itemName + '\nPrice: ' + price + '\nGifting Schedule: ' + schedule;
+    }
+    if (document.getElementById('custom-budget')) document.getElementById('custom-budget').value=price;
+    
+    // 4. Scroll to form
+    setTimeout(()=>{
+      if (customPanel) customPanel.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 200);
+
+  } catch (err) {
+    console.error("Skin order error:", err);
+    alert("Please click the 'Custom Order' tab manually.");
+  }
 }
 
 // ===================== AUTO-VERIFY CODM IGN =====================
@@ -1748,6 +1758,44 @@ function closeQRModal() {
     <button onclick="closeQRModal()" style="margin-top: 15px; width: 100%; padding: 12px; background: var(--dk5); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Close Tab</button>
   </div>
 </div>
+<div id="dd-warn-fab" onclick="openDDInfo()" style="display:none; position: fixed; bottom: 85px; right: 25px; background: #dc2626; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: bold; font-size: 0.9em; box-shadow: 0 8px 20px rgba(220,38,38,0.6); cursor: pointer; z-index: 998; align-items: center; gap: 8px; border: 2px solid #f87171;">
+  <span style="font-size: 1.2em;">⚠️</span> Read Before Ordering
+</div>
 
+<div id="dd-info-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
+  <div style="background: var(--dk2); padding: 25px; border-radius: 16px; border: 1px solid #ef4444; max-width: 350px; width: 90%; position: relative;">
+    <button onclick="closeDDInfo()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: var(--mx); font-size: 2em; cursor: pointer;">&times;</button>
+    <h3 style="color: #f87171; margin-bottom: 15px;">⚠️ Double Diamond Rules</h3>
+    <p style="font-size: 0.85rem; color: #fca5a5; margin-bottom: 10px;"><b>1. Strict One-Time Limit:</b> You can only purchase each Double Diamond tier once per MLBB account.</p>
+    <p style="font-size: 0.85rem; color: #fca5a5; margin-bottom: 10px;"><b>2. Check Your Shop:</b> If you have bought this before, it will be missing from your in-game shop. Do not order it here.</p>
+    <p style="font-size: 0.85rem; color: #fca5a5; margin-bottom: 20px;"><b>3. No Refunds:</b> If you order a tier you've already claimed, you will only receive the standard diamond amount.</p>
+    <button onclick="closeDDInfo()" style="width: 100%; padding: 12px; background: #dc2626; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">I UNDERSTAND</button>
+  </div>
+</div>
+
+<div id="dd-confirm-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
+  <div style="background: var(--dk2); padding: 25px; border-radius: 16px; border: 1px solid #f59e0b; max-width: 350px; width: 90%;">
+    <h3 style="color: #fbbf24; margin-bottom: 15px;">Confirm 2x Diamond Order</h3>
+    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; margin-bottom: 20px; border-left: 3px solid #fbbf24;">
+      <div id="dd-confirm-name" style="font-weight: bold; color: var(--tx); font-size: 1.1rem;">--</div>
+      <div id="dd-confirm-price" style="color: var(--or); font-weight: bold; font-size: 1.2rem; margin-top: 4px;">--</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+      <label style="display: flex; gap: 10px; cursor: pointer;"><input type="checkbox" id="dd-chk1" onchange="checkDDReady()" style="width: 18px; height: 18px;"><span style="font-size: 0.8rem; color: var(--tx);">I confirm I have NEVER purchased this specific tier before.</span></label>
+      <label style="display: flex; gap: 10px; cursor: pointer;"><input type="checkbox" id="dd-chk2" onchange="checkDDReady()" style="width: 18px; height: 18px;"><span style="font-size: 0.8rem; color: var(--tx);">I have checked my in-game shop to verify this 2x bonus is still available.</span></label>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button onclick="cancelDDOrder()" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.1); color: var(--tx); border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Cancel</button>
+      <button id="dd-btn-confirm" onclick="confirmDDOrder()" disabled style="flex: 1; padding: 12px; background: var(--or); color: white; border: none; border-radius: 8px; cursor: not-allowed; font-weight: bold; opacity: 0.5;">Proceed</button>
+    </div>
+  </div>
+</div>
+
+<style>
+#dd-warn-fab.show { display: flex !important; }
+#dd-info-overlay.open { display: flex !important; }
+#dd-confirm-overlay.open { display: flex !important; }
+#dd-btn-confirm.ready { opacity: 1 !important; cursor: pointer !important; }
+</style>
 </body>
 </html>
