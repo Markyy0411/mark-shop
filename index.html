@@ -6,208 +6,203 @@
 <title>Mark Guevarra | Game Top-Up Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
-  --dk:#09090f;--dk2:#111118;--dk3:#1a1a26;--dk4:#22222f;--dk5:#2c2c3e;
-  --tx:#e2e8f0;--mx:#94a3b8;--bdr:rgba(255,255,255,0.06);
+:root {
+  --or: #f97316; --or2: #ea6c0a; --bl: #3b82f6; --gr: #22c55e;
+  --dk: #09090f; --dk2: #111118; --dk3: #1a1a26; --dk4: #22222f; --dk5: #2c2c3e;
+  --tx: #e2e8f0; --mx: #94a3b8; --bdr: rgba(255,255,255,0.06);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-height:100vh;
-  background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
-  radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { 
+  background: var(--dk); color: var(--tx); font-family: 'Exo 2', sans-serif; min-height: 100vh;
+  background-image: radial-gradient(ellipse at 15% 60%, rgba(249,115,22,.06) 0%, transparent 50%),
+  radial-gradient(ellipse at 85% 10%, rgba(59,130,246,.06) 0%, transparent 50%);
+}
 
 /* HEADER */
-.hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
-  border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
-  position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
-.hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;
-  color:var(--or);letter-spacing:3px;text-transform:uppercase}
-.hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
+.hdr { 
+  background: linear-gradient(135deg, var(--dk2), rgba(249,115,22,.08));
+  border-bottom: 1px solid rgba(249,115,22,0.3); padding: 18px; text-align: center;
+  position: sticky; top: 0; z-index: 200; backdrop-filter: blur(12px);
+}
+.hdr h1 { 
+  font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700;
+  color: var(--or); letter-spacing: 3px; text-transform: uppercase;
+}
 
-/* GAME TABS */
-.gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
-  background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
-.gtabs::-webkit-scrollbar{display:none}
-.gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);
-  border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;
-  font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;
-  letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
-.gtab:hover{color:var(--tx);background:var(--dk4)}
-.gtab.active{background:var(--dk);color:var(--or);border-color:rgba(249,115,22,.5);border-bottom-color:var(--dk)}
-.gtab .ico{font-size:1rem}
+/* NAVIGATION */
+.gtabs { display: flex; overflow-x: auto; gap: 5px; padding: 10px; background: var(--dk2); scrollbar-width: none; }
+.gtab { 
+  flex-shrink: 0; padding: 8px 16px; background: var(--dk3); border-radius: 8px; cursor: pointer;
+  font-family: 'Rajdhani', sans-serif; font-weight: 600; color: var(--mx); border: 1px solid var(--bdr);
+}
+.gtab.active { background: var(--or); color: #fff; border-color: var(--or); }
 
-/* MAIN */
-.main{padding:14px;max-width:580px;margin:0 auto}
-.gpanel{display:none}.gpanel.active{display:block}
+.main { padding: 15px; max-width: 600px; margin: 0 auto; }
+.gpanel { display: none; }
+.gpanel.active { display: block; }
 
 /* CATEGORY TABS */
-.ctabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-.ctab{padding:5px 12px;border-radius:20px;border:1px solid var(--dk5);background:var(--dk3);
-  color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
-.ctab.active{background:var(--or);border-color:var(--or);color:#fff;font-weight:600}
+.ctabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+.ctab { 
+  padding: 6px 14px; border-radius: 20px; background: var(--dk3); border: 1px solid var(--dk5);
+  font-size: 0.8rem; color: var(--mx); cursor: pointer; white-space: nowrap;
+}
+.ctab.active { border-color: var(--or); color: var(--or); background: rgba(249,115,22,0.05); }
 
-.cpanel{display:none}.cpanel.active{display:block}
-.slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;
-  text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);
-  padding-left:8px;margin-bottom:10px;margin-top:6px}
+.cpanel { display: none; }
+.cpanel.active { display: block; }
+.slbl { 
+  font-family: 'Rajdhani', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--or);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; border-left: 3px solid var(--or); padding-left: 8px;
+}
 
-/* 🟠 ORIGINAL ORANGE PRICE CARDS */
-.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
+/* 🟠 RESTORED ORANGE PRICE CARDS */
+.pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .pcard {
-    background: var(--dk3);
-    border: 1px solid var(--dk5);
-    border-radius: 12px;
-    padding: 12px;
-    text-align: center;
-    cursor: pointer;
-    transition: .2s;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 80px;
+  background: var(--dk3); border: 1px solid var(--dk5); border-radius: 12px;
+  padding: 15px; text-align: center; cursor: pointer; transition: 0.2s; position: relative;
 }
 .pcard:hover { border-color: var(--or); background: var(--dk4); }
-.pcard.sel { border-color: var(--or) !important; background: rgba(249, 115, 22, 0.1) !important; }
-.pcard .pn { font-weight: 600; font-size: .9rem; margin-bottom: 4px; color: #fff; }
-.pcard .pd { font-size: .7rem; color: var(--mx); margin-bottom: 4px; }
-.pcard .pp { font-weight: 800; color: var(--or); font-size: 1.1rem; }
+.pcard.sel { border-color: var(--or) !important; background: rgba(249,115,22,0.1) !important; }
+.pcard .pn { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; color: #fff; }
+.pcard .pp { font-weight: 800; color: var(--or); font-size: 1.2rem; }
 .pcard .chk {
-    position: absolute; top: 5px; right: 5px;
-    background: var(--or); color: #fff; width: 18px; height: 18px; border-radius: 50%;
-    font-size: 10px; display: none; align-items: center; justify-content: center; z-index: 2;
+  position: absolute; top: 8px; right: 8px; background: var(--or); color: #fff;
+  width: 20px; height: 20px; border-radius: 50%; font-size: 11px; display: none;
+  align-items: center; justify-content: center;
 }
 .pcard.sel .chk { display: flex; }
 
-/* NETWORK SELECTOR */
-.netgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
-.netcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-  padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
-.netcard.active{border-color:var(--bl);background:rgba(59,130,246,.12)}
-
-/* ORDER FORM */
-.oform{background:var(--dk2);border:1px solid var(--bdr);border-radius:14px;
-  padding:18px;margin-top:6px}
-.oform h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-  letter-spacing:2px;color:var(--or);margin-bottom:14px;text-transform:uppercase}
-.sel-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);
-  border-radius:8px;padding:10px 14px;margin-bottom:14px}
-.fg{margin-bottom:12px}
-.fg label{display:block;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mx);margin-bottom:5px}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--dk3);border:1px solid var(--dk5);
-  border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem}
-.btn-sub{width:100%;padding:13px;background:var(--or);color:#fff;border:none;
-  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer}
-.ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:22px;text-align:center}
-
-/* 🔥 PROMO DESIGN */
+/* PROMO CARDS (Special Design) */
+.promo-container { display: grid; gap: 10px; }
 .promo-card {
   background: var(--dk3); border: 1px solid var(--dk5); border-radius: 16px;
-  padding: 16px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; margin-bottom: 10px;
+  padding: 16px; cursor: pointer; transition: 0.3s; position: relative;
 }
 .promo-card:hover { border-color: var(--or); background: var(--dk4); }
-.promo-card.sel { border-color: var(--or); background: rgba(249, 115, 22, 0.1); }
-.oc-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.promo-card.sel { border-color: var(--or); background: rgba(249,115,22,0.1); }
+.oc-top { display: flex; justify-content: space-between; align-items: center; }
 .oc-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.1rem; color: #fff; }
-.oc-price { font-family: 'Rajdhani', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--or); }
-.promo-card .chk { position: absolute; top: 10px; right: 10px; background: var(--or); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
+.oc-price { font-family: 'Rajdhani', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--or); }
+.promo-card .chk { position: absolute; top: 12px; right: 12px; background: var(--or); color: #fff; width: 22px; height: 22px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
 .promo-card.sel .chk { display: flex; }
+
+/* ORDER FORM */
+.oform { background: var(--dk2); border: 1px solid var(--bdr); border-radius: 16px; padding: 20px; margin-top: 10px; }
+.oform h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; color: var(--or); margin-bottom: 15px; letter-spacing: 2px; }
+.sel-box { background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.2); border-radius: 10px; padding: 12px; margin-bottom: 15px; display: none; }
+.fg { margin-bottom: 15px; }
+.fg label { display: block; font-size: 0.75rem; color: var(--mx); margin-bottom: 6px; text-transform: uppercase; font-weight: 600; }
+.fg input, .fg select { width: 100%; background: var(--dk3); border: 1px solid var(--dk5); border-radius: 10px; padding: 10px 14px; color: var(--tx); font-family: inherit; }
+.btn-sub { width: 100%; padding: 14px; background: var(--or); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; cursor: pointer; }
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <h1>⚡ Mark's Game Shop</h1>
-  <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
+  <h1>⚡ MARK'S SHOP</h1>
 </div>
 
-<div class="gtabs" id="gtabs">
-  <div class="gtab active" data-g="mlbb"><span class="ico">🎮</span> MLBB</div>
-  <div class="gtab" data-g="cod"><span class="ico">🎯</span> Garena CoD</div>
-  <div class="gtab" data-g="roblox"><span class="ico">🟥</span> Roblox</div>
-  <div class="gtab" data-g="bs"><span class="ico">🔫</span> Bloodstrike</div>
-  <div class="gtab" data-g="load"><span class="ico">📱</span> Load</div>
+<div class="gtabs">
+  <div class="gtab active" data-g="mlbb">MLBB</div>
+  <div class="gtab" data-g="cod">GARENA COD</div>
+  <div class="gtab" data-g="roblox">ROBLOX</div>
+  <div class="gtab" data-g="load">LOAD</div>
 </div>
 
 <div class="main">
+  <div class="gpanel active" id="g-mlbb">
+    <div class="ctabs">
+      <div class="ctab active" data-c="ml-promos">🔥 PROMOS</div>
+      <div class="ctab" data-c="ml-dias">💎 DIAMONDS</div>
+      <div class="ctab" data-c="ml-skins">🎨 SKINS</div>
+    </div>
 
-<div class="gpanel active" id="g-mlbb">
-  <div class="ctabs" id="mlbb-ctabs">
-    <div class="ctab active" data-c="mlbb-promos">🔥 Promos</div>
-    <div class="ctab" data-c="mlbb-dias">💎 Diamonds</div>
-    <div class="ctab" data-c="mlbb-skins">🎨 Skins</div>
-  </div>
+    <div class="cpanel active" id="ml-promos">
+      <div class="slbl">SPECIAL OFFERS</div>
+      <div class="promo-container">
+        
+        <div class="promo-card" onclick="selectItem(this, 'mlbb', 'June NSL (Normal Starlight)', 165)">
+          <div class="chk">✓</div>
+          <div class="oc-top">
+            <div class="oc-name">⭐ JUNE NSL <small style="color:var(--mx)">(Normal)</small></div>
+            <div class="oc-price">₱165</div>
+          </div>
+        </div>
 
-  <div class="cpanel active" id="mlbb-promos">
-    <div class="slbl">Monthly Offers</div>
-    <div class="promo-card" onclick="selectItem(this, 'mlbb', 'June NSL', 165)">
-      <div class="chk">✓</div>
-      <div class="oc-top">
-        <div class="oc-name">🔥 June NSL <small style="color:#fbbf24; font-size:10px">(Pre-Order)</small></div>
-        <div class="oc-price">₱165</div>
+        <div class="promo-card" onclick="selectItem(this, 'mlbb', 'June PSL (Premium Starlight)', 380)">
+          <div class="chk">✓</div>
+          <div class="oc-top">
+            <div class="oc-name">💎 JUNE PSL <small style="color:var(--mx)">(Premium)</small></div>
+            <div class="oc-price">₱380</div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
 
-  <div class="cpanel" id="mlbb-dias"><div class="pgrid" id="grid-mlbb-dias"></div></div>
-  <div class="cpanel" id="mlbb-skins"><div class="pgrid" id="grid-mlbb-skins-cosmo"></div></div>
+    <div class="cpanel" id="ml-dias">
+      <div class="slbl">SELECT DIAMONDS</div>
+      <div class="pgrid" id="grid-mlbb-dias"></div>
+    </div>
 
-  <div class="oform">
-    <h3>📋 MLBB Order</h3>
-    <div class="sel-box" id="mlbb-sel-box" style="display:none">
-      <div id="mlbb-sel-item">—</div><div id="mlbb-sel-price" style="color:var(--or);font-weight:bold"></div>
+    <div class="cpanel" id="ml-skins">
+      <div class="slbl">AVAILABLE SKINS</div>
+      <div class="pgrid" id="grid-mlbb-skins"></div>
     </div>
-    <input type="hidden" id="mlbb-order-display">
-    <div class="fg"><label>Player ID <span style="color:var(--or)">*</span></label><input type="text" id="mlbb-pid" placeholder="e.g. 123456789"></div>
-    <div class="fg">
-      <label>Zone ID <span style="color:var(--or)">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="mlbb-zid" placeholder="1234" style="flex:1"><button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
-    </div>
-    <div class="fg"><label>IGN</label><input type="text" id="mlbb-ign" placeholder="Verify to auto-fill" readonly></div>
-    
-    <div class="pm-widget">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)"><div class="pmb-name">GCash</div></div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)"><div class="pmb-name">Maya</div></div>
+
+    <div class="oform">
+      <h3>📋 COMPLETE ORDER</h3>
+      <div class="sel-box" id="mlbb-sel-box">
+        <div style="font-weight:700" id="mlbb-sel-item">Item</div>
+        <div style="color:var(--or)" id="mlbb-sel-price">₱0</div>
       </div>
-      <div class="pm-details" id="pm-details-mlbb"></div>
-      <input type="hidden" id="pm-val-mlbb">
+      <input type="hidden" id="mlbb-order-display">
+      
+      <div class="fg"><label>Player ID</label><input type="text" id="mlbb-pid" placeholder="e.g. 12345678"></div>
+      <div class="fg"><label>Zone ID</label><input type="text" id="mlbb-zid" placeholder="e.g. 1234"></div>
+      <div class="fg"><label>IGN</label><input type="text" id="mlbb-ign" placeholder="Enter Nickname"></div>
+      
+      <div class="fg"><label>Payment Method</label>
+        <select id="pm-val-mlbb">
+          <option value="GCash">GCash</option>
+          <option value="Maya">Maya</option>
+          <option value="GoTyme">GoTyme</option>
+        </select>
+      </div>
+      
+      <div class="fg"><label>Receipt / Screenshot</label><input type="file" id="mlbb-screenshot" accept="image/*"></div>
+      <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     </div>
-
-    <div class="fg"><label>Receipt <span style="color:var(--or)">*</span></label><input type="file" id="mlbb-screenshot" accept="image/*"></div>
-    <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
-    <div class="err-msg" id="mlbb-err"></div>
   </div>
-</div>
 
-<div class="ok-msg" id="ok-msg">
-  <div class="ok-ico">✅</div>
-  <h4>ORDER SUBMITTED!</h4>
-  <p>Thank you for trusting Mark's Game Shop!</p>
-  <button class="btn-sub" onclick="location.reload()">Place Another Order</button>
-</div>
-
+  <div class="gpanel" id="g-cod">
+    <div class="slbl">GARENA CP</div>
+    <div class="pgrid" id="grid-cod"></div>
+  </div>
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec";
 let DATA = {};
 
+// 1. FETCH DATA FROM YOUR SHEET
 async function fetchPrices() {
   try {
-    const res = await fetch(API_URL);
-    DATA = await res.json();
+    const response = await fetch(API_URL);
+    DATA = await response.json();
     buildAll();
-  } catch (e) { console.error(e); }
+  } catch (err) { console.error("Error loading prices", err); }
 }
 window.onload = fetchPrices;
 
-function ph(n){ return '₱' + n.toLocaleString('en-PH'); }
+function ph(n) { return '₱' + n.toLocaleString('en-PH'); }
 
-function makeGrid(containerId, items, game, cat){
+// 2. BUILD GRIDS FOR DIAMONDS/SKINS
+function makeGrid(containerId, items, game) {
   const el = document.getElementById(containerId);
-  if(!el) return;
+  if (!el || !items) return;
   el.innerHTML = '';
   items.forEach(it => {
     const c = document.createElement('div');
@@ -218,72 +213,77 @@ function makeGrid(containerId, items, game, cat){
   });
 }
 
-function selectItem(card, game, name, price){
-  document.querySelectorAll(`.pcard[data-game="${game}"], .promo-card`).forEach(x=>x.classList.remove('sel'));
-  if(card) card.classList.add('sel');
-  
+// 3. 🎯 THE MASTER SELECTOR (WORKS FOR PROMOS TOO!)
+function selectItem(card, game, name, price) {
+  // Reset other selections
+  document.querySelectorAll('.pcard, .promo-card').forEach(x => x.classList.remove('sel'));
+  if (card) card.classList.add('sel');
+
   const selBox = document.getElementById(game + '-sel-box');
   const orderInput = document.getElementById(game + '-order-display');
   
-  if(selBox) {
+  if (selBox) {
     selBox.style.display = 'block';
     document.getElementById(game + '-sel-item').textContent = name;
     document.getElementById(game + '-sel-price').textContent = ph(price);
   }
-  if(orderInput) orderInput.value = name + ' — ' + ph(price);
+  if (orderInput) orderInput.value = name + ' — ' + ph(price);
 
+  // Auto-scroll to form
   setTimeout(() => {
     const form = document.querySelector(`#g-${game} .oform`);
-    if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 150);
 }
 
-function buildAll(){
+function buildAll() {
   if (DATA.mlbb) {
-    makeGrid('grid-mlbb-dias', DATA.mlbb.dias, 'mlbb', 'dias');
-    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc, 'mlbb', 'skins');
+    makeGrid('grid-mlbb-dias', DATA.mlbb.dias, 'mlbb');
+    makeGrid('grid-mlbb-skins', DATA.mlbb.skins, 'mlbb');
   }
+  if (DATA.cod) makeGrid('grid-cod', DATA.cod, 'cod');
 }
 
-// TAB LOGIC
-document.querySelectorAll('.gtab').forEach(t=>{
+// INTERFACE LOGIC
+document.querySelectorAll('.gtab').forEach(t => {
   t.onclick = () => {
-    document.querySelectorAll('.gtab, .gpanel').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.gtab, .gpanel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
-    document.getElementById('g-'+t.dataset.g).classList.add('active');
+    document.getElementById('g-' + t.dataset.g).classList.add('active');
   };
 });
 
-document.querySelectorAll('.ctab').forEach(t=>{
+document.querySelectorAll('.ctab').forEach(t => {
   t.onclick = () => {
-    document.querySelectorAll('.ctab, .cpanel').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.ctab, .cpanel').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     document.getElementById(t.dataset.c).classList.add('active');
   };
 });
 
-// SUBMISSION
-async function submitOrder(game){
-  const btn = document.getElementById(game+'-btn');
-  const fileInput = document.getElementById(game+'-screenshot');
-  const pmVal = document.getElementById('pm-val-'+game);
+// SUBMIT ORDER TO GOOGLE APPS SCRIPT
+async function submitOrder(game) {
+  const btn = document.getElementById(game + '-btn');
+  const fileInput = document.getElementById(game + '-screenshot');
+  const pmVal = document.getElementById('pm-val-' + game).value;
   
-  if(!pmVal.value || !fileInput.files[0]) return alert("Fill in Payment & Receipt");
+  if (!fileInput.files[0]) return alert("Please upload receipt!");
 
-  btn.disabled=true; btn.textContent='Uploading...';
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  
   const file = fileInput.files[0];
   const reader = new FileReader();
   reader.onload = async function(e) {
     const fields = {
       game: game.toUpperCase(),
-      order: document.getElementById(game+'-order-display').value,
-      playerID: document.getElementById(game+'-pid').value,
-      zoneID: document.getElementById(game+'-zid') ? document.getElementById(game+'-zid').value : "",
-      ign: document.getElementById(game+'-ign').value,
+      order: document.getElementById(game + '-order-display').value,
+      playerID: document.getElementById(game + '-pid').value,
+      zoneID: document.getElementById(game + '-zid') ? document.getElementById(game + '-zid').value : "",
+      ign: document.getElementById(game + '-ign').value,
       fileData: e.target.result.split(',')[1],
       mimeType: file.type,
       fileName: file.name,
-      paymentMethod: pmVal.value,
+      paymentMethod: pmVal,
       dateTime: new Date().toLocaleString()
     };
 
@@ -293,25 +293,11 @@ async function submitOrder(game){
         body: JSON.stringify(fields),
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
       });
-      document.querySelector('.main').style.display='none';
-      document.getElementById('ok-msg').style.display='block';
-    } catch(err) { alert("Failed. Try again."); btn.disabled=false; }
+      alert("Order successfully submitted!");
+      location.reload();
+    } catch (err) { alert("Failed. Try again."); btn.disabled = false; }
   };
   reader.readAsDataURL(file);
-}
-
-// PAYMENT
-const PM_DATA = {
-  gcash: { label:'GCash', name:'Mark Guevarra', num:'09288978005', color:'#3b82f6' },
-  maya: { label:'Maya', name:'Mark Guevarra', num:'09288978005', color:'#22c55e' }
-};
-function selectPayment(game, method, btn){
-  const pm = PM_DATA[method];
-  document.getElementById('pm-val-'+game).value = pm.label;
-  const box = document.getElementById('pm-details-'+game);
-  box.className = 'pm-details show';
-  box.style.borderLeftColor = pm.color;
-  box.innerHTML = `<div style="color:${pm.color};font-weight:bold">${pm.label}</div><div>${pm.name}</div><div>${pm.num}</div>`;
 }
 </script>
 </body>
