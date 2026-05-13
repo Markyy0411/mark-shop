@@ -248,48 +248,67 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .id-example{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);
   border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.75rem;line-height:1.8}
   /* ===================== PREMIUM ITEM CARDS ===================== */
+/* 🟠 RESTORED ORIGINAL PRICE DESIGN */
 .pcard {
-    background: #1e293b;
-    border: 1px solid #334155;
+    background: var(--dk3);
+    border: 1px solid var(--dk5);
     border-radius: 12px;
-    padding: 15px;
+    padding: 12px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: .2s;
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 80px;
 }
 
-.pcard:hover {
-    transform: translateY(-5px);
-    border-color: #3b82f6;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+.pcard:hover { 
+    border-color: var(--or); 
+    background: var(--dk4); 
 }
 
-.pcard.sel {
-    border: 2px solid #3b82f6 !important;
-    background: rgba(59, 130, 246, 0.1) !important;
+.pcard.sel { 
+    border-color: var(--or) !important; 
+    background: rgba(249, 115, 22, 0.1) !important; 
 }
 
-.pcard .pn { font-weight: bold; color: #f8fafc; font-size: 14px; }
-.pcard .pp { color: #3b82f6; font-weight: 800; margin-top: 8px; }
+.pcard .pn { 
+    font-weight: 600; 
+    font-size: .9rem; 
+    margin-bottom: 4px; 
+    color: #fff;
+}
 
-/* The "Checked" Badge */
+.pcard .pd { 
+    font-size: .7rem; 
+    color: var(--mx); 
+    margin-bottom: 4px; 
+}
+
+.pcard .pp { 
+    font-weight: 800; 
+    color: var(--or); 
+    font-size: 1.1rem; 
+}
+
 .pcard .chk {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #3b82f6;
-    color: white;
+    position: absolute; 
+    top: 5px; 
+    right: 5px;
+    background: var(--or); 
+    color: #fff;
+    width: 18px; 
+    height: 18px; 
     border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    font-size: 12px;
-    display: none;
-    align-items: center;
+    font-size: 10px; 
+    display: none; 
+    align-items: center; 
     justify-content: center;
     z-index: 2;
 }
+
 .pcard.sel .chk { display: flex; }
 </style>
 <body>
@@ -325,55 +344,66 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
   </div>
 
-  <!-- Diamonds -->
-  <!-- 🔥 PROMOS PANEL (Starlight + Skins Pre-Orders) -->
   <div class="cpanel active" id="mlbb-promos">
+  <div class="slbl" style="color:#fbbf24; border-left-color:#fbbf24">🌟 Monthly Starlight Offers</div>
+  
+  <div class="notif-warn">
+    <div class="wi">🚀</div>
+    <p><b>Limited Slots!</b> These are high-speed gifted orders. Once the slots are full, restock happens next month. No ID requirements for gifting!</p>
+  </div>
 
-    <!-- Starlight Section -->
-    <div class="slbl" style="margin-top:10px;color:#fbbf24;border-left-color:#fbbf24">🌟 Monthly Starlight Offers</div>
-    <div class="notif-warn" style="margin-bottom:12px">
-      <div class="wi">⚠️</div>
-      <p><b>Limited Supply!</b> Only <b>5 slots per month</b>. Not own supply — goes through a gifter. Once full, no more orders until next restock.</p>
-    </div>
-
-    <!-- May NSL - SOLD OUT -->
-    <div class="offer-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8);margin-bottom:8px">
+  <div class="promo-container">
+    
+    <div class="promo-card sold-out">
       <div class="oc-top">
         <div>
-          <div class="oc-name">⭐ May NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
+          <div class="oc-name">⭐ May Starlight <small style="color:var(--mx); font-size:10px">(Normal)</small></div>
           <div class="slots-row">
-            <div class="slot-dot filled"></div><div class="slot-dot filled"></div>
-            <div class="slot-dot filled"></div><div class="slot-dot filled"></div>
-            <div class="slot-dot filled"></div>
-            <span class="slots-label">5/5 slots taken</span>
-            <span class="avail-tag low" style="background:rgba(100,100,100,.15);border-color:rgba(150,150,150,.3);color:#6b7280">⛔ SOLD OUT</span>
+            <div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot filled"></div>
+            <span class="slots-label">5/5 Taken</span>
+            <span class="avail-tag low">⛔ SOLD OUT</span>
           </div>
         </div>
-        <div class="oc-price" style="color:#6b7280;text-decoration:line-through">₱165</div>
+        <div class="oc-price" style="text-decoration: line-through; opacity: 0.5;">₱165</div>
       </div>
-      <div class="oc-sub">No more slots available for May 2026.</div>
+      <div class="oc-sub">Available again on June 1st. Stay tuned!</div>
     </div>
 
-    <!-- June NSL - 1 REMAINING -->
-    <div class="offer-card" style="border-color:rgba(239,68,68,.4);cursor:pointer;margin-bottom:8px" onclick="goToCustomOrder()">
+    <div class="promo-card pcard" data-game="mlbb" data-name="June NSL (Normal Starlight)" data-price="165" onclick="selectItem(this, 'mlbb')">
+      <div class="hot-glow"></div>
+      <div class="chk">✓</div>
       <div class="oc-top">
         <div>
-          <div class="oc-name">⭐ June NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
+          <div class="oc-name">🔥 June NSL <small style="color:#fbbf24; font-size:10px">(Pre-Order)</small></div>
           <div class="slots-row">
-            <div class="slot-dot filled"></div><div class="slot-dot filled"></div>
-            <div class="slot-dot filled"></div><div class="slot-dot filled"></div>
-            <div class="slot-dot"></div>
-            <span class="slots-label">4/5 slots taken</span>
-            <span class="avail-tag low"><span class="avail-dot"></span> 1 SLOT LEFT</span>
+            <div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot"></div>
+            <span class="slots-label">4/5 Taken</span>
+            <span class="avail-tag low">⚡ 1 SLOT LEFT</span>
           </div>
         </div>
-        <div class="oc-price">₱160</div>
+        <div class="oc-price">₱165</div>
       </div>
-      <div class="oc-sub">
-        <b>Normal Starlight</b> for June 2026 · Not own supply<br>
-        <span style="color:#f87171;font-size:.68rem">Tap to Order →</span>
-      </div>
+      <div class="oc-sub">Secure your June Starlight Pass now before slots run out!</div>
     </div>
+
+    <div class="promo-card pcard" data-game="mlbb" data-name="June PSL (Premium Starlight)" data-price="380" onclick="selectItem(this, 'mlbb')">
+      <div class="chk">✓</div>
+      <div class="oc-top">
+        <div>
+          <div class="oc-name">💎 June PSL <small style="color:var(--bl); font-size:10px">(Premium)</small></div>
+          <div class="slots-row">
+            <div class="slot-dot filled"></div><div class="slot-dot"></div><div class="slot-dot"></div><div class="slot-dot"></div><div class="slot-dot"></div>
+            <span class="slots-label">1/5 Taken</span>
+            <span class="avail-tag">✅ AVAILABLE</span>
+          </div>
+        </div>
+        <div class="oc-price">₱380</div>
+      </div>
+      <div class="oc-sub">Includes Premium Starlight Rewards + Level Up bonuses.</div>
+    </div>
+
+  </div>
+</div>
 
     <!-- Delivery Info -->
     <div class="delivery-box" style="margin-bottom:18px">
@@ -986,14 +1016,16 @@ function makeGrid(containerId, items, game, cat){
   items.forEach((it,i) => {
     const c = document.createElement('div');
     c.className = 'pcard';
-    c.dataset.game = game; c.dataset.cat = cat;
+    c.dataset.game = game; 
+    c.dataset.cat = cat;
+    
+    // This matches the exact layout in your image (image_55ee51.png)
     c.innerHTML = `
       <div class="chk">✓</div>
       <div class="pn">${it.n}</div>
       ${it.d ? `<div class="pd">${it.d}</div>` : ''}
       <div class="pp">${ph(it.p)}</div>`;
     
-    // Auto-directs and fills order on click
     c.onclick = () => selectItem(c, game, it.n, it.p, cat);
     el.appendChild(c);
   });
