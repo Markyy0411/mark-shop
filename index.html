@@ -1183,6 +1183,48 @@ async function verifyMLBB() {
   }
 }
 
+async function verifyCOD() {
+  const pid = document.getElementById('cod-pid').value.trim();
+  const ignField = document.getElementById('cod-ign');
+  if (!pid) return alert("Please enter Player ID (UID).");
+  ignField.value = "Verifying...";
+  try {
+    const response = await fetch(`/api/verify-cod?id=${pid}`);
+    const data = await response.json();
+    if (response.ok && data.ign) {
+        ignField.value = data.ign;
+        ignField.style.borderColor = "var(--gr)";
+    } else {
+        ignField.value = "";
+        alert(data.error || "Player not found.");
+    }
+  } catch (error) { 
+    ignField.value = "";
+    alert("Verification service busy."); 
+  }
+}
+
+async function verifyRoblox() {
+  const username = document.getElementById('roblox-user').value.trim();
+  const dispField = document.getElementById('roblox-dispname');
+  if (!username) return alert("Please enter your Roblox username.");
+  dispField.value = "Verifying...";
+  try {
+    const response = await fetch(`/api/verify-roblox?username=${username}`);
+    const data = await response.json();
+    if (response.ok && data.ign) {
+        dispField.value = data.ign;
+        dispField.style.borderColor = "var(--gr)";
+    } else {
+        dispField.value = "";
+        alert(data.error || "Username not found.");
+    }
+  } catch (error) { 
+    dispField.value = "";
+    alert("Verification service busy."); 
+  }
+}
+
 // ===================== ORDER SUBMISSION =====================
 async function submitOrder(game){
   const btn = document.getElementById(game+'-btn');
