@@ -911,7 +911,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </div><!-- /main -->
 
 <script>
- // ===================== DYNAMIC DATA LOADING =====================
+// ===================== DYNAMIC DATA LOADING =====================
 const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec";
 
 let DATA = {};
@@ -951,8 +951,8 @@ function makeGrid(containerId, items, game, cat){
       ${it.d ? `<div class="pd">${it.d}</div>` : ''}
       <div class="pp">${ph(it.p)}</div>`;
       
-    // 🚀 FIXED: Respects Double Diamond rules if they exist, otherwise auto-fills
     c.onclick = () => {
+      // Respects Double Diamond rules if the function exists
       if(game === 'mlbb' && cat === 'dd' && typeof openDDConfirm === 'function') {
         openDDConfirm(c);
       } else {
@@ -978,7 +978,6 @@ function selectItem(card, game){
   
   if(game === 'load') {
     const netKey = card.dataset.cat;
-    // Pretty-print the network name (e.g., globe-reg -> Globe)
     const netName = netKey.split('-')[0].charAt(0).toUpperCase() + netKey.split('-')[0].slice(1);
     
     document.getElementById('load-sel-box').style.display = 'block';
@@ -987,7 +986,6 @@ function selectItem(card, game){
     document.getElementById('load-order-display').value = orderText;
     document.getElementById('load-network-display').value = netName;
   } else {
-    // Works for mlbb, cod, roblox, and bs
     const selBox = document.getElementById(game + '-sel-box');
     const selItem = document.getElementById(game + '-sel-item');
     const selPrice = document.getElementById(game + '-sel-price');
@@ -999,7 +997,7 @@ function selectItem(card, game){
     if(orderInput) orderInput.value = orderText;
   }
 
-  // 3. Robust Smooth Scroll to the form
+  // 3. Smooth Scroll to the form
   setTimeout(() => {
     const panel = document.getElementById('g-' + game);
     const form = panel ? panel.querySelector('.oform') : null;
@@ -1009,7 +1007,7 @@ function selectItem(card, game){
   }, 150);
 }
 
-// ===================== REPAIR GRID BUILDER =====================
+// ===================== GRID BUILDER =====================
 function buildAll(){
   if (!DATA || Object.keys(DATA).length === 0) return;
 
@@ -1034,85 +1032,8 @@ function buildAll(){
     });
   }
 }
-  if (!DATA || Object.keys(DATA).length === 0) {
-    console.error("No data received from database!");
-    return;
-  }
 
-  // MLBB
-  if (DATA.mlbb) {
-    makeGrid('grid-mlbb-dias', DATA.mlbb.dias, 'mlbb', 'dias');
-    makeGrid('grid-mlbb-denom', DATA.mlbb.denom, 'mlbb', 'denom');
-    makeGrid('grid-mlbb-combo', DATA.mlbb.combo, 'mlbb', 'combo');
-    makeGrid('grid-mlbb-dd', DATA.mlbb.dd, 'mlbb', 'dd');
-    makeGrid('grid-mlbb-bundles', DATA.mlbb.bundles, 'mlbb', 'bundles');
-    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc, 'mlbb', 'skins'); // Fixed lowercase
-    makeGrid('grid-mlbb-skins-direct', DATA.mlbb.skinsd, 'mlbb', 'skins'); // Fixed lowercase
-    makeGrid('grid-mlbb-starlight', DATA.mlbb.starlight, 'mlbb', 'starlight');
-  }
-
-  // OTHER GAMES
-  if (DATA.cod) makeGrid('grid-cod', DATA.cod, 'cod', 'main');
-  if (DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox', 'main');
-  if (DATA.bs) makeGrid('grid-bs', DATA.bs, 'bs', 'main');
-  
-  // LOAD (Fixed loop structure)
-  if (DATA.load) {
-    Object.keys(DATA.load).forEach(net => {
-      // Removed the '.items' since the data is now a direct array!
-      makeGrid('grid-'+net, DATA.load[net], 'load', net);
-    });
-  }
-}
-
-// ===================== SELECTION =====================
-function selectItem(card, game){
-  // Deselect all in same game
-  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
-  card.classList.add('sel');
-  const name = card.dataset.name;
-  const price = parseInt(card.dataset.price);
-  selected.game=game; selected.item=name; selected.price=price;
-
-  if(game==='mlbb'){
-    document.getElementById('mlbb-sel-box').style.display='block';
-    document.getElementById('mlbb-sel-item').textContent=name;
-    document.getElementById('mlbb-sel-price').textContent=ph(price);
-    document.getElementById('mlbb-order-display').value=name+' — '+ph(price);
-  } else if(game==='cod'){
-    document.getElementById('cod-sel-box').style.display='block';
-    document.getElementById('cod-sel-item').textContent=name;
-    document.getElementById('cod-sel-price').textContent=ph(price);
-    document.getElementById('cod-order-display').value=name+' — '+ph(price);
-  } else if(game==='roblox'){
-    document.getElementById('roblox-sel-box').style.display='block';
-    document.getElementById('roblox-sel-item').textContent=name;
-    document.getElementById('roblox-sel-price').textContent=ph(price);
-    document.getElementById('roblox-order-display').value=name+' — '+ph(price);
-  } else if(game==='bs'){
-    document.getElementById('bs-sel-box').style.display='block';
-    document.getElementById('bs-sel-item').textContent=name;
-    document.getElementById('bs-sel-price').textContent=ph(price);
-    document.getElementById('bs-order-display').value=name+' — '+ph(price);
-  } else if(game==='load'){
-    const netKey = card.dataset.cat;
-    const netName = DATA.load[netKey]?.net || netKey;
-    document.getElementById('load-sel-box').style.display='block';
-    document.getElementById('load-sel-item').textContent=name;
-    document.getElementById('load-sel-price').textContent=ph(price);
-    document.getElementById('load-order-display').value=name+' — '+ph(price);
-    document.getElementById('load-network-display').value=netName;
-    selected.network=netName;
-  }
-  // Scroll to form
-  setTimeout(()=>{
-    const formId = game==='load'?'load':'mlbb'===game?'mlbb':game;
-    const form = document.querySelector(`#g-${game} .oform`);
-    if(form) form.scrollIntoView({behavior:'smooth',block:'nearest'});
-  },100);
-}
-
-// ===================== GAME TABS =====================
+// ===================== INTERFACE LOGIC =====================
 document.querySelectorAll('.gtab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
@@ -1123,19 +1044,17 @@ document.querySelectorAll('.gtab').forEach(t=>{
   });
 });
 
-// ===================== MLBB CATEGORY TABS =====================
 document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('#mlbb-ctabs .ctab').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('#g-mlbb .cpanel').forEach(x=>x.classList.remove('active'));
     t.classList.add('active');
     document.getElementById(t.dataset.c).classList.add('active');
-    // Show/hide DD warning fab
-    if(t.dataset.c === 'mlbb-dd') showDDFab(); else hideDDFab();
+    if(t.dataset.c === 'mlbb-dd' && typeof showDDFab === 'function') showDDFab(); 
+    else if(typeof hideDDFab === 'function') hideDDFab();
   });
 });
 
-// ===================== NETWORK SELECT =====================
 function selectNet(card, netKey){
   document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active'));
   card.classList.add('active');
@@ -1144,257 +1063,109 @@ function selectNet(card, netKey){
   if(panel) panel.classList.add('active');
 }
 
-// ===================== CUSTOM CATEGORY =====================
 function selectCC(card){
   document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
   card.classList.add('active');
   document.getElementById('custom-game').value = card.dataset.cc;
 }
 
-// ===================== AUTO-VERIFY MLBB IGN =====================
 async function verifyMLBB() {
   const pid = document.getElementById('mlbb-pid').value.trim();
   const zid = document.getElementById('mlbb-zid').value.trim();
   const ignField = document.getElementById('mlbb-ign');
-  
-  if (!pid || !zid) {
-    alert("Please enter both Player ID and Zone ID first.");
-    return;
-  }
-
+  if (!pid || !zid) return alert("Please enter Player ID and Zone ID.");
   ignField.value = "Verifying...";
-  ignField.style.borderColor = "var(--or)";
-
   try {
     const response = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
     const data = await response.json();
-
     if (response.ok && data.ign) {
       ignField.value = data.ign;
       ignField.style.borderColor = "var(--gr)";
     } else {
       ignField.value = "";
-      ignField.style.borderColor = "#ef4444";
       alert(data.error || "Player not found.");
     }
   } catch (error) {
     ignField.value = "";
-    alert("Verification service is currently busy. Please try again.");
+    alert("Verification service busy.");
   }
 }
-  
-  
-// ===================== SUBMIT =====================
-// ===================== SUBMIT =====================
+
+// ===================== ORDER SUBMISSION =====================
 async function submitOrder(game){
   const btn = document.getElementById(game+'-btn');
   const errEl = document.getElementById(game+'-err');
+  const fileInput = document.getElementById(game+'-screenshot');
+  const pmVal = document.getElementById('pm-val-'+game);
+  
   errEl.style.display='none';
-
   let fields = {};
-  let valid = true;
   let missingFields = [];
 
-  // 1. Check payment method
-  const pmVal = document.getElementById('pm-val-'+game);
   const chosenPM = pmVal ? pmVal.value : '';
-  if(!chosenPM){ missingFields.push('Payment Method'); }
+  if(!chosenPM) missingFields.push('Payment Method');
+  if(!fileInput || fileInput.files.length === 0) missingFields.push('Payment Receipt');
 
-  // 2. Check receipt upload
-  const fileInput = document.getElementById(game+'-screenshot');
-  if(!fileInput || fileInput.files.length === 0) {
-    missingFields.push('Payment Receipt');
-  }
-
-  // 3. Game Logic
   if(game==='mlbb'){
-    const order = document.getElementById('mlbb-order-display').value;
-    const pid = document.getElementById('mlbb-pid').value.trim();
-    const zid = document.getElementById('mlbb-zid').value.trim();
-    const ign = document.getElementById('mlbb-ign').value.trim();
-    const server = document.getElementById('mlbb-server').value;
-    const notes = document.getElementById('mlbb-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!pid) missingFields.push('Player ID');
-    if(!zid) missingFields.push('Zone ID');
-    if(!ign) missingFields.push('IGN');
-    if(missingFields.length){valid=false;}
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes};
+    fields={game:'MLBB', order:document.getElementById('mlbb-order-display').value, playerID:document.getElementById('mlbb-pid').value, zoneID:document.getElementById('mlbb-zid').value, ign:document.getElementById('mlbb-ign').value, notes:document.getElementById('mlbb-notes').value};
+    if(!fields.order || fields.order.includes('Select')) missingFields.push('Item');
+    if(!fields.playerID || !fields.zoneID || !fields.ign) missingFields.push('Account Info');
   } else if(game==='cod'){
-    const order = document.getElementById('cod-order-display').value;
-    const pid = document.getElementById('cod-pid').value.trim();
-    const ign = document.getElementById('cod-ign').value.trim();
-    const notes = document.getElementById('cod-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!pid) missingFields.push('Player ID');
-    if(!ign) missingFields.push('IGN');
-    if(missingFields.length){valid=false;}
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes};
+    fields={game:'CoD', order:document.getElementById('cod-order-display').value, playerID:document.getElementById('cod-pid').value, ign:document.getElementById('cod-ign').value};
   } else if(game==='roblox'){
-    const order = document.getElementById('roblox-order-display').value;
-    const gpid = document.getElementById('roblox-gpid').value.trim();
-    const gpname = document.getElementById('roblox-gpname').value.trim();
-    const user = document.getElementById('roblox-user').value.trim();
-    const notes = document.getElementById('roblox-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Robux Amount');
-    if(!gpid) missingFields.push('Gamepass ID');
-    if(!gpname) missingFields.push('Gamepass Name');
-    if(!user) missingFields.push('Roblox Username');
-    if(missingFields.length){valid=false;}
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes};
+    fields={game:'Roblox', order:document.getElementById('roblox-order-display').value, gamepassID:document.getElementById('roblox-gpid').value, username:document.getElementById('roblox-user').value};
   } else if(game==='bs'){
-    const order = document.getElementById('bs-order-display').value;
-    const pid = document.getElementById('bs-pid').value.trim();
-    const ign = document.getElementById('bs-ign').value.trim();
-    const notes = document.getElementById('bs-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!pid) missingFields.push('Player ID');
-    if(!ign) missingFields.push('IGN');
-    if(missingFields.length){valid=false;}
-    fields={game:'Bloodstrike',order,playerID:pid,ign,notes};
+    fields={game:'Bloodstrike', order:document.getElementById('bs-order-display').value, playerID:document.getElementById('bs-pid').value, ign:document.getElementById('bs-ign').value};
   } else if(game==='load'){
-    const order = document.getElementById('load-order-display').value;
-    const network = document.getElementById('load-network-display').value;
-    const number = document.getElementById('load-number').value.trim();
-    const notes = document.getElementById('load-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Promo/Load');
-    if(!number) missingFields.push('Mobile Number');
-    if(missingFields.length){valid=false;}
-    fields={game:'Load',order,network,mobileNumber:number,notes};
+    fields={game:'Load', order:document.getElementById('load-order-display').value, network:document.getElementById('load-network-display').value, mobileNumber:document.getElementById('load-number').value};
   } else if(game==='custom'){
-    const gameField = document.getElementById('custom-game').value.trim();
-    const desc = document.getElementById('custom-desc').value.trim();
-    const name = document.getElementById('custom-name').value.trim();
-    const contact = document.getElementById('custom-contact').value.trim();
-    const pid = document.getElementById('custom-pid').value.trim();
-    const budget = document.getElementById('custom-budget').value.trim();
-    const notes = document.getElementById('custom-notes').value.trim();
-    if(!desc) missingFields.push('Order Description');
-    if(!name) missingFields.push('Your Name');
-    if(!contact) missingFields.push('Contact Number / FB Name');
-    if(missingFields.length){valid=false;}
-    fields={game: gameField, orderDescription: desc, customerName: name, contactNumberOrFB: contact, playerID_username: pid || 'Not provided', budget: budget || 'Not specified', notes: notes};
+    fields={game:document.getElementById('custom-game').value, orderDescription:document.getElementById('custom-desc').value, customerName:document.getElementById('custom-name').value, contact:document.getElementById('custom-contact').value};
   }
 
-  if(!valid){
-    errEl.textContent='⚠️ Please fill in: '+missingFields.join(', ');
+  if(missingFields.length){
+    errEl.textContent='⚠️ Fill in: '+missingFields.join(', ');
     errEl.style.display='block';
     return;
   }
 
-  const isCustom = game==='custom';
   btn.disabled=true; 
-  btn.textContent='Uploading Screenshot... Please Wait';
+  btn.textContent='Uploading...';
 
-  // 3. Generate a beautiful Transaction ID for their receipt!
-  fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
-  fields.dateTime = new Date().toLocaleString();
-  fields.paymentMethod = chosenPM;
-
-  // ⚠️ HERE IS YOUR DEPLOYED GOOGLE URL:
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec";
-
-  // 🛡️ SECURITY GATEKEEPER: Check File Type & Size
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
-  const maxSize = 3 * 1024 * 1024; // 3MB limit (Perfect for screenshots)
-
-  // 1. Block non-images (mp4, doc, exe, etc.)
-  if(!allowedTypes.includes(file.type)) {
-    errEl.textContent='❌ Security Block: Only images (JPG, PNG, WEBP) are allowed.';
-    errEl.style.display='block';
-    btn.disabled=false;
-    btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
-    return;
-  }
-
-  // 2. Block huge files to save your Google Drive storage
-  if(file.size > maxSize) {
-    errEl.textContent='❌ File too large! Please use a screenshot under 3MB.';
-    errEl.style.display='block';
-    btn.disabled=false;
-    btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
-    return;
-  }
   const file = fileInput.files[0];
   const reader = new FileReader();
-
   reader.onload = async function(e) {
-    // Extract just the raw Base64 data from the image
     fields.fileData = e.target.result.split(',')[1];
     fields.mimeType = file.type;
     fields.fileName = file.name;
+    fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
+    fields.dateTime = new Date().toLocaleString();
+    fields.paymentMethod = chosenPM;
 
     try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec", {
         method: 'POST',
         body: JSON.stringify(fields),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' } // text/plain fixes CORS issues!
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
       });
-
-      const responseText = await res.text();
-
-      if(responseText.includes("Success")){
+      const text = await res.text();
+      if(text.includes("Success")){
         document.querySelector(`#g-${game}`).style.display='none';
         document.querySelector('.gtabs').style.display='none';
         const ok = document.getElementById('ok-msg');
-        
-        // Show them a professional receipt on screen
-        ok.innerHTML = `
-          <div class="ok-ico">✅</div>
-          <h4>ORDER SUBMITTED!</h4>
-          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--dk5); border-radius:10px; padding:15px; margin:15px 0; text-align:left; font-size:0.85rem;">
-            <b style="color:var(--or);">🧾 TRANSACTION RECEIPT</b><br><br>
-            <b>Transaction ID:</b> <span style="color:#fbbf24">${fields.transactionID}</span><br>
-            <b>Date & Time:</b> ${fields.dateTime}<br>
-            <b>Game:</b> ${fields.game}<br>
-            <b>Order Details:</b> ${fields.order || fields.orderDescription}<br>
-            ${fields.playerID ? `<b>Player ID:</b> ${fields.playerID}<br>` : ''}
-            ${fields.zoneID ? `<b>Zone ID:</b> ${fields.zoneID}<br>` : ''}
-            ${fields.ign ? `<b>IGN:</b> ${fields.ign}<br>` : ''}
-          </div>
-          <p>Your order and payment screenshot have been successfully received!<br>Wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
-          <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
-        `;
+        ok.innerHTML = `<div class="ok-ico">✅</div><h4>ORDER SUBMITTED!</h4><p>ID: ${fields.transactionID}<br>Thank you!</p><button class="btn-sub" onclick="location.reload()">Place Another Order</button>`;
         ok.style.display='block';
-        ok.scrollIntoView({behavior:'smooth'});
-      } else {
-        throw new Error('Server error');
-      }
+      } else { throw new Error(); }
     } catch(err) {
-      errEl.textContent='❌ Upload failed. Please check your internet or try a smaller image size.';
-      errEl.style.display='block';
-      btn.disabled=false; 
-      btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+      alert("Submission failed. Try again.");
+      btn.disabled=false; btn.textContent='Submit Order';
     }
   };
-
-  reader.readAsDataURL(file); // This triggers the upload process
-}
-  
-function resetAll(){
-  document.querySelector('.gtabs').style.display='flex';
-  document.getElementById('ok-msg').style.display='none';
-  document.querySelectorAll('.gpanel').forEach(p=>{p.style.display='';p.classList.remove('active')});
-  document.getElementById('g-mlbb').classList.add('active');
-  document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
-  document.querySelector('.gtab[data-g="mlbb"]').classList.add('active');
-  // Reset form fields
-  document.querySelectorAll('input[type=text],input[type=tel],textarea').forEach(i=>i.value='');
-  document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
-  document.querySelectorAll('.sel-box').forEach(b=>b.style.display='none');
-  document.querySelectorAll('.err-msg').forEach(e=>e.style.display='none');
-  document.querySelectorAll('.btn-sub').forEach(b=>{
-    b.disabled=false;
-    if(b.id==='custom-btn') b.textContent='🛎️ Send Custom Request';
-    else b.textContent='Submit Order';
-  });
-  selected={game:null,item:null,price:null,network:null};
+  reader.readAsDataURL(file);
 }
 
+function resetAll(){ location.reload(); }
 buildAll();
 </script>
-
-<!-- ===== FLOATING NOTIFICATION ===== -->
 <style>
 /* BELL BUTTON */
 .notif-bell{
