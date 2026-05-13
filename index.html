@@ -929,6 +929,33 @@ async function fetchPrices() {
 
 // Trigger the download as soon as the page loads
 window.onload = fetchPrices;
+  // ===================== RENDER HELPERS =====================
+function ph(n){ return '₱' + n.toLocaleString('en-PH'); }
+
+function makeGrid(containerId, items, game, cat){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = '';
+  
+  if(!items || items.length === 0) return; 
+  
+  items.forEach((it,i) => {
+    const c = document.createElement('div');
+    c.className = 'pcard';
+    c.dataset.game = game; c.dataset.cat = cat; c.dataset.idx = i;
+    c.dataset.name = it.n; c.dataset.price = it.p;
+    c.innerHTML = `
+      <div class="chk">✓</div>
+      <div class="pn">${it.n}</div>
+      ${it.d ? `<div class="pd">${it.d}</div>` : ''}
+      <div class="pp">${ph(it.p)}</div>`;
+    c.onclick = () => {
+      if(game === 'mlbb' && cat === 'dd') openDDConfirm(c);
+      else selectItem(c, game);
+    };
+    el.appendChild(c);
+  });
+}
 
 
 
