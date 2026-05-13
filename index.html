@@ -912,6 +912,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
 <script>
   // ===================== DYNAMIC DATA LOADING =====================
+// ===================== DYNAMIC DATA LOADING =====================
 const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec";
 
 let DATA = {};
@@ -927,9 +928,9 @@ async function fetchPrices() {
   }
 }
 
-// Trigger the download as soon as the page loads
 window.onload = fetchPrices;
-  // ===================== RENDER HELPERS =====================
+
+// ===================== RENDER HELPERS (THE GRID BUILDER) =====================
 function ph(n){ return '₱' + n.toLocaleString('en-PH'); }
 
 function makeGrid(containerId, items, game, cat){
@@ -949,16 +950,13 @@ function makeGrid(containerId, items, game, cat){
       <div class="pn">${it.n}</div>
       ${it.d ? `<div class="pd">${it.d}</div>` : ''}
       <div class="pp">${ph(it.p)}</div>`;
-    c.onclick = () => {
-      if(game === 'mlbb' && cat === 'dd') openDDConfirm(c);
-      else selectItem(c, game);
-    };
+      
+    // 🚀 THIS FIXES THE CLICK BUG! (Instantly scrolls & auto-fills the order)
+    c.onclick = () => { selectItem(c, game); };
+    
     el.appendChild(c);
   });
 }
-
-
-
 
 // ===================== RENDER ALL GRIDS =====================
 function buildAll(){
