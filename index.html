@@ -911,13 +911,15 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </div><!-- /main -->
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec";
+  // ===================== DYNAMIC DATA LOADING =====================
+const API_URL = "https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec";
 
 let DATA = {};
 
 async function fetchPrices() {
   try {
     const response = await fetch(API_URL);
+    if (!response.ok) throw new Error('Database connection failed');
     DATA = await response.json();
     buildAll();
   } catch (error) {
@@ -925,6 +927,7 @@ async function fetchPrices() {
   }
 }
 
+// Trigger the download as soon as the page loads
 window.onload = fetchPrices;
 
 
