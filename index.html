@@ -25,9 +25,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   color:var(--or);letter-spacing:3px;text-transform:uppercase}
 .hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
 .gcash-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.12);
-  border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:3px 12px;margin-top:6px;
-  font-size:.72rem;color:var(--bl);font-weight:500}
-.gcash-pill span{opacity:.7}
+  border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:4px 12px;margin-top:6px;
+  font-size:.75rem;color:var(--bl);font-weight:500;cursor:pointer;transition:0.2s}
+.gcash-pill:hover{background:rgba(59,130,246,.2);}
+.gcash-pill span{opacity:1; font-weight:600;}
 
 /* GAME TABS */
 .gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
@@ -136,7 +137,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .ok-msg p{font-size:.8rem;color:var(--mx);margin-top:6px;line-height:1.5}
 .err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
   border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
-@media(max-width:380px){.pgrid{grid-template-columns:1fr}.netgrid{grid-template-columns:1fr 1fr}}
 
 /* CUSTOM ORDER */
 .custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));
@@ -165,6 +165,23 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .btn-sub.custom-btn{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
 .btn-sub.custom-btn:hover{background:linear-gradient(135deg,#6d28d9,#9b7af0);
   box-shadow:0 5px 20px rgba(139,92,246,.35)}
+
+/* 🔒 UNIFIED PAYMENT WIDGET */
+.pm-methods { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.pm-btn { flex: 1; min-width: 65px; text-align: center; padding: 10px 5px; background: var(--dk3); border: 1px solid var(--dk5); border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--mx); transition: 0.2s; }
+.pm-btn.active { background: rgba(249,115,22,0.1); border-color: var(--or); color: var(--or); }
+.pm-details { background: var(--dk4); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 15px; display: none; }
+.pm-row { display: flex; justify-content: space-between; margin-bottom: 5px; color: #fff; font-family: monospace; font-size: 0.95rem;}
+.pm-row span:first-child { color: var(--mx); font-family: 'Exo 2', sans-serif; font-size: 0.8rem;}
+.btn-reveal, .btn-qr { width: 100%; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 0.85rem; margin-top: 8px; transition: 0.2s; }
+.btn-reveal { background: var(--dk5); color: #fff; }
+.btn-reveal:hover { background: var(--dk3); }
+.btn-qr { background: rgba(59,130,246,0.1); color: var(--bl); border: 1px solid rgba(59,130,246,0.3); }
+.btn-qr:hover { background: rgba(59,130,246,0.2); }
+
+/* MODALS */
+.pm-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.pm-modal-box { background: var(--dk2); border: 1px solid var(--dk5); border-radius: 16px; padding: 20px; width: 90%; max-width: 350px; text-align: center; }
 </style>
 </head>
 <body>
@@ -172,7 +189,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
   <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
-  <div class="gcash-pill"><span>💳 GCash</span> 9288978005 <span>· Mark Guevarra</span></div>
+  <div class="gcash-pill" onclick="toggleHeaderGCash()">
+    <span>💳 GCash:</span> <span id="hdr-g-name" style="color:var(--bl);font-weight:600;opacity:1">Ma*k G.</span> 
+    <span style="opacity:1">·</span> <span id="hdr-g-num" style="color:var(--bl);font-weight:600;opacity:1">0928-****-**5</span> 👁
+  </div>
 </div>
 
 <div class="gtabs" id="gtabs">
@@ -186,7 +206,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
 <div class="main">
 
-<!-- ===== MLBB ===== -->
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
@@ -200,30 +219,25 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
   </div>
 
-  <!-- Diamonds -->
   <div class="cpanel active" id="mlbb-dias">
     <div class="slbl">Direct Top-Up Diamonds (PH Server)</div>
     <div class="pgrid" id="grid-mlbb-dias"></div>
   </div>
 
-  <!-- Denomination Diamonds -->
   <div class="cpanel" id="mlbb-denom">
     <div class="slbl">Denomination Diamonds (Single Purchase)</div>
     <div class="pgrid" id="grid-mlbb-denom"></div>
   </div>
 
-  <!-- Combinations -->
   <div class="cpanel" id="mlbb-combo">
     <div class="slbl">Diamond Denomination Combinations</div>
     <div class="alert-box">💡 These use multiple denomination purchases to get the exact diamond count at a better price.</div>
     <div class="pgrid" id="grid-mlbb-combo"></div>
   </div>
 
-  <!-- Double Diamond -->
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div>
 
-    <!-- Main Warning Banner -->
     <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);
       border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -246,13 +260,11 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="pgrid" id="grid-mlbb-dd"></div>
   </div>
 
-  <!-- Bundles & WDP -->
   <div class="cpanel" id="mlbb-bundles">
     <div class="slbl">Bundles & Weekly Diamond Pass</div>
     <div class="pgrid" id="grid-mlbb-bundles"></div>
   </div>
 
-  <!-- Skins & Events -->
   <div class="cpanel" id="mlbb-skins">
     <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div>
     <div class="pgrid" id="grid-mlbb-skins-cosmo"></div>
@@ -260,13 +272,11 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="pgrid" id="grid-mlbb-skins-direct"></div>
   </div>
 
-  <!-- Starlight -->
   <div class="cpanel" id="mlbb-starlight">
     <div class="slbl">Starlight Passes</div>
     <div class="pgrid" id="grid-mlbb-starlight"></div>
   </div>
 
-  <!-- MLBB Order Form -->
   <div class="oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="mlbb-sel-box" style="display:none">
@@ -276,16 +286,17 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
+    
     <div class="fg">
-      <label>Player ID <span class="req">*</span></label>
+      <label>Player ID <span class="req">*</span> <span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;" onclick="openIDModal()">Help finding ID?</span></label>
       <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
     </div>
     
     <div class="fg">
       <label>Zone ID <span class="req">*</span></label>
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="mlbb-zid" placeholder="e.g. 1234" style="flex: 1;">
-        <button type="button" onclick="verifyMLBB()" style="padding: 0 15px; background: var(--bl); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Verify</button>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="mlbb-zid" placeholder="1234" style="flex:1">
+        <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
     
@@ -297,17 +308,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="mlbb-notes" placeholder="Any special requests or notes..."></textarea></div>
+    
     <div class="fg">
-   <label>Upload GCash Screenshot <span class="req">*</span></label>
-   <input type="file" id="mlbb-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
- </div>
+      <label>Payment Method <span class="req">*</span></label>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-mlbb"></div>
+      <input type="hidden" id="pm-val-mlbb">
+    </div>
+
+    <div class="fg">
+      <label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="mlbb-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+    </div>
+
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting. Include screenshot in notes if possible.</div>
   </div>
 </div>
 
-<!-- ===== GARENA CoD ===== -->
 <div class="gpanel" id="g-cod">
   <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
   <div class="pgrid" id="grid-cod"></div>
@@ -320,11 +343,12 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
+    
     <div class="fg">
       <label>Player ID (UID) <span class="req">*</span></label>
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex: 1;">
-        <button type="button" onclick="verifyCOD()" style="padding: 0 15px; background: var(--bl); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Verify</button>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1">
+        <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
     
@@ -334,17 +358,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
+    
     <div class="fg">
-   <label>Upload GCash Screenshot <span class="req">*</span></label>
-   <input type="file" id="cod-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
- </div>
+      <label>Payment Method <span class="req">*</span></label>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('cod','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-cod"></div>
+      <input type="hidden" id="pm-val-cod">
+    </div>
+
+    <div class="fg">
+      <label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="cod-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+    </div>
+
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
-<!-- ===== ROBLOX ===== -->
 <div class="gpanel" id="g-roblox">
   <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
   <div class="pgrid" id="grid-roblox"></div>
@@ -361,11 +397,12 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="roblox-gpid" placeholder="Your Roblox Gamepass ID"></div>
     <div class="fg"><label>Gamepass Name <span class="req">*</span></label>
       <input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
+    
     <div class="fg">
       <label>Roblox Username <span class="req">*</span></label>
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="roblox-user" placeholder="Enter Username" style="flex: 1;">
-        <button type="button" onclick="verifyRoblox()" style="padding: 0 15px; background: var(--bl); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Verify</button>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1">
+        <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
     
@@ -376,17 +413,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="roblox-notes" placeholder="Any special requests..."></textarea></div>
+    
     <div class="fg">
-   <label>Upload GCash Screenshot <span class="req">*</span></label>
-   <input type="file" id="roblox-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
- </div>
+      <label>Payment Method <span class="req">*</span></label>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-roblox"></div>
+      <input type="hidden" id="pm-val-roblox">
+    </div>
+
+    <div class="fg">
+      <label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="roblox-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+    </div>
+
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
-<!-- ===== BLOODSTRIKE ===== -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
   <div class="pgrid" id="grid-bs"></div>
@@ -405,17 +454,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="bs-notes" placeholder="Any special requests..."></textarea></div>
+    
     <div class="fg">
-   <label>Upload GCash Screenshot <span class="req">*</span></label>
-   <input type="file" id="bs-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
- </div>
+      <label>Payment Method <span class="req">*</span></label>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('bs','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('bs','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-bs"></div>
+      <input type="hidden" id="pm-val-bs">
+    </div>
+
+    <div class="fg">
+      <label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="bs-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+    </div>
+
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
-<!-- ===== LOAD ===== -->
 <div class="gpanel" id="g-load">
   <div class="slbl" style="margin:12px 0 8px">Choose Network / Type</div>
   <div class="netgrid">
@@ -448,42 +509,34 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
   </div>
 
-  <!-- Globe Regular -->
   <div class="lpanel" id="lp-globe-reg">
     <div class="slbl">Globe Regular Load</div>
     <div class="pgrid" id="grid-globe-reg"></div>
   </div>
-  <!-- TM Regular -->
   <div class="lpanel" id="lp-tm-reg">
     <div class="slbl">TM Regular Load</div>
     <div class="pgrid" id="grid-tm-reg"></div>
   </div>
-  <!-- Globe Promo B -->
   <div class="lpanel" id="lp-globe-promo">
     <div class="slbl">Globe Promo B</div>
     <div class="pgrid" id="grid-globe-promo"></div>
   </div>
-  <!-- HomeSurf -->
   <div class="lpanel" id="lp-homesurf">
     <div class="slbl">Fr WiFi / Home Surf</div>
     <div class="pgrid" id="grid-homesurf"></div>
   </div>
-  <!-- FamSurf -->
   <div class="lpanel" id="lp-famsurf">
     <div class="slbl">FamSurf Plans</div>
     <div class="pgrid" id="grid-famsurf"></div>
   </div>
-  <!-- TM Promo & ALL-NET -->
   <div class="lpanel" id="lp-tm-promo">
     <div class="slbl">TM Promo & ALL-NET</div>
     <div class="pgrid" id="grid-tm-promo"></div>
   </div>
-  <!-- GFiber -->
   <div class="lpanel" id="lp-gfiber">
     <div class="slbl">GFiber Prepaid</div>
     <div class="pgrid" id="grid-gfiber"></div>
   </div>
-  <!-- Smart/DITO -->
   <div class="lpanel" id="lp-smart">
     <div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div>
   </div>
@@ -491,7 +544,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div>
   </div>
 
-  <!-- Load Order Form -->
   <div class="oform">
     <h3>📋 Load Order</h3>
     <div class="sel-box" id="load-sel-box" style="display:none">
@@ -508,17 +560,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check your number — wrong number = lost load</div></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="load-notes" placeholder="Any special requests..."></textarea></div>
+    
     <div class="fg">
-   <label>Upload GCash Screenshot <span class="req">*</span></label>
-   <input type="file" id="load-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
- </div>
+      <label>Payment Method <span class="req">*</span></label>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('load','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('load','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('load','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-load"></div>
+      <input type="hidden" id="pm-val-load">
+    </div>
+
+    <div class="fg">
+      <label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="load-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+    </div>
+
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
-    <div class="notice">⚠️ Send GCash payment to <b>9288978005</b> (Mark Guevarra) after submitting.</div>
   </div>
 </div>
 
-<!-- ===== CUSTOM ORDER ===== -->
 <div class="gpanel" id="g-custom">
 
   <div class="custom-hero" style="margin-top:12px">
@@ -593,10 +657,23 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <label>Additional Notes</label>
       <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea>
     </div>
+    
     <div class="fg">
-   <label>Upload GCash Screenshot <span class="req">*</span></label>
-   <input type="file" id="custom-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
- </div>
+      <label>Payment Method <span class="req">*</span></label>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('custom','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('custom','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-custom"></div>
+      <input type="hidden" id="pm-val-custom">
+    </div>
+
+    <div class="fg">
+      <label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="custom-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+    </div>
 
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">
       🛎️ Send Custom Request
@@ -608,17 +685,28 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- SUCCESS (shared) -->
 <div class="ok-msg" id="ok-msg">
   <div class="ok-ico">✅</div>
   <h4>ORDER SUBMITTED!</h4>
-  <p>Your order has been received. Please send your GCash payment to<br>
-  <b style="color:var(--bl)">9288978005 (Mark Guevarra)</b><br>
-  and wait for confirmation. Thank you! 🎮</p>
+  <p>Your order has been received. Please send your payment to the confirmed details and wait for confirmation. Thank you! 🎮</p>
   <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
 </div>
 
-</div><!-- /main -->
+</div><div id="qr-modal" class="pm-modal-overlay">
+  <div class="pm-modal-box">
+    <h3 style="color:var(--or); margin-bottom:15px; font-family:'Rajdhani',sans-serif; letter-spacing:1px;">Scan QR Code</h3>
+    <img id="qr-img" src="" style="width:100%; border-radius:10px; margin-bottom:15px; border:1px solid var(--dk5);">
+    <button class="btn-sub" onclick="document.getElementById('qr-modal').style.display='none'">Close</button>
+  </div>
+</div>
+
+<div id="id-modal" class="pm-modal-overlay">
+  <div class="pm-modal-box">
+    <h3 style="color:var(--bl); margin-bottom:15px; font-family:'Rajdhani',sans-serif; letter-spacing:1px;">How to find ID</h3>
+    <p style="font-size:0.9rem; color:var(--mx); margin-bottom:15px; line-height:1.5;">Open your game profile. Your Player ID and Zone ID are usually located under your avatar or in the settings page.</p>
+    <button class="btn-sub" onclick="document.getElementById('id-modal').style.display='none'">Got it</button>
+  </div>
+</div>
 
 <script>
 // ===================== DATA =====================
@@ -812,48 +900,108 @@ function buildAll(){
   });
 }
 
+// ===================== HEADER GCASH TOGGLE =====================
+let hdrRevealed = false;
+function toggleHeaderGCash() {
+  hdrRevealed = !hdrRevealed;
+  document.getElementById('hdr-g-name').textContent = hdrRevealed ? 'Mark Guevarra' : 'Ma*k G.';
+  document.getElementById('hdr-g-num').textContent = hdrRevealed ? '0928-897-8005' : '0928-****-**5';
+}
+
+// ===================== FULL SYSTEM PAYMENT PRIVACY =====================
+const PM_DATA = {
+  gcash: { label:'GCash', name:'Mark Guevarra', num:'09288978005', color:'#3b82f6', qr:'gcash-qr.jpg' },
+  maya: { label:'Maya', name:'Mark Guevarra', num:'09288978005', color:'#22c55e', qr:'maya-qr.jpg' },
+  gotyme: { label:'GoTyme', name:'Mark Guevarra', num:'09288978005', color:'#8b5cf6', qr:'gotyme-qr.jpg' },
+  paypal: { label:'PayPal', name:'Mark Guevarra', num:'markguevarra@gmail.com', color:'#0ea5e9', note:'Please select "Friends & Family"' }
+};
+
+function selectPayment(game, method, btn) {
+  document.querySelectorAll(`#g-${game} .pm-btn`).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`pm-val-${game}`).value = PM_DATA[method].label;
+
+  const pm = PM_DATA[method];
+  const details = document.getElementById(`pm-details-${game}`);
+  details.style.display = 'block';
+  details.style.borderLeft = `4px solid ${pm.color}`;
+
+  const isEmail = method === 'paypal';
+  const maskedName = 'Ma*k G*******';
+  const maskedNum = isEmail ? 'm****@gmail.com' : '0928****005';
+
+  let html = `
+    <div style="color:${pm.color}; font-weight:bold; margin-bottom:10px;">${pm.label} Selected</div>
+    <div class="pm-row"><span>Account Name:</span> <span id="pm-name-${game}">${maskedName}</span></div>
+    <div class="pm-row"><span>${isEmail ? 'Email Address' : 'Account Number'}:</span> <span id="pm-num-${game}">${maskedNum}</span></div>
+    <button type="button" class="btn-reveal" onclick="revealPM('${game}','${method}', this)">🔓 Tap to Reveal Details</button>
+  `;
+  if (pm.qr) {
+    html += `<button type="button" class="btn-qr" onclick="openQRModal('${pm.qr}')">📷 View QR Code</button>`;
+  } else if (pm.note) {
+    html += `<div style="font-size:0.75rem; color:var(--or); margin-top:8px; text-align:center;">⚠️ ${pm.note}</div>`;
+  }
+  details.innerHTML = html;
+}
+
+function revealPM(game, method, btn) {
+  const pm = PM_DATA[method];
+  document.getElementById(`pm-name-${game}`).textContent = pm.name;
+  document.getElementById(`pm-num-${game}`).textContent = pm.num;
+  btn.style.display = 'none'; // hide button after revealing
+}
+
+function openQRModal(imgSrc) {
+  document.getElementById('qr-img').src = imgSrc;
+  document.getElementById('qr-modal').style.display = 'flex';
+}
+function openIDModal() {
+  document.getElementById('id-modal').style.display = 'flex';
+}
+
 // ===================== SELECTION =====================
-function selectItem(card, game){
-  // Deselect all in same game
-  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
-  card.classList.add('sel');
-  const name = card.dataset.name;
-  const price = parseInt(card.dataset.price);
+function selectItem(card, game, manualName, manualPrice){
+  document.querySelectorAll(`.pcard[data-game="${game}"], .promo-card`).forEach(c=>c.classList.remove('sel'));
+  if(card) card.classList.add('sel');
+  
+  const name = manualName || card.dataset.name;
+  const rawPrice = manualPrice || card.dataset.price;
+  const price = (typeof rawPrice === 'string' && rawPrice.includes('₱')) ? rawPrice : ph(parseInt(rawPrice));
+  
   selected.game=game; selected.item=name; selected.price=price;
 
   if(game==='mlbb'){
     document.getElementById('mlbb-sel-box').style.display='block';
     document.getElementById('mlbb-sel-item').textContent=name;
-    document.getElementById('mlbb-sel-price').textContent=ph(price);
-    document.getElementById('mlbb-order-display').value=name+' — '+ph(price);
+    document.getElementById('mlbb-sel-price').textContent=price;
+    document.getElementById('mlbb-order-display').value=name+' — '+price;
   } else if(game==='cod'){
     document.getElementById('cod-sel-box').style.display='block';
     document.getElementById('cod-sel-item').textContent=name;
-    document.getElementById('cod-sel-price').textContent=ph(price);
-    document.getElementById('cod-order-display').value=name+' — '+ph(price);
+    document.getElementById('cod-sel-price').textContent=price;
+    document.getElementById('cod-order-display').value=name+' — '+price;
   } else if(game==='roblox'){
     document.getElementById('roblox-sel-box').style.display='block';
     document.getElementById('roblox-sel-item').textContent=name;
-    document.getElementById('roblox-sel-price').textContent=ph(price);
-    document.getElementById('roblox-order-display').value=name+' — '+ph(price);
+    document.getElementById('roblox-sel-price').textContent=price;
+    document.getElementById('roblox-order-display').value=name+' — '+price;
   } else if(game==='bs'){
     document.getElementById('bs-sel-box').style.display='block';
     document.getElementById('bs-sel-item').textContent=name;
-    document.getElementById('bs-sel-price').textContent=ph(price);
-    document.getElementById('bs-order-display').value=name+' — '+ph(price);
+    document.getElementById('bs-sel-price').textContent=price;
+    document.getElementById('bs-order-display').value=name+' — '+price;
   } else if(game==='load'){
     const netKey = card.dataset.cat;
     const netName = DATA.load[netKey]?.net || netKey;
     document.getElementById('load-sel-box').style.display='block';
     document.getElementById('load-sel-item').textContent=name;
-    document.getElementById('load-sel-price').textContent=ph(price);
-    document.getElementById('load-order-display').value=name+' — '+ph(price);
+    document.getElementById('load-sel-price').textContent=price;
+    document.getElementById('load-order-display').value=name+' — '+price;
     document.getElementById('load-network-display').value=netName;
     selected.network=netName;
   }
   // Scroll to form
   setTimeout(()=>{
-    const formId = game==='load'?'load':'mlbb'===game?'mlbb':game;
     const form = document.querySelector(`#g-${game} .oform`);
     if(form) form.scrollIntoView({behavior:'smooth',block:'nearest'});
   },100);
@@ -898,41 +1046,51 @@ function selectCC(card){
   document.getElementById('custom-game').value = card.dataset.cc;
 }
 
-// ===================== AUTO-VERIFY MLBB IGN =====================
+// ===================== AUTO-VERIFY =====================
 async function verifyMLBB() {
   const pid = document.getElementById('mlbb-pid').value.trim();
   const zid = document.getElementById('mlbb-zid').value.trim();
   const ignField = document.getElementById('mlbb-ign');
-  
-  if (!pid || !zid) {
-    alert("Please enter both Player ID and Zone ID first.");
-    return;
-  }
-
+  if (!pid || !zid) return alert("Please enter both Player ID and Zone ID first.");
   ignField.value = "Verifying...";
   ignField.style.borderColor = "var(--or)";
-
   try {
-    const response = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
-    const data = await response.json();
+    const res = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const data = await res.json();
+    if (res.ok && data.ign) { ignField.value = data.ign; ignField.style.borderColor = "var(--gr)"; } 
+    else { ignField.value = ""; ignField.style.borderColor = "#ef4444"; alert(data.error || "Player not found."); }
+  } catch (err) { ignField.value = ""; alert("Service busy. Try again."); }
+}
 
-    if (response.ok && data.ign) {
-      ignField.value = data.ign;
-      ignField.style.borderColor = "var(--gr)";
-    } else {
-      ignField.value = "";
-      ignField.style.borderColor = "#ef4444";
-      alert(data.error || "Player not found.");
-    }
-  } catch (error) {
-    ignField.value = "";
-    alert("Verification service is currently busy. Please try again.");
-  }
+async function verifyCOD() {
+  const pid = document.getElementById('cod-pid').value.trim();
+  const ignField = document.getElementById('cod-ign');
+  if (!pid) return alert("Please enter your Call of Duty Player ID first.");
+  ignField.value = "Verifying...";
+  ignField.style.borderColor = "var(--or)";
+  try {
+    const res = await fetch(`/api/verify-cod?id=${pid}`);
+    const data = await res.json();
+    if (res.ok && data.ign) { ignField.value = data.ign; ignField.style.borderColor = "var(--gr)"; } 
+    else { ignField.value = ""; ignField.style.borderColor = "#ef4444"; alert(data.error || "Player not found."); }
+  } catch (err) { ignField.value = ""; alert("Service busy. Try again."); }
+}
+
+async function verifyRoblox() {
+  const username = document.getElementById('roblox-user').value.trim();
+  const dispField = document.getElementById('roblox-dispname');
+  if (!username) return alert("Please enter a Roblox Username first.");
+  dispField.value = "Verifying...";
+  dispField.style.borderColor = "var(--or)";
+  try {
+    const res = await fetch(`/api/verify-roblox?username=${encodeURIComponent(username)}`);
+    const data = await res.json();
+    if (res.ok && data.ign) { dispField.value = data.ign; dispField.style.borderColor = "var(--gr)"; } 
+    else { dispField.value = ""; dispField.style.borderColor = "#ef4444"; alert(data.error || "User not found."); }
+  } catch (err) { dispField.value = ""; alert("Service busy. Try again."); }
 }
   
-  
-// ===================== SUBMIT =====================
-// ===================== SUBMIT =====================
+// ===================== SUBMIT ORDER =====================
 async function submitOrder(game){
   const btn = document.getElementById(game+'-btn');
   const errEl = document.getElementById(game+'-err');
@@ -942,10 +1100,14 @@ async function submitOrder(game){
   let valid = true;
   let missingFields = [];
 
-  // 1. Check if they uploaded a screenshot!
+  // 1. Payment Method Validations
+  const pmInput = document.getElementById('pm-val-' + game);
+  const pmVal = pmInput ? pmInput.value : '';
+  if(!pmVal) missingFields.push('Payment Method');
+
   const fileInput = document.getElementById(game+'-screenshot');
   if(!fileInput || fileInput.files.length === 0) {
-    missingFields.push('GCash Screenshot');
+    missingFields.push('Payment Receipt');
   }
 
   // 2. Game Logic
@@ -959,7 +1121,6 @@ async function submitOrder(game){
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
     if(!pid) missingFields.push('Player ID');
     if(!zid) missingFields.push('Zone ID');
-    if(!ign) missingFields.push('IGN');
     if(missingFields.length){valid=false;}
     fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes};
   } else if(game==='cod'){
@@ -969,7 +1130,6 @@ async function submitOrder(game){
     const notes = document.getElementById('cod-notes').value.trim();
     if(!order||order.includes('Select')) missingFields.push('Order/Item');
     if(!pid) missingFields.push('Player ID');
-    if(!ign) missingFields.push('IGN');
     if(missingFields.length){valid=false;}
     fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes};
   } else if(game==='roblox'){
@@ -1028,39 +1188,32 @@ async function submitOrder(game){
   btn.disabled=true; 
   btn.textContent='Uploading Screenshot... Please Wait';
 
-  // 3. Generate a beautiful Transaction ID for their receipt!
   fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
   fields.dateTime = new Date().toLocaleString();
+  fields.paymentMethod = pmVal;
 
-  // ⚠️ HERE IS YOUR DEPLOYED GOOGLE URL:
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec";
 
-  // 🛡️ SECURITY GATEKEEPER: Check File Type & Size
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
-  const maxSize = 3 * 1024 * 1024; // 3MB limit (Perfect for screenshots)
+  const maxSize = 3 * 1024 * 1024;
+  const file = fileInput.files[0];
 
-  // 1. Block non-images (mp4, doc, exe, etc.)
   if(!allowedTypes.includes(file.type)) {
     errEl.textContent='❌ Security Block: Only images (JPG, PNG, WEBP) are allowed.';
     errEl.style.display='block';
-    btn.disabled=false;
-    btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+    btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
     return;
   }
 
-  // 2. Block huge files to save your Google Drive storage
   if(file.size > maxSize) {
     errEl.textContent='❌ File too large! Please use a screenshot under 3MB.';
     errEl.style.display='block';
-    btn.disabled=false;
-    btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+    btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
     return;
   }
-  const file = fileInput.files[0];
+  
   const reader = new FileReader();
-
   reader.onload = async function(e) {
-    // Extract just the raw Base64 data from the image
     fields.fileData = e.target.result.split(',')[1];
     fields.mimeType = file.type;
     fields.fileName = file.name;
@@ -1069,7 +1222,7 @@ async function submitOrder(game){
       const res = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify(fields),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' } // text/plain fixes CORS issues!
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
       });
 
       const responseText = await res.text();
@@ -1079,7 +1232,6 @@ async function submitOrder(game){
         document.querySelector('.gtabs').style.display='none';
         const ok = document.getElementById('ok-msg');
         
-        // Show them a professional receipt on screen
         ok.innerHTML = `
           <div class="ok-ico">✅</div>
           <h4>ORDER SUBMITTED!</h4>
@@ -1087,6 +1239,7 @@ async function submitOrder(game){
             <b style="color:var(--or);">🧾 TRANSACTION RECEIPT</b><br><br>
             <b>Transaction ID:</b> <span style="color:#fbbf24">${fields.transactionID}</span><br>
             <b>Date & Time:</b> ${fields.dateTime}<br>
+            <b>Payment via:</b> ${fields.paymentMethod}<br>
             <b>Game:</b> ${fields.game}<br>
             <b>Order Details:</b> ${fields.order || fields.orderDescription}<br>
             ${fields.playerID ? `<b>Player ID:</b> ${fields.playerID}<br>` : ''}
@@ -1109,7 +1262,7 @@ async function submitOrder(game){
     }
   };
 
-  reader.readAsDataURL(file); // This triggers the upload process
+  reader.readAsDataURL(file); 
 }
   
 function resetAll(){
@@ -1119,15 +1272,13 @@ function resetAll(){
   document.getElementById('g-mlbb').classList.add('active');
   document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
   document.querySelector('.gtab[data-g="mlbb"]').classList.add('active');
-  // Reset form fields
   document.querySelectorAll('input[type=text],input[type=tel],textarea').forEach(i=>i.value='');
-  document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
-  document.querySelectorAll('.sel-box').forEach(b=>b.style.display='none');
-  document.querySelectorAll('.err-msg').forEach(e=>e.style.display='none');
+  document.querySelectorAll('.pcard, .pm-btn').forEach(c=>c.classList.remove('sel','active'));
+  document.querySelectorAll('.sel-box, .pm-details, .err-msg').forEach(b=>b.style.display='none');
   document.querySelectorAll('.btn-sub').forEach(b=>{
     b.disabled=false;
     if(b.id==='custom-btn') b.textContent='🛎️ Send Custom Request';
-    else b.textContent='Submit Order';
+    else if(b.id) b.textContent='Submit Order';
   });
   selected={game:null,item:null,price:null,network:null};
 }
@@ -1135,7 +1286,6 @@ function resetAll(){
 buildAll();
 </script>
 
-<!-- ===== FLOATING NOTIFICATION ===== -->
 <style>
 /* BELL BUTTON */
 .notif-bell{
@@ -1315,7 +1465,6 @@ buildAll();
 .dd-btn-cancel:hover{border-color:var(--mx);color:var(--tx)}
 </style>
 
-<!-- DD Floating Warning Badge -->
 <div class="dd-warn-fab" id="dd-warn-fab" onclick="openDDInfo()">
   <div class="dwf-ico">🚫</div>
   <div>
@@ -1324,7 +1473,6 @@ buildAll();
   </div>
 </div>
 
-<!-- DD Info Modal (tap the fab) -->
 <div class="dd-confirm-overlay" id="dd-info-overlay" onclick="if(event.target===this)closeDDInfo()">
   <div class="dd-confirm-box">
     <div class="dcb-ico">🚫</div>
@@ -1338,7 +1486,6 @@ buildAll();
   </div>
 </div>
 
-<!-- DD Confirm Modal (tap a card) -->
 <div class="dd-confirm-overlay" id="dd-confirm-overlay">
   <div class="dd-confirm-box">
     <div class="dcb-ico">⚠️</div>
@@ -1368,20 +1515,17 @@ buildAll();
   </div>
 </div>
 
-<!-- Bell Button -->
 <button class="notif-bell" onclick="openNotif()" title="May & June Starlight Offers" style="bottom:86px">
   🔔
   <div class="notif-badge">2</div>
 </button>
 
-<!-- Skins Fire Button -->
 <button class="notif-bell" onclick="openSkins()" title="Upcoming Skins & Pre-Orders"
   style="background:linear-gradient(135deg,#dc2626,#f97316);box-shadow:0 4px 18px rgba(220,38,38,.5);animation:none">
   🔥
   <div class="notif-badge" style="background:#f59e0b">5</div>
 </button>
 
-<!-- Modal -->
 <div class="notif-overlay" id="notif-overlay" onclick="overlayClick(event)">
   <div class="notif-sheet" id="notif-sheet">
     <div class="notif-drag"></div>
@@ -1394,16 +1538,13 @@ buildAll();
       <button class="notif-close" onclick="closeNotif()">✕</button>
     </div>
 
-    <!-- Warning Banner -->
     <div class="notif-warn">
       <div class="wi">⚠️</div>
       <p><b>Limited Supply!</b> Only <b>5 slots per month</b> available. These are <b>not own supply</b> — orders go through a gifter. Once slots are full, no more orders until next restock.</p>
     </div>
 
-    <!-- Offer Cards -->
     <div class="notif-offers">
 
-      <!-- May NSL - SOLD OUT -->
       <div class="offer-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8)">
         <div class="oc-top">
           <div>
@@ -1423,7 +1564,6 @@ buildAll();
         <div class="oc-sub">No more slots available for May 2026.</div>
       </div>
 
-      <!-- June NSL - 1 REMAINING -->
       <div class="offer-card" style="border-color:rgba(239,68,68,.4)">
         <div class="oc-top">
           <div>
@@ -1448,7 +1588,6 @@ buildAll();
 
     </div>
 
-    <!-- Delivery Info -->
     <div class="delivery-box">
       <div class="db-title">📦 How Delivery Works</div>
       <div class="delivery-row">
@@ -1469,7 +1608,6 @@ buildAll();
       </div>
     </div>
 
-    <!-- CTA -->
     <div class="notif-cta">
       <button class="notif-cta-btn" onclick="goToCustomOrder()">
         ✏️ Order Here (Custom Request)
@@ -1482,7 +1620,6 @@ buildAll();
   </div>
 </div>
 
-<!-- ===== SKINS PRE-ORDER MODAL ===== -->
 <style>
 .skin-card{
   background:var(--dk3);border:1.5px solid rgba(220,38,38,.2);
@@ -1530,7 +1667,6 @@ buildAll();
 
     <div style="padding:14px 18px 0">
 
-      <!-- OBSIDIA -->
       <div class="skin-card" onclick="orderSkin('🌑 OBSIDIA (Premium Starlight)','₱420','8th Day of May Release')" style="cursor:pointer">
         <div class="sk-head">
           <div>
@@ -1548,7 +1684,6 @@ buildAll();
         <div class="sk-schedule">📅 Gifting Schedule: 8th Day of May Release</div>
       </div>
 
-      <!-- PHARSA ALL-STAR -->
       <div class="skin-card" style="cursor:pointer">
         <div class="sk-head">
           <div>
@@ -1570,7 +1705,6 @@ buildAll();
         <div class="sk-schedule">📅 Gifting Schedule: May 20</div>
       </div>
 
-      <!-- KARINA ZODIAC -->
       <div class="skin-card" onclick="orderSkin('♋ KARINA ZODIAC (Original Value: 899 💎)','₱495','May 21')" style="cursor:pointer">
         <div class="sk-head">
           <div>
@@ -1588,7 +1722,6 @@ buildAll();
         <div class="sk-schedule">📅 Gifting Schedule: May 21</div>
       </div>
 
-      <!-- LING ALL-STAR -->
       <div class="skin-card" onclick="orderSkin('⚔️ LING ALL-STAR (Original Value: 762 💎)','₱495','June 26')" style="cursor:pointer">
         <div class="sk-head">
           <div>
@@ -1606,7 +1739,6 @@ buildAll();
         <div class="sk-schedule">📅 Gifting Schedule: June 26</div>
       </div>
 
-      <!-- LEGEND LESLEY -->
       <div class="skin-card legend-card" style="cursor:pointer">
         <div class="sk-head">
           <div>
@@ -1650,9 +1782,6 @@ buildAll();
 </div>
 
 <script>
-// ===================== DD WARNING FAB =====================
-let pendingDDCard = null;
-
 function showDDFab(){ document.getElementById('dd-warn-fab').classList.add('show'); }
 function hideDDFab(){ document.getElementById('dd-warn-fab').classList.remove('show'); }
 function openDDInfo(){ document.getElementById('dd-info-overlay').classList.add('open'); }
@@ -1661,6 +1790,7 @@ function closeDDInfo(){
   hideDDFab();
 }
 
+let pendingDDCard = null;
 function openDDConfirm(card){
   pendingDDCard = card;
   document.getElementById('dd-confirm-name').textContent = card.dataset.name;
@@ -1685,7 +1815,6 @@ function confirmDDOrder(){
   document.getElementById('dd-confirm-overlay').classList.remove('open');
   hideDDFab();
   if(pendingDDCard){
-    // Finalize selection like normal selectItem
     document.querySelectorAll('.pcard[data-game="mlbb"]').forEach(c=>c.classList.remove('sel'));
     pendingDDCard.classList.add('sel');
     const name = pendingDDCard.dataset.name;
@@ -1764,67 +1893,6 @@ function orderSkin(skinName, price, schedule){
     document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
     document.getElementById('custom-name').focus();
   },200);
-}
-  // ===================== AUTO-VERIFY CODM IGN =====================
-async function verifyCOD() {
-  const pid = document.getElementById('cod-pid').value.trim();
-  const ignField = document.getElementById('cod-ign');
-  
-  if (!pid) {
-    alert("Please enter your Call of Duty Player ID first.");
-    return;
-  }
-
-  ignField.value = "Verifying...";
-  ignField.style.borderColor = "var(--or)";
-
-  try {
-    // Talk to your new CODM backend
-    const response = await fetch(`/api/verify-cod?id=${pid}`);
-    const data = await response.json();
-
-    if (response.ok && data.ign) {
-      ignField.value = data.ign;
-      ignField.style.borderColor = "var(--gr)";
-    } else {
-      ignField.value = "";
-      ignField.style.borderColor = "#ef4444";
-      alert(data.error || "Player not found.");
-    }
-  } catch (error) {
-    ignField.value = "";
-    alert("Verification service is currently busy. Please try again.");
-  }
-}
-  // ===================== AUTO-VERIFY ROBLOX USERNAME =====================
-async function verifyRoblox() {
-  const username = document.getElementById('roblox-user').value.trim();
-  const dispField = document.getElementById('roblox-dispname');
-  
-  if (!username) {
-    alert("Please enter a Roblox Username first.");
-    return;
-  }
-
-  dispField.value = "Verifying...";
-  dispField.style.borderColor = "var(--or)";
-
-  try {
-    const response = await fetch(`/api/verify-roblox?username=${encodeURIComponent(username)}`);
-    const data = await response.json();
-
-    if (response.ok && data.ign) {
-      dispField.value = data.ign;
-      dispField.style.borderColor = "var(--gr)";
-    } else {
-      dispField.value = "";
-      dispField.style.borderColor = "#ef4444";
-      alert(data.error || "Roblox user not found. Check the spelling.");
-    }
-  } catch (error) {
-    dispField.value = "";
-    alert("Verification service is currently busy. Please try again.");
-  }
 }
 </script>
 </body>
