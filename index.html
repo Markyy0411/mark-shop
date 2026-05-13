@@ -937,9 +937,8 @@ function makeGrid(containerId, items, game, cat){
   const el = document.getElementById(containerId);
   if(!el) return;
   el.innerHTML = '';
-  
   if(!items || items.length === 0) return; 
-  
+
   items.forEach((it,i) => {
     const c = document.createElement('div');
     c.className = 'pcard';
@@ -950,22 +949,16 @@ function makeGrid(containerId, items, game, cat){
       <div class="pn">${it.n}</div>
       ${it.d ? `<div class="pd">${it.d}</div>` : ''}
       <div class="pp">${ph(it.p)}</div>`;
-      
-    c.onclick = () => {
-      // Respects Double Diamond rules if the function exists
-      if(game === 'mlbb' && cat === 'dd' && typeof openDDConfirm === 'function') {
-        openDDConfirm(c);
-      } else {
-        selectItem(c, game);
-      }
-    };
+    
+    // Auto-directs and fills order on click
+    c.onclick = () => selectItem(c, game);
     el.appendChild(c);
   });
 }
 
 // ===================== AUTO-FILL & SCROLL ENGINE =====================
 function selectItem(card, game){
-  // 1. Highlight the selected card
+  // Highlight selection
   document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
   card.classList.add('sel');
   
@@ -973,13 +966,11 @@ function selectItem(card, game){
   const price = parseInt(card.dataset.price);
   selected.game = game; selected.item = name; selected.price = price;
 
-  // 2. Auto-fill the specific game form
   const orderText = name + ' — ' + ph(price);
   
   if(game === 'load') {
     const netKey = card.dataset.cat;
     const netName = netKey.split('-')[0].charAt(0).toUpperCase() + netKey.split('-')[0].slice(1);
-    
     document.getElementById('load-sel-box').style.display = 'block';
     document.getElementById('load-sel-item').textContent = name;
     document.getElementById('load-sel-price').textContent = ph(price);
@@ -987,23 +978,20 @@ function selectItem(card, game){
     document.getElementById('load-network-display').value = netName;
   } else {
     const selBox = document.getElementById(game + '-sel-box');
-    const selItem = document.getElementById(game + '-sel-item');
-    const selPrice = document.getElementById(game + '-sel-price');
     const orderInput = document.getElementById(game + '-order-display');
-
-    if(selBox) selBox.style.display = 'block';
-    if(selItem) selItem.textContent = name;
-    if(selPrice) selPrice.textContent = ph(price);
+    if(selBox) {
+        selBox.style.display = 'block';
+        document.getElementById(game + '-sel-item').textContent = name;
+        document.getElementById(game + '-sel-price').textContent = ph(price);
+    }
     if(orderInput) orderInput.value = orderText;
   }
 
-  // 3. Smooth Scroll to the form
+  // Auto-scroll to the order form
   setTimeout(() => {
     const panel = document.getElementById('g-' + game);
     const form = panel ? panel.querySelector('.oform') : null;
-    if(form) {
-      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    if(form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 150);
 }
 
@@ -1050,8 +1038,6 @@ document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>{
     document.querySelectorAll('#g-mlbb .cpanel').forEach(x=>x.classList.remove('active'));
     t.classList.add('active');
     document.getElementById(t.dataset.c).classList.add('active');
-    if(t.dataset.c === 'mlbb-dd' && typeof showDDFab === 'function') showDDFab(); 
-    else if(typeof hideDDFab === 'function') hideDDFab();
   });
 });
 
@@ -1079,15 +1065,15 @@ async function verifyMLBB() {
     const response = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
     const data = await response.json();
     if (response.ok && data.ign) {
-      ignField.value = data.ign;
-      ignField.style.borderColor = "var(--gr)";
+        ignField.value = data.ign;
+        ignField.style.borderColor = "var(--gr)";
     } else {
-      ignField.value = "";
-      alert(data.error || "Player not found.");
+        ignField.value = "";
+        alert(data.error || "Player not found.");
     }
-  } catch (error) {
+  } catch (error) { 
     ignField.value = "";
-    alert("Verification service busy.");
+    alert("Verification service busy."); 
   }
 }
 
@@ -1098,48 +1084,64 @@ async function submitOrder(game){
   const fileInput = document.getElementById(game+'-screenshot');
   const pmVal = document.getElementById('pm-val-'+game);
   
-  errEl.style.display='none';
-  let fields = {};
-  let missingFields = [];
-
-  const chosenPM = pmVal ? pmVal.value : '';
-  if(!chosenPM) missingFields.push('Payment Method');
-  if(!fileInput || fileInput.files.length === 0) missingFields.push('Payment Receipt');
-
-  if(game==='mlbb'){
-    fields={game:'MLBB', order:document.getElementById('mlbb-order-display').value, playerID:document.getElementById('mlbb-pid').value, zoneID:document.getElementById('mlbb-zid').value, ign:document.getElementById('mlbb-ign').value, notes:document.getElementById('mlbb-notes').value};
-    if(!fields.order || fields.order.includes('Select')) missingFields.push('Item');
-    if(!fields.playerID || !fields.zoneID || !fields.ign) missingFields.push('Account Info');
-  } else if(game==='cod'){
-    fields={game:'CoD', order:document.getElementById('cod-order-display').value, playerID:document.getElementById('cod-pid').value, ign:document.getElementById('cod-ign').value};
-  } else if(game==='roblox'){
-    fields={game:'Roblox', order:document.getElementById('roblox-order-display').value, gamepassID:document.getElementById('roblox-gpid').value, username:document.getElementById('roblox-user').value};
-  } else if(game==='bs'){
-    fields={game:'Bloodstrike', order:document.getElementById('bs-order-display').value, playerID:document.getElementById('bs-pid').value, ign:document.getElementById('bs-ign').value};
-  } else if(game==='load'){
-    fields={game:'Load', order:document.getElementById('load-order-display').value, network:document.getElementById('load-network-display').value, mobileNumber:document.getElementById('load-number').value};
-  } else if(game==='custom'){
-    fields={game:document.getElementById('custom-game').value, orderDescription:document.getElementById('custom-desc').value, customerName:document.getElementById('custom-name').value, contact:document.getElementById('custom-contact').value};
-  }
-
-  if(missingFields.length){
-    errEl.textContent='⚠️ Fill in: '+missingFields.join(', ');
-    errEl.style.display='block';
+  if(!pmVal || !pmVal.value || !fileInput.files[0]) {
+    errEl.textContent = "⚠️ Fill in Payment Method & Receipt";
+    errEl.style.display = "block";
     return;
   }
+  errEl.style.display = "none";
 
-  btn.disabled=true; 
-  btn.textContent='Uploading...';
-
+  btn.disabled=true; btn.textContent='Uploading...';
   const file = fileInput.files[0];
   const reader = new FileReader();
   reader.onload = async function(e) {
-    fields.fileData = e.target.result.split(',')[1];
-    fields.mimeType = file.type;
-    fields.fileName = file.name;
-    fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
-    fields.dateTime = new Date().toLocaleString();
-    fields.paymentMethod = chosenPM;
+    
+    // Grab specific form fields dynamically
+    let playerID = "", zoneID = "", ign = "", notes = "", gamepassID = "", username = "", network = "", mobileNumber = "", orderDescription = "", customerName = "", contact = "";
+    
+    if (game === 'mlbb') {
+      playerID = document.getElementById('mlbb-pid').value;
+      zoneID = document.getElementById('mlbb-zid').value;
+      ign = document.getElementById('mlbb-ign').value;
+      notes = document.getElementById('mlbb-notes').value;
+    } else if (game === 'cod') {
+      playerID = document.getElementById('cod-pid').value;
+      ign = document.getElementById('cod-ign').value;
+    } else if (game === 'roblox') {
+      gamepassID = document.getElementById('roblox-gpid').value;
+      username = document.getElementById('roblox-user').value;
+    } else if (game === 'bs') {
+      playerID = document.getElementById('bs-pid').value;
+      ign = document.getElementById('bs-ign').value;
+    } else if (game === 'load') {
+      network = document.getElementById('load-network-display').value;
+      mobileNumber = document.getElementById('load-number').value;
+    } else if (game === 'custom') {
+      orderDescription = document.getElementById('custom-desc').value;
+      customerName = document.getElementById('custom-name').value;
+      contact = document.getElementById('custom-contact').value;
+    }
+
+    const fields = {
+      game: game.toUpperCase(),
+      order: document.getElementById(game+'-order-display') ? document.getElementById(game+'-order-display').value : orderDescription,
+      playerID: playerID,
+      zoneID: zoneID,
+      ign: ign,
+      notes: notes,
+      gamepassID: gamepassID,
+      username: username,
+      network: network,
+      mobileNumber: mobileNumber,
+      customerName: customerName,
+      contact: contact,
+      fileData: e.target.result.split(',')[1],
+      mimeType: file.type,
+      fileName: file.name,
+      paymentMethod: pmVal.value,
+      transactionID: "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase(),
+      dateTime: new Date().toLocaleString()
+    };
 
     try {
       const res = await fetch("https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec", {
@@ -1147,13 +1149,13 @@ async function submitOrder(game){
         body: JSON.stringify(fields),
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
       });
-      const text = await res.text();
-      if(text.includes("Success")){
+      if((await res.text()).includes("Success")){
         document.querySelector(`#g-${game}`).style.display='none';
         document.querySelector('.gtabs').style.display='none';
         const ok = document.getElementById('ok-msg');
         ok.innerHTML = `<div class="ok-ico">✅</div><h4>ORDER SUBMITTED!</h4><p>ID: ${fields.transactionID}<br>Thank you!</p><button class="btn-sub" onclick="location.reload()">Place Another Order</button>`;
         ok.style.display='block';
+        ok.scrollIntoView({behavior:'smooth'});
       } else { throw new Error(); }
     } catch(err) {
       alert("Submission failed. Try again.");
@@ -1164,755 +1166,27 @@ async function submitOrder(game){
 }
 
 function resetAll(){ location.reload(); }
-buildAll();
-</script>
-<style>
-/* BELL BUTTON */
-.notif-bell{
-  position:fixed;bottom:22px;right:18px;z-index:999;
-  width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
-  background:linear-gradient(135deg,#f59e0b,#f97316);
-  box-shadow:0 4px 18px rgba(249,115,22,.5);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;transition:transform .2s;
-  animation:bellWiggle 3s ease-in-out infinite}
-.notif-bell:hover{transform:scale(1.1)}
-@keyframes bellWiggle{
-  0%,100%{transform:rotate(0)}
-  10%{transform:rotate(-18deg)}
-  20%{transform:rotate(18deg)}
-  30%{transform:rotate(-12deg)}
-  40%{transform:rotate(12deg)}
-  50%{transform:rotate(0)}
-}
-.notif-badge{
-  position:absolute;top:-3px;right:-3px;
-  background:#ef4444;color:#fff;border-radius:50%;
-  width:19px;height:19px;font-size:.62rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  border:2px solid #09090f;font-family:'Exo 2',sans-serif}
 
-/* MODAL OVERLAY */
-.notif-overlay{
-  position:fixed;inset:0;z-index:1000;
-  background:rgba(0,0,0,.75);backdrop-filter:blur(4px);
-  display:none;align-items:flex-end;justify-content:center;
-  padding-bottom:0}
-.notif-overlay.open{display:flex}
-
-/* MODAL SHEET */
-.notif-sheet{
-  background:var(--dk2);border:1px solid rgba(251,191,36,.2);
-  border-radius:20px 20px 0 0;width:100%;max-width:580px;
-  padding:0 0 30px;max-height:90vh;overflow-y:auto;
-  animation:slideUp .3s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.notif-drag{width:40px;height:4px;border-radius:4px;
-  background:rgba(255,255,255,.2);margin:12px auto 0}
-
-/* SHEET HEADER */
-.notif-hdr{
-  background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(249,115,22,.1));
-  border-bottom:1px solid rgba(251,191,36,.15);
-  padding:16px 18px 14px;display:flex;align-items:flex-start;justify-content:space-between}
-.notif-hdr-left h3{
-  font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;
-  color:#fbbf24;letter-spacing:2px;text-transform:uppercase;
-  display:flex;align-items:center;gap:7px}
-.notif-hdr-left p{font-size:.72rem;color:var(--mx);margin-top:3px}
-.notif-close{
-  background:rgba(255,255,255,.08);border:none;border-radius:50%;
-  width:30px;height:30px;color:var(--mx);font-size:1rem;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-left:10px;transition:background .18s}
-.notif-close:hover{background:rgba(255,255,255,.16)}
-
-/* WARN BANNER */
-.notif-warn{
-  margin:14px 18px 0;background:rgba(239,68,68,.1);
-  border:1px solid rgba(239,68,68,.3);border-radius:10px;
-  padding:10px 14px;display:flex;gap:10px;align-items:flex-start}
-.notif-warn .wi{font-size:1.1rem;flex-shrink:0;margin-top:1px}
-.notif-warn p{font-size:.75rem;color:#fca5a5;line-height:1.6}
-.notif-warn b{color:#f87171}
-
-/* OFFER CARDS */
-.notif-offers{padding:14px 18px 0;display:flex;flex-direction:column;gap:10px}
-.offer-card{
-  background:var(--dk3);border:1.5px solid rgba(251,191,36,.2);
-  border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
-.offer-card::before{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,#f59e0b,#f97316)}
-.offer-card .oc-top{display:flex;justify-content:space-between;align-items:flex-start}
-.offer-card .oc-name{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;
-  color:#fbbf24;letter-spacing:.5px}
-.offer-card .oc-price{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or)}
-.offer-card .oc-sub{font-size:.72rem;color:var(--mx);margin-top:4px;line-height:1.6}
-.offer-card .oc-sub b{color:var(--tx)}
-.slots-row{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
-.slot-dot{
-  width:13px;height:13px;border-radius:50%;
-  border:1.5px solid rgba(251,191,36,.4);background:rgba(251,191,36,.12)}
-.slot-dot.filled{background:#f59e0b;border-color:#f59e0b}
-.slots-label{font-size:.68rem;color:var(--mx)}
-.avail-tag{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);
-  border-radius:20px;padding:2px 9px;font-size:.65rem;color:#4ade80;
-  font-weight:600;letter-spacing:.5px}
-.avail-tag.low{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#f87171}
-.avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;
-  animation:pulseAnim 1.2s ease-in-out infinite}
-
-/* DELIVERY INFO */
-.delivery-box{
-  margin:14px 18px 0;background:rgba(59,130,246,.07);
-  border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px 14px}
-.delivery-box .db-title{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;
-  color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-.delivery-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
-.delivery-row .dr-ico{flex-shrink:0;font-size:.9rem}
-.delivery-row p{font-size:.73rem;color:var(--mx);line-height:1.5}
-.delivery-row p b{color:var(--tx)}
-
-/* CTA */
-.notif-cta{padding:14px 18px 0}
-.notif-cta-btn{
-  width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
-  font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-  letter-spacing:2px;text-transform:uppercase;transition:all .2s;
-  background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
-.notif-cta-btn:hover{opacity:.9;transform:translateY(-1px);
-  box-shadow:0 5px 20px rgba(139,92,246,.4)}
-.notif-cta-note{font-size:.68rem;color:var(--mx);text-align:center;margin-top:8px;line-height:1.5}
-
-/* DD FLOATING WARNING FAB */
-.dd-warn-fab{
-  position:fixed;bottom:150px;left:18px;z-index:998;
-  display:none;align-items:center;gap:8px;
-  background:linear-gradient(135deg,#dc2626,#b91c1c);
-  border:1px solid rgba(239,68,68,.5);border-radius:14px;
-  padding:9px 14px;box-shadow:0 4px 20px rgba(220,38,38,.5);
-  cursor:pointer;animation:ddPulse 2s ease-in-out infinite}
-.dd-warn-fab.show{display:flex}
-@keyframes ddPulse{
-  0%,100%{box-shadow:0 4px 20px rgba(220,38,38,.5)}
-  50%{box-shadow:0 4px 28px rgba(220,38,38,.85)}}
-.dd-warn-fab .dwf-ico{font-size:1.1rem}
-.dd-warn-fab .dwf-txt{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:.78rem;color:#fff;letter-spacing:.5px;line-height:1.3}
-.dd-warn-fab .dwf-sub{font-size:.62rem;color:rgba(255,255,255,.7);margin-top:1px}
-
-/* DD CONFIRM MODAL */
-.dd-confirm-overlay{position:fixed;inset:0;z-index:1100;
-  background:rgba(0,0,0,.8);backdrop-filter:blur(5px);
-  display:none;align-items:center;justify-content:center;padding:20px}
-.dd-confirm-overlay.open{display:flex}
-.dd-confirm-box{background:var(--dk2);border:1.5px solid rgba(239,68,68,.4);
-  border-radius:18px;padding:24px 20px;max-width:360px;width:100%;
-  animation:popIn .25s ease}
-@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-.dd-confirm-box .dcb-ico{font-size:2.4rem;text-align:center;margin-bottom:10px}
-.dd-confirm-box h3{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;
-  color:#f87171;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:12px}
-.dd-confirm-box .dcb-item{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
-  border-radius:10px;padding:10px 14px;margin-bottom:14px;text-align:center}
-.dd-confirm-box .dcb-item .di-name{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:1rem;color:var(--tx)}
-.dd-confirm-box .dcb-item .di-price{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:1.2rem;color:var(--or);margin-top:2px}
-.dd-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.dd-check-item{display:flex;align-items:flex-start;gap:9px;
-  background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px}
-.dd-check-item input[type=checkbox]{width:16px;height:16px;flex-shrink:0;
-  accent-color:#ef4444;margin-top:2px;cursor:pointer}
-.dd-check-item label{font-size:.74rem;color:var(--mx);line-height:1.5;cursor:pointer}
-.dd-check-item label b{color:#fca5a5}
-.dd-confirm-btns{display:flex;flex-direction:column;gap:8px}
-.dd-btn-confirm{width:100%;padding:12px;background:#dc2626;color:#fff;border:none;
-  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;
-  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;
-  opacity:.4;pointer-events:none}
-.dd-btn-confirm.ready{opacity:1;pointer-events:all}
-.dd-btn-confirm.ready:hover{background:#b91c1c;transform:translateY(-1px)}
-.dd-btn-cancel{width:100%;padding:10px;background:transparent;color:var(--mx);
-  border:1px solid var(--dk5);border-radius:10px;font-family:'Rajdhani',sans-serif;
-  font-size:.88rem;cursor:pointer;transition:all .2s}
-.dd-btn-cancel:hover{border-color:var(--mx);color:var(--tx)}
-</style>
-
-<!-- DD Floating Warning Badge -->
-<div class="dd-warn-fab" id="dd-warn-fab" onclick="openDDInfo()">
-  <div class="dwf-ico">🚫</div>
-  <div>
-    <div class="dwf-txt">ONE-TIME ONLY</div>
-    <div class="dwf-sub">Tap to learn more</div>
-  </div>
-</div>
-
-<!-- DD Info Modal (tap the fab) -->
-<div class="dd-confirm-overlay" id="dd-info-overlay" onclick="if(event.target===this)closeDDInfo()">
-  <div class="dd-confirm-box">
-    <div class="dcb-ico">🚫</div>
-    <h3>One-Time Purchase Warning</h3>
-    <div style="font-size:.78rem;color:var(--mx);line-height:1.8;margin-bottom:16px">
-      Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>
-      Once you have bought a specific tier (e.g. 50 & 50 Bonus), <b style="color:#f87171">that tier disappears permanently from your shop</b> and can <b style="color:#f87171">never be purchased again</b> — even during the next Double Diamond event.<br><br>
-      Please <b style="color:#fff">check your in-game shop first</b> to confirm the tier is still available before placing an order!
-    </div>
-    <button class="dd-btn-cancel" onclick="closeDDInfo()">Got it, go back</button>
-  </div>
-</div>
-
-<!-- DD Confirm Modal (tap a card) -->
-<div class="dd-confirm-overlay" id="dd-confirm-overlay">
-  <div class="dd-confirm-box">
-    <div class="dcb-ico">⚠️</div>
-    <h3>Confirm Your Order</h3>
-    <div class="dcb-item">
-      <div class="di-name" id="dd-confirm-name">—</div>
-      <div class="di-price" id="dd-confirm-price">—</div>
-    </div>
-    <div class="dd-checks">
-      <div class="dd-check-item">
-        <input type="checkbox" id="dd-chk1" onchange="checkDDReady()">
-        <label for="dd-chk1">I confirm this tier is <b>still available</b> in my in-game shop and has <b>never been purchased</b> before.</label>
-      </div>
-      <div class="dd-check-item">
-        <input type="checkbox" id="dd-chk2" onchange="checkDDReady()">
-        <label for="dd-chk2">I understand that once purchased, <b>this tier will be gone permanently</b> and cannot be bought again on my account.</label>
-      </div>
-      <div class="dd-check-item">
-        <input type="checkbox" id="dd-chk3" onchange="checkDDReady()">
-        <label for="dd-chk3">I am ordering during an <b>active Double Diamond event</b> or I accept the current pricing.</label>
-      </div>
-    </div>
-    <div class="dd-confirm-btns">
-      <button class="dd-btn-confirm" id="dd-btn-confirm" onclick="confirmDDOrder()">✅ I Understand — Proceed</button>
-      <button class="dd-btn-cancel" onclick="cancelDDOrder()">Cancel — Go Back</button>
-    </div>
-  </div>
-</div>
-
-<!-- Bell Button -->
-<button class="notif-bell" onclick="openNotif()" title="May & June Starlight Offers" style="bottom:86px">
-  🔔
-  <div class="notif-badge">2</div>
-</button>
-
-<!-- Skins Fire Button -->
-<button class="notif-bell" onclick="openSkins()" title="Upcoming Skins & Pre-Orders"
-  style="background:linear-gradient(135deg,#dc2626,#f97316);box-shadow:0 4px 18px rgba(220,38,38,.5);animation:none">
-  🔥
-  <div class="notif-badge" style="background:#f59e0b">5</div>
-</button>
-
-<!-- Modal -->
-<div class="notif-overlay" id="notif-overlay" onclick="overlayClick(event)">
-  <div class="notif-sheet" id="notif-sheet">
-    <div class="notif-drag"></div>
-
-    <div class="notif-hdr">
-      <div class="notif-hdr-left">
-        <h3>🌟 Monthly Offers</h3>
-        <p>Special Starlight deals — May & June 2026</p>
-      </div>
-      <button class="notif-close" onclick="closeNotif()">✕</button>
-    </div>
-
-    <!-- Warning Banner -->
-    <div class="notif-warn">
-      <div class="wi">⚠️</div>
-      <p><b>Limited Supply!</b> Only <b>5 slots per month</b> available. These are <b>not own supply</b> — orders go through a gifter. Once slots are full, no more orders until next restock.</p>
-    </div>
-
-    <!-- Offer Cards -->
-    <div class="notif-offers">
-
-      <!-- May NSL - SOLD OUT -->
-      <div class="offer-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8)">
-        <div class="oc-top">
-          <div>
-            <div class="oc-name">⭐ May NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
-            <div class="slots-row">
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <span class="slots-label">5/5 slots taken</span>
-              <span class="avail-tag low" style="background:rgba(100,100,100,.15);border-color:rgba(150,150,150,.3);color:#6b7280">⛔ SOLD OUT</span>
-            </div>
-          </div>
-          <div class="oc-price" style="color:#6b7280;text-decoration:line-through">₱165</div>
-        </div>
-        <div class="oc-sub">No more slots available for May 2026.</div>
-      </div>
-
-      <!-- June NSL - 1 REMAINING -->
-      <div class="offer-card" style="border-color:rgba(239,68,68,.4)">
-        <div class="oc-top">
-          <div>
-            <div class="oc-name">⭐ June NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
-            <div class="slots-row">
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot"></div>
-              <span class="slots-label">4/5 slots taken</span>
-              <span class="avail-tag low"><span class="avail-dot"></span> 1 SLOT LEFT</span>
-            </div>
-          </div>
-          <div class="oc-price">₱160</div>
-        </div>
-        <div class="oc-sub">
-          <b>Normal Starlight</b> for June 2026 · Not own supply<br>
-          Processed via gifter — see delivery info below
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Delivery Info -->
-    <div class="delivery-box">
-      <div class="db-title">📦 How Delivery Works</div>
-      <div class="delivery-row">
-        <div class="dr-ico">⏳</div>
-        <p>Processing takes <b>24–48 hours</b> before the gifter sends your order.</p>
-      </div>
-      <div class="delivery-row">
-        <div class="dr-ico">📅</div>
-        <p>Gifter sends the NSL within <b>8–9 days</b> after payment confirmation.</p>
-      </div>
-      <div class="delivery-row">
-        <div class="dr-ico">🎁</div>
-        <p><b>NSL = Normal Starlight</b> — the monthly in-game pass that gives skins, emotes, and exclusive rewards.</p>
-      </div>
-      <div class="delivery-row">
-        <div class="dr-ico">💳</div>
-        <p>Pay via your chosen payment method after your slot is confirmed.</p>
-      </div>
-    </div>
-
-    <!-- CTA -->
-    <div class="notif-cta">
-      <button class="notif-cta-btn" onclick="goToCustomOrder()">
-        ✏️ Order Here (Custom Request)
-      </button>
-      <div class="notif-cta-note">
-        Tap above → fills out the Custom Order form → Mark confirms your slot within 24hrs
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ===== SKINS PRE-ORDER MODAL ===== -->
-<style>
-.skin-card{
-  background:var(--dk3);border:1.5px solid rgba(220,38,38,.2);
-  border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden}
-.skin-card::before{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,#dc2626,#f97316)}
-.skin-card .sk-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.skin-card .sk-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.98rem;
-  color:#fca5a5;letter-spacing:.5px;line-height:1.3}
-.skin-card .sk-release{font-size:.65rem;color:var(--mx);margin-top:2px}
-.skin-card .sk-prices{margin-top:9px;display:flex;flex-direction:column;gap:4px}
-.sk-price-row{display:flex;justify-content:space-between;align-items:center;
-  background:rgba(255,255,255,.04);border-radius:6px;padding:5px 10px}
-.sk-price-row .spr-label{font-size:.72rem;color:var(--mx)}
-.sk-price-row .spr-val{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:.95rem;color:var(--or)}
-.sk-price-row .spr-save{font-size:.62rem;color:#4ade80;margin-left:4px}
-.sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;
-  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);
-  border-radius:6px;padding:5px 10px;font-size:.7rem;color:#fbbf24}
-.legend-card{border-color:rgba(251,191,36,.4)!important}
-.legend-card::before{background:linear-gradient(180deg,#f59e0b,#ef4444)!important}
-.legend-card .sk-name{color:#fbbf24!important}
-.legend-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.15);
-  border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:2px 8px;
-  font-size:.62rem;color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:6px;vertical-align:middle}
-.skins-note{margin:4px 18px 14px;background:rgba(239,68,68,.08);
-  border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:9px 13px;
-  font-size:.72rem;color:#fca5a5;line-height:1.6;text-align:center}
-.skins-note b{color:#f87171}
-</style>
-
-<div class="notif-overlay" id="skins-overlay" onclick="skinsOverlayClick(event)">
-  <div class="notif-sheet" id="skins-sheet">
-    <div class="notif-drag"></div>
-
-    <div class="notif-hdr" style="background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(249,115,22,.1));border-color:rgba(220,38,38,.2)">
-      <div class="notif-hdr-left">
-        <h3 style="color:#f87171">🔥 Upcoming Skins & Pre-Orders</h3>
-        <p>Way cheaper than buying diamonds! Secure your slot now.</p>
-      </div>
-      <button class="notif-close" onclick="closeSkins()">✕</button>
-    </div>
-
-    <div style="padding:14px 18px 0">
-
-      <!-- OBSIDIA -->
-      <div class="skin-card" onclick="orderSkin('🌑 OBSIDIA (Premium Starlight)','₱420','8th Day of May Release')" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">🌑 OBSIDIA <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
-            <div class="sk-release">Gifting: 8th Day of May Release</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row">
-            <span class="spr-label">Price</span>
-            <span class="spr-val">₱420 <span class="spr-save">Save ₱300+!</span></span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: 8th Day of May Release</div>
-      </div>
-
-      <!-- PHARSA ALL-STAR -->
-      <div class="skin-card" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">🦋 PHARSA ALL-STAR</div>
-            <div class="sk-release">Release: May 17 · Gifting: May 20</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱275','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱275</span>
-          </div>
-          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱410','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱410</span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: May 20</div>
-      </div>
-
-      <!-- KARINA ZODIAC -->
-      <div class="skin-card" onclick="orderSkin('♋ KARINA ZODIAC (Original Value: 899 💎)','₱495','May 21')" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">♋ KARINA ZODIAC</div>
-            <div class="sk-release">Release: May 21 · Original Value: 899 💎</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row">
-            <span class="spr-label">Price (Save 400+ in diamonds!)</span>
-            <span class="spr-val">₱495</span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: May 21</div>
-      </div>
-
-      <!-- LING ALL-STAR -->
-      <div class="skin-card" onclick="orderSkin('⚔️ LING ALL-STAR (Original Value: 762 💎)','₱495','June 26')" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">⚔️ LING ALL-STAR</div>
-            <div class="sk-release">Release: June 24 · Original Value: 762 💎</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row">
-            <span class="spr-label">Price</span>
-            <span class="spr-val">₱495</span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: June 26</div>
-      </div>
-
-      <!-- LEGEND LESLEY -->
-      <div class="skin-card legend-card" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div>
-            <div class="sk-release">Original Value: 10,000 💎 — Choose your gifting phase below</div>
-          </div>
-          <div style="font-size:.7rem;color:#f59e0b;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400','8th Day Gifting Phase')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">8th Day Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱6,400</span>
-          </div>
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250','Phase 2 Gifting')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Phase 2 Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱6,250</span>
-          </div>
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Last Day Gifting (Best Deal!)','₱6,150','Last Day Gifting')" style="cursor:pointer;border:1px solid rgba(245,158,11,.25);transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Last Day Gifting <span style="color:#4ade80;font-size:.62rem">Best deal · Tap to order</span></span>
-            <span class="spr-val" style="color:#fbbf24">₱6,150</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="skins-note">
-      ⚠️ <b>Payment strictly required to reserve your slot!</b><br>
-      These are scheduled gifts — your item is sent on the gifting date listed above.
-    </div>
-
-    <div class="notif-cta">
-      <button class="notif-cta-btn" style="background:linear-gradient(135deg,#dc2626,#f97316)" onclick="goToSkinsOrder()">
-        🔥 Pre-Order / Reserve a Slot
-      </button>
-      <div class="notif-cta-note">
-        Tap above → fills out the Custom Order form → Mark confirms and collects payment
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// ===================== DD WARNING FAB =====================
-let pendingDDCard = null;
-
-function showDDFab(){ document.getElementById('dd-warn-fab').classList.add('show'); }
-function hideDDFab(){ document.getElementById('dd-warn-fab').classList.remove('show'); }
-function openDDInfo(){ document.getElementById('dd-info-overlay').classList.add('open'); }
-function closeDDInfo(){
-  document.getElementById('dd-info-overlay').classList.remove('open');
-  hideDDFab();
-}
-
-function openDDConfirm(card){
-  pendingDDCard = card;
-  document.getElementById('dd-confirm-name').textContent = card.dataset.name;
-  document.getElementById('dd-confirm-price').textContent = '₱' + parseInt(card.dataset.price).toLocaleString('en-PH');
-  document.getElementById('dd-chk1').checked = false;
-  document.getElementById('dd-chk2').checked = false;
-  document.getElementById('dd-chk3').checked = false;
-  document.getElementById('dd-btn-confirm').classList.remove('ready');
-  document.getElementById('dd-confirm-overlay').classList.add('open');
-}
-function checkDDReady(){
-  const all = document.getElementById('dd-chk1').checked &&
-              document.getElementById('dd-chk2').checked &&
-              document.getElementById('dd-chk3').checked;
-  document.getElementById('dd-btn-confirm').classList.toggle('ready', all);
-}
-function cancelDDOrder(){
-  document.getElementById('dd-confirm-overlay').classList.remove('open');
-  if(pendingDDCard){ pendingDDCard.classList.remove('sel'); pendingDDCard=null; }
-}
-function confirmDDOrder(){
-  document.getElementById('dd-confirm-overlay').classList.remove('open');
-  hideDDFab();
-  if(pendingDDCard){
-    // Finalize selection like normal selectItem
-    document.querySelectorAll('.pcard[data-game="mlbb"]').forEach(c=>c.classList.remove('sel'));
-    pendingDDCard.classList.add('sel');
-    const name = pendingDDCard.dataset.name;
-    const price = parseInt(pendingDDCard.dataset.price);
-    selected.game='mlbb'; selected.item=name; selected.price=price;
-    document.getElementById('mlbb-sel-box').style.display='block';
-    document.getElementById('mlbb-sel-item').textContent=name;
-    document.getElementById('mlbb-sel-price').textContent='₱'+price.toLocaleString('en-PH');
-    document.getElementById('mlbb-order-display').value=name+' — ₱'+price.toLocaleString('en-PH');
-    setTimeout(()=>{
-      document.querySelector('#g-mlbb .oform').scrollIntoView({behavior:'smooth',block:'nearest'});
-    },100);
-    pendingDDCard=null;
-  }
-}
-
-function openNotif(){
-  document.getElementById('notif-overlay').classList.add('open');
-  document.querySelector('.notif-bell[onclick="openNotif()"] .notif-badge').style.display='none';
-}
-function closeNotif(){ document.getElementById('notif-overlay').classList.remove('open'); }
-function overlayClick(e){ if(e.target===document.getElementById('notif-overlay')) closeNotif(); }
-
-function openSkins(){
-  document.getElementById('skins-overlay').classList.add('open');
-  document.querySelector('.notif-bell[onclick="openSkins()"] .notif-badge').style.display='none';
-}
-function closeSkins(){ document.getElementById('skins-overlay').classList.remove('open'); }
-function skinsOverlayClick(e){ if(e.target===document.getElementById('skins-overlay')) closeSkins(); }
-
-function goToCustomOrder(){
-  closeNotif();
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value='Monthly Starlight (NSL) — [June / July 2026]\nQuantity: ';
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-desc').focus();
-  },200);
-}
-
-function goToSkinsOrder(){
-  closeSkins();
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value='Skin Pre-Order\nSkin Name: \nVersion (if applicable): Normal / Premium\nGifting Phase (for Legend): ';
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-desc').focus();
-  },200);
-}
-
-function orderSkin(skinName, price, schedule){
-  closeSkins();
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value=
-    'Skin Pre-Order\n' +
-    'Skin: ' + skinName + '\n' +
-    'Price: ' + price + '\n' +
-    'Gifting Schedule: ' + schedule;
-  document.getElementById('custom-budget').value=price;
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-name').focus();
-  },200);
-}
-  // ===================== AUTO-VERIFY CODM IGN =====================
-async function verifyCOD() {
-  const pid = document.getElementById('cod-pid').value.trim();
-  const ignField = document.getElementById('cod-ign');
-  
-  if (!pid) {
-    alert("Please enter your Call of Duty Player ID first.");
-    return;
-  }
-
-  ignField.value = "Verifying...";
-  ignField.style.borderColor = "var(--or)";
-
-  try {
-    // Talk to your new CODM backend
-    const response = await fetch(`/api/verify-cod?id=${pid}`);
-    const data = await response.json();
-
-    if (response.ok && data.ign) {
-      ignField.value = data.ign;
-      ignField.style.borderColor = "var(--gr)";
-    } else {
-      ignField.value = "";
-      ignField.style.borderColor = "#ef4444";
-      alert(data.error || "Player not found.");
-    }
-  } catch (error) {
-    ignField.value = "";
-    alert("Verification service is currently busy. Please try again.");
-  }
-}
-  // ===================== AUTO-VERIFY ROBLOX USERNAME =====================
-async function verifyRoblox() {
-  const username = document.getElementById('roblox-user').value.trim();
-  const dispField = document.getElementById('roblox-dispname');
-  
-  if (!username) {
-    alert("Please enter a Roblox Username first.");
-    return;
-  }
-
-  dispField.value = "Verifying...";
-  dispField.style.borderColor = "var(--or)";
-
-  try {
-    const response = await fetch(`/api/verify-roblox?username=${encodeURIComponent(username)}`);
-    const data = await response.json();
-
-    if (response.ok && data.ign) {
-      dispField.value = data.ign;
-      dispField.style.borderColor = "var(--gr)";
-    } else {
-      dispField.value = "";
-      dispField.style.borderColor = "#ef4444";
-      alert(data.error || "Roblox user not found. Check the spelling.");
-    }
-  } catch (error) {
-    dispField.value = "";
-    alert("Verification service is currently busy. Please try again.");
-  }
-}
-</script>
-
-<!-- ===== QR MODAL ===== -->
-<div class="qr-overlay" id="qr-modal-overlay" onclick="if(event.target===this)closeQRModal()">
-  <div class="qr-box">
-    <h3 id="qr-modal-title" style="color:#4ade80">📷 Scan to Pay</h3>
-    <p id="qr-modal-sub">Open your app and scan this QR code</p>
-    <img id="qr-modal-img" src="" alt="QR Code" onerror="this.style.display='none'">
-    <div class="qr-steps">
-      📱 <b>Step 1:</b> Screenshot or scan this QR<br>
-      💸 <b>Step 2:</b> Enter the exact amount<br>
-      🧾 <b>Step 3:</b> Upload receipt below
-    </div>
-    <button class="qr-close-btn" onclick="closeQRModal()">Close</button>
-  </div>
-</div>
-
-<!-- ===== ID HELP MODAL ===== -->
-<div class="idhelp-overlay" id="idhelp-overlay" onclick="if(event.target===this)closeIDHelp()">
-  <div class="idhelp-box">
-    <h3>🔍 How to Find Your IDs</h3>
-    <div class="id-step"><div class="id-step-num">1</div><p>Open <b>Mobile Legends</b> and tap your <b>profile picture</b> (top-left corner)</p></div>
-    <div class="id-step"><div class="id-step-num">2</div><p>Your <b>Player ID</b> is the <b>long number</b> shown below your username</p></div>
-    <div class="id-step"><div class="id-step-num">3</div><p>Your <b>Zone ID</b> is the <b>short number in parentheses ( )</b> right after your Player ID</p></div>
-    <div class="id-example">
-      Example: <b style="color:#fbbf24">123456789</b> <span style="color:var(--mx)">(</span><b style="color:#4ade80">1234</b><span style="color:var(--mx)">)</span><br>
-      <span style="font-size:.7rem;color:var(--mx)">Player ID = <b style="color:#fbbf24">123456789</b> · Zone ID = <b style="color:#4ade80">1234</b></span>
-    </div>
-    <div class="id-step"><div class="id-step-num">4</div><p>Enter both fields then tap <b style="color:var(--bl)">Verify</b> ✅</p></div>
-    <button onclick="closeIDHelp()" style="width:100%;padding:11px;background:var(--bl);color:#fff;border:none;border-radius:10px;font-family:'Exo 2',sans-serif;font-weight:700;cursor:pointer;margin-top:4px">Got it!</button>
-  </div>
-</div>
-
-<script>
-// ===== PAYMENT DATA (PRIVATE) =====
+// ===================== PAYMENT DATA (PRIVATE) =====================
 const PM_DATA = {
   gcash:  { label:'GCash',    ico:'🔵', color:'#3b82f6', name:'Mark Guevarra', num:'09288978005', qr:'gcash-qr.jpg',   isQR:true  },
   maya:   { label:'Maya',     ico:'🟢', color:'#22c55e', name:'Mark Guevarra', num:'09288978005', qr:'maya-qr.jpg',    isQR:true  },
   gotyme: { label:'GoTyme',   ico:'🟣', color:'#8b5cf6', name:'Mark Guevarra', num:'09288978005', qr:'gotyme-qr.jpg',  isQR:true  },
-  paypal: { label:'PayPal',   ico:'🔷', color:'#0ea5e9', name:'Mark Guevarra', num:'marcangelguevarra@gmail.com', qr:null, isQR:false }
+  paypal: { label:'PayPal',   ico:'🔷', color:'#0ea5e9', name:'Mark Guevarra', num:'markguevarra@gmail.com', qr:null, isQR:false }
 };
 
 function maskName(n){ return n.split(' ').map(w=>w[0]+'*'.repeat(w.length-1)).join(' '); }
 function maskNum(n){
-  if(n.includes('@')) return n[0]+'****@'+n.split('@')[1]; // email
+  if(n.includes('@')) return n[0]+'****@'+n.split('@')[1];
   return n.slice(0,4)+'****'+n.slice(-3);
 }
 
 function selectPayment(game, method, btn){
   const pm = PM_DATA[method];
-  // Update button active states
   const widget = document.getElementById('pm-'+game);
   widget.querySelectorAll('.pm-btn').forEach(b=>{ b.className='pm-btn'; });
   btn.classList.add('active-'+method);
-  // Store value
   document.getElementById('pm-val-'+game).value = pm.label;
-  // Render details
   const box = document.getElementById('pm-details-'+game);
   box.className = 'pm-details show';
   box.style.borderLeftColor = pm.color;
@@ -1921,8 +1195,7 @@ function selectPayment(game, method, btn){
     <div class="pmd-method" style="color:${pm.color}">${pm.ico} ${pm.label}</div>
     <div class="pmd-row"><span class="pmd-label">Name</span><span class="pmd-val masked-name">📛 ${maskName(pm.name)}</span></div>
     <div class="pmd-row"><span class="pmd-label">${isEmail?'Email':'Number'}</span><span class="pmd-val masked-num">🔒 ${maskNum(pm.num)}</span></div>
-    ${isEmail ? '<div class="pm-paypal-note">⚠️ Send via <b>Friends & Family</b> to avoid fees</div>' : ''}
-    <button class="pm-reveal-btn" onclick="revealPM('${game}','${method}',this)">🔓 Tap to Reveal ${isEmail?'Email':'Number'}</button>
+    <button class="pm-reveal-btn" onclick="revealPM('${game}','${method}',this)">🔓 Tap to Reveal Details</button>
     ${pm.isQR ? `<button class="pm-qr-btn" onclick="openQRModal('${method}')">📷 View QR Code</button>` : ''}
   `;
 }
@@ -1938,46 +1211,12 @@ function revealPM(game, method, btn){
 
 function openQRModal(method){
   const pm = PM_DATA[method];
-  document.getElementById('qr-modal-title').innerHTML = pm.ico+' '+pm.label+' QR Code';
-  document.getElementById('qr-modal-title').style.color = pm.color;
-  document.getElementById('qr-modal-sub').textContent = 'Scan with your '+pm.label+' app to pay';
-  const img = document.getElementById('qr-modal-img');
-  img.src = pm.qr; img.style.borderColor = pm.color; img.style.display='block';
+  document.getElementById('qr-modal-img').src = pm.qr;
   document.getElementById('qr-modal-overlay').classList.add('open');
 }
 function closeQRModal(){ document.getElementById('qr-modal-overlay').classList.remove('open'); }
-
-// ===== HEADER REVEAL =====
-function toggleHeaderReveal(btn){
-  const nameEl = btn.parentElement.querySelector('.pm-masked-name');
-  const numEl  = btn.parentElement.querySelector('.pm-masked-num');
-  const showing = btn.dataset.show === '1';
-  if(showing){
-    nameEl.textContent = 'Ma*k G.'; numEl.textContent = '0928-****-**5';
-    btn.textContent = '👁'; btn.dataset.show = '0';
-  } else {
-    nameEl.textContent = 'Mark Guevarra'; numEl.textContent = '09288978005';
-    btn.textContent = '🙈'; btn.dataset.show = '1';
-  }
-}
-
-// ===== ID HELP MODAL =====
 function showIDHelp(){ document.getElementById('idhelp-overlay').classList.add('open'); }
 function closeIDHelp(){ document.getElementById('idhelp-overlay').classList.remove('open'); }
-
-// ===== RESET payment widgets on resetAll =====
-const _origReset = typeof resetAll === 'function' ? resetAll : null;
-function resetAll(){
-  if(_origReset) _origReset();
-  ['mlbb','cod','roblox','bs','load','custom'].forEach(g=>{
-    const pmVal = document.getElementById('pm-val-'+g);
-    if(pmVal) pmVal.value = '';
-    const box = document.getElementById('pm-details-'+g);
-    if(box){ box.className='pm-details'; box.innerHTML=''; }
-    const widget = document.getElementById('pm-'+g);
-    if(widget) widget.querySelectorAll('.pm-btn').forEach(b=>b.className='pm-btn');
-  });
-}
 </script>
 </body>
 </html>
