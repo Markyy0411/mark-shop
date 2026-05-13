@@ -247,6 +247,50 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .id-step p b{color:var(--tx)}
 .id-example{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);
   border-radius:8px;padding:10px 12px;margin:10px 0 14px;font-size:.75rem;line-height:1.8}
+  /* ===================== PREMIUM ITEM CARDS ===================== */
+.pcard {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pcard:hover {
+    transform: translateY(-5px);
+    border-color: #3b82f6;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.pcard.sel {
+    border: 2px solid #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.1) !important;
+}
+
+.pcard .pn { font-weight: bold; color: #f8fafc; font-size: 14px; }
+.pcard .pp { color: #3b82f6; font-weight: 800; margin-top: 8px; }
+
+/* The "Checked" Badge */
+.pcard .chk {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+.pcard.sel .chk { display: flex; }
 </style>
 <body>
 
@@ -930,19 +974,15 @@ async function fetchPrices() {
 
 window.onload = fetchPrices;
 
-// ===================== RENDER HELPERS =====================
+// ===================== RENDER HELPERS (BEAUTIFUL GRID) =====================
 function ph(n){ return '₱' + n.toLocaleString('en-PH'); }
 
 function makeGrid(containerId, items, game, cat){
   const el = document.getElementById(containerId);
-  if(!el) {
-    console.warn("Missing container: " + containerId); // Prevents crashing if ID is missing
-    return;
-  }
+  if(!el) return;
   el.innerHTML = '';
-  
   if(!items || items.length === 0) return; 
-  
+
   items.forEach((it,i) => {
     const c = document.createElement('div');
     c.className = 'pcard';
@@ -951,10 +991,41 @@ function makeGrid(containerId, items, game, cat){
       <div class="chk">✓</div>
       <div class="pn">${it.n}</div>
       ${it.d ? `<div class="pd">${it.d}</div>` : ''}
-      <div class="pp">₱${it.p.toLocaleString()}</div>`;
-    c.onclick = () => selectItem(c, game);
+      <div class="pp">${ph(it.p)}</div>`;
+    
+    // Auto-directs and fills order on click
+    c.onclick = () => selectItem(c, game, it.n, it.p, cat);
     el.appendChild(c);
   });
+}
+
+function selectItem(card, game, name, price, cat){
+  // 1. Highlight the selection
+  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
+  card.classList.add('sel');
+  
+  const orderText = name + ' — ' + ph(price);
+  const selBox = document.getElementById(game + '-sel-box');
+  const orderInput = document.getElementById(game + '-order-display');
+
+  // 2. Fill the visual selection box and the hidden input
+  if(selBox) {
+    selBox.style.display = 'block';
+    const nameLabel = document.getElementById(game + '-sel-item');
+    const priceLabel = document.getElementById(game + '-sel-price');
+    if(nameLabel) nameLabel.textContent = name;
+    if(priceLabel) priceLabel.textContent = ph(price);
+  }
+  if(orderInput) orderInput.value = orderText;
+
+  // 3. Smooth Scroll directly to the form
+  setTimeout(() => {
+    const panel = document.getElementById('g-' + game);
+    const form = panel ? panel.querySelector('.oform') : null;
+    if(form) {
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 150);
 }
 
 // ===================== AUTO-FILL & SCROLL ENGINE =====================
