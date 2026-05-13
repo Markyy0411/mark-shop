@@ -935,22 +935,23 @@ function ph(n){ return '₱' + n.toLocaleString('en-PH'); }
 
 function makeGrid(containerId, items, game, cat){
   const el = document.getElementById(containerId);
-  if(!el) return;
+  if(!el) {
+    console.warn("Missing container: " + containerId); // Prevents crashing if ID is missing
+    return;
+  }
   el.innerHTML = '';
+  
   if(!items || items.length === 0) return; 
-
+  
   items.forEach((it,i) => {
     const c = document.createElement('div');
     c.className = 'pcard';
-    c.dataset.game = game; c.dataset.cat = cat; c.dataset.idx = i;
-    c.dataset.name = it.n; c.dataset.price = it.p;
+    c.dataset.game = game; c.dataset.cat = cat;
     c.innerHTML = `
       <div class="chk">✓</div>
       <div class="pn">${it.n}</div>
       ${it.d ? `<div class="pd">${it.d}</div>` : ''}
-      <div class="pp">${ph(it.p)}</div>`;
-    
-    // Auto-directs and fills order on click
+      <div class="pp">₱${it.p.toLocaleString()}</div>`;
     c.onclick = () => selectItem(c, game);
     el.appendChild(c);
   });
@@ -999,23 +1000,25 @@ function selectItem(card, game){
 function buildAll(){
   if (!DATA || Object.keys(DATA).length === 0) return;
 
+  // MLBB Section
   if (DATA.mlbb) {
-    makeGrid('grid-mlbb-dias', DATA.mlbb.dias, 'mlbb', 'dias');
-    makeGrid('grid-mlbb-denom', DATA.mlbb.denom, 'mlbb', 'denom');
-    makeGrid('grid-mlbb-combo', DATA.mlbb.combo, 'mlbb', 'combo');
-    makeGrid('grid-mlbb-dd', DATA.mlbb.dd, 'mlbb', 'dd');
-    makeGrid('grid-mlbb-bundles', DATA.mlbb.bundles, 'mlbb', 'bundles');
-    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc, 'mlbb', 'skins');
-    makeGrid('grid-mlbb-skins-direct', DATA.mlbb.skinsd, 'mlbb', 'skins');
-    makeGrid('grid-mlbb-starlight', DATA.mlbb.starlight, 'mlbb', 'starlight');
+    const mlCats = ['dias', 'denom', 'combo', 'dd', 'bundles', 'skinsc', 'skinsd', 'starlight'];
+    mlCats.forEach(cat => {
+      // Safely maps your data keys to your HTML grid IDs
+      let gridId = 'grid-mlbb-' + cat.replace('skinsc', 'skins-cosmo').replace('skinsd', 'skins-direct');
+      if(DATA.mlbb[cat]) makeGrid(gridId, DATA.mlbb[cat], 'mlbb', cat);
+    });
   }
 
-  if (DATA.cod) makeGrid('grid-cod', DATA.cod, 'cod', 'main');
-  if (DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox', 'main');
-  if (DATA.bs) makeGrid('grid-bs', DATA.bs, 'bs', 'main');
+  // General Games
+  ['cod', 'roblox', 'bs'].forEach(game => {
+    if(DATA[game]) makeGrid('grid-' + game, DATA[game], game, 'main');
+  });
   
+  // Load Section
   if (DATA.load) {
     Object.keys(DATA.load).forEach(net => {
+      // Maps 'globe-reg' from database to 'grid-globe-reg' in HTML
       makeGrid('grid-' + net, DATA.load[net], 'load', net);
     });
   }
