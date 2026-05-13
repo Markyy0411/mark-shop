@@ -930,22 +930,37 @@ window.onload = fetchPrices;
 
 
 
+// ===================== RENDER ALL GRIDS =====================
 function buildAll(){
-  makeGrid('grid-mlbb-dias', DATA.mlbb.dias,'mlbb','dias');
-  makeGrid('grid-mlbb-denom', DATA.mlbb.denom,'mlbb','denom');
-  makeGrid('grid-mlbb-combo', DATA.mlbb.combo,'mlbb','combo');
-  makeGrid('grid-mlbb-dd', DATA.mlbb.dd,'mlbb','dd');
-  makeGrid('grid-mlbb-bundles', DATA.mlbb.bundles,'mlbb','bundles');
-  makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsC,'mlbb','skins');
-  makeGrid('grid-mlbb-skins-direct', DATA.mlbb.skinsD,'mlbb','skins');
-  makeGrid('grid-mlbb-starlight', DATA.mlbb.starlight,'mlbb','starlight');
-  makeGrid('grid-cod', DATA.cod,'cod','main');
-  makeGrid('grid-roblox', DATA.roblox,'roblox','main');
-  makeGrid('grid-bs', DATA.bs,'bs','main');
-  // Load grids
-  Object.keys(DATA.load).forEach(net=>{
-    makeGrid('grid-'+net, DATA.load[net].items,'load',net);
-  });
+  if (!DATA || Object.keys(DATA).length === 0) {
+    console.error("No data received from database!");
+    return;
+  }
+
+  // MLBB
+  if (DATA.mlbb) {
+    makeGrid('grid-mlbb-dias', DATA.mlbb.dias, 'mlbb', 'dias');
+    makeGrid('grid-mlbb-denom', DATA.mlbb.denom, 'mlbb', 'denom');
+    makeGrid('grid-mlbb-combo', DATA.mlbb.combo, 'mlbb', 'combo');
+    makeGrid('grid-mlbb-dd', DATA.mlbb.dd, 'mlbb', 'dd');
+    makeGrid('grid-mlbb-bundles', DATA.mlbb.bundles, 'mlbb', 'bundles');
+    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc, 'mlbb', 'skins'); // Fixed lowercase
+    makeGrid('grid-mlbb-skins-direct', DATA.mlbb.skinsd, 'mlbb', 'skins'); // Fixed lowercase
+    makeGrid('grid-mlbb-starlight', DATA.mlbb.starlight, 'mlbb', 'starlight');
+  }
+
+  // OTHER GAMES
+  if (DATA.cod) makeGrid('grid-cod', DATA.cod, 'cod', 'main');
+  if (DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox', 'main');
+  if (DATA.bs) makeGrid('grid-bs', DATA.bs, 'bs', 'main');
+  
+  // LOAD (Fixed loop structure)
+  if (DATA.load) {
+    Object.keys(DATA.load).forEach(net => {
+      // Removed the '.items' since the data is now a direct array!
+      makeGrid('grid-'+net, DATA.load[net], 'load', net);
+    });
+  }
 }
 
 // ===================== SELECTION =====================
