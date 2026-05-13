@@ -7,181 +7,154 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
-  --dk:#09090f;--dk2:#111118;--dk3:#1a1a26;--dk4:#22222f;--dk5:#2c2c3e;
-  --tx:#e2e8f0;--mx:#94a3b8;--bdr:rgba(255,255,255,0.06);
+--or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
+--dk:#09090f;--dk2:#111118;--dk3:#1a1a26;--dk4:#22222f;--dk5:#2c2c3e;
+--tx:#e2e8f0;--mx:#94a3b8;--bdr:rgba(255,255,255,0.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-height:100vh;
-  background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
-  radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
-
-/* HEADER */
+background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
+radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
 .hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
-  border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
-  position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
+border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
+position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
 .hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;
-  color:var(--or);letter-spacing:3px;text-transform:uppercase}
+color:var(--or);letter-spacing:3px;text-transform:uppercase}
 .hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
 .gcash-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.12);
-  border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:4px 12px;margin-top:6px;
-  font-size:.75rem;color:var(--bl);font-weight:500;cursor:pointer;transition:0.2s}
-.gcash-pill:hover{background:rgba(59,130,246,.2);}
-.gcash-pill span{opacity:1; font-weight:600;}
-
-/* GAME TABS */
+border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:4px 12px;margin-top:6px;
+font-size:.75rem;color:var(--bl);font-weight:500;cursor:pointer;transition:0.2s}
+.gcash-pill:hover{background:rgba(59,130,246,.2)}
 .gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
-  background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
+background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
 .gtabs::-webkit-scrollbar{display:none}
 .gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);
-  border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;
-  font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;
-  letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
+border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;
+font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;
+letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
 .gtab:hover{color:var(--tx);background:var(--dk4)}
 .gtab.active{background:var(--dk);color:var(--or);border-color:rgba(249,115,22,.5);border-bottom-color:var(--dk)}
 .gtab.custom-tab{color:#a78bfa;border-color:rgba(167,139,250,.2)}
 .gtab.custom-tab:hover{color:#c4b5fd;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.05)}
 .gtab.custom-tab.active{color:#a78bfa;border-color:rgba(167,139,250,.6);border-bottom-color:var(--dk);background:var(--dk)}
 .gtab .ico{font-size:1rem}
-
-/* MAIN */
 .main{padding:14px;max-width:580px;margin:0 auto}
 .gpanel{display:none}.gpanel.active{display:block}
-
-/* CATEGORY TABS */
 .ctabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
 .ctab{padding:5px 12px;border-radius:20px;border:1px solid var(--dk5);background:var(--dk3);
-  color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
+color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
 .ctab:hover{border-color:var(--or);color:var(--tx)}
 .ctab.active{background:var(--or);border-color:var(--or);color:#fff;font-weight:600}
-
-/* CATEGORY PANELS */
 .cpanel{display:none}.cpanel.active{display:block}
-
-/* SECTION LABEL */
 .slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;
-  text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);
-  padding-left:8px;margin-bottom:10px;margin-top:6px}
-
-/* PRICE GRID */
+text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);
+padding-left:8px;margin-bottom:10px;margin-top:6px}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
-.pgrid.single{grid-template-columns:1fr}
 .pcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-  padding:11px 12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+padding:11px 12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
 .pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--or),#fbbf24);transform:scaleX(0);
-  transition:transform .2s;transform-origin:left}
+background:linear-gradient(90deg,var(--or),#fbbf24);transform:scaleX(0);
+transition:transform .2s;transform-origin:left}
 .pcard:hover::after,.pcard.sel::after{transform:scaleX(1)}
 .pcard:hover{border-color:rgba(249,115,22,.45);background:var(--dk4)}
 .pcard.sel{border-color:var(--or);background:rgba(249,115,22,.1)}
 .pcard .pn{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.9rem;color:var(--tx);line-height:1.3}
 .pcard .pd{font-size:.68rem;color:var(--mx);margin-top:2px;line-height:1.4}
-.pcard .pp{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;
-  color:var(--or);margin-top:6px}
+.pcard .pp{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or);margin-top:6px}
 .pcard .chk{position:absolute;top:7px;right:7px;width:18px;height:18px;border-radius:50%;
-  background:var(--or);display:none;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
+background:var(--or);display:none;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
 .pcard.sel .chk{display:flex}
-
-/* NETWORK SELECTOR */
 .netgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
 .netcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-  padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
+padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .netcard:hover{border-color:var(--bl)}
 .netcard.active{border-color:var(--bl);background:rgba(59,130,246,.12)}
-.netcard .nn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;
-  letter-spacing:.5px;color:var(--tx)}
+.netcard .nn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.5px;color:var(--tx)}
 .netcard.active .nn{color:var(--bl)}
 .netcard .nd{font-size:.62rem;color:var(--mx);margin-top:2px}
-
-/* LOAD PROMO PANEL */
 .lpanel{display:none}.lpanel.active{display:block}
-
-/* ORDER FORM */
-.oform{background:var(--dk2);border:1px solid var(--bdr);border-radius:14px;
-  padding:18px;margin-top:6px}
+.oform{background:var(--dk2);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-top:6px}
 .oform h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-  letter-spacing:2px;color:var(--or);margin-bottom:14px;text-transform:uppercase;
-  display:flex;align-items:center;gap:8px}
+letter-spacing:2px;color:var(--or);margin-bottom:14px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .sel-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);
-  border-radius:8px;padding:10px 14px;margin-bottom:14px}
+border-radius:8px;padding:10px 14px;margin-bottom:14px}
 .sel-box .sl{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--mx)}
 .sel-box .sv{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:var(--or);margin-top:2px}
 .sel-box .sp{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1.1rem;color:#fbbf24}
 .fg{margin-bottom:12px}
-.fg label{display:block;font-size:.7rem;font-weight:600;letter-spacing:1px;
-  text-transform:uppercase;color:var(--mx);margin-bottom:5px}
+.fg label{display:block;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mx);margin-bottom:5px}
 .fg label .req{color:var(--or)}
 .fg input,.fg select,.fg textarea{width:100%;background:var(--dk3);border:1px solid var(--dk5);
-  border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;
-  font-size:.88rem;transition:border-color .18s;-webkit-appearance:none;appearance:none}
+border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem;transition:border-color .18s;-webkit-appearance:none;appearance:none}
 .fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
+background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--or)}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--dk5)}
 .fg textarea{resize:vertical;min-height:65px}
 .fg select option{background:var(--dk3);color:var(--tx)}
 .btn-sub{width:100%;padding:13px;background:var(--or);color:#fff;border:none;
-  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;
-  letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
+border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;
+letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
 .btn-sub:hover{background:var(--or2);transform:translateY(-1px);box-shadow:0 5px 20px rgba(249,115,22,.35)}
 .btn-sub:disabled{background:var(--dk5);color:var(--mx);cursor:not-allowed;transform:none;box-shadow:none}
 .notice{font-size:.7rem;color:var(--mx);text-align:center;margin-top:12px;line-height:1.6}
 .notice b{color:var(--bl)}
 .alert-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);
-  border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--bl);margin-bottom:14px;line-height:1.6}
+border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--bl);margin-bottom:14px;line-height:1.6}
 .ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);
-  border-radius:12px;padding:22px;text-align:center;margin-top:12px}
+border-radius:12px;padding:22px;text-align:center;margin-top:12px}
 .ok-msg .ok-ico{font-size:2.5rem;margin-bottom:8px}
 .ok-msg h4{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--gr);letter-spacing:2px}
 .ok-msg p{font-size:.8rem;color:var(--mx);margin-top:6px;line-height:1.5}
 .err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
-  border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
-
+border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
+/* PAYMENT WIDGET */
+.pm-methods{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.pm-btn{flex:1;min-width:65px;text-align:center;padding:10px 5px;background:var(--dk3);
+border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--mx);transition:.2s}
+.pm-btn.active{background:rgba(249,115,22,.1);border-color:var(--or);color:var(--or)}
+/* FIX: static pm-details block, hidden by default */
+.pm-details{background:var(--dk4);padding:12px;border-radius:8px;font-size:.85rem;margin-bottom:15px;display:none;border-left:4px solid var(--or)}
+.pm-row{display:flex;justify-content:space-between;margin-bottom:5px;color:#fff;font-family:monospace;font-size:.95rem}
+.pm-row span:first-child{color:var(--mx);font-family:'Exo 2',sans-serif;font-size:.8rem}
+.btn-reveal,.btn-qr{width:100%;padding:10px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.85rem;margin-top:8px;transition:.2s}
+.btn-reveal{background:var(--dk5);color:#fff}
+.btn-reveal:hover{background:var(--dk3)}
+.btn-qr{background:rgba(59,130,246,.1);color:var(--bl);border:1px solid rgba(59,130,246,.3)}
+.btn-qr:hover{background:rgba(59,130,246,.2)}
 /* CUSTOM ORDER */
 .custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));
-  border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
+border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
 .custom-hero .ch-ico{font-size:2.2rem;margin-bottom:8px}
-.custom-hero h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;
-  color:#a78bfa;letter-spacing:2px;text-transform:uppercase}
+.custom-hero h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:#a78bfa;letter-spacing:2px;text-transform:uppercase}
 .custom-hero p{font-size:.78rem;color:var(--mx);margin-top:6px;line-height:1.6}
 .pulse-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);
-  border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:4px 12px;margin-top:10px;
-  font-size:.72rem;color:#c4b5fd;font-weight:600;letter-spacing:1px}
-.pulse-dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;
-  animation:pulseAnim 1.4s ease-in-out infinite}
+border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:4px 12px;margin-top:10px;
+font-size:.72rem;color:#c4b5fd;font-weight:600;letter-spacing:1px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:pulseAnim 1.4s ease-in-out infinite}
 @keyframes pulseAnim{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
 .custom-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
 .custom-cat{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-  padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
+padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .custom-cat:hover{border-color:rgba(167,139,250,.4)}
 .custom-cat.active{border-color:#a78bfa;background:rgba(167,139,250,.1)}
 .custom-cat .cc-ico{font-size:1.3rem}
-.custom-cat .cc-name{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.78rem;
-  color:var(--mx);margin-top:3px;letter-spacing:.5px}
+.custom-cat .cc-name{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.78rem;color:var(--mx);margin-top:3px;letter-spacing:.5px}
 .custom-cat.active .cc-name{color:#a78bfa}
 .oform.custom-form{border-color:rgba(167,139,250,.2)}
 .oform.custom-form h3{color:#a78bfa}
 .btn-sub.custom-btn{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
-.btn-sub.custom-btn:hover{background:linear-gradient(135deg,#6d28d9,#9b7af0);
-  box-shadow:0 5px 20px rgba(139,92,246,.35)}
-
-/* 🔒 UNIFIED PAYMENT WIDGET */
-.pm-methods { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-.pm-btn { flex: 1; min-width: 65px; text-align: center; padding: 10px 5px; background: var(--dk3); border: 1px solid var(--dk5); border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--mx); transition: 0.2s; }
-.pm-btn.active { background: rgba(249,115,22,0.1); border-color: var(--or); color: var(--or); }
-.pm-details { background: var(--dk4); padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 15px; display: none; }
-.pm-row { display: flex; justify-content: space-between; margin-bottom: 5px; color: #fff; font-family: monospace; font-size: 0.95rem;}
-.pm-row span:first-child { color: var(--mx); font-family: 'Exo 2', sans-serif; font-size: 0.8rem;}
-.btn-reveal, .btn-qr { width: 100%; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 0.85rem; margin-top: 8px; transition: 0.2s; }
-.btn-reveal { background: var(--dk5); color: #fff; }
-.btn-reveal:hover { background: var(--dk3); }
-.btn-qr { background: rgba(59,130,246,0.1); color: var(--bl); border: 1px solid rgba(59,130,246,0.3); }
-.btn-qr:hover { background: rgba(59,130,246,0.2); }
-
+.btn-sub.custom-btn:hover{background:linear-gradient(135deg,#6d28d9,#9b7af0);box-shadow:0 5px 20px rgba(139,92,246,.35)}
 /* MODALS */
-.pm-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-.pm-modal-box { background: var(--dk2); border: 1px solid var(--dk5); border-radius: 16px; padding: 20px; width: 90%; max-width: 350px; text-align: center; }
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);
+z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.modal-box{background:var(--dk2);border:1px solid var(--dk5);border-radius:16px;padding:20px;width:90%;max-width:350px;text-align:center}
+/* DD WARNING MODAL — FIX: restored */
+.dd-warning-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.35);border-radius:12px;padding:16px;margin-bottom:14px;text-align:left}
+.dd-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
+.dd-check input[type=checkbox]{width:17px;height:17px;accent-color:var(--or);flex-shrink:0;margin-top:2px}
+.dd-check span{font-size:.78rem;color:#fca5a5;line-height:1.5}
 </style>
 </head>
 <body>
@@ -190,8 +163,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <h1>⚡ Mark's Game Shop</h1>
   <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
   <div class="gcash-pill" onclick="toggleHeaderGCash()">
-    <span>💳 GCash:</span> <span id="hdr-g-name" style="color:var(--bl);font-weight:600;opacity:1">Ma*k G.</span> 
-    <span style="opacity:1">·</span> <span id="hdr-g-num" style="color:var(--bl);font-weight:600;opacity:1">0928-****-**5</span> 👁
+    <span>💳 GCash</span> <span id="hdr-gcash-reveal" style="display:none;color:var(--bl);font-weight:600"> · Mark Guevarra · 09288978005</span> 👁 Tap to reveal
   </div>
 </div>
 
@@ -206,6 +178,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
 <div class="main">
 
+<!-- ===== MLBB ===== -->
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
@@ -218,66 +191,56 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div class="ctab" data-c="mlbb-starlight">⭐ Starlight</div>
     </div>
   </div>
-
   <div class="cpanel active" id="mlbb-dias">
     <div class="slbl">Direct Top-Up Diamonds (PH Server)</div>
     <div class="pgrid" id="grid-mlbb-dias"></div>
   </div>
-
   <div class="cpanel" id="mlbb-denom">
     <div class="slbl">Denomination Diamonds (Single Purchase)</div>
     <div class="pgrid" id="grid-mlbb-denom"></div>
   </div>
-
   <div class="cpanel" id="mlbb-combo">
     <div class="slbl">Diamond Denomination Combinations</div>
     <div class="alert-box">💡 These use multiple denomination purchases to get the exact diamond count at a better price.</div>
     <div class="pgrid" id="grid-mlbb-combo"></div>
   </div>
-
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div>
-
-    <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);
-      border-radius:12px;padding:14px;margin-bottom:12px">
+    <!-- FIX: Restored warning box -->
+    <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
         <span style="font-size:1.2rem">🚫</span>
-        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;
-          color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span>
+        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span>
       </div>
       <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">
         Each Double Diamond tier can only be purchased <b style="color:#f87171">ONCE per account</b>.
         If you have already bought a tier before, <b style="color:#f87171">it will not appear</b> in your shop again.
         Please make sure you have <b style="color:#f87171">never purchased</b> this tier before ordering.
       </div>
-      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;
-        background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px">
+      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px">
         <span>💡</span>
         <span style="font-size:.71rem;color:#fca5a5">During Double Diamond events, you get <b style="color:#fff">2x the listed diamonds</b> — but only if this tier is still available on your account.</span>
       </div>
     </div>
-
     <div class="pgrid" id="grid-mlbb-dd"></div>
   </div>
-
   <div class="cpanel" id="mlbb-bundles">
     <div class="slbl">Bundles & Weekly Diamond Pass</div>
     <div class="pgrid" id="grid-mlbb-bundles"></div>
   </div>
-
   <div class="cpanel" id="mlbb-skins">
     <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div>
     <div class="pgrid" id="grid-mlbb-skins-cosmo"></div>
     <div class="slbl">Skin Direct Purchase Pricing</div>
     <div class="pgrid" id="grid-mlbb-skins-direct"></div>
   </div>
-
   <div class="cpanel" id="mlbb-starlight">
     <div class="slbl">Starlight Passes</div>
     <div class="pgrid" id="grid-mlbb-starlight"></div>
   </div>
 
-  <div class="oform">
+
+  <div class="oform" id="mlbb-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="mlbb-sel-box" style="display:none">
       <div class="sl">Selected Item</div>
@@ -286,52 +249,59 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
-    
     <div class="fg">
-      <label>Player ID <span class="req">*</span> <span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;" onclick="openIDModal()">Help finding ID?</span></label>
+      <label>Player ID <span class="req">*</span> <span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0" onclick="openIDModal()">Help finding ID?</span></label>
       <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
     </div>
-    
     <div class="fg">
       <label>Zone ID <span class="req">*</span></label>
       <div style="display:flex;gap:8px">
         <input type="text" id="mlbb-zid" placeholder="1234" style="flex:1">
-        <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
+        <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
-    
     <div class="fg">
       <label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+      <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold">
     </div>
     <div class="fg"><label>Server</label>
-      <select id="mlbb-server"><option value="PH Server">PH Server</option><option value="Other">Other</option></select></div>
+      <select id="mlbb-server"><option>PH Server</option><option>Other</option></select></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="mlbb-notes" placeholder="Any special requests or notes..."></textarea></div>
-    
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
-     <div class="pm-methods">
-  <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">GCash</div>
-  <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">Maya</div>
-  <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">GoTyme</div>
-  <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">PayPal</div>
-</div>
-
+      <!-- FIX: hidden input for payment value -->
+      <input type="hidden" id="pm-val-mlbb">
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">PayPal</div>
+      </div>
+      <!-- FIX: static pm-details div -->
+      <div class="pm-details" id="pm-details-mlbb">
+        <div id="pm-label-mlbb" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-mlbb"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-mlbb">Account Number:</span><span id="pm-num-mlbb"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-mlbb" onclick="revealPM('mlbb')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-mlbb" onclick="openQRModal(currentQR['mlbb'])" style="display:none">📷 View QR Code</button>
+        <div id="pm-note-mlbb" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
+    </div>
     <div class="fg">
       <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="mlbb-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+      <input type="file" id="mlbb-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
     </div>
-
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
   </div>
 </div>
 
+<!-- ===== COD ===== -->
 <div class="gpanel" id="g-cod">
   <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
   <div class="pgrid" id="grid-cod"></div>
-  <div class="oform">
+  <div class="oform" id="cod-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="cod-sel-box" style="display:none">
       <div class="sl">Selected Item</div>
@@ -340,44 +310,51 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
-    
     <div class="fg">
       <label>Player ID (UID) <span class="req">*</span></label>
       <div style="display:flex;gap:8px">
         <input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1">
-        <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
+        <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
-    
     <div class="fg">
       <label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold">
     </div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
-    
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
+      <input type="hidden" id="pm-val-cod">
       <div class="pm-methods">
-  <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">GCash</div>
-  <div class="pm-btn" onclick="selectPayment('cod','maya',this)">Maya</div>
-  <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">GoTyme</div>
-  <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">PayPal</div>
-</div>
+        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('cod','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-cod">
+        <div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR Code</button>
+        <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
+    </div>
     <div class="fg">
       <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="cod-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+      <input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
     </div>
-
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
   </div>
 </div>
 
+<!-- ===== ROBLOX ===== -->
 <div class="gpanel" id="g-roblox">
   <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
   <div class="pgrid" id="grid-roblox"></div>
-  <div class="oform">
+  <div class="oform" id="roblox-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="roblox-sel-box" style="display:none">
       <div class="sl">Selected Item</div>
@@ -390,46 +367,51 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="roblox-gpid" placeholder="Your Roblox Gamepass ID"></div>
     <div class="fg"><label>Gamepass Name <span class="req">*</span></label>
       <input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
-    
     <div class="fg">
       <label>Roblox Username <span class="req">*</span></label>
       <div style="display:flex;gap:8px">
         <input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1">
-        <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:white;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
+        <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
-    
     <div class="fg">
       <label>Display Name (Auto-fill)</label>
-      <input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background: rgba(255,255,255,0.05); border-color: var(--dk5); color: #fbbf24; font-weight: bold;">
+      <input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold">
     </div>
-    
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="roblox-notes" placeholder="Any special requests..."></textarea></div>
-    
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
+      <input type="hidden" id="pm-val-roblox">
       <div class="pm-methods">
-  <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">GCash</div>
-  <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">Maya</div>
-  <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">GoTyme</div>
-  <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">PayPal</div>
-</div>
-
+        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-roblox">
+        <div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR Code</button>
+        <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
+    </div>
     <div class="fg">
       <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="roblox-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+      <input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
     </div>
-
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
   </div>
 </div>
 
+<!-- ===== BLOODSTRIKE ===== -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
   <div class="pgrid" id="grid-bs"></div>
-  <div class="oform">
+  <div class="oform" id="bs-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="bs-sel-box" style="display:none">
       <div class="sl">Selected Item</div>
@@ -444,94 +426,57 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="bs-notes" placeholder="Any special requests..."></textarea></div>
-    
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
-     <div class="pm-methods">
-  <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">GCash</div>
-  <div class="pm-btn" onclick="selectPayment('bs','maya',this)">Maya</div>
-  <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">GoTyme</div>
-  <div class="pm-btn" onclick="selectPayment('bs','paypal',this)">PayPal</div>
-</div>
-
+      <input type="hidden" id="pm-val-bs">
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('bs','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('bs','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-bs">
+        <div id="pm-label-bs" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-bs"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-bs">Account Number:</span><span id="pm-num-bs"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-bs" onclick="revealPM('bs')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-bs" onclick="openQRModal(currentQR['bs'])" style="display:none">📷 View QR Code</button>
+        <div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
+    </div>
     <div class="fg">
       <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="bs-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+      <input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
     </div>
-
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
   </div>
 </div>
 
+<!-- ===== LOAD ===== -->
 <div class="gpanel" id="g-load">
   <div class="slbl" style="margin:12px 0 8px">Choose Network / Type</div>
   <div class="netgrid">
-    <div class="netcard" data-net="globe-reg" onclick="selectNet(this,'globe-reg')">
-      <div class="nn">🔵 Globe</div><div class="nd">Regular Load</div>
-    </div>
-    <div class="netcard" data-net="tm-reg" onclick="selectNet(this,'tm-reg')">
-      <div class="nn">🟢 TM</div><div class="nd">Regular Load</div>
-    </div>
-    <div class="netcard" data-net="globe-promo" onclick="selectNet(this,'globe-promo')">
-      <div class="nn">🔵 Globe</div><div class="nd">Promo B</div>
-    </div>
-    <div class="netcard" data-net="homesurf" onclick="selectNet(this,'homesurf')">
-      <div class="nn">🏠 HomeSurf</div><div class="nd">WiFi / Fr</div>
-    </div>
-    <div class="netcard" data-net="famsurf" onclick="selectNet(this,'famsurf')">
-      <div class="nn">👨‍👩‍👧 FamSurf</div><div class="nd">Family Plan</div>
-    </div>
-    <div class="netcard" data-net="tm-promo" onclick="selectNet(this,'tm-promo')">
-      <div class="nn">🟢 TM/ALL</div><div class="nd">Promo & ALL-NET</div>
-    </div>
-    <div class="netcard" data-net="gfiber" onclick="selectNet(this,'gfiber')">
-      <div class="nn">📡 GFiber</div><div class="nd">Prepaid</div>
-    </div>
-    <div class="netcard" data-net="smart" onclick="selectNet(this,'smart')">
-      <div class="nn">🟡 Smart/TNT</div><div class="nd">Ask for price</div>
-    </div>
-    <div class="netcard" data-net="dito" onclick="selectNet(this,'dito')">
-      <div class="nn">🔴 DITO</div><div class="nd">Ask for price</div>
-    </div>
+    <div class="netcard" data-net="globe-reg" onclick="selectNet(this,'globe-reg')"><div class="nn">🔵 Globe</div><div class="nd">Regular Load</div></div>
+    <div class="netcard" data-net="tm-reg" onclick="selectNet(this,'tm-reg')"><div class="nn">🟢 TM</div><div class="nd">Regular Load</div></div>
+    <div class="netcard" data-net="globe-promo" onclick="selectNet(this,'globe-promo')"><div class="nn">🔵 Globe</div><div class="nd">Promo B</div></div>
+    <div class="netcard" data-net="homesurf" onclick="selectNet(this,'homesurf')"><div class="nn">🏠 HomeSurf</div><div class="nd">WiFi / Fr</div></div>
+    <div class="netcard" data-net="famsurf" onclick="selectNet(this,'famsurf')"><div class="nn">👨‍👩‍👧 FamSurf</div><div class="nd">Family Plan</div></div>
+    <div class="netcard" data-net="tm-promo" onclick="selectNet(this,'tm-promo')"><div class="nn">🟢 TM/ALL</div><div class="nd">Promo & ALL-NET</div></div>
+    <div class="netcard" data-net="gfiber" onclick="selectNet(this,'gfiber')"><div class="nn">📡 GFiber</div><div class="nd">Prepaid</div></div>
+    <div class="netcard" data-net="smart" onclick="selectNet(this,'smart')"><div class="nn">🟡 Smart/TNT</div><div class="nd">Ask for price</div></div>
+    <div class="netcard" data-net="dito" onclick="selectNet(this,'dito')"><div class="nn">🔴 DITO</div><div class="nd">Ask for price</div></div>
   </div>
-
-  <div class="lpanel" id="lp-globe-reg">
-    <div class="slbl">Globe Regular Load</div>
-    <div class="pgrid" id="grid-globe-reg"></div>
-  </div>
-  <div class="lpanel" id="lp-tm-reg">
-    <div class="slbl">TM Regular Load</div>
-    <div class="pgrid" id="grid-tm-reg"></div>
-  </div>
-  <div class="lpanel" id="lp-globe-promo">
-    <div class="slbl">Globe Promo B</div>
-    <div class="pgrid" id="grid-globe-promo"></div>
-  </div>
-  <div class="lpanel" id="lp-homesurf">
-    <div class="slbl">Fr WiFi / Home Surf</div>
-    <div class="pgrid" id="grid-homesurf"></div>
-  </div>
-  <div class="lpanel" id="lp-famsurf">
-    <div class="slbl">FamSurf Plans</div>
-    <div class="pgrid" id="grid-famsurf"></div>
-  </div>
-  <div class="lpanel" id="lp-tm-promo">
-    <div class="slbl">TM Promo & ALL-NET</div>
-    <div class="pgrid" id="grid-tm-promo"></div>
-  </div>
-  <div class="lpanel" id="lp-gfiber">
-    <div class="slbl">GFiber Prepaid</div>
-    <div class="pgrid" id="grid-gfiber"></div>
-  </div>
-  <div class="lpanel" id="lp-smart">
-    <div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div>
-  </div>
-  <div class="lpanel" id="lp-dito">
-    <div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div>
-  </div>
-
-  <div class="oform">
+  <div class="lpanel" id="lp-globe-reg"><div class="slbl">Globe Regular Load</div><div class="pgrid" id="grid-globe-reg"></div></div>
+  <div class="lpanel" id="lp-tm-reg"><div class="slbl">TM Regular Load</div><div class="pgrid" id="grid-tm-reg"></div></div>
+  <div class="lpanel" id="lp-globe-promo"><div class="slbl">Globe Promo B</div><div class="pgrid" id="grid-globe-promo"></div></div>
+  <div class="lpanel" id="lp-homesurf"><div class="slbl">Fr WiFi / Home Surf</div><div class="pgrid" id="grid-homesurf"></div></div>
+  <div class="lpanel" id="lp-famsurf"><div class="slbl">FamSurf Plans</div><div class="pgrid" id="grid-famsurf"></div></div>
+  <div class="lpanel" id="lp-tm-promo"><div class="slbl">TM Promo & ALL-NET</div><div class="pgrid" id="grid-tm-promo"></div></div>
+  <div class="lpanel" id="lp-gfiber"><div class="slbl">GFiber Prepaid</div><div class="pgrid" id="grid-gfiber"></div></div>
+  <div class="lpanel" id="lp-smart"><div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div></div>
+  <div class="lpanel" id="lp-dito"><div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div></div>
+  <div class="oform" id="load-oform">
     <h3>📋 Load Order</h3>
     <div class="sel-box" id="load-sel-box" style="display:none">
       <div class="sl">Selected Promo / Load</div>
@@ -543,121 +488,96 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="fg"><label>Network <span class="req">*</span></label>
       <input type="text" id="load-network-display" placeholder="Auto-filled when you select above" readonly></div>
     <div class="fg"><label>Mobile Number <span class="req">*</span></label>
-      <input type="tel" id="load-number" placeholder="09XXXXXXXXX (no 0 if using +63)">
+      <input type="tel" id="load-number" placeholder="09XXXXXXXXX">
       <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check your number — wrong number = lost load</div></div>
     <div class="fg"><label>Notes (optional)</label>
       <textarea id="load-notes" placeholder="Any special requests..."></textarea></div>
-    
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
+      <input type="hidden" id="pm-val-load">
       <div class="pm-methods">
-  <div class="pm-btn" onclick="selectPayment('load','gcash',this)">GCash</div>
-  <div class="pm-btn" onclick="selectPayment('load','maya',this)">Maya</div>
-  <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">GoTyme</div>
-  <div class="pm-btn" onclick="selectPayment('load','paypal',this)">PayPal</div>
-</div>
-
+        <div class="pm-btn" onclick="selectPayment('load','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('load','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('load','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-load">
+        <div id="pm-label-load" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-load"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-load">Account Number:</span><span id="pm-num-load"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-load" onclick="revealPM('load')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-load" onclick="openQRModal(currentQR['load'])" style="display:none">📷 View QR Code</button>
+        <div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
+    </div>
     <div class="fg">
       <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="load-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+      <input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
     </div>
-
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
   </div>
 </div>
 
+<!-- ===== CUSTOM ORDER ===== -->
 <div class="gpanel" id="g-custom">
-
   <div class="custom-hero" style="margin-top:12px">
     <div class="ch-ico">🛎️</div>
     <h2>Custom Order Request</h2>
     <p>Can't find what you're looking for? Describe your order below and Mark will personally handle it for you.</p>
     <div class="pulse-badge"><div class="pulse-dot"></div> NOTIFIES MARK DIRECTLY</div>
   </div>
-
   <div class="slbl" style="margin-bottom:10px">What game / service is this for?</div>
   <div class="custom-cats">
-    <div class="custom-cat active" data-cc="Mobile Legends (MLBB)" onclick="selectCC(this)">
-      <div class="cc-ico">🎮</div><div class="cc-name">MLBB</div>
-    </div>
-    <div class="custom-cat" data-cc="Garena Call of Duty" onclick="selectCC(this)">
-      <div class="cc-ico">🎯</div><div class="cc-name">Garena CoD</div>
-    </div>
-    <div class="custom-cat" data-cc="Roblox" onclick="selectCC(this)">
-      <div class="cc-ico">🟥</div><div class="cc-name">Roblox</div>
-    </div>
-    <div class="custom-cat" data-cc="Bloodstrike" onclick="selectCC(this)">
-      <div class="cc-ico">🔫</div><div class="cc-name">Bloodstrike</div>
-    </div>
-    <div class="custom-cat" data-cc="Load / Data" onclick="selectCC(this)">
-      <div class="cc-ico">📱</div><div class="cc-name">Load / Data</div>
-    </div>
-    <div class="custom-cat" data-cc="Other Game / Service" onclick="selectCC(this)">
-      <div class="cc-ico">🎲</div><div class="cc-name">Other</div>
-    </div>
+    <div class="custom-cat active" data-cc="Mobile Legends (MLBB)" onclick="selectCC(this)"><div class="cc-ico">🎮</div><div class="cc-name">MLBB</div></div>
+    <div class="custom-cat" data-cc="Garena Call of Duty" onclick="selectCC(this)"><div class="cc-ico">🎯</div><div class="cc-name">Garena CoD</div></div>
+    <div class="custom-cat" data-cc="Roblox" onclick="selectCC(this)"><div class="cc-ico">🟥</div><div class="cc-name">Roblox</div></div>
+    <div class="custom-cat" data-cc="Bloodstrike" onclick="selectCC(this)"><div class="cc-ico">🔫</div><div class="cc-name">Bloodstrike</div></div>
+    <div class="custom-cat" data-cc="Load / Data" onclick="selectCC(this)"><div class="cc-ico">📱</div><div class="cc-name">Load / Data</div></div>
+    <div class="custom-cat" data-cc="Other Game / Service" onclick="selectCC(this)"><div class="cc-ico">🎲</div><div class="cc-name">Other</div></div>
   </div>
-
   <div class="oform custom-form">
     <h3>✏️ Describe Your Order</h3>
-
     <div class="alert-box" style="border-color:rgba(167,139,250,.3);color:#c4b5fd;background:rgba(167,139,250,.07)">
       📢 This form sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> directly to Mark. He will review it and reach out to confirm the price and availability before processing.
     </div>
-
-    <div class="fg">
-      <label>Game / Service <span class="req">*</span></label>
-      <input type="text" id="custom-game" value="Mobile Legends (MLBB)" readonly
-        style="border-color:rgba(167,139,250,.3);color:#a78bfa">
-    </div>
-
-    <div class="fg">
-      <label>What exactly do you want? <span class="req">*</span></label>
-      <textarea id="custom-desc" rows="4"
-        placeholder="Example format:&#10;Monthly Starlight (NSL) — June 2026&#10;Quantity: 1&#10;&#10;Or: Monthly Starlight (NSL) — July 2026&#10;Quantity: 2"></textarea>
-    </div>
-
-    <div class="fg">
-      <label>Your Name <span class="req">*</span></label>
-      <input type="text" id="custom-name" placeholder="So Mark knows who to reply to">
-    </div>
-
-    <div class="fg">
-      <label>Contact Number / FB Name <span class="req">*</span></label>
-      <input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up">
-    </div>
-
-    <div class="fg">
-      <label>Player ID / Username (if applicable)</label>
-      <input type="text" id="custom-pid" placeholder="Game ID, username, or any account info needed">
-    </div>
-
-    <div class="fg">
-      <label>Budget (optional)</label>
-      <input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'">
-    </div>
-
-    <div class="fg">
-      <label>Additional Notes</label>
-      <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea>
-    </div>
-    
+    <div class="fg"><label>Game / Service <span class="req">*</span></label>
+      <input type="text" id="custom-game" value="Mobile Legends (MLBB)" readonly style="border-color:rgba(167,139,250,.3);color:#a78bfa"></div>
+    <div class="fg"><label>What exactly do you want? <span class="req">*</span></label>
+      <textarea id="custom-desc" rows="4" placeholder="Describe your order here..."></textarea></div>
+    <div class="fg"><label>Your Name <span class="req">*</span></label>
+      <input type="text" id="custom-name" placeholder="So Mark knows who to reply to"></div>
+    <div class="fg"><label>Contact Number / FB Name <span class="req">*</span></label>
+      <input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up"></div>
+    <div class="fg"><label>Player ID / Username (if applicable)</label>
+      <input type="text" id="custom-pid" placeholder="Game ID, username, or any account info needed"></div>
+    <div class="fg"><label>Budget (optional)</label>
+      <input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'"></div>
+    <div class="fg"><label>Additional Notes</label>
+      <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
-     <div class="pm-methods">
-  <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">GCash</div>
-  <div class="pm-btn" onclick="selectPayment('custom','maya',this)">Maya</div>
-  <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">GoTyme</div>
-  <div class="pm-btn" onclick="selectPayment('custom','paypal',this)">PayPal</div>
-</div>
+      <input type="hidden" id="pm-val-custom">
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">GCash</div>
+        <div class="pm-btn" onclick="selectPayment('custom','maya',this)">Maya</div>
+        <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('custom','paypal',this)">PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-custom">
+        <div id="pm-label-custom" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-custom"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-custom">Account Number:</span><span id="pm-num-custom"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-custom" onclick="revealPM('custom')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-custom" onclick="openQRModal(currentQR['custom'])" style="display:none">📷 View QR Code</button>
+        <div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
+    </div>
     <div class="fg">
       <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="custom-screenshot" accept="image/*" style="padding: 6px 12px; background: rgba(59,130,246,0.1); border-color: var(--bl); color: #fff;">
+      <input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
     </div>
-
-    <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">
-      🛎️ Send Custom Request
-    </button>
+    <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">🛎️ Send Custom Request</button>
     <div class="err-msg" id="custom-err"></div>
     <div class="notice" style="color:#7c6fa0">
       ⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies to you. Payment only after confirmation.
@@ -665,6 +585,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
+<!-- SUCCESS MESSAGE -->
 <div class="ok-msg" id="ok-msg">
   <div class="ok-ico">✅</div>
   <h4>ORDER SUBMITTED!</h4>
@@ -672,25 +593,52 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
 </div>
 
-</div><div id="qr-modal" class="pm-modal-overlay">
-  <div class="pm-modal-box">
-    <h3 style="color:var(--or); margin-bottom:15px; font-family:'Rajdhani',sans-serif; letter-spacing:1px;">Scan QR Code</h3>
-    <img id="qr-img" src="" style="width:100%; border-radius:10px; margin-bottom:15px; border:1px solid var(--dk5);">
+</div><!-- /main -->
+
+<!-- ===== QR MODAL ===== -->
+<div id="qr-modal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="color:var(--or);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">Scan QR Code</h3>
+    <img id="qr-img" src="" style="width:100%;border-radius:10px;margin-bottom:15px;border:1px solid var(--dk5)">
     <button class="btn-sub" onclick="document.getElementById('qr-modal').style.display='none'">Close</button>
   </div>
 </div>
 
-<div id="id-modal" class="pm-modal-overlay">
-  <div class="pm-modal-box">
-    <h3 style="color:var(--bl); margin-bottom:15px; font-family:'Rajdhani',sans-serif; letter-spacing:1px;">How to find ID</h3>
-    <p style="font-size:0.9rem; color:var(--mx); margin-bottom:15px; line-height:1.5;">Open your game profile. Your Player ID and Zone ID are usually located under your avatar or in the settings page.</p>
+<!-- ===== ID MODAL ===== -->
+<div id="id-modal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="color:var(--bl);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">How to find ID</h3>
+    <p style="font-size:.9rem;color:var(--mx);margin-bottom:15px;line-height:1.5">Open your game profile. Your Player ID and Zone ID are usually located under your avatar or in the settings page.</p>
     <button class="btn-sub" onclick="document.getElementById('id-modal').style.display='none'">Got it</button>
   </div>
 </div>
 
-<script>
-// ===================== DATA =====================
+<!-- ===== FIX: DD CONFIRM MODAL (restored) ===== -->
+<div id="dd-modal" class="modal-overlay">
+  <div class="modal-box" style="text-align:left">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <span style="font-size:1.4rem">🚫</span>
+      <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Warning</span>
+    </div>
+    <div style="font-size:.8rem;color:#fca5a5;line-height:1.7;margin-bottom:16px">
+      Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>
+      Once you have bought a specific tier, <b style="color:#f87171">that tier disappears permanently</b> from your shop and can <b style="color:#f87171">never be purchased again</b> — even during the next Double Diamond event.<br><br>
+      Please <b style="color:#fff">check your in-game shop first</b> to confirm the tier is still available before placing an order!
+    </div>
+    <div class="dd-warning-box">
+      <label class="dd-check"><input type="checkbox" id="dd-chk1"> <span>I confirm this tier is <b>still available</b> in my in-game shop and has <b>never been purchased</b> before.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk2"> <span>I understand that once purchased, <b>this tier will be gone permanently</b> and cannot be bought again on my account.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk3"> <span>I am ordering during an <b>active Double Diamond event</b> or I accept the current pricing.</span></label>
+    </div>
+    <button class="btn-sub" id="dd-proceed-btn" onclick="proceedDD()" style="background:#dc2626;margin-bottom:8px" disabled>✅ I Understand — Proceed</button>
+    <button class="btn-sub" onclick="closeDDModal()" style="background:var(--dk5)">Cancel — Go Back</button>
+  </div>
+</div>
 
+<script>
+// ============================================================
+// DATA
+// ============================================================
 const DATA = {
   mlbb:{
     dias:[
@@ -799,7 +747,7 @@ const DATA = {
     ]},
     "globe-promo":{net:"Globe Promo B",items:[
       {n:"UnliS680",p:70},{n:"GO59",p:53},{n:"GO59 (Students)",p:53},
-      {n:"UnliGO99 (FB/TikTok/IG)",p:89},{n:"Go+99",p:90},{n:"Go+109",p:99},
+      {n:"UnliGO99",p:89},{n:"Go+99",p:90},{n:"Go+109",p:99},
       {n:"Go+120",p:109},{n:"Go+149",p:135},{n:"Go+179",p:162},
       {n:"GoExtra59",p:54},{n:"GoExtra89",p:80},{n:"GoExtra109",p:96},
       {n:"GoExtra179",p:162},{n:"GoExtra199",p:179},
@@ -834,1069 +782,437 @@ const DATA = {
   }
 };
 
-// ===================== STATE =====================
-let selected = {game:null, item:null, price:null, network:null};
+// ============================================================
+// PAYMENT DATA
+// ============================================================
+const PM_DATA = {
+  gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',         color:'#3b82f6', qr:'gcash-logo.jpg'},
+  maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',         color:'#22c55e', qr:'paymaya-logo.jpg'},
+  gotyme: {label:'GoTyme', name:'Mark Guevarra', num:'09288978005',         color:'#8b5cf6', qr:'gotyme-logo.jpg'},
+  paypal: {label:'PayPal', name:'Mark Guevarra', num:'markguevarra@gmail.com', color:'#0ea5e9', note:'Please select "Friends & Family"'}
+};
 
-// ===================== RENDER GRIDS =====================
-function ph(n){return '₱'+n.toLocaleString('en-PH')}
+// Track current method & timer per game
+const currentMethod = {};
+const currentQR = {};
+const pmTimers = {};
+
+// ============================================================
+// HEADER GCASH TOGGLE
+// ============================================================
+let hdrRevealed = false, hdrTimer = null;
+function toggleHeaderGCash(){
+  const el = document.getElementById('hdr-gcash-reveal');
+  clearTimeout(hdrTimer);
+  hdrRevealed = !hdrRevealed;
+  el.style.display = hdrRevealed ? 'inline' : 'none';
+  if(hdrRevealed) hdrTimer = setTimeout(() => { el.style.display='none'; hdrRevealed=false; }, 3000);
+}
+
+// ============================================================
+// PAYMENT SELECTION — FIX: uses static DOM elements
+// ============================================================
+function selectPayment(game, method, btn){
+  clearTimeout(pmTimers[game]);
+  currentMethod[game] = method;
+
+  // Highlight button
+  document.querySelectorAll(`#g-${game} .pm-btn, #g-custom .pm-btn`).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const pm = PM_DATA[method];
+  document.getElementById(`pm-val-${game}`).value = pm.label;
+
+  // Show details block
+  const det = document.getElementById(`pm-details-${game}`);
+  det.style.display = 'block';
+  det.style.borderLeftColor = pm.color;
+
+  // Set label
+  document.getElementById(`pm-label-${game}`).innerHTML = `<span style="color:${pm.color}">${pm.label} Selected</span>`;
+
+  // Show masked info
+  const isEmail = method === 'paypal';
+  document.getElementById(`pm-numlbl-${game}`).textContent = isEmail ? 'Email Address:' : 'Account Number:';
+  document.getElementById(`pm-name-${game}`).textContent = 'M*** G*******';
+  document.getElementById(`pm-num-${game}`).textContent  = isEmail ? 'm****@gmail.com' : '0928****005';
+
+  // Reveal button — FIX: use block not flex to avoid display issue
+  const revBtn = document.getElementById(`pm-reveal-btn-${game}`);
+  revBtn.style.display = 'block';
+
+  // QR / note
+  const qrBtn  = document.getElementById(`pm-qr-btn-${game}`);
+  const noteEl = document.getElementById(`pm-note-${game}`);
+  if(pm.qr){
+    currentQR[game] = pm.qr;
+    qrBtn.style.display  = 'block';
+    noteEl.style.display = 'none';
+  } else {
+    qrBtn.style.display  = 'none';
+    noteEl.style.display = pm.note ? 'block' : 'none';
+    noteEl.textContent   = pm.note || '';
+    currentQR[game]      = null;
+  }
+}
+
+// FIX: revealPM uses static element IDs; timer re-shows button correctly
+function revealPM(game){
+  clearTimeout(pmTimers[game]);
+  const method  = currentMethod[game];
+  const pm      = PM_DATA[method];
+  const isEmail = method === 'paypal';
+  const revBtn  = document.getElementById(`pm-reveal-btn-${game}`);
+
+  document.getElementById(`pm-name-${game}`).textContent = pm.name;
+  document.getElementById(`pm-num-${game}`).textContent  = pm.num;
+  revBtn.style.display = 'none';
+
+  // FIX: 5-second timer re-shows correctly using block
+  pmTimers[game] = setTimeout(() => {
+    document.getElementById(`pm-name-${game}`).textContent = 'M*** G*******';
+    document.getElementById(`pm-num-${game}`).textContent  = isEmail ? 'm****@gmail.com' : '0928****005';
+    revBtn.style.display = 'block';
+  }, 3000);
+}
+
+function openQRModal(src){
+  if(!src) return;
+  document.getElementById('qr-img').src = src;
+  document.getElementById('qr-modal').style.display = 'flex';
+}
+function openIDModal(){
+  document.getElementById('id-modal').style.display = 'flex';
+}
+
+// ============================================================
+// GAME / CATEGORY TABS
+// ============================================================
+document.querySelectorAll('.gtab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.gtab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.gpanel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('g-' + tab.dataset.g).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ctab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const parent = tab.closest('.gpanel');
+    parent.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+    parent.querySelectorAll('.cpanel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.c).classList.add('active');
+  });
+});
+
+// ============================================================
+// RENDER PRICE GRIDS
+// ============================================================
+function ph(n){ return '₱' + Number(n).toLocaleString('en-PH'); }
 
 function makeGrid(containerId, items, game, cat){
   const el = document.getElementById(containerId);
   if(!el) return;
   el.innerHTML = '';
-  items.forEach((it,i)=>{
+  items.forEach((it, i) => {
     const c = document.createElement('div');
-    c.className='pcard';
-    c.dataset.game=game; c.dataset.cat=cat; c.dataset.idx=i;
-    c.dataset.name=it.n; c.dataset.price=it.p;
-    c.innerHTML=`
-      <div class="chk">✓</div>
+    c.className = 'pcard';
+    c.dataset.game  = game;
+    c.dataset.cat   = cat;
+    c.dataset.idx   = i;
+    c.dataset.name  = it.n;
+    c.dataset.price = it.p;
+    c.innerHTML = `<div class="chk">✓</div>
       <div class="pn">${it.n}</div>
-      ${it.d?`<div class="pd">${it.d}</div>`:''}
+      ${it.d ? `<div class="pd">${it.d}</div>` : ''}
       <div class="pp">${ph(it.p)}</div>`;
-    c.onclick=()=>{
-      if(game==='mlbb' && cat==='dd') openDDConfirm(c);
-      else selectItem(c,game);
+    c.onclick = () => {
+      if(game === 'mlbb' && cat === 'dd') openDDModal(c);
+      else selectItem(c, game);
     };
     el.appendChild(c);
   });
 }
 
 function buildAll(){
-  makeGrid('grid-mlbb-dias', DATA.mlbb.dias,'mlbb','dias');
-  makeGrid('grid-mlbb-denom', DATA.mlbb.denom,'mlbb','denom');
-  makeGrid('grid-mlbb-combo', DATA.mlbb.combo,'mlbb','combo');
-  makeGrid('grid-mlbb-dd', DATA.mlbb.dd,'mlbb','dd');
-  makeGrid('grid-mlbb-bundles', DATA.mlbb.bundles,'mlbb','bundles');
-  makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsC,'mlbb','skins');
-  makeGrid('grid-mlbb-skins-direct', DATA.mlbb.skinsD,'mlbb','skins');
-  makeGrid('grid-mlbb-starlight', DATA.mlbb.starlight,'mlbb','starlight');
-  makeGrid('grid-cod', DATA.cod,'cod','main');
-  makeGrid('grid-roblox', DATA.roblox,'roblox','main');
-  makeGrid('grid-bs', DATA.bs,'bs','main');
-  // Load grids
-  Object.keys(DATA.load).forEach(net=>{
-    makeGrid('grid-'+net, DATA.load[net].items,'load',net);
+  makeGrid('grid-mlbb-dias',       DATA.mlbb.dias,    'mlbb','dias');
+  makeGrid('grid-mlbb-denom',      DATA.mlbb.denom,   'mlbb','denom');
+  makeGrid('grid-mlbb-combo',      DATA.mlbb.combo,   'mlbb','combo');
+  makeGrid('grid-mlbb-dd',         DATA.mlbb.dd,      'mlbb','dd');
+  makeGrid('grid-mlbb-bundles',    DATA.mlbb.bundles,  'mlbb','bundles');
+  makeGrid('grid-mlbb-skins-cosmo',DATA.mlbb.skinsC,  'mlbb','skins');
+  makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsD, 'mlbb','skins');
+  makeGrid('grid-mlbb-starlight',  DATA.mlbb.starlight,'mlbb','starlight');
+  makeGrid('grid-cod',    DATA.cod,    'cod','main');
+  makeGrid('grid-roblox', DATA.roblox, 'roblox','main');
+  makeGrid('grid-bs',     DATA.bs,     'bs','main');
+  Object.keys(DATA.load).forEach(net => {
+    makeGrid('grid-' + net, DATA.load[net].items, 'load', net);
   });
 }
 
-// ===================== HEADER GCASH TOGGLE =====================
-let hdrRevealed = false;
-function toggleHeaderGCash() {
-  hdrRevealed = !hdrRevealed;
-  document.getElementById('hdr-g-name').textContent = hdrRevealed ? 'Mark Guevarra' : 'Ma*k G.';
-  document.getElementById('hdr-g-num').textContent = hdrRevealed ? '0928-897-8005' : '0928-****-**5';
-}
-
-// ===================== FULL SYSTEM PAYMENT PRIVACY (5-Second Auto-Hide) =====================
-const PM_DATA = {
-  gcash: { label:'GCash', name:'Mark Guevarra', num:'09288978005', color:'#3b82f6', qr:'gcash-logo.jpg' },
-  maya: { label:'Maya', name:'Mark Guevarra', num:'09288978005', color:'#22c55e', qr:'paymaya-logo.jpg' },
-  gotyme: { label:'GoTyme', name:'Mark Guevarra', num:'09288978005', color:'#8b5cf6', qr:'gotyme-logo.jpg' },
-  paypal: { label:'PayPal', name:'Mark Guevarra', num:'markguevarra@gmail.com', color:'#0ea5e9', note:'Please select "Friends & Family"' }
-};
-
-let pmTimeout; // Stores the 5-second timer
-
-function selectPayment(game, method, btn) {
-  clearTimeout(pmTimeout); // Stop the timer if they click a different payment method
-
-  document.querySelectorAll(`#g-${game} .pm-btn`).forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(`pm-val-${game}`).value = PM_DATA[method].label;
-
-  const pm = PM_DATA[method];
-  const details = document.getElementById(`pm-details-${game}`);
-  details.style.display = 'block';
-  details.style.borderLeft = `4px solid ${pm.color}`;
-
-  const isEmail = method === 'paypal';
-  // Fully masked details
-  const maskedName = 'M*** G*******';
-  const maskedNum = isEmail ? 'm****@gmail.com' : '0928****005';
-
-  let html = `
-    <div style="color:${pm.color}; font-weight:bold; margin-bottom:10px;">${pm.label} Selected</div>
-    <div class="pm-row"><span>Account Name:</span> <span id="pm-name-${game}" style="letter-spacing:1px">${maskedName}</span></div>
-    <div class="pm-row"><span>${isEmail ? 'Email Address' : 'Account Number'}:</span> <span id="pm-num-${game}" style="letter-spacing:1px">${maskedNum}</span></div>
-    <button type="button" class="btn-reveal" onclick="revealPM('${game}','${method}', this)">👁️ Reveal Info</button>
-  `;
-  if (pm.qr) {
-    html += `<button type="button" class="btn-qr" onclick="openQRModal('${pm.qr}')">📷 View QR Code</button>`;
-  } else if (pm.note) {
-    html += `<div style="font-size:0.75rem; color:var(--or); margin-top:8px; text-align:center;">⚠️ ${pm.note}</div>`;
-  }
-  details.innerHTML = html;
-}
-
-function revealPM(game, method, btn) {
-  clearTimeout(pmTimeout); // Reset timer to prevent glitches if they tap fast
-  
-  const pm = PM_DATA[method];
-  const nameEl = document.getElementById(`pm-name-${game}`);
-  const numEl = document.getElementById(`pm-num-${game}`);
-  
-  // 1. Reveal the real details
-  nameEl.textContent = pm.name;
-  numEl.textContent = pm.num;
-  btn.style.display = 'none'; // Hide the "Reveal" button while reading
-  
-  // 2. Start the 5-Second Timer
-  pmTimeout = setTimeout(() => {
-    const isEmail = method === 'paypal';
-    
-    // Auto-mask details again after 5 seconds
-    nameEl.textContent = 'M*** G*******';
-    numEl.textContent = isEmail ? 'm****@gmail.com' : '0928****005';
-    
-    // Show the button again so they can click it if they forgot
-    btn.style.display = 'flex'; 
-  }, 5000); // 5000 milliseconds = 5 seconds
-}
-
-function openQRModal(imgSrc) {
-  document.getElementById('qr-img').src = imgSrc;
-  document.getElementById('qr-modal').style.display = 'flex';
-}
-function openIDModal() {
-  document.getElementById('id-modal').style.display = 'flex';
-}
-
-// ===================== SELECTION =====================
+// ============================================================
+// ITEM SELECTION
+// ============================================================
 function selectItem(card, game, manualName, manualPrice){
-  document.querySelectorAll(`.pcard[data-game="${game}"], .promo-card`).forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c => c.classList.remove('sel'));
   if(card) card.classList.add('sel');
-  
-  const name = manualName || card.dataset.name;
-  const rawPrice = manualPrice || card.dataset.price;
-  const price = (typeof rawPrice === 'string' && rawPrice.includes('₱')) ? rawPrice : ph(parseInt(rawPrice));
-  
-  selected.game=game; selected.item=name; selected.price=price;
 
-  if(game==='mlbb'){
-    document.getElementById('mlbb-sel-box').style.display='block';
-    document.getElementById('mlbb-sel-item').textContent=name;
-    document.getElementById('mlbb-sel-price').textContent=price;
-    document.getElementById('mlbb-order-display').value=name+' — '+price;
-  } else if(game==='cod'){
-    document.getElementById('cod-sel-box').style.display='block';
-    document.getElementById('cod-sel-item').textContent=name;
-    document.getElementById('cod-sel-price').textContent=price;
-    document.getElementById('cod-order-display').value=name+' — '+price;
-  } else if(game==='roblox'){
-    document.getElementById('roblox-sel-box').style.display='block';
-    document.getElementById('roblox-sel-item').textContent=name;
-    document.getElementById('roblox-sel-price').textContent=price;
-    document.getElementById('roblox-order-display').value=name+' — '+price;
-  } else if(game==='bs'){
-    document.getElementById('bs-sel-box').style.display='block';
-    document.getElementById('bs-sel-item').textContent=name;
-    document.getElementById('bs-sel-price').textContent=price;
-    document.getElementById('bs-order-display').value=name+' — '+price;
-  } else if(game==='load'){
-    const netKey = card.dataset.cat;
+  const name  = manualName  || card.dataset.name;
+  const price = manualPrice || ph(parseInt(card.dataset.price));
+
+  if(game === 'mlbb'){
+    document.getElementById('mlbb-sel-box').style.display  = 'block';
+    document.getElementById('mlbb-sel-item').textContent   = name;
+    document.getElementById('mlbb-sel-price').textContent  = price;
+    document.getElementById('mlbb-order-display').value    = name + ' — ' + price;
+    scrollToForm('mlbb-oform');
+  } else if(game === 'cod'){
+    document.getElementById('cod-sel-box').style.display   = 'block';
+    document.getElementById('cod-sel-item').textContent    = name;
+    document.getElementById('cod-sel-price').textContent   = price;
+    document.getElementById('cod-order-display').value     = name + ' — ' + price;
+    scrollToForm('cod-oform');
+  } else if(game === 'roblox'){
+    document.getElementById('roblox-sel-box').style.display  = 'block';
+    document.getElementById('roblox-sel-item').textContent   = name;
+    document.getElementById('roblox-sel-price').textContent  = price;
+    document.getElementById('roblox-order-display').value    = name + ' — ' + price;
+    scrollToForm('roblox-oform');
+  } else if(game === 'bs'){
+    document.getElementById('bs-sel-box').style.display   = 'block';
+    document.getElementById('bs-sel-item').textContent    = name;
+    document.getElementById('bs-sel-price').textContent   = price;
+    document.getElementById('bs-order-display').value     = name + ' — ' + price;
+    scrollToForm('bs-oform');
+  } else if(game === 'load'){
+    const netKey  = card.dataset.cat;
     const netName = DATA.load[netKey]?.net || netKey;
-    document.getElementById('load-sel-box').style.display='block';
-    document.getElementById('load-sel-item').textContent=name;
-    document.getElementById('load-sel-price').textContent=price;
-    document.getElementById('load-order-display').value=name+' — '+price;
-    document.getElementById('load-network-display').value=netName;
-    selected.network=netName;
+    document.getElementById('load-sel-box').style.display        = 'block';
+    document.getElementById('load-sel-item').textContent         = name;
+    document.getElementById('load-sel-price').textContent        = price;
+    document.getElementById('load-order-display').value          = name + ' — ' + price;
+    document.getElementById('load-network-display').value        = netName;
+    scrollToForm('load-oform');
   }
-  // Scroll to form
-  setTimeout(()=>{
-    const form = document.querySelector(`#g-${game} .oform`);
-    if(form) form.scrollIntoView({behavior:'smooth',block:'nearest'});
-  },100);
 }
 
-// ===================== GAME TABS =====================
-document.querySelectorAll('.gtab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById('g-'+t.dataset.g).classList.add('active');
-    document.getElementById('ok-msg').style.display='none';
+// FIX: scroll helper
+function scrollToForm(id){
+  const el = document.getElementById(id);
+  if(el) setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+// ============================================================
+// DOUBLE DIAMOND MODAL — FIX: restored + checkboxes + scroll
+// ============================================================
+let pendingDDCard = null;
+
+function openDDModal(card){
+  pendingDDCard = card;
+  ['dd-chk1','dd-chk2','dd-chk3'].forEach(id => document.getElementById(id).checked = false);
+  document.getElementById('dd-proceed-btn').disabled = true;
+  document.getElementById('dd-modal').style.display = 'flex';
+}
+
+function closeDDModal(){
+  document.getElementById('dd-modal').style.display = 'none';
+  pendingDDCard = null;
+}
+
+// Enable proceed only when all 3 boxes checked
+['dd-chk1','dd-chk2','dd-chk3'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    const all = ['dd-chk1','dd-chk2','dd-chk3'].every(i => document.getElementById(i).checked);
+    document.getElementById('dd-proceed-btn').disabled = !all;
+    document.getElementById('dd-proceed-btn').style.background = all ? '#16a34a' : '#dc2626';
   });
 });
 
-// ===================== MLBB CATEGORY TABS =====================
-document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('#mlbb-ctabs .ctab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('#g-mlbb .cpanel').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById(t.dataset.c).classList.add('active');
-    // Show/hide DD warning fab
-    if(t.dataset.c === 'mlbb-dd') showDDFab(); else hideDDFab();
-  });
-});
-
-// ===================== NETWORK SELECT =====================
-function selectNet(card, netKey){
-  document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active'));
-  card.classList.add('active');
-  document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active'));
-  const panel = document.getElementById('lp-'+netKey);
-  if(panel) panel.classList.add('active');
+function proceedDD(){
+  document.getElementById('dd-modal').style.display = 'none';
+  if(pendingDDCard){
+    selectItem(pendingDDCard, 'mlbb'); // FIX: now scrolls to form too
+    pendingDDCard = null;
+  }
 }
 
-// ===================== CUSTOM CATEGORY =====================
-function selectCC(card){
-  document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
+// ============================================================
+// LOAD NETWORK SELECTOR
+// ============================================================
+function selectNet(card, net){
+  document.querySelectorAll('.netcard').forEach(c => c.classList.remove('active'));
   card.classList.add('active');
-  document.getElementById('custom-game').value = card.dataset.cc;
+  document.querySelectorAll('.lpanel').forEach(p => p.classList.remove('active'));
+  const lp = document.getElementById('lp-' + net);
+  if(lp) lp.classList.add('active');
 }
 
-// ===================== AUTO-VERIFY =====================
-async function verifyMLBB() {
+// ============================================================
+// CUSTOM ORDER CATEGORY
+// ============================================================
+function selectCC(el){
+  document.querySelectorAll('.custom-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('custom-game').value = el.dataset.cc;
+}
+
+// ============================================================
+// VERIFY APIs
+// ============================================================
+async function verifyMLBB(){
   const pid = document.getElementById('mlbb-pid').value.trim();
   const zid = document.getElementById('mlbb-zid').value.trim();
-  const ignField = document.getElementById('mlbb-ign');
-  if (!pid || !zid) return alert("Please enter both Player ID and Zone ID first.");
-  ignField.value = "Verifying...";
-  ignField.style.borderColor = "var(--or)";
+  if(!pid || !zid){ alert('Enter Player ID and Zone ID first.'); return; }
   try {
-    const res = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
-    const data = await res.json();
-    if (res.ok && data.ign) { ignField.value = data.ign; ignField.style.borderColor = "var(--gr)"; } 
-    else { ignField.value = ""; ignField.style.borderColor = "#ef4444"; alert(data.error || "Player not found."); }
-  } catch (err) { ignField.value = ""; alert("Service busy. Try again."); }
+    const r = await fetch(`https://api.gameofthrones.life/moonton/user?userId=${pid}&zoneId=${zid}`);
+    const d = await r.json();
+    document.getElementById('mlbb-ign').value = d.name || d.username || d.nickName || 'Not found';
+  } catch(e){ document.getElementById('mlbb-ign').value = 'Verification failed'; }
 }
 
-async function verifyCOD() {
+async function verifyCOD(){
   const pid = document.getElementById('cod-pid').value.trim();
-  const ignField = document.getElementById('cod-ign');
-  if (!pid) return alert("Please enter your Call of Duty Player ID first.");
-  ignField.value = "Verifying...";
-  ignField.style.borderColor = "var(--or)";
-  try {
-    const res = await fetch(`/api/verify-cod?id=${pid}`);
-    const data = await res.json();
-    if (res.ok && data.ign) { ignField.value = data.ign; ignField.style.borderColor = "var(--gr)"; } 
-    else { ignField.value = ""; ignField.style.borderColor = "#ef4444"; alert(data.error || "Player not found."); }
-  } catch (err) { ignField.value = ""; alert("Service busy. Try again."); }
+  if(!pid){ alert('Enter Player ID first.'); return; }
+  document.getElementById('cod-ign').value = 'Manual entry required';
 }
 
-async function verifyRoblox() {
-  const username = document.getElementById('roblox-user').value.trim();
-  const dispField = document.getElementById('roblox-dispname');
-  if (!username) return alert("Please enter a Roblox Username first.");
-  dispField.value = "Verifying...";
-  dispField.style.borderColor = "var(--or)";
+async function verifyRoblox(){
+  const u = document.getElementById('roblox-user').value.trim();
+  if(!u){ alert('Enter Roblox username first.'); return; }
   try {
-    const res = await fetch(`/api/verify-roblox?username=${encodeURIComponent(username)}`);
-    const data = await res.json();
-    if (res.ok && data.ign) { dispField.value = data.ign; dispField.style.borderColor = "var(--gr)"; } 
-    else { dispField.value = ""; dispField.style.borderColor = "#ef4444"; alert(data.error || "User not found."); }
-  } catch (err) { dispField.value = ""; alert("Service busy. Try again."); }
+    const r = await fetch(`https://api.roblox.com/users/get-by-username?username=${u}`);
+    const d = await r.json();
+    document.getElementById('roblox-dispname').value = d.Username || d.username || 'Not found';
+  } catch(e){ document.getElementById('roblox-dispname').value = 'Verification failed'; }
 }
-  
-// ===================== SUBMIT ORDER =====================
+
+// ============================================================
+// SUBMIT ORDER
+// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIiEGWRVT5GnJRVgR6d5wgxuEhcHr41fjJMmR8wMhZPjOCxhJ2z0CWjLkoxMjdXXnb/exec';
+
 async function submitOrder(game){
-  const btn = document.getElementById(game+'-btn');
-  const errEl = document.getElementById(game+'-err');
-  errEl.style.display='none';
+  const btn = document.getElementById(game + '-btn');
+  const err = document.getElementById(game + '-err');
+  err.style.display = 'none';
 
-  let fields = {};
-  let valid = true;
-  let missingFields = [];
+  // Gather fields
+  let order, pid, ign, notes, network;
+  const pm = document.getElementById(`pm-val-${game}`).value;
+  const fileInput = document.getElementById(game + '-screenshot');
 
-  // 1. Payment Method Validations
-  const pmInput = document.getElementById('pm-val-' + game);
-  const pmVal = pmInput ? pmInput.value : '';
-  if(!pmVal) missingFields.push('Payment Method');
-
-  const fileInput = document.getElementById(game+'-screenshot');
-  if(!fileInput || fileInput.files.length === 0) {
-    missingFields.push('Payment Receipt');
+  if(game === 'mlbb'){
+    order   = document.getElementById('mlbb-order-display').value;
+    pid     = document.getElementById('mlbb-pid').value + ' / Zone: ' + document.getElementById('mlbb-zid').value;
+    ign     = document.getElementById('mlbb-ign').value;
+    notes   = document.getElementById('mlbb-notes').value;
+  } else if(game === 'cod'){
+    order   = document.getElementById('cod-order-display').value;
+    pid     = document.getElementById('cod-pid').value;
+    ign     = document.getElementById('cod-ign').value;
+    notes   = document.getElementById('cod-notes').value;
+  } else if(game === 'roblox'){
+    order   = document.getElementById('roblox-order-display').value;
+    pid     = 'GP:' + document.getElementById('roblox-gpid').value + ' (' + document.getElementById('roblox-gpname').value + ')';
+    ign     = document.getElementById('roblox-user').value + ' / ' + document.getElementById('roblox-dispname').value;
+    notes   = document.getElementById('roblox-notes').value;
+  } else if(game === 'bs'){
+    order   = document.getElementById('bs-order-display').value;
+    pid     = document.getElementById('bs-pid').value;
+    ign     = document.getElementById('bs-ign').value;
+    notes   = document.getElementById('bs-notes').value;
+  } else if(game === 'load'){
+    order   = document.getElementById('load-order-display').value;
+    pid     = document.getElementById('load-number').value;
+    ign     = document.getElementById('load-network-display').value;
+    notes   = document.getElementById('load-notes').value;
+  } else if(game === 'custom'){
+    order   = document.getElementById('custom-desc').value;
+    pid     = document.getElementById('custom-pid').value;
+    ign     = document.getElementById('custom-name').value + ' / ' + document.getElementById('custom-contact').value;
+    notes   = document.getElementById('custom-notes').value;
   }
 
-  // 2. Game Logic
-  if(game==='mlbb'){
-    const order = document.getElementById('mlbb-order-display').value;
-    const pid = document.getElementById('mlbb-pid').value.trim();
-    const zid = document.getElementById('mlbb-zid').value.trim();
-    const ign = document.getElementById('mlbb-ign').value.trim();
-    const server = document.getElementById('mlbb-server').value;
-    const notes = document.getElementById('mlbb-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!pid) missingFields.push('Player ID');
-    if(!zid) missingFields.push('Zone ID');
-    if(missingFields.length){valid=false;}
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server,notes};
-  } else if(game==='cod'){
-    const order = document.getElementById('cod-order-display').value;
-    const pid = document.getElementById('cod-pid').value.trim();
-    const ign = document.getElementById('cod-ign').value.trim();
-    const notes = document.getElementById('cod-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!pid) missingFields.push('Player ID');
-    if(missingFields.length){valid=false;}
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes};
-  } else if(game==='roblox'){
-    const order = document.getElementById('roblox-order-display').value;
-    const gpid = document.getElementById('roblox-gpid').value.trim();
-    const gpname = document.getElementById('roblox-gpname').value.trim();
-    const user = document.getElementById('roblox-user').value.trim();
-    const notes = document.getElementById('roblox-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Robux Amount');
-    if(!gpid) missingFields.push('Gamepass ID');
-    if(!gpname) missingFields.push('Gamepass Name');
-    if(!user) missingFields.push('Roblox Username');
-    if(missingFields.length){valid=false;}
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes};
-  } else if(game==='bs'){
-    const order = document.getElementById('bs-order-display').value;
-    const pid = document.getElementById('bs-pid').value.trim();
-    const ign = document.getElementById('bs-ign').value.trim();
-    const notes = document.getElementById('bs-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Order/Item');
-    if(!pid) missingFields.push('Player ID');
-    if(!ign) missingFields.push('IGN');
-    if(missingFields.length){valid=false;}
-    fields={game:'Bloodstrike',order,playerID:pid,ign,notes};
-  } else if(game==='load'){
-    const order = document.getElementById('load-order-display').value;
-    const network = document.getElementById('load-network-display').value;
-    const number = document.getElementById('load-number').value.trim();
-    const notes = document.getElementById('load-notes').value.trim();
-    if(!order||order.includes('Select')) missingFields.push('Promo/Load');
-    if(!number) missingFields.push('Mobile Number');
-    if(missingFields.length){valid=false;}
-    fields={game:'Load',order,network,mobileNumber:number,notes};
-  } else if(game==='custom'){
-    const gameField = document.getElementById('custom-game').value.trim();
-    const desc = document.getElementById('custom-desc').value.trim();
-    const name = document.getElementById('custom-name').value.trim();
-    const contact = document.getElementById('custom-contact').value.trim();
-    const pid = document.getElementById('custom-pid').value.trim();
-    const budget = document.getElementById('custom-budget').value.trim();
-    const notes = document.getElementById('custom-notes').value.trim();
-    if(!desc) missingFields.push('Order Description');
-    if(!name) missingFields.push('Your Name');
-    if(!contact) missingFields.push('Contact Number / FB Name');
-    if(missingFields.length){valid=false;}
-    fields={game: gameField, orderDescription: desc, customerName: name, contactNumberOrFB: contact, playerID_username: pid || 'Not provided', budget: budget || 'Not specified', notes: notes};
+  if(!order){ showErr(err,'Please select an item first.'); return; }
+  if(!pm){    showErr(err,'Please select a payment method.'); return; }
+
+  // File
+  let fileData = null, fileName = null, mimeType = null;
+  if(fileInput && fileInput.files[0]){
+    const file = fileInput.files[0];
+    if(file.size > 4500000){ showErr(err,'Screenshot too large (max 4.5MB).'); return; }
+    fileName = file.name; mimeType = file.type;
+    fileData = await toBase64(file);
   }
 
-  if(!valid){
-    errEl.textContent='⚠️ Please fill in: '+missingFields.join(', ');
-    errEl.style.display='block';
-    return;
-  }
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    const gameName = game === 'custom'
+      ? document.getElementById('custom-game').value
+      : game.toUpperCase();
 
-  const isCustom = game==='custom';
-  btn.disabled=true; 
-  btn.textContent='Uploading Screenshot... Please Wait';
+    const payload = {
+      game: gameName,
+      order: order,
+      orderDescription: `Order: ${order}\nPlayer/ID: ${pid || '-'}\nIGN: ${ign || '-'}\nPayment: ${pm}\nNotes: ${notes || '-'}`,
+      fileData, fileName, mimeType
+    };
 
-  fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
-  fields.dateTime = new Date().toLocaleString();
-  fields.paymentMethod = pmVal;
-
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec";
-
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
-  const maxSize = 3 * 1024 * 1024;
-  const file = fileInput.files[0];
-
-  if(!allowedTypes.includes(file.type)) {
-    errEl.textContent='❌ Security Block: Only images (JPG, PNG, WEBP) are allowed.';
-    errEl.style.display='block';
-    btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
-    return;
-  }
-
-  if(file.size > maxSize) {
-    errEl.textContent='❌ File too large! Please use a screenshot under 3MB.';
-    errEl.style.display='block';
-    btn.disabled=false; btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
-    return;
-  }
-  
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    fields.fileData = e.target.result.split(',')[1];
-    fields.mimeType = file.type;
-    fields.fileName = file.name;
-
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(fields),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
-      });
-
-      const responseText = await res.text();
-
-      if(responseText.includes("Success")){
-        document.querySelector(`#g-${game}`).style.display='none';
-        document.querySelector('.gtabs').style.display='none';
-        const ok = document.getElementById('ok-msg');
-        
-        ok.innerHTML = `
-          <div class="ok-ico">✅</div>
-          <h4>ORDER SUBMITTED!</h4>
-          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--dk5); border-radius:10px; padding:15px; margin:15px 0; text-align:left; font-size:0.85rem;">
-            <b style="color:var(--or);">🧾 TRANSACTION RECEIPT</b><br><br>
-            <b>Transaction ID:</b> <span style="color:#fbbf24">${fields.transactionID}</span><br>
-            <b>Date & Time:</b> ${fields.dateTime}<br>
-            <b>Payment via:</b> ${fields.paymentMethod}<br>
-            <b>Game:</b> ${fields.game}<br>
-            <b>Order Details:</b> ${fields.order || fields.orderDescription}<br>
-            ${fields.playerID ? `<b>Player ID:</b> ${fields.playerID}<br>` : ''}
-            ${fields.zoneID ? `<b>Zone ID:</b> ${fields.zoneID}<br>` : ''}
-            ${fields.ign ? `<b>IGN:</b> ${fields.ign}<br>` : ''}
-          </div>
-          <p>Your order and payment screenshot have been successfully received!<br>Wait for Mark to process and confirm your top-up. Thank you! 🎮</p>
-          <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
-        `;
-        ok.style.display='block';
-        ok.scrollIntoView({behavior:'smooth'});
-      } else {
-        throw new Error('Server error');
-      }
-    } catch(err) {
-      errEl.textContent='❌ Upload failed. Please check your internet or try a smaller image size.';
-      errEl.style.display='block';
-      btn.disabled=false; 
-      btn.textContent= isCustom ? '🛎️ Send Custom Request' : 'Submit Order';
+    const res = await fetch(SCRIPT_URL, {method:'POST', body: JSON.stringify(payload)});
+    const txt = await res.text();
+    if(txt.includes('Success') || txt.toLowerCase().includes('success')){
+      document.getElementById('ok-msg').style.display = 'block';
+      document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
+    } else {
+      showErr(err, 'Server error: ' + txt);
     }
-  };
-
-  reader.readAsDataURL(file); 
-}
-  
-function resetAll(){
-  document.querySelector('.gtabs').style.display='flex';
-  document.getElementById('ok-msg').style.display='none';
-  document.querySelectorAll('.gpanel').forEach(p=>{p.style.display='';p.classList.remove('active')});
-  document.getElementById('g-mlbb').classList.add('active');
-  document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
-  document.querySelector('.gtab[data-g="mlbb"]').classList.add('active');
-  document.querySelectorAll('input[type=text],input[type=tel],textarea').forEach(i=>i.value='');
-  document.querySelectorAll('.pcard, .pm-btn').forEach(c=>c.classList.remove('sel','active'));
-  document.querySelectorAll('.sel-box, .pm-details, .err-msg').forEach(b=>b.style.display='none');
-  document.querySelectorAll('.btn-sub').forEach(b=>{
-    b.disabled=false;
-    if(b.id==='custom-btn') b.textContent='🛎️ Send Custom Request';
-    else if(b.id) b.textContent='Submit Order';
-  });
-  selected={game:null,item:null,price:null,network:null};
-}
-
-buildAll();
-</script>
-
-<style>
-/* BELL BUTTON */
-.notif-bell{
-  position:fixed;bottom:22px;right:18px;z-index:999;
-  width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
-  background:linear-gradient(135deg,#f59e0b,#f97316);
-  box-shadow:0 4px 18px rgba(249,115,22,.5);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;transition:transform .2s;
-  animation:bellWiggle 3s ease-in-out infinite}
-.notif-bell:hover{transform:scale(1.1)}
-@keyframes bellWiggle{
-  0%,100%{transform:rotate(0)}
-  10%{transform:rotate(-18deg)}
-  20%{transform:rotate(18deg)}
-  30%{transform:rotate(-12deg)}
-  40%{transform:rotate(12deg)}
-  50%{transform:rotate(0)}
-}
-.notif-badge{
-  position:absolute;top:-3px;right:-3px;
-  background:#ef4444;color:#fff;border-radius:50%;
-  width:19px;height:19px;font-size:.62rem;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  border:2px solid #09090f;font-family:'Exo 2',sans-serif}
-
-/* MODAL OVERLAY */
-.notif-overlay{
-  position:fixed;inset:0;z-index:1000;
-  background:rgba(0,0,0,.75);backdrop-filter:blur(4px);
-  display:none;align-items:flex-end;justify-content:center;
-  padding-bottom:0}
-.notif-overlay.open{display:flex}
-
-/* MODAL SHEET */
-.notif-sheet{
-  background:var(--dk2);border:1px solid rgba(251,191,36,.2);
-  border-radius:20px 20px 0 0;width:100%;max-width:580px;
-  padding:0 0 30px;max-height:90vh;overflow-y:auto;
-  animation:slideUp .3s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.notif-drag{width:40px;height:4px;border-radius:4px;
-  background:rgba(255,255,255,.2);margin:12px auto 0}
-
-/* SHEET HEADER */
-.notif-hdr{
-  background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(249,115,22,.1));
-  border-bottom:1px solid rgba(251,191,36,.15);
-  padding:16px 18px 14px;display:flex;align-items:flex-start;justify-content:space-between}
-.notif-hdr-left h3{
-  font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;
-  color:#fbbf24;letter-spacing:2px;text-transform:uppercase;
-  display:flex;align-items:center;gap:7px}
-.notif-hdr-left p{font-size:.72rem;color:var(--mx);margin-top:3px}
-.notif-close{
-  background:rgba(255,255,255,.08);border:none;border-radius:50%;
-  width:30px;height:30px;color:var(--mx);font-size:1rem;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-left:10px;transition:background .18s}
-.notif-close:hover{background:rgba(255,255,255,.16)}
-
-/* WARN BANNER */
-.notif-warn{
-  margin:14px 18px 0;background:rgba(239,68,68,.1);
-  border:1px solid rgba(239,68,68,.3);border-radius:10px;
-  padding:10px 14px;display:flex;gap:10px;align-items:flex-start}
-.notif-warn .wi{font-size:1.1rem;flex-shrink:0;margin-top:1px}
-.notif-warn p{font-size:.75rem;color:#fca5a5;line-height:1.6}
-.notif-warn b{color:#f87171}
-
-/* OFFER CARDS */
-.notif-offers{padding:14px 18px 0;display:flex;flex-direction:column;gap:10px}
-.offer-card{
-  background:var(--dk3);border:1.5px solid rgba(251,191,36,.2);
-  border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
-.offer-card::before{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,#f59e0b,#f97316)}
-.offer-card .oc-top{display:flex;justify-content:space-between;align-items:flex-start}
-.offer-card .oc-name{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;
-  color:#fbbf24;letter-spacing:.5px}
-.offer-card .oc-price{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or)}
-.offer-card .oc-sub{font-size:.72rem;color:var(--mx);margin-top:4px;line-height:1.6}
-.offer-card .oc-sub b{color:var(--tx)}
-.slots-row{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
-.slot-dot{
-  width:13px;height:13px;border-radius:50%;
-  border:1.5px solid rgba(251,191,36,.4);background:rgba(251,191,36,.12)}
-.slot-dot.filled{background:#f59e0b;border-color:#f59e0b}
-.slots-label{font-size:.68rem;color:var(--mx)}
-.avail-tag{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);
-  border-radius:20px;padding:2px 9px;font-size:.65rem;color:#4ade80;
-  font-weight:600;letter-spacing:.5px}
-.avail-tag.low{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#f87171}
-.avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;
-  animation:pulseAnim 1.2s ease-in-out infinite}
-
-/* DELIVERY INFO */
-.delivery-box{
-  margin:14px 18px 0;background:rgba(59,130,246,.07);
-  border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px 14px}
-.delivery-box .db-title{
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;
-  color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
-.delivery-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
-.delivery-row .dr-ico{flex-shrink:0;font-size:.9rem}
-.delivery-row p{font-size:.73rem;color:var(--mx);line-height:1.5}
-.delivery-row p b{color:var(--tx)}
-
-/* CTA */
-.notif-cta{padding:14px 18px 0}
-.notif-cta-btn{
-  width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
-  font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-  letter-spacing:2px;text-transform:uppercase;transition:all .2s;
-  background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
-.notif-cta-btn:hover{opacity:.9;transform:translateY(-1px);
-  box-shadow:0 5px 20px rgba(139,92,246,.4)}
-.notif-cta-note{font-size:.68rem;color:var(--mx);text-align:center;margin-top:8px;line-height:1.5}
-
-/* DD FLOATING WARNING FAB */
-.dd-warn-fab{
-  position:fixed;bottom:150px;left:18px;z-index:998;
-  display:none;align-items:center;gap:8px;
-  background:linear-gradient(135deg,#dc2626,#b91c1c);
-  border:1px solid rgba(239,68,68,.5);border-radius:14px;
-  padding:9px 14px;box-shadow:0 4px 20px rgba(220,38,38,.5);
-  cursor:pointer;animation:ddPulse 2s ease-in-out infinite}
-.dd-warn-fab.show{display:flex}
-@keyframes ddPulse{
-  0%,100%{box-shadow:0 4px 20px rgba(220,38,38,.5)}
-  50%{box-shadow:0 4px 28px rgba(220,38,38,.85)}}
-.dd-warn-fab .dwf-ico{font-size:1.1rem}
-.dd-warn-fab .dwf-txt{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:.78rem;color:#fff;letter-spacing:.5px;line-height:1.3}
-.dd-warn-fab .dwf-sub{font-size:.62rem;color:rgba(255,255,255,.7);margin-top:1px}
-
-/* DD CONFIRM MODAL */
-.dd-confirm-overlay{position:fixed;inset:0;z-index:1100;
-  background:rgba(0,0,0,.8);backdrop-filter:blur(5px);
-  display:none;align-items:center;justify-content:center;padding:20px}
-.dd-confirm-overlay.open{display:flex}
-.dd-confirm-box{background:var(--dk2);border:1.5px solid rgba(239,68,68,.4);
-  border-radius:18px;padding:24px 20px;max-width:360px;width:100%;
-  animation:popIn .25s ease}
-@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-.dd-confirm-box .dcb-ico{font-size:2.4rem;text-align:center;margin-bottom:10px}
-.dd-confirm-box h3{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;
-  color:#f87171;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:12px}
-.dd-confirm-box .dcb-item{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
-  border-radius:10px;padding:10px 14px;margin-bottom:14px;text-align:center}
-.dd-confirm-box .dcb-item .di-name{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:1rem;color:var(--tx)}
-.dd-confirm-box .dcb-item .di-price{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:1.2rem;color:var(--or);margin-top:2px}
-.dd-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.dd-check-item{display:flex;align-items:flex-start;gap:9px;
-  background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px}
-.dd-check-item input[type=checkbox]{width:16px;height:16px;flex-shrink:0;
-  accent-color:#ef4444;margin-top:2px;cursor:pointer}
-.dd-check-item label{font-size:.74rem;color:var(--mx);line-height:1.5;cursor:pointer}
-.dd-check-item label b{color:#fca5a5}
-.dd-confirm-btns{display:flex;flex-direction:column;gap:8px}
-.dd-btn-confirm{width:100%;padding:12px;background:#dc2626;color:#fff;border:none;
-  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;
-  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;
-  opacity:.4;pointer-events:none}
-.dd-btn-confirm.ready{opacity:1;pointer-events:all}
-.dd-btn-confirm.ready:hover{background:#b91c1c;transform:translateY(-1px)}
-.dd-btn-cancel{width:100%;padding:10px;background:transparent;color:var(--mx);
-  border:1px solid var(--dk5);border-radius:10px;font-family:'Rajdhani',sans-serif;
-  font-size:.88rem;cursor:pointer;transition:all .2s}
-.dd-btn-cancel:hover{border-color:var(--mx);color:var(--tx)}
-</style>
-
-<div class="dd-warn-fab" id="dd-warn-fab" onclick="openDDInfo()">
-  <div class="dwf-ico">🚫</div>
-  <div>
-    <div class="dwf-txt">ONE-TIME ONLY</div>
-    <div class="dwf-sub">Tap to learn more</div>
-  </div>
-</div>
-
-<div class="dd-confirm-overlay" id="dd-info-overlay" onclick="if(event.target===this)closeDDInfo()">
-  <div class="dd-confirm-box">
-    <div class="dcb-ico">🚫</div>
-    <h3>One-Time Purchase Warning</h3>
-    <div style="font-size:.78rem;color:var(--mx);line-height:1.8;margin-bottom:16px">
-      Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>
-      Once you have bought a specific tier (e.g. 50 & 50 Bonus), <b style="color:#f87171">that tier disappears permanently from your shop</b> and can <b style="color:#f87171">never be purchased again</b> — even during the next Double Diamond event.<br><br>
-      Please <b style="color:#fff">check your in-game shop first</b> to confirm the tier is still available before placing an order!
-    </div>
-    <button class="dd-btn-cancel" onclick="closeDDInfo()">Got it, go back</button>
-  </div>
-</div>
-
-<div class="dd-confirm-overlay" id="dd-confirm-overlay">
-  <div class="dd-confirm-box">
-    <div class="dcb-ico">⚠️</div>
-    <h3>Confirm Your Order</h3>
-    <div class="dcb-item">
-      <div class="di-name" id="dd-confirm-name">—</div>
-      <div class="di-price" id="dd-confirm-price">—</div>
-    </div>
-    <div class="dd-checks">
-      <div class="dd-check-item">
-        <input type="checkbox" id="dd-chk1" onchange="checkDDReady()">
-        <label for="dd-chk1">I confirm this tier is <b>still available</b> in my in-game shop and has <b>never been purchased</b> before.</label>
-      </div>
-      <div class="dd-check-item">
-        <input type="checkbox" id="dd-chk2" onchange="checkDDReady()">
-        <label for="dd-chk2">I understand that once purchased, <b>this tier will be gone permanently</b> and cannot be bought again on my account.</label>
-      </div>
-      <div class="dd-check-item">
-        <input type="checkbox" id="dd-chk3" onchange="checkDDReady()">
-        <label for="dd-chk3">I am ordering during an <b>active Double Diamond event</b> or I accept the current pricing.</label>
-      </div>
-    </div>
-    <div class="dd-confirm-btns">
-      <button class="dd-btn-confirm" id="dd-btn-confirm" onclick="confirmDDOrder()">✅ I Understand — Proceed</button>
-      <button class="dd-btn-cancel" onclick="cancelDDOrder()">Cancel — Go Back</button>
-    </div>
-  </div>
-</div>
-
-<button class="notif-bell" onclick="openNotif()" title="May & June Starlight Offers" style="bottom:86px">
-  🔔
-  <div class="notif-badge">2</div>
-</button>
-
-<button class="notif-bell" onclick="openSkins()" title="Upcoming Skins & Pre-Orders"
-  style="background:linear-gradient(135deg,#dc2626,#f97316);box-shadow:0 4px 18px rgba(220,38,38,.5);animation:none">
-  🔥
-  <div class="notif-badge" style="background:#f59e0b">5</div>
-</button>
-
-<div class="notif-overlay" id="notif-overlay" onclick="overlayClick(event)">
-  <div class="notif-sheet" id="notif-sheet">
-    <div class="notif-drag"></div>
-
-    <div class="notif-hdr">
-      <div class="notif-hdr-left">
-        <h3>🌟 Monthly Offers</h3>
-        <p>Special Starlight deals — May & June 2026</p>
-      </div>
-      <button class="notif-close" onclick="closeNotif()">✕</button>
-    </div>
-
-    <div class="notif-warn">
-      <div class="wi">⚠️</div>
-      <p><b>Limited Supply!</b> Only <b>5 slots per month</b> available. These are <b>not own supply</b> — orders go through a gifter. Once slots are full, no more orders until next restock.</p>
-    </div>
-
-    <div class="notif-offers">
-
-      <div class="offer-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8)">
-        <div class="oc-top">
-          <div>
-            <div class="oc-name">⭐ May NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
-            <div class="slots-row">
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <span class="slots-label">5/5 slots taken</span>
-              <span class="avail-tag low" style="background:rgba(100,100,100,.15);border-color:rgba(150,150,150,.3);color:#6b7280">⛔ SOLD OUT</span>
-            </div>
-          </div>
-          <div class="oc-price" style="color:#6b7280;text-decoration:line-through">₱165</div>
-        </div>
-        <div class="oc-sub">No more slots available for May 2026.</div>
-      </div>
-
-      <div class="offer-card" style="border-color:rgba(239,68,68,.4)">
-        <div class="oc-top">
-          <div>
-            <div class="oc-name">⭐ June NSL <span style="font-size:.7rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
-            <div class="slots-row">
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot filled"></div>
-              <div class="slot-dot"></div>
-              <span class="slots-label">4/5 slots taken</span>
-              <span class="avail-tag low"><span class="avail-dot"></span> 1 SLOT LEFT</span>
-            </div>
-          </div>
-          <div class="oc-price">₱160</div>
-        </div>
-        <div class="oc-sub">
-          <b>Normal Starlight</b> for June 2026 · Not own supply<br>
-          Processed via gifter — see delivery info below
-        </div>
-      </div>
-
-    </div>
-
-    <div class="delivery-box">
-      <div class="db-title">📦 How Delivery Works</div>
-      <div class="delivery-row">
-        <div class="dr-ico">⏳</div>
-        <p>Processing takes <b>24–48 hours</b> before the gifter sends your order.</p>
-      </div>
-      <div class="delivery-row">
-        <div class="dr-ico">📅</div>
-        <p>Gifter sends the NSL within <b>8–9 days</b> after payment confirmation.</p>
-      </div>
-      <div class="delivery-row">
-        <div class="dr-ico">🎁</div>
-        <p><b>NSL = Normal Starlight</b> — the monthly in-game pass that gives skins, emotes, and exclusive rewards.</p>
-      </div>
-      <div class="delivery-row">
-        <div class="dr-ico">💳</div>
-        <p>Pay via <b>GCash 9288978005 (Mark Guevarra)</b> after your slot is confirmed.</p>
-      </div>
-    </div>
-
-    <div class="notif-cta">
-      <button class="notif-cta-btn" onclick="goToCustomOrder()">
-        ✏️ Order Here (Custom Request)
-      </button>
-      <div class="notif-cta-note">
-        Tap above → fills out the Custom Order form → Mark confirms your slot within 24hrs
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<style>
-.skin-card{
-  background:var(--dk3);border:1.5px solid rgba(220,38,38,.2);
-  border-radius:12px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden}
-.skin-card::before{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,#dc2626,#f97316)}
-.skin-card .sk-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.skin-card .sk-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.98rem;
-  color:#fca5a5;letter-spacing:.5px;line-height:1.3}
-.skin-card .sk-release{font-size:.65rem;color:var(--mx);margin-top:2px}
-.skin-card .sk-prices{margin-top:9px;display:flex;flex-direction:column;gap:4px}
-.sk-price-row{display:flex;justify-content:space-between;align-items:center;
-  background:rgba(255,255,255,.04);border-radius:6px;padding:5px 10px}
-.sk-price-row .spr-label{font-size:.72rem;color:var(--mx)}
-.sk-price-row .spr-val{font-family:'Rajdhani',sans-serif;font-weight:700;
-  font-size:.95rem;color:var(--or)}
-.sk-price-row .spr-save{font-size:.62rem;color:#4ade80;margin-left:4px}
-.sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;
-  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);
-  border-radius:6px;padding:5px 10px;font-size:.7rem;color:#fbbf24}
-.legend-card{border-color:rgba(251,191,36,.4)!important}
-.legend-card::before{background:linear-gradient(180deg,#f59e0b,#ef4444)!important}
-.legend-card .sk-name{color:#fbbf24!important}
-.legend-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.15);
-  border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:2px 8px;
-  font-size:.62rem;color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:6px;vertical-align:middle}
-.skins-note{margin:4px 18px 14px;background:rgba(239,68,68,.08);
-  border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:9px 13px;
-  font-size:.72rem;color:#fca5a5;line-height:1.6;text-align:center}
-.skins-note b{color:#f87171}
-</style>
-
-<div class="notif-overlay" id="skins-overlay" onclick="skinsOverlayClick(event)">
-  <div class="notif-sheet" id="skins-sheet">
-    <div class="notif-drag"></div>
-
-    <div class="notif-hdr" style="background:linear-gradient(135deg,rgba(220,38,38,.15),rgba(249,115,22,.1));border-color:rgba(220,38,38,.2)">
-      <div class="notif-hdr-left">
-        <h3 style="color:#f87171">🔥 Upcoming Skins & Pre-Orders</h3>
-        <p>Way cheaper than buying diamonds! Secure your slot now.</p>
-      </div>
-      <button class="notif-close" onclick="closeSkins()">✕</button>
-    </div>
-
-    <div style="padding:14px 18px 0">
-
-      <div class="skin-card" onclick="orderSkin('🌑 OBSIDIA (Premium Starlight)','₱420','8th Day of May Release')" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">🌑 OBSIDIA <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
-            <div class="sk-release">Gifting: 8th Day of May Release</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row">
-            <span class="spr-label">Price</span>
-            <span class="spr-val">₱420 <span class="spr-save">Save ₱300+!</span></span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: 8th Day of May Release</div>
-      </div>
-
-      <div class="skin-card" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">🦋 PHARSA ALL-STAR</div>
-            <div class="sk-release">Release: May 17 · Gifting: May 20</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱275','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱275</span>
-          </div>
-          <div class="sk-price-row" onclick="orderSkin('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱410','May 20')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(249,115,22,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱410</span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: May 20</div>
-      </div>
-
-      <div class="skin-card" onclick="orderSkin('♋ KARINA ZODIAC (Original Value: 899 💎)','₱495','May 21')" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">♋ KARINA ZODIAC</div>
-            <div class="sk-release">Release: May 21 · Original Value: 899 💎</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row">
-            <span class="spr-label">Price (Save 400+ in diamonds!)</span>
-            <span class="spr-val">₱495</span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: May 21</div>
-      </div>
-
-      <div class="skin-card" onclick="orderSkin('⚔️ LING ALL-STAR (Original Value: 762 💎)','₱495','June 26')" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">⚔️ LING ALL-STAR</div>
-            <div class="sk-release">Release: June 24 · Original Value: 762 💎</div>
-          </div>
-          <div style="font-size:.7rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0">Tap to Order →</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row">
-            <span class="spr-label">Price</span>
-            <span class="spr-val">₱495</span>
-          </div>
-        </div>
-        <div class="sk-schedule">📅 Gifting Schedule: June 26</div>
-      </div>
-
-      <div class="skin-card legend-card" style="cursor:pointer">
-        <div class="sk-head">
-          <div>
-            <div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div>
-            <div class="sk-release">Original Value: 10,000 💎 — Choose your gifting phase below</div>
-          </div>
-          <div style="font-size:.7rem;color:#f59e0b;font-weight:600;white-space:nowrap;flex-shrink:0">Choose below ↓</div>
-        </div>
-        <div class="sk-prices">
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400','8th Day Gifting Phase')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">8th Day Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱6,400</span>
-          </div>
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250','Phase 2 Gifting')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Phase 2 Gifting <span style="color:#f59e0b;font-size:.62rem">· Tap to order</span></span>
-            <span class="spr-val">₱6,250</span>
-          </div>
-          <div class="sk-price-row" onclick="orderSkin('👑 LEGEND LESLEY — Last Day Gifting (Best Deal!)','₱6,150','Last Day Gifting')" style="cursor:pointer;border:1px solid rgba(245,158,11,.25);transition:background .15s" onmouseover="this.style.background='rgba(245,158,11,.12)'" onmouseout="this.style.background='rgba(255,255,255,.04)'">
-            <span class="spr-label">Last Day Gifting <span style="color:#4ade80;font-size:.62rem">Best deal · Tap to order</span></span>
-            <span class="spr-val" style="color:#fbbf24">₱6,150</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="skins-note">
-      ⚠️ <b>Payment strictly required to reserve your slot!</b><br>
-      These are scheduled gifts — your item is sent on the gifting date listed above.
-    </div>
-
-    <div class="notif-cta">
-      <button class="notif-cta-btn" style="background:linear-gradient(135deg,#dc2626,#f97316)" onclick="goToSkinsOrder()">
-        🔥 Pre-Order / Reserve a Slot
-      </button>
-      <div class="notif-cta-note">
-        Tap above → fills out the Custom Order form → Mark confirms and collects payment
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function showDDFab(){ document.getElementById('dd-warn-fab').classList.add('show'); }
-function hideDDFab(){ document.getElementById('dd-warn-fab').classList.remove('show'); }
-function openDDInfo(){ document.getElementById('dd-info-overlay').classList.add('open'); }
-function closeDDInfo(){
-  document.getElementById('dd-info-overlay').classList.remove('open');
-  hideDDFab();
-}
-
-let pendingDDCard = null;
-function openDDConfirm(card){
-  pendingDDCard = card;
-  document.getElementById('dd-confirm-name').textContent = card.dataset.name;
-  document.getElementById('dd-confirm-price').textContent = '₱' + parseInt(card.dataset.price).toLocaleString('en-PH');
-  document.getElementById('dd-chk1').checked = false;
-  document.getElementById('dd-chk2').checked = false;
-  document.getElementById('dd-chk3').checked = false;
-  document.getElementById('dd-btn-confirm').classList.remove('ready');
-  document.getElementById('dd-confirm-overlay').classList.add('open');
-}
-function checkDDReady(){
-  const all = document.getElementById('dd-chk1').checked &&
-              document.getElementById('dd-chk2').checked &&
-              document.getElementById('dd-chk3').checked;
-  document.getElementById('dd-btn-confirm').classList.toggle('ready', all);
-}
-function cancelDDOrder(){
-  document.getElementById('dd-confirm-overlay').classList.remove('open');
-  if(pendingDDCard){ pendingDDCard.classList.remove('sel'); pendingDDCard=null; }
-}
-function confirmDDOrder(){
-  document.getElementById('dd-confirm-overlay').classList.remove('open');
-  hideDDFab();
-  if(pendingDDCard){
-    document.querySelectorAll('.pcard[data-game="mlbb"]').forEach(c=>c.classList.remove('sel'));
-    pendingDDCard.classList.add('sel');
-    const name = pendingDDCard.dataset.name;
-    const price = parseInt(pendingDDCard.dataset.price);
-    selected.game='mlbb'; selected.item=name; selected.price=price;
-    document.getElementById('mlbb-sel-box').style.display='block';
-    document.getElementById('mlbb-sel-item').textContent=name;
-    document.getElementById('mlbb-sel-price').textContent='₱'+price.toLocaleString('en-PH');
-    document.getElementById('mlbb-order-display').value=name+' — ₱'+price.toLocaleString('en-PH');
-    setTimeout(()=>{
-      document.querySelector('#g-mlbb .oform').scrollIntoView({behavior:'smooth',block:'nearest'});
-    },100);
-    pendingDDCard=null;
+  } catch(e){
+    showErr(err, 'Network error. Please try again.');
   }
+  btn.disabled = false; btn.textContent = game === 'custom' ? '🛎️ Send Custom Request' : 'Submit Order';
 }
 
-function openNotif(){
-  document.getElementById('notif-overlay').classList.add('open');
-  document.querySelector('.notif-bell[onclick="openNotif()"] .notif-badge').style.display='none';
-}
-function closeNotif(){ document.getElementById('notif-overlay').classList.remove('open'); }
-function overlayClick(e){ if(e.target===document.getElementById('notif-overlay')) closeNotif(); }
+function showErr(el, msg){ el.textContent = msg; el.style.display = 'block'; }
 
-function openSkins(){
-  document.getElementById('skins-overlay').classList.add('open');
-  document.querySelector('.notif-bell[onclick="openSkins()"] .notif-badge').style.display='none';
+function toBase64(file){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
 }
-function closeSkins(){ document.getElementById('skins-overlay').classList.remove('open'); }
-function skinsOverlayClick(e){ if(e.target===document.getElementById('skins-overlay')) closeSkins(); }
 
-function goToCustomOrder(){
-  closeNotif();
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
+function resetAll(){
+  document.getElementById('ok-msg').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ============================================================
+// PREFILL CUSTOM ORDER (for promo buttons)
+// ============================================================
+function prefillCustom(desc){
+  // Switch to custom tab
+  document.querySelectorAll('.gtab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.gpanel').forEach(p => p.classList.remove('active'));
   document.querySelector('.gtab[data-g="custom"]').classList.add('active');
   document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value='Monthly Starlight (NSL) — [June / July 2026]\nQuantity: ';
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-desc').focus();
-  },200);
+  // Pre-fill game + description
+  document.getElementById('custom-game').value = 'Mobile Legends (MLBB)';
+  document.getElementById('custom-desc').value = desc;
+  // Make sure MLBB cat is highlighted
+  document.querySelectorAll('.custom-cat').forEach(c => c.classList.remove('active'));
+  document.querySelector('.custom-cat[data-cc="Mobile Legends (MLBB)"]').classList.add('active');
+  setTimeout(() => document.getElementById('g-custom').scrollIntoView({behavior:'smooth'}), 100);
 }
 
-function goToSkinsOrder(){
-  closeSkins();
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value='Skin Pre-Order\nSkin Name: \nVersion (if applicable): Normal / Premium\nGifting Phase (for Legend): ';
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-desc').focus();
-  },200);
-}
-
-function orderSkin(skinName, price, schedule){
-  closeSkins();
-  document.querySelectorAll('.gtab').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(x=>x.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  document.getElementById('ok-msg').style.display='none';
-  document.getElementById('custom-game').value='Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value=
-    'Skin Pre-Order\n' +
-    'Skin: ' + skinName + '\n' +
-    'Price: ' + price + '\n' +
-    'Gifting Schedule: ' + schedule;
-  document.getElementById('custom-budget').value=price;
-  setTimeout(()=>{
-    document.getElementById('g-custom').scrollIntoView({behavior:'smooth',block:'start'});
-    document.getElementById('custom-name').focus();
-  },200);
-}
+// ============================================================
+// INIT
+// ============================================================
+buildAll();
 </script>
 </body>
 </html>
