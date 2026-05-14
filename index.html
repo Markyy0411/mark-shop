@@ -705,7 +705,9 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <div class="ok-msg" id="ok-msg">
   <div class="ok-ico">✅</div>
   <h4>ORDER SUBMITTED!</h4>
-  <p>Your order has been received. Wait for Mark to confirm, then send payment. Thank you! 🎮</p>
+  <div id="receipt-summary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--dk5); border-radius: 10px; padding: 15px; margin: 15px 0; text-align: left; font-size: 0.9rem;">
+  </div>
+  <p style="font-size: 0.85rem; color: var(--mx);">Your order and receipt have been received. Wait for Mark to confirm. Thank you! 🎮</p>
   <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
 </div>
 
@@ -1175,18 +1177,28 @@ async function submitOrder(game) {
             orderHistory.push(Date.now());
             localStorage.setItem('markShopHistory', JSON.stringify(orderHistory));
             
+            // 🧾 INJECT RECEIPT DETAILS FOR THE USER
+            const receiptDiv = document.getElementById('receipt-summary');
+            receiptDiv.innerHTML = `
+              <div style="color: var(--or); font-weight: bold; border-bottom: 1px solid var(--dk5); padding-bottom: 5px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+                <span>Receipt Summary</span> <span>${fields.transactionID}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: var(--mx);">Item:</span> <span>${fields.order || fields.orderDescription}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="color: var(--mx);">Price:</span> <span style="color: #fbbf24; font-weight: bold;">${selected.price || 'Check Email'}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--mx);">Account:</span> <span>${fields.ign || fields.customerName || fields.username || 'Verified'}</span>
+              </div>
+            `;
+
             document.querySelector(`#g-${game}`).style.display = 'none';
             document.querySelector('.gtabs').style.display = 'none';
             document.getElementById('ok-msg').style.display = 'block';
             window.scrollTo(0,0);
-          } else { 
-            throw new Error(responseText); // Will catch specific errors like "Bot detected"
           }
-        } catch(err) {
-          errEl.textContent = '❌ Upload failed: ' + err.message;
-          errEl.style.display = 'block';
-          btn.disabled = false; btn.textContent = 'Submit Order';
-        }
 
       });
     });
