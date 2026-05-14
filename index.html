@@ -1150,7 +1150,7 @@ async function submitOrder(game) {
     return;
   }
 
- const reader = new FileReader();
+const reader = new FileReader();
   reader.onload = function(e) {
     fields.fileData = e.target.result.split(',')[1];
     fields.mimeType = file.type;
@@ -1179,18 +1179,23 @@ async function submitOrder(game) {
             
             // 🧾 INJECT RECEIPT DETAILS FOR THE USER
             const receiptDiv = document.getElementById('receipt-summary');
+            
+            // Extract the price dynamically from the order box
+            const orderDisp = document.getElementById(game + '-order-display').value || '';
+            const priceExtracted = orderDisp.includes('—') ? orderDisp.split('—')[1].trim() : 'Check Email';
+
             receiptDiv.innerHTML = `
               <div style="color: var(--or); font-weight: bold; border-bottom: 1px solid var(--dk5); padding-bottom: 5px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-                <span>Receipt Summary</span> <span>${fields.transactionID}</span>
+                <span>Receipt Summary</span> <span style="font-family: monospace; color: #a78bfa;">${fields.transactionID}</span>
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="color: var(--mx);">Item:</span> <span>${fields.order || fields.orderDescription}</span>
+                <span style="color: var(--mx);">Item:</span> <span style="text-align: right;">${fields.order || fields.orderDescription}</span>
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="color: var(--mx);">Price:</span> <span style="color: #fbbf24; font-weight: bold;">${selected.price || 'Check Email'}</span>
+                <span style="color: var(--mx);">Price:</span> <span style="color: #fbbf24; font-weight: bold;">${priceExtracted}</span>
               </div>
               <div style="display: flex; justify-content: space-between;">
-                <span style="color: var(--mx);">Account:</span> <span>${fields.ign || fields.customerName || fields.username || 'Verified'}</span>
+                <span style="color: var(--mx);">Account:</span> <span>${fields.ign || fields.customerName || fields.username || fields.mobileNumber || 'Verified'}</span>
               </div>
             `;
 
@@ -1198,7 +1203,14 @@ async function submitOrder(game) {
             document.querySelector('.gtabs').style.display = 'none';
             document.getElementById('ok-msg').style.display = 'block';
             window.scrollTo(0,0);
+          } else { 
+            throw new Error(responseText); // Will catch specific errors like "Bot detected"
           }
+        } catch(err) {
+          errEl.textContent = '❌ Order failed: ' + err.message;
+          errEl.style.display = 'block';
+          btn.disabled = false; btn.textContent = 'Submit Order';
+        }
 
       });
     });
