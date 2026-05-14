@@ -225,27 +225,26 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </style>
 </head>
 <body>
-  <div id="auth-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
-    <div style="margin-bottom: 20px; font-size: 2.5rem; color: white; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">MARK'S <span style="color: var(--accent);">SHOP</span></div>
+ <div id="auth-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dk2); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+    <div style="margin-bottom: 20px; font-size: 2.5rem; color: white; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">MARK'S <span style="color: var(--or);">SHOP</span></div>
     
-    <div style="background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-      <h3 style="color: var(--text-main); margin-bottom: 10px;">Welcome Back, Player!</h3>
-      <p style="color: var(--text-dim); margin-bottom: 25px; font-size: 0.9rem;">Login to access the fastest top-up shop.</p>
+    <div style="background: var(--dk3); padding: 30px; border-radius: 12px; border: 1px solid var(--dk5); width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+      <h3 style="color: #fbbf24; margin-bottom: 10px;">Welcome Back, Player!</h3>
+      <p style="color: var(--mx); margin-bottom: 25px; font-size: 0.9rem;">Login to access the fastest top-up shop.</p>
 
       <div class="fg">
-        <input type="text" id="auth-user" placeholder="Create a Username" style="text-align: center; font-size: 1rem; width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--input-brd); color: white; border-radius: 6px; margin-bottom: 10px;">
+        <input type="text" id="auth-user" placeholder="Create a Username" style="text-align: center; font-size: 1rem; width: 100%; padding: 12px; background: var(--dk4); border: 1px solid var(--dk5); color: var(--tx); border-radius: 8px; margin-bottom: 10px; outline: none;">
       </div>
       <div class="fg">
-        <input type="password" id="auth-pass" placeholder="Password" style="text-align: center; font-size: 1rem; width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--input-brd); color: white; border-radius: 6px; margin-bottom: 15px;">
+        <input type="password" id="auth-pass" placeholder="Password" style="text-align: center; font-size: 1rem; width: 100%; padding: 12px; background: var(--dk4); border: 1px solid var(--dk5); color: var(--tx); border-radius: 8px; margin-bottom: 15px; outline: none;">
       </div>
 
-      <button id="btn-login" onclick="handleAuth('login')" class="btn" style="width: 100%; margin-bottom: 12px; font-size: 1rem; background: var(--accent); color: var(--bg); font-weight: 700;">Login to Shop</button>
-      <button id="btn-register" onclick="handleAuth('register')" style="width: 100%; padding: 14px; border-radius: 6px; background: transparent; color: var(--accent); border: 1px solid var(--accent); cursor: pointer; font-weight: bold; transition: 0.2s;">Create Account</button>
+      <button id="btn-login" onclick="handleAuth('login')" class="btn-sub" style="margin-bottom: 12px;">Login to Shop</button>
+      <button id="btn-register" onclick="handleAuth('register')" style="width: 100%; padding: 12px; border-radius: 8px; background: transparent; color: var(--or); border: 1px solid var(--or); cursor: pointer; font-weight: 600; transition: 0.2s;">Create Account</button>
       
       <div id="auth-error" style="color: #ef4444; margin-top: 15px; font-size: 0.85rem; display: none; font-weight: bold;"></div>
     </div>
   </div>
-
 <!-- ── HEADER ── -->
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
