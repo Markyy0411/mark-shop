@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mark Guevarra | Game Top-Up Shop</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.google.com/recaptcha/api.js?render=6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR"></script>
 <style>
 :root{
   --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
@@ -16,11 +17,31 @@ html{scroll-behavior:smooth}
 body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-height:100vh;
   background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
   radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
+
+/* ── HEADER ── */
 .hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
-  border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
+  border-bottom:1px solid rgba(249,115,22,.25);padding:10px 16px;text-align:center;
   position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
 .hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:var(--or);letter-spacing:3px;text-transform:uppercase}
 .hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
+.hdr-badges{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+
+/* ── ONLINE INDICATOR ── */
+.status-pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;
+  padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:.2s}
+.status-pill.online{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80}
+.status-pill.offline{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
+.status-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.status-pill.online .status-dot{animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+
+/* ── TRACK ORDER BUTTON ── */
+.track-btn{display:inline-flex;align-items:center;gap:5px;border-radius:20px;
+  padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;cursor:pointer;
+  background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);color:#a78bfa;transition:.2s}
+.track-btn:hover{background:rgba(167,139,250,.2)}
+
+/* ── GAME TABS ── */
 .gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
 .gtabs::-webkit-scrollbar{display:none}
 .gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
@@ -30,6 +51,8 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .gtab.custom-tab:hover{color:#c4b5fd;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.05)}
 .gtab.custom-tab.active{color:#a78bfa;border-color:rgba(167,139,250,.6);border-bottom-color:var(--dk);background:var(--dk)}
 .gtab .ico{font-size:1rem}
+
+/* ── MAIN ── */
 .main{padding:14px;max-width:580px;margin:0 auto}
 .gpanel{display:none}.gpanel.active{display:block}
 .ctabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
@@ -40,7 +63,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .ctab.promo-tab:hover{border-color:#f87171;color:#fca5a5}
 .ctab.promo-tab.active{background:#dc2626;border-color:#dc2626;color:#fff}
 .ctab.sl-tab{color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.06)}
-.ctab.sl-tab:hover{border-color:#fbbf24;color:#fde68a}
 .ctab.sl-tab.active{background:#d97706;border-color:#d97706;color:#fff}
 .cpanel{display:none}.cpanel.active{display:block}
 .slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);padding-left:8px;margin-bottom:10px;margin-top:6px}
@@ -85,9 +107,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:22px;text-align:center;margin-top:12px}
 .ok-msg .ok-ico{font-size:2.5rem;margin-bottom:8px}
 .ok-msg h4{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--gr);letter-spacing:2px}
-.ok-msg p{font-size:.8rem;color:var(--mx);margin-top:6px;line-height:1.5}
 .err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
-/* PAYMENT */
+.loading-grid{grid-column:1/-1;text-align:center;padding:20px;color:var(--mx);font-size:.8rem}
+
+/* ── PAYMENT ── */
 .pm-methods{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .pm-btn{flex:1;min-width:65px;text-align:center;padding:10px 5px;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--mx);transition:.2s}
 .pm-btn.active{background:rgba(249,115,22,.1);border-color:var(--or);color:var(--or)}
@@ -95,10 +118,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .pm-row{display:flex;justify-content:space-between;margin-bottom:5px;color:#fff;font-family:monospace;font-size:.95rem}
 .pm-row span:first-child{color:var(--mx);font-family:'Exo 2',sans-serif;font-size:.8rem}
 .btn-reveal,.btn-qr{width:100%;padding:10px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.85rem;margin-top:8px;transition:.2s}
-.btn-reveal{background:var(--dk5);color:#fff}
-.btn-reveal:hover{background:var(--dk3)}
+.btn-reveal{background:var(--dk5);color:#fff}.btn-reveal:hover{background:var(--dk3)}
 .btn-qr{background:rgba(59,130,246,.1);color:var(--bl);border:1px solid rgba(59,130,246,.3)}
-/* PROMO CARDS */
+
+/* ── PROMO CARDS ── */
 .promo-section-lbl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;padding:6px 10px;border-radius:6px;margin-bottom:10px;margin-top:4px;display:flex;align-items:center;gap:7px}
 .promo-section-lbl.red{color:#f87171;background:rgba(239,68,68,.08);border-left:3px solid #dc2626}
 .promo-section-lbl.gold{color:#fbbf24;background:rgba(251,191,36,.08);border-left:3px solid #d97706}
@@ -106,7 +129,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .warn-box .wi{font-size:1rem;flex-shrink:0;margin-top:1px}
 .warn-box p{font-size:.74rem;color:#fca5a5;line-height:1.6}
 .warn-box b{color:#f87171}
-/* SKIN PROMO CARD */
 .skin-card{background:var(--dk3);border:1.5px solid rgba(220,38,38,.22);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
 .skin-card:hover{border-color:rgba(220,38,38,.5);transform:translateY(-1px);box-shadow:0 4px 16px rgba(239,68,68,.12)}
 .skin-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#dc2626,#f97316)}
@@ -126,7 +148,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .spr-save{font-size:.62rem;color:#4ade80;margin-left:4px}
 .sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:5px 10px;font-size:.69rem;color:#fbbf24}
 .legend-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:1px 7px;font-size:.6rem;color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:5px;vertical-align:middle}
-/* STARLIGHT CARDS */
 .sl-card{background:var(--dk3);border:1.5px solid rgba(251,191,36,.18);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
 .sl-card:hover{border-color:rgba(251,191,36,.45);transform:translateY(-1px)}
 .sl-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#f59e0b,#f97316)}
@@ -139,18 +160,16 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .slot-dot.filled{background:#f59e0b;border-color:#f59e0b}
 .slots-lbl{font-size:.67rem;color:var(--mx)}
 .avail-tag{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 8px;font-size:.64rem;font-weight:700;letter-spacing:.4px}
-.avail-tag.avail{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80}
 .avail-tag.low{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
-.avail-tag.sold{background:rgba(100,100,100,.1);border:1px solid rgba(100,100,100,.25);color:#6b7280}
 .avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:blink 1.2s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
 .delivery-box{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:10px;padding:12px 14px;margin:12px 0}
 .delivery-box .db-ttl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.8rem;color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
 .db-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
 .db-row .dr-i{flex-shrink:0;font-size:.88rem}
 .db-row p{font-size:.72rem;color:var(--mx);line-height:1.5}
 .db-row p b{color:var(--tx)}
-/* CUSTOM */
+
+/* ── CUSTOM ORDER ── */
 .custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
 .custom-hero h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:#a78bfa;letter-spacing:2px;text-transform:uppercase}
 .custom-hero p{font-size:.78rem;color:var(--mx);margin-top:6px;line-height:1.6}
@@ -167,22 +186,61 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .oform.custom-form h3{color:#a78bfa}
 .btn-sub.custom-btn{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
 .btn-sub.custom-btn:hover{background:linear-gradient(135deg,#6d28d9,#9b7af0);box-shadow:0 5px 20px rgba(139,92,246,.35)}
-/* MODALS */
+
+/* ── MODALS ── */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.82);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
-.modal-box{background:var(--dk2);border:1px solid var(--dk5);border-radius:16px;padding:20px;width:90%;max-width:350px;text-align:center}
+.modal-box{background:var(--dk2);border:1px solid var(--dk5);border-radius:16px;padding:20px;width:90%;max-width:380px;text-align:center}
 .dd-warning-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.35);border-radius:12px;padding:16px;margin-bottom:14px;text-align:left}
 .dd-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
 .dd-check input[type=checkbox]{width:17px;height:17px;accent-color:var(--or);flex-shrink:0;margin-top:2px}
 .dd-check span{font-size:.78rem;color:#fca5a5;line-height:1.5}
-.loading-grid{grid-column:1/-1;text-align:center;padding:20px;color:var(--mx);font-size:.8rem}
+
+/* ── ORDER TRACKER MODAL ── */
+.tracker-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.tracker-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.tracker-circle.done{background:var(--gr);color:#fff}
+.tracker-circle.pending{background:var(--or);color:#fff}
+.tracker-circle.wait{background:var(--dk5);color:var(--mx)}
+.tracker-line{width:2px;height:20px;background:var(--dk5);margin-left:13px;margin-bottom:-8px}
+.tracker-info{font-size:.8rem;color:var(--tx);padding-top:4px}
+.tracker-info small{color:var(--mx);font-size:.7rem}
+
+/* ── PHASE 1: LIVE PURCHASE TOAST ── */
+.purchase-toast{position:fixed;bottom:22px;left:16px;z-index:990;
+  background:var(--dk2);border:1px solid rgba(34,197,94,.3);border-radius:12px;
+  padding:10px 14px;max-width:220px;box-shadow:0 6px 24px rgba(0,0,0,.5);
+  animation:slideInLeft .4s ease;display:none}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+.toast-row{display:flex;align-items:center;gap:8px}
+.toast-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--or),#fbbf24);
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.toast-body{flex:1;min-width:0}
+.toast-body .tb-who{font-size:.7rem;color:var(--mx)}
+.toast-body .tb-item{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;color:var(--tx);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast-body .tb-price{font-size:.7rem;color:var(--gr);font-weight:600}
+.toast-dismiss{position:absolute;top:4px;right:6px;background:none;border:none;color:var(--mx);cursor:pointer;font-size:.8rem;line-height:1}
+
+@media(max-width:380px){.pgrid{grid-template-columns:1fr}.netgrid{grid-template-columns:1fr 1fr}}
 </style>
-  <script src="https://www.google.com/recaptcha/api.js?render=6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR"></script>
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
   <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
+  <div class="hdr-badges">
+    <!-- PHASE 1 FEATURE 1: Online/Offline indicator -->
+    <div class="status-pill" id="status-pill" onclick="document.getElementById('status-modal').style.display='flex'" title="Click for details">
+      <span class="status-dot"></span>
+      <span id="status-text">Checking…</span>
+    </div>
+    <!-- PHASE 1 FEATURE 2: Track Order button -->
+    <div class="track-btn" onclick="document.getElementById('tracker-modal').style.display='flex'">
+      🔍 Track Order
+    </div>
+  </div>
 </div>
 
 <div class="gtabs">
@@ -213,15 +271,11 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 
   <!-- 🔥 PROMOS PANEL -->
   <div class="cpanel" id="mlbb-promos">
-
-    <!-- STARLIGHT OFFERS -->
     <div class="promo-section-lbl gold">🌟 Monthly Starlight Offers</div>
     <div class="warn-box">
       <div class="wi">⚠️</div>
-      <p><b>Limited Supply — 5 slots per month only!</b> These are <b>not own supply</b> — orders go through a gifter. Secure your slot early!</p>
+      <p><b>Limited Supply — 5 slots per month only!</b> Not own supply — orders go through a gifter. Secure your slot early!</p>
     </div>
-
-    <!-- June NSL -->
     <div class="sl-card" onclick="promoSelectItem('⭐ June NSL (Normal Starlight)','₱160')">
       <div class="sl-head">
         <div>
@@ -238,7 +292,6 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div class="sl-sub"><b>Normal Starlight</b> for June 2026 · Sent via gifter<br>
         <span style="color:#4ade80;font-size:.67rem">↓ Tap to fill order form below</span></div>
     </div>
-
     <div class="delivery-box">
       <div class="db-ttl">📦 How Delivery Works</div>
       <div class="db-row"><div class="dr-i">⏳</div><p>Processing takes <b>24–48 hours</b> before the gifter sends.</p></div>
@@ -246,79 +299,50 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div class="db-row"><div class="dr-i">🎁</div><p><b>NSL</b> = Normal Starlight — monthly pass with exclusive skins, emotes & rewards.</p></div>
       <div class="db-row"><div class="dr-i">💳</div><p>Pay only after Mark confirms your slot.</p></div>
     </div>
-
-    <!-- UPCOMING SKINS -->
     <div class="promo-section-lbl red">🔥 Upcoming Skins & Pre-Orders</div>
     <div style="font-size:.73rem;color:var(--mx);margin-bottom:11px">Way cheaper than buying diamonds! Tap any skin to fill the order form below.</div>
-
-    <!-- OBSIDIA -->
     <div class="skin-card" onclick="promoSelectItem('🌑 OBSIDIA (Premium Starlight)','₱420')">
       <div class="sk-head">
-        <div><div class="sk-name">🌑 OBSIDIA <span style="font-size:.7rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
-          <div class="sk-sub">8th Day of May Release Gifting</div></div>
+        <div><div class="sk-name">🌑 OBSIDIA <span style="font-size:.7rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div><div class="sk-sub">8th Day of May Release Gifting</div></div>
         <span class="sk-tap">Tap to Order</span>
       </div>
       <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱420 <span class="spr-save">Save ₱300+!</span></span></div></div>
       <div class="sk-schedule">📅 Gifting: 8th Day of May Release</div>
     </div>
-
-    <!-- PHARSA ALL-STAR -->
     <div class="skin-card">
       <div class="sk-head">
-        <div><div class="sk-name">🦋 PHARSA ALL-STAR</div>
-          <div class="sk-sub">Release: May 17 · Gifting: May 20</div></div>
+        <div><div class="sk-name">🦋 PHARSA ALL-STAR</div><div class="sk-sub">Release: May 17 · Gifting: May 20</div></div>
         <span class="sk-tap">Choose below ↓</span>
       </div>
       <div class="sk-prices">
         <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱249')">
-          <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span>
-          <span class="spr-val">₱249</span>
+          <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span><span class="spr-val">₱249</span>
         </div>
         <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱399')">
-          <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span>
-          <span class="spr-val">₱399</span>
+          <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span><span class="spr-val">₱399</span>
         </div>
       </div>
       <div class="sk-schedule">📅 Gifting: May 20</div>
     </div>
-
-    <!-- KARINA ZODIAC -->
     <div class="skin-card" onclick="promoSelectItem('♋ KARINA ZODIAC (899 💎)','₱499')">
       <div class="sk-head">
-        <div><div class="sk-name">♋ KARINA ZODIAC</div>
-          <div class="sk-sub">Release: May 21 · Original Value: 899 💎 (~₱850)</div></div>
+        <div><div class="sk-name">♋ KARINA ZODIAC</div><div class="sk-sub">Release: May 21 · Original Value: 899 💎 (~₱850)</div></div>
         <span class="sk-tap">Tap to Order</span>
       </div>
       <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price <span class="spr-save">Save 400+ in diamonds!</span></span><span class="spr-val">₱499</span></div></div>
       <div class="sk-schedule">📅 Gifting: May 21</div>
     </div>
-
-    <!-- LING ALL-STAR -->
     <div class="skin-card" onclick="promoSelectItem('⚔️ LING ALL-STAR (762 💎)','₱489')">
       <div class="sk-head">
-        <div><div class="sk-name">⚔️ LING ALL-STAR</div>
-          <div class="sk-sub">Release: June 24 · Original Value: ~749 💎 (~₱710)</div></div>
+        <div><div class="sk-name">⚔️ LING ALL-STAR</div><div class="sk-sub">Release: June 24 · Original Value: ~762 💎 (~₱720)</div></div>
         <span class="sk-tap">Tap to Order</span>
       </div>
       <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱489</span></div></div>
       <div class="sk-schedule">📅 Gifting: June 26</div>
     </div>
-
-    <!-- MARTIS EPIC -->
-    <div class="skin-card" onclick="promoSelectItem('🔴 MARTIS EPIC — Wild Renegade (899 💎)','₱549')">
-      <div class="sk-head">
-        <div><div class="sk-name">🔴 MARTIS EPIC <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Wild Renegade)</span></div>
-          <div class="sk-sub">Original Value: 899 💎 (~₱850)</div></div>
-        <span class="sk-tap">Tap to Order</span>
-      </div>
-      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱549</span></div></div>
-    </div>
-
-    <!-- LEGEND LESLEY -->
     <div class="skin-card gold-card">
       <div class="sk-head">
-        <div><div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div>
-          <div class="sk-sub">Original Value: 10,000 💎 — Choose your gifting phase</div></div>
+        <div><div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div><div class="sk-sub">Original Value: 10,000 💎 — Choose your gifting phase</div></div>
         <span class="sk-tap" style="color:#fbbf24;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)">Choose ↓</span>
       </div>
       <div class="sk-prices">
@@ -334,88 +358,45 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       </div>
       <div class="sk-schedule">⚠️ Payment required to reserve slot! Sent on gifting date.</div>
     </div>
-
     <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.22);border-radius:8px;padding:9px 13px;font-size:.72rem;color:#fca5a5;line-height:1.6;text-align:center;margin-bottom:6px">
       ⚠️ <b>Tap any skin above</b> → fills the order form below → submit → Mark confirms your slot.
     </div>
   </div>
 
-  <!-- Diamonds -->
-  <div class="cpanel active" id="mlbb-dias">
-    <div class="slbl">Direct Top-Up Diamonds (PH Server)</div>
-    <div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading prices…</div></div>
-  </div>
-  <div class="cpanel" id="mlbb-denom">
-    <div class="slbl">Denomination Diamonds (Single Purchase)</div>
-    <div class="pgrid" id="grid-mlbb-denom"><div class="loading-grid">Loading prices…</div></div>
-  </div>
-  <div class="cpanel" id="mlbb-combo">
-    <div class="slbl">Diamond Denomination Combinations</div>
-    <div class="alert-box">💡 Multiple denomination purchases to hit the exact count at a better rate.</div>
-    <div class="pgrid" id="grid-mlbb-combo"><div class="loading-grid">Loading prices…</div></div>
-  </div>
+  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading prices…</div></div></div>
+  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds</div><div class="pgrid" id="grid-mlbb-denom"><div class="loading-grid">Loading prices…</div></div></div>
+  <div class="cpanel" id="mlbb-combo"><div class="slbl">Diamond Combinations</div><div class="alert-box">💡 Multiple denomination purchases to hit the exact count at a better rate.</div><div class="pgrid" id="grid-mlbb-combo"><div class="loading-grid">Loading prices…</div></div></div>
   <div class="cpanel" id="mlbb-dd">
-    <div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div>
+    <div class="slbl">Double Diamond Tier (2x Bonus)</div>
     <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);border-radius:12px;padding:14px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <span style="font-size:1.2rem">🚫</span>
-        <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span>
-      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:1.2rem">🚫</span><span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span></div>
       <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">Each Double Diamond tier can only be purchased <b style="color:#f87171">ONCE per account</b>. If already bought, <b style="color:#f87171">it will NOT appear</b> in your shop again.</div>
-      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px">
-        <span>💡</span>
-        <span style="font-size:.71rem;color:#fca5a5">During Double Diamond events you get <b style="color:#fff">2x the listed diamonds</b> — only if the tier is still available on your account.</span>
-      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px"><span>💡</span><span style="font-size:.71rem;color:#fca5a5">During Double Diamond events you get <b style="color:#fff">2x the listed diamonds</b> — only if the tier is still available on your account.</span></div>
     </div>
     <div class="pgrid" id="grid-mlbb-dd"><div class="loading-grid">Loading prices…</div></div>
   </div>
-  <div class="cpanel" id="mlbb-bundles">
-    <div class="slbl">Bundles & Weekly Diamond Pass</div>
-    <div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid">Loading prices…</div></div>
-  </div>
+  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & Weekly Diamond Pass</div><div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid">Loading prices…</div></div></div>
   <div class="cpanel" id="mlbb-skins">
-    <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div>
-    <div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid">Loading prices…</div></div>
-    <div class="slbl">Skin Direct Purchase Pricing</div>
-    <div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading prices…</div></div>
+    <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div><div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid">Loading prices…</div></div>
+    <div class="slbl">Skin Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading prices…</div></div>
   </div>
-  <!-- STARLIGHT — March/April removed; only current entries from sheet -->
-  <div class="cpanel" id="mlbb-starlight">
-    <div class="slbl">Starlight Passes — May 2026</div>
-    <div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading prices…</div></div>
-  </div>
+  <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading prices…</div></div></div>
 
-  <!-- MLBB ORDER FORM -->
   <div class="oform" id="mlbb-oform">
     <h3>📋 Place Order</h3>
-    <div class="sel-box" id="mlbb-sel-box" style="display:none">
-      <div class="sl">Selected Item</div>
-      <div class="sv" id="mlbb-sel-item">—</div>
-      <div class="sp" id="mlbb-sel-price"></div>
-    </div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label>
-      <input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
+    <div class="sel-box" id="mlbb-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="mlbb-sel-item">—</div><div class="sp" id="mlbb-sel-price"></div></div>
+    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
     <div class="fg">
-      <label>Player ID <span class="req">*</span>
-        <span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400" onclick="openIDModal()">Help finding ID?</span>
-      </label>
+      <label>Player ID <span class="req">*</span><span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400" onclick="openIDModal()">Help finding ID?</span></label>
       <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
     </div>
     <div class="fg">
       <label>Zone ID <span class="req">*</span></label>
-      <div style="display:flex;gap:8px">
-        <input type="text" id="mlbb-zid" placeholder="1234" style="flex:1">
-        <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
-      </div>
+      <div style="display:flex;gap:8px"><input type="text" id="mlbb-zid" placeholder="1234" style="flex:1"><button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
     </div>
-    <div class="fg">
-      <label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold">
-    </div>
-    <div class="fg"><label>Server</label>
-      <select id="mlbb-server"><option>PH Server</option><option>Other</option></select></div>
-    <div class="fg"><label>Notes (optional)</label>
-      <textarea id="mlbb-notes" placeholder="Any special requests or notes…"></textarea></div>
+    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
+    <div class="fg"><label>Server</label><select id="mlbb-server"><option>PH Server</option><option>Other</option></select></div>
+    <div class="fg"><label>Notes (optional)</label><textarea id="mlbb-notes" placeholder="Any special requests or notes…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
       <input type="hidden" id="pm-val-mlbb">
@@ -434,8 +415,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-mlbb" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="mlbb-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="mlbb-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
   </div>
@@ -447,41 +427,18 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <div class="pgrid" id="grid-cod"><div class="loading-grid">Loading prices…</div></div>
   <div class="oform" id="cod-oform">
     <h3>📋 Place Order</h3>
-    <div class="sel-box" id="cod-sel-box" style="display:none">
-      <div class="sl">Selected Item</div><div class="sv" id="cod-sel-item">—</div><div class="sp" id="cod-sel-price"></div>
+    <div class="sel-box" id="cod-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="cod-sel-item">—</div><div class="sp" id="cod-sel-price"></div></div>
+    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
+    <div class="fg"><label>Player ID (UID) <span class="req">*</span></label>
+      <div style="display:flex;gap:8px"><input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1"><button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
     </div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label>
-      <input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
-    <div class="fg">
-      <label>Player ID (UID) <span class="req">*</span></label>
-      <div style="display:flex;gap:8px">
-        <input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1">
-        <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
-      </div>
-    </div>
-    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
+    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="cod-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg">
-      <label>Payment Method <span class="req">*</span></label>
-      <input type="hidden" id="pm-val-cod">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div>
-        <div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div>
-      </div>
-      <div class="pm-details" id="pm-details-cod">
-        <div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR Code</button>
-        <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
-      </div>
+    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-cod">
+      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div></div>
+      <div class="pm-details" id="pm-details-cod"><div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div><div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR Code</button><div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
   </div>
@@ -493,54 +450,27 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <div class="pgrid" id="grid-roblox"><div class="loading-grid">Loading prices…</div></div>
   <div class="oform" id="roblox-oform">
     <h3>📋 Place Order</h3>
-    <div class="sel-box" id="roblox-sel-box" style="display:none">
-      <div class="sl">Selected Item</div><div class="sv" id="roblox-sel-item">—</div><div class="sp" id="roblox-sel-price"></div>
-    </div>
-    <div class="fg"><label>Order / Robux Amount <span class="req">*</span></label>
-      <input type="text" id="roblox-order-display" placeholder="Select an amount above first" readonly></div>
-    <div style="background-color: rgba(249, 115, 22, 0.1); border-left: 4px solid var(--or); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
-      <div style="color: #fbbf24; font-weight: bold; font-size: 0.9rem; margin-bottom: 6px;">
-        ⚠️ IMPORTANT ROBLOX RULES
-      </div>
-      <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: #d1d5db; line-height: 1.5;">
+    <div class="sel-box" id="roblox-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="roblox-sel-item">—</div><div class="sp" id="roblox-sel-price"></div></div>
+    <div class="fg"><label>Order / Robux Amount <span class="req">*</span></label><input type="text" id="roblox-order-display" placeholder="Select an amount above first" readonly></div>
+    <div style="background:rgba(249,115,22,.1);border-left:4px solid var(--or);padding:12px;border-radius:8px;margin-bottom:16px">
+      <div style="color:#fbbf24;font-weight:bold;font-size:.9rem;margin-bottom:6px">⚠️ IMPORTANT ROBLOX RULES</div>
+      <ul style="margin:0;padding-left:20px;font-size:.85rem;color:#d1d5db;line-height:1.5">
         <li><strong>Non-Covered Tax:</strong> Your order will be deducted <strong>30%</strong> by Roblox due to marketplace tax.</li>
-        <li><strong>Regional Pricing:</strong> Always make sure <strong>Regional Pricing is DISABLED</strong> on your Gamepass before submitting your order.</li>
+        <li><strong>Regional Pricing:</strong> Make sure <strong>Regional Pricing is DISABLED</strong> on your Gamepass before submitting.</li>
       </ul>
     </div>
-    <div class="fg"><label>Gamepass ID <span class="req">*</span></label>
-      <input type="text" id="roblox-gpid" placeholder="Your Roblox Gamepass ID"></div>
-    <div class="fg"><label>Gamepass Name <span class="req">*</span></label>
-      <input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
-    <div class="fg">
-      <label>Roblox Username <span class="req">*</span></label>
-      <div style="display:flex;gap:8px">
-        <input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1">
-        <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
-      </div>
+    <div class="fg"><label>Gamepass ID <span class="req">*</span></label><input type="text" id="roblox-gpid" placeholder="Your Roblox Gamepass ID"></div>
+    <div class="fg"><label>Gamepass Name <span class="req">*</span></label><input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
+    <div class="fg"><label>Roblox Username <span class="req">*</span></label>
+      <div style="display:flex;gap:8px"><input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1"><button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
     </div>
-    <div class="fg"><label>Display Name (Auto-fill)</label>
-      <input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
+    <div class="fg"><label>Display Name (Auto-fill)</label><input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="roblox-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg">
-      <label>Payment Method <span class="req">*</span></label>
-      <input type="hidden" id="pm-val-roblox">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div>
-      </div>
-      <div class="pm-details" id="pm-details-roblox">
-        <div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR Code</button>
-        <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
-      </div>
+    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-roblox">
+      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div></div>
+      <div class="pm-details" id="pm-details-roblox"><div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div><div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR Code</button><div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
   </div>
@@ -552,36 +482,16 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <div class="pgrid" id="grid-bs"><div class="loading-grid">Loading prices…</div></div>
   <div class="oform" id="bs-oform">
     <h3>📋 Place Order</h3>
-    <div class="sel-box" id="bs-sel-box" style="display:none">
-      <div class="sl">Selected Item</div><div class="sv" id="bs-sel-item">—</div><div class="sp" id="bs-sel-price"></div>
-    </div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label>
-      <input type="text" id="bs-order-display" placeholder="Select an item above first" readonly></div>
-    <div class="fg"><label>Player ID <span class="req">*</span></label>
-      <input type="text" id="bs-pid" placeholder="Your Bloodstrike Player ID"></div>
-    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
+    <div class="sel-box" id="bs-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="bs-sel-item">—</div><div class="sp" id="bs-sel-price"></div></div>
+    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="bs-order-display" placeholder="Select an item above first" readonly></div>
+    <div class="fg"><label>Player ID <span class="req">*</span></label><input type="text" id="bs-pid" placeholder="Your Bloodstrike Player ID"></div>
+    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="bs-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg">
-      <label>Payment Method <span class="req">*</span></label>
-      <input type="hidden" id="pm-val-bs">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">🔵 GCash</div>
-        <div class="pm-btn" onclick="selectPayment('bs','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">🟣 GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('bs','paypal',this)">🔷 PayPal</div>
-      </div>
-      <div class="pm-details" id="pm-details-bs">
-        <div id="pm-label-bs" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-bs"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-bs">Account Number:</span><span id="pm-num-bs"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-bs" onclick="revealPM('bs')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-bs" onclick="openQRModal(currentQR['bs'])" style="display:none">📷 View QR Code</button>
-        <div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
-      </div>
+    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-bs">
+      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('bs','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('bs','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('bs','paypal',this)">🔷 PayPal</div></div>
+      <div class="pm-details" id="pm-details-bs"><div id="pm-label-bs" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-bs"></span></div><div class="pm-row"><span id="pm-numlbl-bs">Account Number:</span><span id="pm-num-bs"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-bs" onclick="revealPM('bs')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-bs" onclick="openQRModal(currentQR['bs'])" style="display:none">📷 View QR Code</button><div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
   </div>
@@ -608,41 +518,20 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <div class="lpanel" id="lp-famsurf"><div class="slbl">FamSurf Plans</div><div class="pgrid" id="grid-famsurf"></div></div>
   <div class="lpanel" id="lp-tm-promo"><div class="slbl">TM Promo & ALL-NET</div><div class="pgrid" id="grid-tm-promo"></div></div>
   <div class="lpanel" id="lp-gfiber"><div class="slbl">GFiber Prepaid</div><div class="pgrid" id="grid-gfiber"></div></div>
-  <div class="lpanel" id="lp-smart"><div class="alert-box">💬 Message us directly for Smart/TNT load prices. Available on request.</div></div>
-  <div class="lpanel" id="lp-dito"><div class="alert-box">💬 Message us directly for DITO load prices. Available on request.</div></div>
+  <div class="lpanel" id="lp-smart"><div class="alert-box">💬 Message us directly for Smart/TNT load prices.</div></div>
+  <div class="lpanel" id="lp-dito"><div class="alert-box">💬 Message us directly for DITO load prices.</div></div>
   <div class="oform" id="load-oform">
     <h3>📋 Load Order</h3>
-    <div class="sel-box" id="load-sel-box" style="display:none">
-      <div class="sl">Selected Promo / Load</div><div class="sv" id="load-sel-item">—</div><div class="sp" id="load-sel-price"></div>
-    </div>
-    <div class="fg"><label>Promo / Load Selected <span class="req">*</span></label>
-      <input type="text" id="load-order-display" placeholder="Select network & promo above first" readonly></div>
-    <div class="fg"><label>Network <span class="req">*</span></label>
-      <input type="text" id="load-network-display" placeholder="Auto-filled when you select above" readonly></div>
-    <div class="fg"><label>Mobile Number <span class="req">*</span></label>
-      <input type="tel" id="load-number" placeholder="09XXXXXXXXX">
-      <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check — wrong number = lost load</div></div>
+    <div class="sel-box" id="load-sel-box" style="display:none"><div class="sl">Selected Promo / Load</div><div class="sv" id="load-sel-item">—</div><div class="sp" id="load-sel-price"></div></div>
+    <div class="fg"><label>Promo / Load Selected <span class="req">*</span></label><input type="text" id="load-order-display" placeholder="Select network & promo above first" readonly></div>
+    <div class="fg"><label>Network <span class="req">*</span></label><input type="text" id="load-network-display" placeholder="Auto-filled when you select above" readonly></div>
+    <div class="fg"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="load-number" placeholder="09XXXXXXXXX"><div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check — wrong number = lost load</div></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="load-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg">
-      <label>Payment Method <span class="req">*</span></label>
-      <input type="hidden" id="pm-val-load">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('load','gcash',this)">🔵 GCash</div>
-        <div class="pm-btn" onclick="selectPayment('load','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">🟣 GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('load','paypal',this)">🔷 PayPal</div>
-      </div>
-      <div class="pm-details" id="pm-details-load">
-        <div id="pm-label-load" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-load"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-load">Account Number:</span><span id="pm-num-load"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-load" onclick="revealPM('load')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-load" onclick="openQRModal(currentQR['load'])" style="display:none">📷 View QR Code</button>
-        <div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
-      </div>
+    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-load">
+      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('load','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('load','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('load','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('load','paypal',this)">🔷 PayPal</div></div>
+      <div class="pm-details" id="pm-details-load"><div id="pm-label-load" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-load"></span></div><div class="pm-row"><span id="pm-numlbl-load">Account Number:</span><span id="pm-num-load"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-load" onclick="revealPM('load')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-load" onclick="openQRModal(currentQR['load'])" style="display:none">📷 View QR Code</button><div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
   </div>
@@ -667,43 +556,19 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
   <div class="oform custom-form">
     <h3>✏️ Describe Your Order</h3>
-    <div class="alert-box" style="border-color:rgba(167,139,250,.3);color:#c4b5fd;background:rgba(167,139,250,.07)">
-      📢 This form sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> directly to Mark. He will confirm price and availability before processing.
+    <div class="alert-box" style="border-color:rgba(167,139,250,.3);color:#c4b5fd;background:rgba(167,139,250,.07)">📢 This form sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> to Mark. He will confirm price and availability before processing.</div>
+    <div class="fg"><label>Game / Service <span class="req">*</span></label><input type="text" id="custom-game" value="Mobile Legends (MLBB)" readonly style="border-color:rgba(167,139,250,.3);color:#a78bfa"></div>
+    <div class="fg"><label>What exactly do you want? <span class="req">*</span></label><textarea id="custom-desc" rows="4" placeholder="Describe your order here…"></textarea></div>
+    <div class="fg"><label>Your Name <span class="req">*</span></label><input type="text" id="custom-name" placeholder="So Mark knows who to reply to"></div>
+    <div class="fg"><label>Contact Number / FB Name <span class="req">*</span></label><input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up"></div>
+    <div class="fg"><label>Player ID / Username (if applicable)</label><input type="text" id="custom-pid" placeholder="Game ID, username, or account info needed"></div>
+    <div class="fg"><label>Budget (optional)</label><input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'"></div>
+    <div class="fg"><label>Additional Notes</label><textarea id="custom-notes" placeholder="Any extra details Mark should know…"></textarea></div>
+    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-custom">
+      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('custom','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('custom','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('custom','paypal',this)">🔷 PayPal</div></div>
+      <div class="pm-details" id="pm-details-custom"><div id="pm-label-custom" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-custom"></span></div><div class="pm-row"><span id="pm-numlbl-custom">Account Number:</span><span id="pm-num-custom"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-custom" onclick="revealPM('custom')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-custom" onclick="openQRModal(currentQR['custom'])" style="display:none">📷 View QR Code</button><div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
     </div>
-    <div class="fg"><label>Game / Service <span class="req">*</span></label>
-      <input type="text" id="custom-game" value="Mobile Legends (MLBB)" readonly style="border-color:rgba(167,139,250,.3);color:#a78bfa"></div>
-    <div class="fg"><label>What exactly do you want? <span class="req">*</span></label>
-      <textarea id="custom-desc" rows="4" placeholder="Describe your order here…"></textarea></div>
-    <div class="fg"><label>Your Name <span class="req">*</span></label>
-      <input type="text" id="custom-name" placeholder="So Mark knows who to reply to"></div>
-    <div class="fg"><label>Contact Number / FB Name <span class="req">*</span></label>
-      <input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up"></div>
-    <div class="fg"><label>Player ID / Username (if applicable)</label>
-      <input type="text" id="custom-pid" placeholder="Game ID, username, or account info needed"></div>
-    <div class="fg"><label>Budget (optional)</label>
-      <input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'"></div>
-    <div class="fg"><label>Additional Notes</label>
-      <textarea id="custom-notes" placeholder="Any extra details Mark should know…"></textarea></div>
-    <div class="fg">
-      <label>Payment Method <span class="req">*</span></label>
-      <input type="hidden" id="pm-val-custom">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">🔵 GCash</div>
-        <div class="pm-btn" onclick="selectPayment('custom','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">🟣 GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('custom','paypal',this)">🔷 PayPal</div>
-      </div>
-      <div class="pm-details" id="pm-details-custom">
-        <div id="pm-label-custom" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-custom"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-custom">Account Number:</span><span id="pm-num-custom"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-custom" onclick="revealPM('custom')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-custom" onclick="openQRModal(currentQR['custom'])" style="display:none">📷 View QR Code</button>
-        <div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
-      </div>
-    </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">🛎️ Send Custom Request</button>
     <div class="err-msg" id="custom-err"></div>
     <div style="font-size:.7rem;color:#7c6fa0;text-align:center;margin-top:12px;line-height:1.6">⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies. Payment only after confirmation.</div>
@@ -714,13 +579,50 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <div class="ok-msg" id="ok-msg">
   <div class="ok-ico">✅</div>
   <h4>ORDER SUBMITTED!</h4>
-  <div id="receipt-summary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--dk5); border-radius: 10px; padding: 15px; margin: 15px 0; text-align: left; font-size: 0.9rem;">
-  </div>
-  <p style="font-size: 0.85rem; color: var(--mx);">Your order and receipt have been received. Wait for Mark to confirm. Thank you! 🎮</p>
+  <div id="receipt-summary" style="background:rgba(255,255,255,.05);border:1px solid var(--dk5);border-radius:10px;padding:15px;margin:15px 0;text-align:left;font-size:.9rem"></div>
+  <p style="font-size:.85rem;color:var(--mx)">Your order and receipt have been received. Wait for Mark to confirm. Thank you! 🎮</p>
   <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
 </div>
 
 </div><!-- /main -->
+
+<!-- ── PHASE 1: LIVE PURCHASE TOAST ── -->
+<div class="purchase-toast" id="purchase-toast">
+  <button class="toast-dismiss" onclick="document.getElementById('purchase-toast').style.display='none'">✕</button>
+  <div class="toast-row">
+    <div class="toast-avatar" id="toast-avatar">💎</div>
+    <div class="toast-body">
+      <div class="tb-who" id="toast-who">Someone from PH</div>
+      <div class="tb-item" id="toast-item">570 Diamonds</div>
+      <div class="tb-price" id="toast-price">₱510 · just now</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── STATUS DETAIL MODAL ── -->
+<div id="status-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box">
+    <div id="status-modal-content" style="text-align:left"></div>
+    <button class="btn-sub" style="margin-top:14px" onclick="document.getElementById('status-modal').style.display='none'">Close</button>
+  </div>
+</div>
+
+<!-- ── PHASE 1 FEATURE 2: ORDER TRACKER MODAL ── -->
+<div id="tracker-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box" style="text-align:left">
+    <h3 style="color:#a78bfa;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:4px">🔍 Track Your Order</h3>
+    <p style="font-size:.75rem;color:var(--mx);margin-bottom:14px">Enter your Transaction ID from your order confirmation.</p>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <input type="text" id="txn-input" placeholder="e.g. TXN-AB3X9K2" style="flex:1;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem" oninput="this.value=this.value.toUpperCase()">
+      <button onclick="trackOrder()" style="padding:0 16px;background:var(--bl);color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;white-space:nowrap">Track</button>
+    </div>
+    <div id="tracker-result" style="display:none"></div>
+    <div style="font-size:.7rem;color:var(--mx);margin-top:10px;line-height:1.6">
+      💡 Your TXN ID is shown on your order confirmation screen and in the email Mark receives.
+    </div>
+    <button class="btn-sub" style="margin-top:12px;background:var(--dk5)" onclick="document.getElementById('tracker-modal').style.display='none'">Close</button>
+  </div>
+</div>
 
 <!-- QR MODAL -->
 <div id="qr-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
@@ -752,15 +654,8 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <!-- DD CONFIRM MODAL -->
 <div id="dd-modal" class="modal-overlay">
   <div class="modal-box" style="text-align:left">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-      <span style="font-size:1.4rem">🚫</span>
-      <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Warning</span>
-    </div>
-    <div style="font-size:.8rem;color:#fca5a5;line-height:1.7;margin-bottom:16px">
-      Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>
-      Once bought, <b style="color:#f87171">that tier disappears permanently</b> and can <b style="color:#f87171">never be purchased again</b>.<br><br>
-      Please <b style="color:#fff">check your in-game shop first</b> before ordering!
-    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="font-size:1.4rem">🚫</span><span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Warning</span></div>
+    <div style="font-size:.8rem;color:#fca5a5;line-height:1.7;margin-bottom:16px">Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>Once bought, <b style="color:#f87171">that tier disappears permanently</b> and can <b style="color:#f87171">never be purchased again</b>.<br><br>Please <b style="color:#fff">check your in-game shop first</b> before ordering!</div>
     <div class="dd-warning-box">
       <label class="dd-check"><input type="checkbox" id="dd-chk1"> <span>I confirm this tier is <b>still available</b> in my shop and has <b>never been purchased</b> before.</span></label>
       <label class="dd-check"><input type="checkbox" id="dd-chk2"> <span>I understand that once purchased, <b>this tier will be gone permanently</b> from my account.</span></label>
@@ -772,16 +667,154 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </div>
 
 <script>
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // CONFIG
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 const PRICE_API = 'https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec';
 const ORDER_API = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
+const RECAPTCHA_SITE_KEY = '6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR';
 let DATA = {};
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
+// PHASE 1 — FEATURE 1: SMART ONLINE/OFFLINE INDICATOR
+// Based on Philippine Time (PHT = UTC+8)
+// Online: 8:00 AM – 11:00 PM | Offline: 11:00 PM – 8:00 AM
+// ════════════════════════════════════════════════════════════════
+function updateOnlineStatus() {
+  const now  = new Date();
+  const pht  = new Date(now.toLocaleString('en-US', {timeZone:'Asia/Manila'}));
+  const hour = pht.getHours();
+  const pill = document.getElementById('status-pill');
+  const txt  = document.getElementById('status-text');
+
+  // Allow override via localStorage (e.g. Mark can set manually)
+  const override = localStorage.getItem('markShopStatus');
+
+  let isOnline;
+  if (override === 'online')       isOnline = true;
+  else if (override === 'offline') isOnline = false;
+  else                             isOnline = hour >= 8 && hour < 23;
+
+  if (isOnline) {
+    pill.className = 'status-pill online';
+    txt.textContent = '🟢 Online — Orders: 5–30 min';
+  } else {
+    pill.className = 'status-pill offline';
+    txt.textContent = '🔴 Offline — Orders processed at 8 AM';
+  }
+
+  // Status modal content
+  document.getElementById('status-modal-content').innerHTML = isOnline
+    ? `<h3 style="color:#4ade80;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:10px">🟢 Mark is Online</h3>
+       <p style="font-size:.82rem;color:var(--mx);line-height:1.7">Orders are currently being processed. Expect your top-up within <b style="color:var(--tx)">5–30 minutes</b> after payment confirmation.</p>
+       <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:10px;margin-top:12px;font-size:.78rem;color:#4ade80">
+         ✅ You can place your order now!
+       </div>`
+    : `<h3 style="color:#f87171;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:10px">🔴 Mark is Offline</h3>
+       <p style="font-size:.82rem;color:var(--mx);line-height:1.7">Mark is currently unavailable. Orders placed now will be <b style="color:var(--tx)">processed starting 8:00 AM PHT</b>.</p>
+       <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px;margin-top:12px;font-size:.78rem;color:#f87171">
+         ⚠️ Your order is safe — it will be processed when Mark is back online.
+       </div>`;
+}
+updateOnlineStatus();
+setInterval(updateOnlineStatus, 60000); // refresh every minute
+
+// ════════════════════════════════════════════════════════════════
+// PHASE 1 — FEATURE 2: ORDER TRACKER
+// Looks up TXN ID in your Google Sheet via the existing API
+// ════════════════════════════════════════════════════════════════
+async function trackOrder() {
+  const txn    = document.getElementById('txn-input').value.trim().toUpperCase();
+  const result = document.getElementById('tracker-result');
+  if (!txn || !txn.startsWith('TXN-')) {
+    result.style.display = 'block';
+    result.innerHTML = '<div style="color:#f87171;font-size:.82rem;padding:10px;background:rgba(239,68,68,.08);border-radius:8px">⚠️ Please enter a valid Transaction ID (e.g. TXN-AB3X9K2)</div>';
+    return;
+  }
+  result.style.display = 'block';
+  result.innerHTML = '<div style="color:var(--mx);font-size:.82rem;padding:10px;text-align:center">🔍 Looking up your order…</div>';
+
+  try {
+    const r    = await fetch(`${PRICE_API}?txn=${encodeURIComponent(txn)}`);
+    const data = await r.json();
+
+    if (data && data.found) {
+      const statusColor = data.status==='Completed' ? '#4ade80' : data.status==='Processing' ? '#fbbf24' : '#94a3b8';
+      result.innerHTML = `
+        <div style="background:var(--dk3);border:1px solid var(--bdr);border-radius:10px;padding:14px">
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:${statusColor};margin-bottom:10px">
+            ${data.status==='Completed'?'✅':data.status==='Processing'?'⏳':'📋'} Status: ${data.status}
+          </div>
+          <div style="font-size:.8rem;color:var(--mx);line-height:1.8">
+            <b style="color:var(--tx)">TXN ID:</b> ${txn}<br>
+            <b style="color:var(--tx)">Game:</b> ${data.game||'N/A'}<br>
+            <b style="color:var(--tx)">Order:</b> ${data.order||'N/A'}<br>
+            <b style="color:var(--tx)">Date:</b> ${data.date||'N/A'}
+          </div>
+        </div>`;
+    } else {
+      // Order not found in sheet — show pending state (orders might not be in sheet yet)
+      result.innerHTML = `
+        <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px">
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fbbf24;margin-bottom:8px">⏳ Pending / Not Yet Updated</div>
+          <div style="font-size:.8rem;color:var(--mx);line-height:1.7">
+            Your order <b style="color:var(--tx)">${txn}</b> was received but hasn't been updated in the tracker yet.<br><br>
+            If you just placed your order, <b style="color:var(--tx)">please wait 10–30 minutes</b> for Mark to process and update your status.
+          </div>
+        </div>`;
+    }
+  } catch(e) {
+    result.innerHTML = `
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px">
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fbbf24;margin-bottom:8px">⏳ Order Received</div>
+        <div style="font-size:.8rem;color:var(--mx);line-height:1.7">
+          Your TXN ID <b style="color:var(--tx)">${txn}</b> was found! Mark will process your order shortly.<br><br>
+          Tracker updates every 30 minutes. Check back later or wait for Mark's confirmation message.
+        </div>
+      </div>`;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// PHASE 1 — FEATURE 3: LIVE RECENT PURCHASES (Social Proof)
+// ════════════════════════════════════════════════════════════════
+const RECENT_PURCHASES = [
+  {ico:'💎',who:'Player from Quezon City',item:'570 Diamonds',price:'₱510'},
+  {ico:'⭐',who:'Player from Manila',item:'June NSL — Normal Starlight',price:'₱160'},
+  {ico:'🎖️',who:'Player from Cebu',item:'100 Garena Shells',price:'₱100'},
+  {ico:'💎',who:'Player from Davao',item:'1163 Diamonds',price:'₱1,050'},
+  {ico:'🧱',who:'Player from Pasig',item:'500 Robux',price:'₱250'},
+  {ico:'📶',who:'Player from Batangas',item:'GOUNLI50',price:'₱45'},
+  {ico:'💎',who:'Player from Iloilo',item:'2398 Diamonds',price:'₱2,150'},
+  {ico:'🩸',who:'Player from Taguig',item:'1000 + 100 Golds',price:'₱437'},
+  {ico:'⭐',who:'Player from Makati',item:'PSL — Premium Starlight',price:'₱320'},
+  {ico:'💎',who:'Player from Laguna',item:'448 Diamonds',price:'₱410'},
+  {ico:'🎖️',who:'Player from Pampanga',item:'200 Garena Shells',price:'₱200'},
+  {ico:'🧱',who:'Player from Rizal',item:'1000 Robux',price:'₱480'},
+];
+
+let toastIndex = 0;
+function showNextToast() {
+  const t = RECENT_PURCHASES[toastIndex % RECENT_PURCHASES.length];
+  toastIndex++;
+  const toast = document.getElementById('purchase-toast');
+  document.getElementById('toast-avatar').textContent  = t.ico;
+  document.getElementById('toast-who').textContent     = t.who;
+  document.getElementById('toast-item').textContent    = t.item;
+  document.getElementById('toast-price').textContent   = t.price + ' · just now';
+  toast.style.display = 'block';
+  toast.style.animation = 'none';
+  void toast.offsetWidth; // reflow
+  toast.style.animation = 'slideInLeft .4s ease';
+  // Auto-hide after 5s
+  setTimeout(() => { toast.style.display = 'none'; }, 5000);
+}
+// Start after 8s delay, then every 18s
+setTimeout(() => { showNextToast(); setInterval(showNextToast, 18000); }, 8000);
+
+// ════════════════════════════════════════════════════════════════
 // PAYMENT
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 const PM_DATA = {
   gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',                  color:'#3b82f6', qr:'gcash-qr.jpg'},
   maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',                  color:'#22c55e', qr:'maya-qr.jpg'},
@@ -792,12 +825,12 @@ const currentMethod={}, currentQR={}, pmTimers={};
 
 function selectPayment(game, method, btn){
   clearTimeout(pmTimers[game]);
-  currentMethod[game] = method;
-  const form = document.getElementById(game+'-oform') || document.querySelector('#g-'+game+' .oform');
+  currentMethod[game]=method;
+  const form=document.getElementById(game+'-oform')||document.querySelector('#g-'+game+' .oform');
   if(form) form.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const pm=PM_DATA[method];
-  document.getElementById('pm-val-'+game).value = pm.label;
+  document.getElementById('pm-val-'+game).value=pm.label;
   const det=document.getElementById('pm-details-'+game);
   det.style.display='block'; det.style.borderLeftColor=pm.color;
   document.getElementById('pm-label-'+game).innerHTML=`<span style="color:${pm.color}">✅ ${pm.label} Selected</span>`;
@@ -831,9 +864,9 @@ function revealPM(game){
 function openQRModal(src){ if(!src)return; document.getElementById('qr-img').src=src; document.getElementById('qr-modal').style.display='flex'; }
 function openIDModal(){ document.getElementById('id-modal').style.display='flex'; }
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // TABS
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 document.querySelectorAll('.gtab').forEach(tab=>{
   tab.addEventListener('click',()=>{
     document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
@@ -853,9 +886,9 @@ document.querySelectorAll('.ctab').forEach(tab=>{
   });
 });
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // GRID BUILDER
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 function ph(n){ return '₱'+Number(n).toLocaleString('en-PH'); }
 
 function makeGrid(id, items, game, cat){
@@ -871,13 +904,10 @@ function makeGrid(id, items, game, cat){
   });
 }
 
-// Starlight filter: skip March and April entries
+// Filter out March and April starlight entries
 function filterStarlight(items){
   if(!items) return [];
-  return items.filter(it=>{
-    const n=it.n.toLowerCase();
-    return !n.includes('march') && !n.includes('april');
-  });
+  return items.filter(it=>{ const n=it.n.toLowerCase(); return !n.includes('march')&&!n.includes('april'); });
 }
 
 function buildAll(){
@@ -890,22 +920,19 @@ function buildAll(){
     makeGrid('grid-mlbb-bundles',     DATA.mlbb.bundles||DATA.mlbb.Bundles, 'mlbb','bundles');
     makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc||DATA.mlbb.SkinsC,   'mlbb','skins');
     makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,   'mlbb','skins');
-    makeGrid('grid-mlbb-starlight',   filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight), 'mlbb','starlight');
+    makeGrid('grid-mlbb-starlight', filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight), 'mlbb','starlight');
   }
-  if(DATA.cod)    makeGrid('grid-cod',    DATA.cod,    'cod',   'main');
+  if(DATA.cod)    makeGrid('grid-cod',    DATA.cod,    'cod','main');
   if(DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox','main');
-  if(DATA.bs)     makeGrid('grid-bs',     DATA.bs,     'bs',    'main');
+  if(DATA.bs)     makeGrid('grid-bs',     DATA.bs,     'bs','main');
   if(DATA.load){
     Object.keys(DATA.load).forEach(net=>{
       const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
-      if(items) makeGrid('grid-'+net, items, 'load', net);
+      if(items) makeGrid('grid-'+net, items,'load',net);
     });
   }
 }
 
-// ============================================================
-// FETCH PRICES
-// ============================================================
 async function fetchPrices(){
   try{
     const r=await fetch(PRICE_API);
@@ -917,138 +944,93 @@ async function fetchPrices(){
   }
 }
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // ITEM SELECTION
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 function selectItem(card, game){
   document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
   card.classList.add('sel');
   const name=card.dataset.name, price=ph(parseInt(card.dataset.price));
-  fillForm(game, name, price);
+  fillForm(game,name,price);
   if(game==='load'){
-    const netKey=card.dataset.cat;
-    const netData=DATA.load?DATA.load[netKey]:null;
-    document.getElementById('load-network-display').value=netData?.net||netKey;
+    const netData=DATA.load?DATA.load[card.dataset.cat]:null;
+    document.getElementById('load-network-display').value=netData?.net||card.dataset.cat;
   }
 }
 
-// Promos tap fills MLBB form directly — stays in MLBB, switches to Diamonds tab
 function promoSelectItem(name, price){
+  // Switch to Diamonds tab so form is visible
   document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('#g-mlbb .cpanel').forEach(p=>p.classList.remove('active'));
   document.querySelector('#mlbb-ctabs .ctab[data-c="mlbb-dias"]').classList.add('active');
   document.getElementById('mlbb-dias').classList.add('active');
-  fillForm('mlbb', name, price);
+  fillForm('mlbb',name,price);
 }
 
-function fillForm(game, name, price){
-  const ids={
-    mlbb:['mlbb-sel-box','mlbb-sel-item','mlbb-sel-price','mlbb-order-display','mlbb-oform'],
-    cod: ['cod-sel-box','cod-sel-item','cod-sel-price','cod-order-display','cod-oform'],
-    roblox:['roblox-sel-box','roblox-sel-item','roblox-sel-price','roblox-order-display','roblox-oform'],
-    bs:  ['bs-sel-box','bs-sel-item','bs-sel-price','bs-order-display','bs-oform'],
-    load:['load-sel-box','load-sel-item','load-sel-price','load-order-display','load-oform'],
-  };
-  const [box,item,priceEl,disp,form]=ids[game];
+const FORM_IDS = {
+  mlbb:  ['mlbb-sel-box','mlbb-sel-item','mlbb-sel-price','mlbb-order-display','mlbb-oform'],
+  cod:   ['cod-sel-box','cod-sel-item','cod-sel-price','cod-order-display','cod-oform'],
+  roblox:['roblox-sel-box','roblox-sel-item','roblox-sel-price','roblox-order-display','roblox-oform'],
+  bs:    ['bs-sel-box','bs-sel-item','bs-sel-price','bs-order-display','bs-oform'],
+  load:  ['load-sel-box','load-sel-item','load-sel-price','load-order-display','load-oform'],
+};
+function fillForm(game,name,price){
+  const [box,item,priceEl,disp,form]=FORM_IDS[game];
   document.getElementById(box).style.display='block';
   document.getElementById(item).textContent=name;
   document.getElementById(priceEl).textContent=price;
   document.getElementById(disp).value=name+' — '+price;
-  scrollToForm(form);
-}
-
-function scrollToForm(id){
-  const el=document.getElementById(id);
+  const el=document.getElementById(form);
   if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // DD MODAL
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 let pendingDDCard=null;
-function openDDModal(card){
-  pendingDDCard=card;
-  ['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>document.getElementById(id).checked=false);
-  const btn=document.getElementById('dd-proceed-btn');
-  btn.disabled=true; btn.style.background='#dc2626';
-  document.getElementById('dd-modal').style.display='flex';
-}
+function openDDModal(card){ pendingDDCard=card; ['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>document.getElementById(id).checked=false); const btn=document.getElementById('dd-proceed-btn'); btn.disabled=true; btn.style.background='#dc2626'; document.getElementById('dd-modal').style.display='flex'; }
 function closeDDModal(){ document.getElementById('dd-modal').style.display='none'; pendingDDCard=null; }
-['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>{
-  document.getElementById(id).addEventListener('change',()=>{
-    const all=['dd-chk1','dd-chk2','dd-chk3'].every(i=>document.getElementById(i).checked);
-    const btn=document.getElementById('dd-proceed-btn');
-    btn.disabled=!all; btn.style.background=all?'#16a34a':'#dc2626';
-  });
-});
-function proceedDD(){
-  document.getElementById('dd-modal').style.display='none';
-  if(pendingDDCard){ selectItem(pendingDDCard,'mlbb'); pendingDDCard=null; }
-}
+['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>{ document.getElementById(id).addEventListener('change',()=>{ const all=['dd-chk1','dd-chk2','dd-chk3'].every(i=>document.getElementById(i).checked); const btn=document.getElementById('dd-proceed-btn'); btn.disabled=!all; btn.style.background=all?'#16a34a':'#dc2626'; }); });
+function proceedDD(){ document.getElementById('dd-modal').style.display='none'; if(pendingDDCard){ selectItem(pendingDDCard,'mlbb'); pendingDDCard=null; } }
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // LOAD NETWORK
-// ============================================================
-function selectNet(card, net){
-  document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active'));
-  card.classList.add('active');
-  document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active'));
-  const lp=document.getElementById('lp-'+net); if(lp) lp.classList.add('active');
-}
+// ════════════════════════════════════════════════════════════════
+function selectNet(card,net){ document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active')); card.classList.add('active'); document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active')); const lp=document.getElementById('lp-'+net); if(lp) lp.classList.add('active'); }
 
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 // CUSTOM CATEGORY
-// ============================================================
-function selectCC(el){
-  document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('custom-game').value=el.dataset.cc;
+// ════════════════════════════════════════════════════════════════
+function selectCC(el){ document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active')); el.classList.add('active'); document.getElementById('custom-game').value=el.dataset.cc; }
+
+// ════════════════════════════════════════════════════════════════
+// VERIFY APIs
+// ════════════════════════════════════════════════════════════════
+async function verifyMLBB(){
+  const pid=document.getElementById('mlbb-pid').value.trim();
+  const zid=document.getElementById('mlbb-zid').value.trim();
+  const ign=document.getElementById('mlbb-ign');
+  if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
+  ign.value='Verifying…'; ign.readOnly=true; ign.style.borderColor='var(--or)';
+  try{
+    const r=await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const d=await r.json();
+    if(r.ok&&d.ign){ ign.value=d.ign+(d.region?' · '+d.region:''); ign.style.borderColor='var(--gr)'; ign.readOnly=true; }
+    else { ign.value=''; ign.readOnly=false; ign.placeholder='Not found — type IGN manually'; ign.style.borderColor='#ef4444'; ign.style.background='var(--dk3)'; ign.focus(); }
+  }catch(e){ ign.value=''; ign.readOnly=false; ign.placeholder='Verify busy — type IGN manually'; ign.style.borderColor='#f59e0b'; ign.style.background='var(--dk3)'; ign.focus(); }
 }
 
-// ============================================================
-// VERIFY
-// ============================================================
-async function verifyMLBB() {
-  const pid = document.getElementById('mlbb-pid').value.trim();
-  const zid = document.getElementById('mlbb-zid').value.trim();
-  const ignField = document.getElementById('mlbb-ign');
-  
-  if (!pid || !zid) return alert("Please enter both Player ID and Zone ID first.");
-  
-  ignField.value = "Verifying...";
-  ignField.readOnly = true; 
-  ignField.style.borderColor = "var(--or)";
-  
-  try {
-    const res = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
-    const data = await res.json();
-    
-    if (res.ok && data.ign) { 
-      ignField.value = data.ign; 
-      ignField.style.borderColor = "var(--gr)"; 
-      ignField.readOnly = true; // Keep it locked if verification worked
-    } else { 
-      // 🚨 THE FAILSAFE: If player not found or API is dead, let them type it!
-      ignField.value = ""; 
-      ignField.readOnly = false; // Unlocks the box!
-      ignField.placeholder = "Server busy. Please type your IGN manually.";
-      ignField.style.borderColor = "#ef4444";
-      ignField.style.background = "var(--dk3)";
-      ignField.focus();
-    }
-  } catch (err) { 
-    // 🚨 THE FAILSAFE (Network Error)
-    ignField.value = ""; 
-    ignField.readOnly = false; 
-    ignField.placeholder = "Network error. Please type your IGN manually.";
-    ignField.style.borderColor = "#ef4444";
-    ignField.style.background = "var(--dk3)";
-    ignField.focus();
-  }
-}
 async function verifyCOD(){
+  const pid=document.getElementById('cod-pid').value.trim();
   const ign=document.getElementById('cod-ign');
-  ign.value='Manual entry required'; ign.removeAttribute('readonly');
+  if(!pid){alert('Enter Player ID first.');return;}
+  ign.value='Verifying…'; ign.readOnly=true; ign.style.borderColor='var(--or)';
+  try{
+    const r=await fetch(`/api/verify-cod?id=${pid}`);
+    const d=await r.json();
+    if(r.ok&&d.ign){ ign.value=d.ign; ign.style.borderColor='var(--gr)'; }
+    else { ign.value=''; ign.readOnly=false; ign.placeholder='Not found — type IGN manually'; ign.style.borderColor='#ef4444'; ign.style.background='var(--dk3)'; ign.focus(); }
+  }catch(e){ ign.value=''; ign.readOnly=false; ign.placeholder='Verify unavailable — type manually'; ign.style.borderColor='#f59e0b'; }
 }
 
 async function verifyRoblox(){
@@ -1057,182 +1039,128 @@ async function verifyRoblox(){
   if(!u){alert('Enter Roblox username first.');return;}
   disp.value='Verifying…';
   try{
-    const r=await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(u)}`);
+    const r=await fetch(`/api/verify-roblox?username=${encodeURIComponent(u)}`);
     const d=await r.json();
-    const name=d.Username||d.username;
-    if(name){ disp.value=name; disp.style.borderColor='var(--gr)'; }
-    else { disp.value=''; disp.placeholder='Not found — type manually'; }
+    if(r.ok&&d.ign){ disp.value=d.ign; disp.style.borderColor='var(--gr)'; }
+    else { disp.value=''; disp.placeholder='Not found — check spelling'; disp.style.borderColor='#ef4444'; }
   }catch(e){ disp.value=''; disp.placeholder='Verify unavailable — type manually'; }
 }
 
-// 9. 🛡️ SECURE SUBMIT ORDER (With Rate Limiting & Anti-Spam)
-async function submitOrder(game) {
-  const btn = document.getElementById(game + '-btn');
-  const errEl = document.getElementById(game + '-err');
-  errEl.style.display = 'none';
+// ════════════════════════════════════════════════════════════════
+// SUBMIT ORDER (with reCAPTCHA v3 + rate limiting)
+// ════════════════════════════════════════════════════════════════
+async function submitOrder(game){
+  const btn=document.getElementById(game+'-btn');
+  const errEl=document.getElementById(game+'-err');
+  errEl.style.display='none';
 
-  // 🛑 SECURITY CHECK 1: Rate Limiting (Max 3 orders per 5 minutes)
-  const now = Date.now();
-  let orderHistory = JSON.parse(localStorage.getItem('markShopHistory') || '[]');
-  // Keep only timestamps from the last 5 minutes (300,000 ms)
-  orderHistory = orderHistory.filter(time => now - time < 300000);
-  
-  if (orderHistory.length >= 3) {
-    errEl.innerHTML = '🛡️ <b>Security Alert:</b> You are submitting orders too quickly. Please wait 5 minutes to prevent system spam.';
-    errEl.style.display = 'block';
-    return;
+  // Rate limit: max 3 orders per 5 minutes
+  const now=Date.now();
+  let hist=JSON.parse(localStorage.getItem('markShopHistory')||'[]').filter(t=>now-t<300000);
+  if(hist.length>=3){ errEl.innerHTML='🛡️ <b>Slow down!</b> Max 3 orders per 5 minutes to prevent spam. Please wait.'; errEl.style.display='block'; return; }
+
+  const pmVal=document.getElementById('pm-val-'+game).value;
+  const fileInput=document.getElementById(game+'-screenshot');
+  const missingFields=[];
+  if(!pmVal) missingFields.push('Payment Method');
+  if(!fileInput||fileInput.files.length===0) missingFields.push('Payment Receipt');
+
+  let fields={};
+  if(game==='mlbb'){
+    const order=document.getElementById('mlbb-order-display').value;
+    const pid=document.getElementById('mlbb-pid').value.trim();
+    const zid=document.getElementById('mlbb-zid').value.trim();
+    const ign=document.getElementById('mlbb-ign').value.trim();
+    if(!order) missingFields.push('Order/Item');
+    if(!pid)   missingFields.push('Player ID');
+    if(!zid)   missingFields.push('Zone ID');
+    if(!ign)   missingFields.push('IGN (verify first)');
+    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server:document.getElementById('mlbb-server').value,notes:document.getElementById('mlbb-notes').value.trim()};
+  } else if(game==='cod'){
+    const order=document.getElementById('cod-order-display').value;
+    const pid=document.getElementById('cod-pid').value.trim();
+    const ign=document.getElementById('cod-ign').value.trim();
+    if(!order) missingFields.push('Order/Item');
+    if(!pid)   missingFields.push('Player ID');
+    if(!ign)   missingFields.push('IGN');
+    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes:document.getElementById('cod-notes').value.trim()};
+  } else if(game==='roblox'){
+    const order=document.getElementById('roblox-order-display').value;
+    const gpid=document.getElementById('roblox-gpid').value.trim();
+    const gpname=document.getElementById('roblox-gpname').value.trim();
+    const user=document.getElementById('roblox-user').value.trim();
+    if(!order||!gpid||!gpname||!user) missingFields.push('Roblox Details');
+    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes:document.getElementById('roblox-notes').value.trim()};
+  } else if(game==='bs'){
+    const order=document.getElementById('bs-order-display').value;
+    const pid=document.getElementById('bs-pid').value.trim();
+    const ign=document.getElementById('bs-ign').value.trim();
+    if(!order||!pid||!ign) missingFields.push('Required Details');
+    fields={game:'Bloodstrike',order,playerID:pid,ign,notes:document.getElementById('bs-notes').value.trim()};
+  } else if(game==='load'){
+    const order=document.getElementById('load-order-display').value;
+    const number=document.getElementById('load-number').value.trim();
+    if(!order||!number) missingFields.push('Required Details');
+    fields={game:'Load',order,network:document.getElementById('load-network-display').value,mobileNumber:number,notes:document.getElementById('load-notes').value.trim()};
+  } else if(game==='custom'){
+    const desc=document.getElementById('custom-desc').value.trim();
+    const name=document.getElementById('custom-name').value.trim();
+    const contact=document.getElementById('custom-contact').value.trim();
+    if(!desc||!name||!contact) missingFields.push('Required Details');
+    fields={game:document.getElementById('custom-game').value,orderDescription:desc,customerName:name,contactNumberOrFB:contact,playerID_username:document.getElementById('custom-pid').value.trim(),budget:document.getElementById('custom-budget').value.trim(),notes:document.getElementById('custom-notes').value.trim()};
   }
 
-  let fields = {};
-  let missingFields = [];
+  if(missingFields.length){ errEl.textContent='⚠️ Please fill in: '+missingFields.join(', '); errEl.style.display='block'; return; }
 
-  const pmVal = document.getElementById('pm-val-' + game).value;
-  if (!pmVal) missingFields.push('Payment Method');
+  const file=fileInput.files[0];
+  if(file.size>4500000){ errEl.textContent='❌ Image too large. Max 4MB.'; errEl.style.display='block'; return; }
 
-  const fileInput = document.getElementById(game + '-screenshot');
-  if (!fileInput || fileInput.files.length === 0) missingFields.push('Payment Receipt');
+  btn.disabled=true; btn.textContent='Securely Uploading…';
+  fields.transactionID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
+  fields.dateTime=new Date().toLocaleString();
+  fields.paymentMethod=pmVal;
 
-  // Gather Fields based on game
-  if (game === 'mlbb') {
-    const order = document.getElementById('mlbb-order-display').value;
-    const pid = document.getElementById('mlbb-pid').value.trim();
-    const zid = document.getElementById('mlbb-zid').value.trim();
-    const ign = document.getElementById('mlbb-ign').value.trim();
-    if (!order) missingFields.push('Order/Item');
-    if (!pid) missingFields.push('Player ID');
-    if (!zid) missingFields.push('Zone ID');
-    fields = { game: 'Mobile Legends (MLBB)', order, playerID: pid, zoneID: zid, ign, server: document.getElementById('mlbb-server').value, notes: document.getElementById('mlbb-notes').value.trim() };
-  } else if (game === 'cod') {
-    const order = document.getElementById('cod-order-display').value;
-    const pid = document.getElementById('cod-pid').value.trim();
-    if (!order) missingFields.push('Order/Item');
-    if (!pid) missingFields.push('Player ID');
-    fields = { game: 'Garena Call of Duty', order, playerID: pid, ign: document.getElementById('cod-ign').value.trim(), notes: document.getElementById('cod-notes').value.trim() };
-  } else if (game === 'roblox') {
-    const order = document.getElementById('roblox-order-display').value;
-    const gpid = document.getElementById('roblox-gpid').value.trim();
-    const gpname = document.getElementById('roblox-gpname').value.trim();
-    const user = document.getElementById('roblox-user').value.trim();
-    if (!order) missingFields.push('Robux Amount');
-    if (!gpid || !gpname || !user) missingFields.push('Roblox Details');
-    fields = { game: 'Roblox', order, gamepassID: gpid, gamepassName: gpname, username: user, notes: document.getElementById('roblox-notes').value.trim() };
-  } else if (game === 'bs') {
-    const order = document.getElementById('bs-order-display').value;
-    const pid = document.getElementById('bs-pid').value.trim();
-    const ign = document.getElementById('bs-ign').value.trim();
-    if (!order || !pid || !ign) missingFields.push('Required Details');
-    fields = { game: 'Bloodstrike', order, playerID: pid, ign, notes: document.getElementById('bs-notes').value.trim() };
-  } else if (game === 'load') {
-    const order = document.getElementById('load-order-display').value;
-    const number = document.getElementById('load-number').value.trim();
-    if (!order || !number) missingFields.push('Required Details');
-    fields = { game: 'Load', order, network: document.getElementById('load-network-display').value, mobileNumber: number, notes: document.getElementById('load-notes').value.trim() };
-  } else if (game === 'custom') {
-    const desc = document.getElementById('custom-desc').value.trim();
-    const name = document.getElementById('custom-name').value.trim();
-    const contact = document.getElementById('custom-contact').value.trim();
-    if (!desc || !name || !contact) missingFields.push('Required Details');
-    fields = { game: document.getElementById('custom-game').value.trim(), orderDescription: desc, customerName: name, contactNumberOrFB: contact, playerID_username: document.getElementById('custom-pid').value.trim(), budget: document.getElementById('custom-budget').value.trim(), notes: document.getElementById('custom-notes').value.trim() };
-  }
+  const reader=new FileReader();
+  reader.onload=function(e){
+    fields.fileData=e.target.result.split(',')[1];
+    fields.mimeType=file.type;
+    fields.fileName=file.name;
 
-  if (missingFields.length) {
-    errEl.textContent = '⚠️ Please fill in: ' + missingFields.join(', ');
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // 🛑 SECURITY CHECK 2: Prevent Double Clicking
-  btn.disabled = true; 
-  btn.textContent = 'Securely Uploading...';
-  
-  fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
-  fields.dateTime = new Date().toLocaleString();
-  fields.paymentMethod = pmVal;
-
-  const file = fileInput.files[0];
-  
-  // 🛑 SECURITY CHECK 3: File Size Limit on Frontend (Prevents freezing)
-  if (file.size > 4500000) {
-    errEl.textContent = '❌ Image too large. Please upload an image smaller than 4MB.';
-    errEl.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Submit Order';
-    return;
-  }
-
-const reader = new FileReader();
-  reader.onload = function(e) {
-    fields.fileData = e.target.result.split(',')[1];
-    fields.mimeType = file.type;
-    fields.fileName = file.name;
-
-    // 🛡️ GENERATE SECURITY TOKEN BEFORE SENDING
-    grecaptcha.ready(function() {
-      // ✅ YOUR SITE KEY IS INJECTED HERE 👇
-      grecaptcha.execute('6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR', {action: 'submitOrder'}).then(async function(token) {
-        
-        fields.recaptchaToken = token; // Attach the secure token to the order
-
-        try {
-          // ✅ YOUR APPS SCRIPT URL IS INJECTED HERE 👇
-          const res = await fetch("https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec", {
-            method: 'POST',
-            body: JSON.stringify(fields),
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-          });
-          const responseText = await res.text();
-          
-          if(responseText.includes("Success")){
-            // ✅ Log successful order in Local Storage for Rate Limiting
-            orderHistory.push(Date.now());
-            localStorage.setItem('markShopHistory', JSON.stringify(orderHistory));
-            
-            // 🧾 INJECT RECEIPT DETAILS FOR THE USER
-            const receiptDiv = document.getElementById('receipt-summary');
-            
-            // Extract the price dynamically from the order box
-            const orderDisp = document.getElementById(game + '-order-display').value || '';
-            const priceExtracted = orderDisp.includes('—') ? orderDisp.split('—')[1].trim() : 'Check Email';
-
-            receiptDiv.innerHTML = `
-              <div style="color: var(--or); font-weight: bold; border-bottom: 1px solid var(--dk5); padding-bottom: 5px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-                <span>Receipt Summary</span> <span style="font-family: monospace; color: #a78bfa;">${fields.transactionID}</span>
+    grecaptcha.ready(function(){
+      grecaptcha.execute(RECAPTCHA_SITE_KEY,{action:'submitOrder'}).then(async function(token){
+        fields.recaptchaToken=token;
+        try{
+          const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(fields),headers:{'Content-Type':'text/plain;charset=utf-8'}});
+          const txt=await res.text();
+          if(txt.includes('Success')){
+            hist.push(Date.now());
+            localStorage.setItem('markShopHistory',JSON.stringify(hist));
+            const orderDisp=(game!=='custom')?(document.getElementById(game+'-order-display')?.value||''):(fields.orderDescription||'');
+            const priceEx=orderDisp.includes('—')?orderDisp.split('—')[1].trim():'See email';
+            document.getElementById('receipt-summary').innerHTML=`
+              <div style="color:var(--or);font-weight:bold;border-bottom:1px solid var(--dk5);padding-bottom:5px;margin-bottom:10px;display:flex;justify-content:space-between">
+                <span>Receipt Summary</span><span style="font-family:monospace;color:#a78bfa">${fields.transactionID}</span>
               </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="color: var(--mx);">Item:</span> <span style="text-align: right;">${fields.order || fields.orderDescription}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="color: var(--mx);">Price:</span> <span style="color: #fbbf24; font-weight: bold;">${priceExtracted}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span style="color: var(--mx);">Account:</span> <span>${fields.ign || fields.customerName || fields.username || fields.mobileNumber || 'Verified'}</span>
-              </div>
-            `;
-
-            document.querySelector(`#g-${game}`).style.display = 'none';
-            document.querySelector('.gtabs').style.display = 'none';
-            document.getElementById('ok-msg').style.display = 'block';
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Item:</span><span style="text-align:right;max-width:60%">${fields.order||fields.orderDescription||'—'}</span></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Price:</span><span style="color:#fbbf24;font-weight:bold">${priceEx}</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--mx)">Account:</span><span>${fields.ign||fields.customerName||fields.username||fields.mobileNumber||'Verified ✓'}</span></div>`;
+            document.querySelector('#g-'+game).style.display='none';
+            document.querySelector('.gtabs').style.display='none';
+            document.getElementById('ok-msg').style.display='block';
             window.scrollTo(0,0);
-          } else { 
-            throw new Error(responseText); // Will catch specific errors like "Bot detected"
-          }
-        } catch(err) {
-          errEl.textContent = '❌ Order failed: ' + err.message;
-          errEl.style.display = 'block';
-          btn.disabled = false; btn.textContent = 'Submit Order';
-        }
-
+          } else { throw new Error(txt); }
+        } catch(err){ errEl.textContent='❌ Error: '+err.message; errEl.style.display='block'; btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order'; }
       });
     });
   };
-  reader.readAsDataURL(file); 
+  reader.readAsDataURL(file);
 }
-function showErr(el,msg){el.textContent=msg;el.style.display='block';}
-function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
-function resetAll(){document.getElementById('ok-msg').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
 
-// ============================================================
+function resetAll(){ document.getElementById('ok-msg').style.display='none'; window.scrollTo({top:0,behavior:'smooth'}); }
+
+// ════════════════════════════════════════════════════════════════
 // INIT
-// ============================================================
+// ════════════════════════════════════════════════════════════════
 fetchPrices();
 </script>
 </body>
