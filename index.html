@@ -1192,6 +1192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // 2. Handle Login & Registration
+// 2. Handle Login & Registration
 async function handleAuth(action) {
   const u = document.getElementById('auth-user').value.trim();
   const p = document.getElementById('auth-pass').value.trim();
@@ -1209,13 +1210,22 @@ async function handleAuth(action) {
   btn.textContent = "Connecting to database...";
 
   try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec", {
+    // 💡 FIX 1: We now use your global API_URL variable instead of a hardcoded link!
+    const res = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({ action: action, username: u, password: p }),
       headers: { 'Content-Type': 'text/plain;charset=utf-8' }
     });
     
-    const data = await res.json();
+    // 💡 FIX 2: We read the raw text first to prevent JSON crash errors
+    const textResponse = await res.text();
+    let data;
+    try {
+      data = JSON.parse(textResponse);
+    } catch (parseErr) {
+      // If Google sends an error message instead of JSON, we catch it here!
+      throw new Error("Backend Error: " + textResponse);
+    }
     
     if (data.success) {
       // ✅ Save to browser memory permanently!
@@ -1229,7 +1239,8 @@ async function handleAuth(action) {
       errDiv.style.display = "block";
     }
   } catch (err) {
-    errDiv.textContent = "❌ Server error. Please try again.";
+    // This will now show the EXACT error so we know if it's a URL issue or Sheet issue
+    errDiv.textContent = "❌ " + err.message;
     errDiv.style.display = "block";
   }
   btn.textContent = oldText;
