@@ -40,6 +40,9 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;cursor:pointer;
   background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);color:#a78bfa;transition:.2s}
 .track-btn:hover{background:rgba(167,139,250,.2)}
+.user-pill{display:none;align-items:center;gap:5px;border-radius:20px;
+  padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;
+  background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);color:#c4b5fd}
 
 /* ── GAME TABS ── */
 .gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
@@ -255,6 +258,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <span class="status-dot"></span>
       <span id="status-text">Checking…</span>
     </div>
+    <div class="user-pill" id="live-status" aria-live="polite"></div>
     <!-- PHASE 1 FEATURE 2: Track Order button -->
     <div class="track-btn" onclick="document.getElementById('tracker-modal').style.display='flex'">
       🔍 Track Order
@@ -691,6 +695,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 // ════════════════════════════════════════════════════════════════
 const PRICE_API = 'https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec';
 const ORDER_API = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
+const AUTH_API = ORDER_API;
 const RECAPTCHA_SITE_KEY = '6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR';
 let DATA = {};
 
@@ -1163,8 +1168,10 @@ async function submitOrder(game){
               <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Item:</span><span style="text-align:right;max-width:60%">${fields.order||fields.orderDescription||'—'}</span></div>
               <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Price:</span><span style="color:#fbbf24;font-weight:bold">${priceEx}</span></div>
               <div style="display:flex;justify-content:space-between"><span style="color:var(--mx)">Account:</span><span>${fields.ign||fields.customerName||fields.username||fields.mobileNumber||'Verified ✓'}</span></div>`;
-            document.querySelector('#g-'+game).style.display='none';
-            document.querySelector('.gtabs').style.display='none';
+            const activePanel = document.getElementById('g-'+game);
+            if(activePanel) activePanel.style.display='none';
+            const gameTabs = document.querySelector('.gtabs');
+            if(gameTabs) gameTabs.style.display='none';
             document.getElementById('ok-msg').style.display='block';
             window.scrollTo(0,0);
           } else { throw new Error(txt); }
@@ -1175,23 +1182,46 @@ async function submitOrder(game){
   reader.readAsDataURL(file);
 }
 
-function resetAll(){ document.getElementById('ok-msg').style.display='none'; window.scrollTo({top:0,behavior:'smooth'}); }
+function resetAll(){
+  const okMsg = document.getElementById('ok-msg');
+  if(okMsg) okMsg.style.display='none';
+  const gameTabs = document.querySelector('.gtabs');
+  if(gameTabs) gameTabs.style.display='';
+  document.querySelectorAll('.gpanel').forEach(panel=>{ panel.style.display=''; });
+
+  const activeTab = document.querySelector('.gtab.active') || document.querySelector('.gtab');
+  const activeGame = activeTab?.dataset.g || 'mlbb';
+  document.querySelectorAll('.gpanel').forEach(panel=>panel.classList.remove('active'));
+  const activePanel = document.getElementById('g-'+activeGame) || document.getElementById('g-mlbb');
+  if(activePanel) activePanel.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
 // ════════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════════
 fetchPrices();
   // --- LOGIN & MEMORY SYSTEM ---
+function showLoggedInUser(username){
+  const cleanName = String(username || '').trim();
+  const authScreen = document.getElementById('auth-screen');
+  if(authScreen) authScreen.style.display='none';
+
+  const liveStatus = document.getElementById('live-status');
+  if(liveStatus && cleanName){
+    liveStatus.textContent = 'User: ' + cleanName;
+    liveStatus.style.display = 'inline-flex';
+  }
+}
+
 // 1. Check if user is already logged in when the page loads
 document.addEventListener("DOMContentLoaded", () => {
   const savedUser = localStorage.getItem('markShopUser');
   if (savedUser) {
-    document.getElementById('auth-screen').style.display = 'none'; // Hide login screen
-    document.getElementById('live-status').innerHTML += ` <span style="color: #a78bfa; margin-left: 10px;">👤 ${savedUser}</span>`;
+    showLoggedInUser(savedUser);
   }
 });
 
-// 2. Handle Login & Registration
 // 2. Handle Login & Registration
 async function handleAuth(action) {
   const u = document.getElementById('auth-user').value.trim();
@@ -1210,8 +1240,7 @@ async function handleAuth(action) {
   btn.textContent = "Connecting to database...";
 
   try {
-    // 💡 FIX 1: We now use your global API_URL variable instead of a hardcoded link!
-    const res = await fetch(API_URL, {
+    const res = await fetch(AUTH_API, {
       method: 'POST',
       body: JSON.stringify({ action: action, username: u, password: p }),
       headers: { 'Content-Type': 'text/plain;charset=utf-8' }
@@ -1230,10 +1259,7 @@ async function handleAuth(action) {
     if (data.success) {
       // ✅ Save to browser memory permanently!
       localStorage.setItem('markShopUser', data.username);
-      
-      // ✅ Hide login screen and welcome them
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('live-status').innerHTML += ` <span style="color: #a78bfa; margin-left: 10px;">👤 ${data.username}</span>`;
+      showLoggedInUser(data.username);
     } else {
       errDiv.textContent = "❌ " + data.error;
       errDiv.style.display = "block";
