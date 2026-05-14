@@ -1053,76 +1053,131 @@ async function verifyRoblox(){
   }catch(e){ disp.value=''; disp.placeholder='Verify unavailable — type manually'; }
 }
 
-// ============================================================
-// SUBMIT ORDER
-// ============================================================
-async function submitOrder(game){
-  const btn=document.getElementById(game+'-btn');
-  const err=document.getElementById(game+'-err');
-  const pm=document.getElementById('pm-val-'+game).value;
-  const fi=document.getElementById(game+'-screenshot');
-  err.style.display='none';
-  let order='',pid='',ign='',notes='';
-  if(game==='mlbb'){
-    order=document.getElementById('mlbb-order-display').value;
-    pid=document.getElementById('mlbb-pid').value+' / Zone: '+document.getElementById('mlbb-zid').value;
-    ign=document.getElementById('mlbb-ign').value; notes=document.getElementById('mlbb-notes').value;
-  }else if(game==='cod'){
-    order=document.getElementById('cod-order-display').value;
-    pid=document.getElementById('cod-pid').value; ign=document.getElementById('cod-ign').value; notes=document.getElementById('cod-notes').value;
-  }else if(game==='roblox'){
-    order=document.getElementById('roblox-order-display').value;
-    pid='GP:'+document.getElementById('roblox-gpid').value+' ('+document.getElementById('roblox-gpname').value+')';
-    ign=document.getElementById('roblox-user').value+' / '+document.getElementById('roblox-dispname').value;
-    notes=document.getElementById('roblox-notes').value;
-  }else if(game==='bs'){
-    order=document.getElementById('bs-order-display').value;
-    pid=document.getElementById('bs-pid').value; ign=document.getElementById('bs-ign').value; notes=document.getElementById('bs-notes').value;
-  }else if(game==='load'){
-    order=document.getElementById('load-order-display').value;
-    pid=document.getElementById('load-number').value; ign=document.getElementById('load-network-display').value; notes=document.getElementById('load-notes').value;
-  }else if(game==='custom'){
-    order=document.getElementById('custom-desc').value;
-    pid=document.getElementById('custom-pid').value;
-    ign=document.getElementById('custom-name').value+' / '+document.getElementById('custom-contact').value;
-    notes=document.getElementById('custom-notes').value;
+// 9. 🛡️ SECURE SUBMIT ORDER (With Rate Limiting & Anti-Spam)
+async function submitOrder(game) {
+  const btn = document.getElementById(game + '-btn');
+  const errEl = document.getElementById(game + '-err');
+  errEl.style.display = 'none';
+
+  // 🛑 SECURITY CHECK 1: Rate Limiting (Max 3 orders per 5 minutes)
+  const now = Date.now();
+  let orderHistory = JSON.parse(localStorage.getItem('markShopHistory') || '[]');
+  // Keep only timestamps from the last 5 minutes (300,000 ms)
+  orderHistory = orderHistory.filter(time => now - time < 300000);
+  
+  if (orderHistory.length >= 3) {
+    errEl.innerHTML = '🛡️ <b>Security Alert:</b> You are submitting orders too quickly. Please wait 5 minutes to prevent system spam.';
+    errEl.style.display = 'block';
+    return;
   }
-  if(!order){showErr(err,'Please select or describe your order first.');return;}
-  if(!pm){showErr(err,'Please select a payment method.');return;}
-  let fileData=null,fileName=null,mimeType=null;
-  if(fi&&fi.files[0]){
-    const f=fi.files[0];
-    if(f.size>4500000){showErr(err,'Screenshot too large (max 4.5MB).');return;}
-    fileName=f.name; mimeType=f.type; fileData=await toBase64(f);
+
+  let fields = {};
+  let missingFields = [];
+
+  const pmVal = document.getElementById('pm-val-' + game).value;
+  if (!pmVal) missingFields.push('Payment Method');
+
+  const fileInput = document.getElementById(game + '-screenshot');
+  if (!fileInput || fileInput.files.length === 0) missingFields.push('Payment Receipt');
+
+  // Gather Fields based on game
+  if (game === 'mlbb') {
+    const order = document.getElementById('mlbb-order-display').value;
+    const pid = document.getElementById('mlbb-pid').value.trim();
+    const zid = document.getElementById('mlbb-zid').value.trim();
+    const ign = document.getElementById('mlbb-ign').value.trim();
+    if (!order) missingFields.push('Order/Item');
+    if (!pid) missingFields.push('Player ID');
+    if (!zid) missingFields.push('Zone ID');
+    fields = { game: 'Mobile Legends (MLBB)', order, playerID: pid, zoneID: zid, ign, server: document.getElementById('mlbb-server').value, notes: document.getElementById('mlbb-notes').value.trim() };
+  } else if (game === 'cod') {
+    const order = document.getElementById('cod-order-display').value;
+    const pid = document.getElementById('cod-pid').value.trim();
+    if (!order) missingFields.push('Order/Item');
+    if (!pid) missingFields.push('Player ID');
+    fields = { game: 'Garena Call of Duty', order, playerID: pid, ign: document.getElementById('cod-ign').value.trim(), notes: document.getElementById('cod-notes').value.trim() };
+  } else if (game === 'roblox') {
+    const order = document.getElementById('roblox-order-display').value;
+    const gpid = document.getElementById('roblox-gpid').value.trim();
+    const gpname = document.getElementById('roblox-gpname').value.trim();
+    const user = document.getElementById('roblox-user').value.trim();
+    if (!order) missingFields.push('Robux Amount');
+    if (!gpid || !gpname || !user) missingFields.push('Roblox Details');
+    fields = { game: 'Roblox', order, gamepassID: gpid, gamepassName: gpname, username: user, notes: document.getElementById('roblox-notes').value.trim() };
+  } else if (game === 'bs') {
+    const order = document.getElementById('bs-order-display').value;
+    const pid = document.getElementById('bs-pid').value.trim();
+    const ign = document.getElementById('bs-ign').value.trim();
+    if (!order || !pid || !ign) missingFields.push('Required Details');
+    fields = { game: 'Bloodstrike', order, playerID: pid, ign, notes: document.getElementById('bs-notes').value.trim() };
+  } else if (game === 'load') {
+    const order = document.getElementById('load-order-display').value;
+    const number = document.getElementById('load-number').value.trim();
+    if (!order || !number) missingFields.push('Required Details');
+    fields = { game: 'Load', order, network: document.getElementById('load-network-display').value, mobileNumber: number, notes: document.getElementById('load-notes').value.trim() };
+  } else if (game === 'custom') {
+    const desc = document.getElementById('custom-desc').value.trim();
+    const name = document.getElementById('custom-name').value.trim();
+    const contact = document.getElementById('custom-contact').value.trim();
+    if (!desc || !name || !contact) missingFields.push('Required Details');
+    fields = { game: document.getElementById('custom-game').value.trim(), orderDescription: desc, customerName: name, contactNumberOrFB: contact, playerID_username: document.getElementById('custom-pid').value.trim(), budget: document.getElementById('custom-budget').value.trim(), notes: document.getElementById('custom-notes').value.trim() };
   }
-  btn.disabled=true; btn.textContent='Sending…';
-  const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
-  const txnID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
-  const payload={game:gameName,order,orderDescription:`Order: ${order}\nPlayer/ID: ${pid||'-'}\nIGN: ${ign||'-'}\nPayment: ${pm}\nNotes: ${notes||'-'}`,transactionID:txnID,dateTime:new Date().toLocaleString(),fileData,fileName,mimeType};
-  try{
-    const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(payload)});
-    const txt=await res.text();
-    if(txt.toLowerCase().includes('success')){
-      document.getElementById('ok-msg').innerHTML=`<div class="ok-ico">✅</div><h4>ORDER SUBMITTED!</h4>
-        <div style="background:rgba(255,255,255,.05);border:1px solid var(--dk5);border-radius:10px;padding:14px;margin:12px 0;text-align:left;font-size:.82rem">
-          <b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>
-          <b>ID:</b> <span style="color:#fbbf24">${txnID}</span><br>
-          <b>Game:</b> ${gameName}<br>
-          <b>Payment:</b> ${pm}<br>
-          <b>Order:</b> ${order}
-        </div>
-        <p>Order received! Wait for Mark to confirm before sending payment. 🎮</p>
-        <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>`;
-      document.getElementById('ok-msg').style.display='block';
-      document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
-    }else{
-      showErr(err,'Server error: '+txt);
-      btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
+
+  if (missingFields.length) {
+    errEl.textContent = '⚠️ Please fill in: ' + missingFields.join(', ');
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // 🛑 SECURITY CHECK 2: Prevent Double Clicking
+  btn.disabled = true; 
+  btn.textContent = 'Securely Uploading...';
+  
+  fields.transactionID = "TXN-" + Math.random().toString(36).substr(2, 7).toUpperCase();
+  fields.dateTime = new Date().toLocaleString();
+  fields.paymentMethod = pmVal;
+
+  const file = fileInput.files[0];
+  
+  // 🛑 SECURITY CHECK 3: File Size Limit on Frontend (Prevents freezing)
+  if (file.size > 4500000) {
+    errEl.textContent = '❌ Image too large. Please upload an image smaller than 4MB.';
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit Order';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    fields.fileData = e.target.result.split(',')[1];
+    fields.mimeType = file.type;
+    fields.fileName = file.name;
+
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec", {
+        method: 'POST',
+        body: JSON.stringify(fields),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      const responseText = await res.text();
+      
+      if(responseText.includes("Success")){
+        // ✅ Log successful order in Local Storage for Rate Limiting
+        orderHistory.push(Date.now());
+        localStorage.setItem('markShopHistory', JSON.stringify(orderHistory));
+        
+        document.querySelector(`#g-${game}`).style.display = 'none';
+        document.querySelector('.gtabs').style.display = 'none';
+        document.getElementById('ok-msg').style.display = 'block';
+        window.scrollTo(0,0);
+      } else { throw new Error('Server error'); }
+    } catch(err) {
+      errEl.textContent = '❌ Upload failed. Please check your internet connection and try again.';
+      errEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Submit Order';
     }
-  }catch(e){
-    showErr(err,'Network error. Please try again.');
-    btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
-  }
+  };
+  reader.readAsDataURL(file); 
 }
 
 function showErr(el,msg){el.textContent=msg;el.style.display='block';}
