@@ -690,539 +690,38 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-// CONFIG
-// ════════════════════════════════════════════════════════════════
-const PRICE_API = 'https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec';
-const ORDER_API = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
-const AUTH_API = ORDER_API;
-const RECAPTCHA_SITE_KEY = '6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR';
-let DATA = {};
+// ==========================================
+// 1. GLOBAL API CONFIGURATION
+// ==========================================
+// 💡 This ONE link now handles Prices, Orders, and Logins perfectly!
+const API_URL = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
 
-// ════════════════════════════════════════════════════════════════
-// PHASE 1 — FEATURE 1: SMART ONLINE/OFFLINE INDICATOR
-// Based on Philippine Time (PHT = UTC+8)
-// Online: 8:00 AM – 11:00 PM | Offline: 11:00 PM – 8:00 AM
-// ════════════════════════════════════════════════════════════════
-function updateOnlineStatus() {
-  const now  = new Date();
-  const pht  = new Date(now.toLocaleString('en-US', {timeZone:'Asia/Manila'}));
-  const hour = pht.getHours();
-  const pill = document.getElementById('status-pill');
-  const txt  = document.getElementById('status-text');
+let gameData = {};
+let selectedGame = '';
+let selectedItem = {};
+let selectedPrice = 0;
 
-  // Allow override via localStorage (e.g. Mark can set manually)
-  const override = localStorage.getItem('markShopStatus');
-
-  let isOnline;
-  if (override === 'online')       isOnline = true;
-  else if (override === 'offline') isOnline = false;
-  else                             isOnline = hour >= 8 && hour < 23;
-
-  if (isOnline) {
-    pill.className = 'status-pill online';
-    txt.textContent = '🟢 Online — Orders: 5–30 min';
-  } else {
-    pill.className = 'status-pill offline';
-    txt.textContent = '🔴 Offline — Orders processed at 8 AM';
-  }
-
-  // Status modal content
-  document.getElementById('status-modal-content').innerHTML = isOnline
-    ? `<h3 style="color:#4ade80;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:10px">🟢 Mark is Online</h3>
-       <p style="font-size:.82rem;color:var(--mx);line-height:1.7">Orders are currently being processed. Expect your top-up within <b style="color:var(--tx)">5–30 minutes</b> after payment confirmation.</p>
-       <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:10px;margin-top:12px;font-size:.78rem;color:#4ade80">
-         ✅ You can place your order now!
-       </div>`
-    : `<h3 style="color:#f87171;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:10px">🔴 Mark is Offline</h3>
-       <p style="font-size:.82rem;color:var(--mx);line-height:1.7">Mark is currently unavailable. Orders placed now will be <b style="color:var(--tx)">processed starting 8:00 AM PHT</b>.</p>
-       <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px;margin-top:12px;font-size:.78rem;color:#f87171">
-         ⚠️ Your order is safe — it will be processed when Mark is back online.
-       </div>`;
-}
-updateOnlineStatus();
-setInterval(updateOnlineStatus, 60000); // refresh every minute
-
-// ════════════════════════════════════════════════════════════════
-// PHASE 1 — FEATURE 2: ORDER TRACKER
-// Looks up TXN ID in your Google Sheet via the existing API
-// ════════════════════════════════════════════════════════════════
-async function trackOrder() {
-  const txn    = document.getElementById('txn-input').value.trim().toUpperCase();
-  const result = document.getElementById('tracker-result');
-  if (!txn || !txn.startsWith('TXN-')) {
-    result.style.display = 'block';
-    result.innerHTML = '<div style="color:#f87171;font-size:.82rem;padding:10px;background:rgba(239,68,68,.08);border-radius:8px">⚠️ Please enter a valid Transaction ID (e.g. TXN-AB3X9K2)</div>';
-    return;
-  }
-  result.style.display = 'block';
-  result.innerHTML = '<div style="color:var(--mx);font-size:.82rem;padding:10px;text-align:center">🔍 Looking up your order…</div>';
-
-  try {
-    const r    = await fetch(`${PRICE_API}?txn=${encodeURIComponent(txn)}`);
-    const data = await r.json();
-
-    if (data && data.found) {
-      const statusColor = data.status==='Completed' ? '#4ade80' : data.status==='Processing' ? '#fbbf24' : '#94a3b8';
-      result.innerHTML = `
-        <div style="background:var(--dk3);border:1px solid var(--bdr);border-radius:10px;padding:14px">
-          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:${statusColor};margin-bottom:10px">
-            ${data.status==='Completed'?'✅':data.status==='Processing'?'⏳':'📋'} Status: ${data.status}
-          </div>
-          <div style="font-size:.8rem;color:var(--mx);line-height:1.8">
-            <b style="color:var(--tx)">TXN ID:</b> ${txn}<br>
-            <b style="color:var(--tx)">Game:</b> ${data.game||'N/A'}<br>
-            <b style="color:var(--tx)">Order:</b> ${data.order||'N/A'}<br>
-            <b style="color:var(--tx)">Date:</b> ${data.date||'N/A'}
-          </div>
-        </div>`;
-    } else {
-      // Order not found in sheet — show pending state (orders might not be in sheet yet)
-      result.innerHTML = `
-        <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px">
-          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fbbf24;margin-bottom:8px">⏳ Pending / Not Yet Updated</div>
-          <div style="font-size:.8rem;color:var(--mx);line-height:1.7">
-            Your order <b style="color:var(--tx)">${txn}</b> was received but hasn't been updated in the tracker yet.<br><br>
-            If you just placed your order, <b style="color:var(--tx)">please wait 10–30 minutes</b> for Mark to process and update your status.
-          </div>
-        </div>`;
-    }
-  } catch(e) {
-    result.innerHTML = `
-      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px">
-        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fbbf24;margin-bottom:8px">⏳ Order Received</div>
-        <div style="font-size:.8rem;color:var(--mx);line-height:1.7">
-          Your TXN ID <b style="color:var(--tx)">${txn}</b> was found! Mark will process your order shortly.<br><br>
-          Tracker updates every 30 minutes. Check back later or wait for Mark's confirmation message.
-        </div>
-      </div>`;
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
-// PHASE 1 — FEATURE 3: LIVE RECENT PURCHASES (Social Proof)
-// ════════════════════════════════════════════════════════════════
-const RECENT_PURCHASES = [
-  {ico:'💎',who:'Player from Quezon City',item:'570 Diamonds',price:'₱510'},
-  {ico:'⭐',who:'Player from Manila',item:'June NSL — Normal Starlight',price:'₱160'},
-  {ico:'🎖️',who:'Player from Cebu',item:'100 Garena Shells',price:'₱100'},
-  {ico:'💎',who:'Player from Davao',item:'1163 Diamonds',price:'₱1,050'},
-  {ico:'🧱',who:'Player from Pasig',item:'500 Robux',price:'₱250'},
-  {ico:'📶',who:'Player from Batangas',item:'GOUNLI50',price:'₱45'},
-  {ico:'💎',who:'Player from Iloilo',item:'2398 Diamonds',price:'₱2,150'},
-  {ico:'🩸',who:'Player from Taguig',item:'1000 + 100 Golds',price:'₱437'},
-  {ico:'⭐',who:'Player from Makati',item:'PSL — Premium Starlight',price:'₱320'},
-  {ico:'💎',who:'Player from Laguna',item:'448 Diamonds',price:'₱410'},
-  {ico:'🎖️',who:'Player from Pampanga',item:'200 Garena Shells',price:'₱200'},
-  {ico:'🧱',who:'Player from Rizal',item:'1000 Robux',price:'₱480'},
-];
-
-let toastIndex = 0;
-function showNextToast() {
-  const t = RECENT_PURCHASES[toastIndex % RECENT_PURCHASES.length];
-  toastIndex++;
-  const toast = document.getElementById('purchase-toast');
-  document.getElementById('toast-avatar').textContent  = t.ico;
-  document.getElementById('toast-who').textContent     = t.who;
-  document.getElementById('toast-item').textContent    = t.item;
-  document.getElementById('toast-price').textContent   = t.price + ' · just now';
-  toast.style.display = 'block';
-  toast.style.animation = 'none';
-  void toast.offsetWidth; // reflow
-  toast.style.animation = 'slideInLeft .4s ease';
-  // Auto-hide after 5s
-  setTimeout(() => { toast.style.display = 'none'; }, 5000);
-}
-// Start after 8s delay, then every 18s
-setTimeout(() => { showNextToast(); setInterval(showNextToast, 18000); }, 8000);
-
-// ════════════════════════════════════════════════════════════════
-// PAYMENT
-// ════════════════════════════════════════════════════════════════
-const PM_DATA = {
-  gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',                  color:'#3b82f6', qr:'gcash-qr.jpg'},
-  maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',                  color:'#22c55e', qr:'maya-qr.jpg'},
-  gotyme: {label:'GoTyme', name:'Mark Guevarra', num:'09288978005',                  color:'#8b5cf6', qr:'gotyme-qr.jpg'},
-  paypal: {label:'PayPal', name:'Mark Guevarra', num:'marcangelguevarra@gmail.com',  color:'#0ea5e9', note:'Please select "Friends & Family"'}
-};
-const currentMethod={}, currentQR={}, pmTimers={};
-
-function selectPayment(game, method, btn){
-  clearTimeout(pmTimers[game]);
-  currentMethod[game]=method;
-  const form=document.getElementById(game+'-oform')||document.querySelector('#g-'+game+' .oform');
-  if(form) form.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const pm=PM_DATA[method];
-  document.getElementById('pm-val-'+game).value=pm.label;
-  const det=document.getElementById('pm-details-'+game);
-  det.style.display='block'; det.style.borderLeftColor=pm.color;
-  document.getElementById('pm-label-'+game).innerHTML=`<span style="color:${pm.color}">✅ ${pm.label} Selected</span>`;
-  const isEmail=method==='paypal';
-  document.getElementById('pm-numlbl-'+game).textContent=isEmail?'Email Address:':'Account Number:';
-  document.getElementById('pm-name-'+game).textContent='M*** G*******';
-  document.getElementById('pm-num-'+game).textContent=isEmail?'m****@gmail.com':'0928****005';
-  const revBtn=document.getElementById('pm-reveal-btn-'+game);
-  revBtn.style.display='block'; revBtn.textContent='👁️ Reveal Info';
-  const qrBtn=document.getElementById('pm-qr-btn-'+game);
-  const noteEl=document.getElementById('pm-note-'+game);
-  if(pm.qr){ currentQR[game]=pm.qr; qrBtn.style.display='block'; noteEl.style.display='none'; }
-  else { currentQR[game]=null; qrBtn.style.display='none'; noteEl.style.display=pm.note?'block':'none'; if(pm.note)noteEl.textContent=pm.note; }
-}
-
-function revealPM(game){
-  clearTimeout(pmTimers[game]);
-  const method=currentMethod[game]; if(!method)return;
-  const pm=PM_DATA[method]; const isEmail=method==='paypal';
-  const revBtn=document.getElementById('pm-reveal-btn-'+game);
-  document.getElementById('pm-name-'+game).textContent=pm.name;
-  document.getElementById('pm-num-'+game).textContent=pm.num;
-  revBtn.style.display='none';
-  pmTimers[game]=setTimeout(()=>{
-    document.getElementById('pm-name-'+game).textContent='M*** G*******';
-    document.getElementById('pm-num-'+game).textContent=isEmail?'m****@gmail.com':'0928****005';
-    revBtn.style.display='block'; revBtn.textContent='👁️ Reveal Again';
-  }, 3000);
-}
-
-function openQRModal(src){ if(!src)return; document.getElementById('qr-img').src=src; document.getElementById('qr-modal').style.display='flex'; }
-function openIDModal(){ document.getElementById('id-modal').style.display='flex'; }
-
-// ════════════════════════════════════════════════════════════════
-// TABS
-// ════════════════════════════════════════════════════════════════
-document.querySelectorAll('.gtab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.gpanel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('g-'+tab.dataset.g).classList.add('active');
-  });
-});
-document.querySelectorAll('.ctab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    const parent=tab.closest('.gpanel');
-    parent.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
-    parent.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    const panel=document.getElementById(tab.dataset.c);
-    if(panel) panel.classList.add('active');
-  });
-});
-
-// ════════════════════════════════════════════════════════════════
-// GRID BUILDER
-// ════════════════════════════════════════════════════════════════
-function ph(n){ return '₱'+Number(n).toLocaleString('en-PH'); }
-
-function makeGrid(id, items, game, cat){
-  const el=document.getElementById(id); if(!el)return;
-  el.innerHTML='';
-  if(!items||!items.length){ el.innerHTML='<div class="loading-grid">No items found.</div>'; return; }
-  items.forEach(it=>{
-    const c=document.createElement('div');
-    c.className='pcard'; c.dataset.game=game; c.dataset.cat=cat; c.dataset.name=it.n; c.dataset.price=it.p;
-    c.innerHTML=`<div class="chk">✓</div><div class="pn">${it.n}</div>${it.d?`<div class="pd">${it.d}</div>`:''}<div class="pp">${ph(it.p)}</div>`;
-    c.onclick=()=>{ if(game==='mlbb'&&cat==='dd') openDDModal(c); else selectItem(c,game); };
-    el.appendChild(c);
-  });
-}
-
-// Filter out March and April starlight entries
-function filterStarlight(items){
-  if(!items) return [];
-  return items.filter(it=>{ const n=it.n.toLowerCase(); return !n.includes('march')&&!n.includes('april'); });
-}
-
-function buildAll(){
-  if(!DATA||!Object.keys(DATA).length) return;
-  if(DATA.mlbb){
-    makeGrid('grid-mlbb-dias',        DATA.mlbb.dias||DATA.mlbb.Dias,       'mlbb','dias');
-    makeGrid('grid-mlbb-denom',       DATA.mlbb.denom||DATA.mlbb.Denom,     'mlbb','denom');
-    makeGrid('grid-mlbb-combo',       DATA.mlbb.combo||DATA.mlbb.Combo,     'mlbb','combo');
-    makeGrid('grid-mlbb-dd',          DATA.mlbb.dd||DATA.mlbb.DD,           'mlbb','dd');
-    makeGrid('grid-mlbb-bundles',     DATA.mlbb.bundles||DATA.mlbb.Bundles, 'mlbb','bundles');
-    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc||DATA.mlbb.SkinsC,   'mlbb','skins');
-    makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,   'mlbb','skins');
-    makeGrid('grid-mlbb-starlight', filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight), 'mlbb','starlight');
-  }
-  if(DATA.cod)    makeGrid('grid-cod',    DATA.cod,    'cod','main');
-  if(DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox','main');
-  if(DATA.bs)     makeGrid('grid-bs',     DATA.bs,     'bs','main');
-  if(DATA.load){
-    Object.keys(DATA.load).forEach(net=>{
-      const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
-      if(items) makeGrid('grid-'+net, items,'load',net);
-    });
-  }
-}
-
-async function fetchPrices(){
-  try{
-    const r=await fetch(PRICE_API);
-    if(!r.ok) throw new Error();
-    DATA=await r.json();
-    buildAll();
-  }catch(e){
-    document.querySelectorAll('.loading-grid').forEach(el=>{ el.textContent='⚠️ Could not load prices. Please refresh.'; });
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
-// ITEM SELECTION
-// ════════════════════════════════════════════════════════════════
-function selectItem(card, game){
-  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
-  card.classList.add('sel');
-  const name=card.dataset.name, price=ph(parseInt(card.dataset.price));
-  fillForm(game,name,price);
-  if(game==='load'){
-    const netData=DATA.load?DATA.load[card.dataset.cat]:null;
-    document.getElementById('load-network-display').value=netData?.net||card.dataset.cat;
-  }
-}
-
-function promoSelectItem(name, price){
-  // Switch to Diamonds tab so form is visible
-  document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#g-mlbb .cpanel').forEach(p=>p.classList.remove('active'));
-  document.querySelector('#mlbb-ctabs .ctab[data-c="mlbb-dias"]').classList.add('active');
-  document.getElementById('mlbb-dias').classList.add('active');
-  fillForm('mlbb',name,price);
-}
-
-const FORM_IDS = {
-  mlbb:  ['mlbb-sel-box','mlbb-sel-item','mlbb-sel-price','mlbb-order-display','mlbb-oform'],
-  cod:   ['cod-sel-box','cod-sel-item','cod-sel-price','cod-order-display','cod-oform'],
-  roblox:['roblox-sel-box','roblox-sel-item','roblox-sel-price','roblox-order-display','roblox-oform'],
-  bs:    ['bs-sel-box','bs-sel-item','bs-sel-price','bs-order-display','bs-oform'],
-  load:  ['load-sel-box','load-sel-item','load-sel-price','load-order-display','load-oform'],
-};
-function fillForm(game,name,price){
-  const [box,item,priceEl,disp,form]=FORM_IDS[game];
-  document.getElementById(box).style.display='block';
-  document.getElementById(item).textContent=name;
-  document.getElementById(priceEl).textContent=price;
-  document.getElementById(disp).value=name+' — '+price;
-  const el=document.getElementById(form);
-  if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
-}
-
-// ════════════════════════════════════════════════════════════════
-// DD MODAL
-// ════════════════════════════════════════════════════════════════
-let pendingDDCard=null;
-function openDDModal(card){ pendingDDCard=card; ['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>document.getElementById(id).checked=false); const btn=document.getElementById('dd-proceed-btn'); btn.disabled=true; btn.style.background='#dc2626'; document.getElementById('dd-modal').style.display='flex'; }
-function closeDDModal(){ document.getElementById('dd-modal').style.display='none'; pendingDDCard=null; }
-['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>{ document.getElementById(id).addEventListener('change',()=>{ const all=['dd-chk1','dd-chk2','dd-chk3'].every(i=>document.getElementById(i).checked); const btn=document.getElementById('dd-proceed-btn'); btn.disabled=!all; btn.style.background=all?'#16a34a':'#dc2626'; }); });
-function proceedDD(){ document.getElementById('dd-modal').style.display='none'; if(pendingDDCard){ selectItem(pendingDDCard,'mlbb'); pendingDDCard=null; } }
-
-// ════════════════════════════════════════════════════════════════
-// LOAD NETWORK
-// ════════════════════════════════════════════════════════════════
-function selectNet(card,net){ document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active')); card.classList.add('active'); document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active')); const lp=document.getElementById('lp-'+net); if(lp) lp.classList.add('active'); }
-
-// ════════════════════════════════════════════════════════════════
-// CUSTOM CATEGORY
-// ════════════════════════════════════════════════════════════════
-function selectCC(el){ document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active')); el.classList.add('active'); document.getElementById('custom-game').value=el.dataset.cc; }
-
-// ════════════════════════════════════════════════════════════════
-// VERIFY APIs
-// ════════════════════════════════════════════════════════════════
-async function verifyMLBB(){
-  const pid=document.getElementById('mlbb-pid').value.trim();
-  const zid=document.getElementById('mlbb-zid').value.trim();
-  const ign=document.getElementById('mlbb-ign');
-  if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
-  ign.value='Verifying…'; ign.readOnly=true; ign.style.borderColor='var(--or)';
-  try{
-    const r=await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
-    const d=await r.json();
-    if(r.ok&&d.ign){ ign.value=d.ign+(d.region?' · '+d.region:''); ign.style.borderColor='var(--gr)'; ign.readOnly=true; }
-    else { ign.value=''; ign.readOnly=false; ign.placeholder='Not found — type IGN manually'; ign.style.borderColor='#ef4444'; ign.style.background='var(--dk3)'; ign.focus(); }
-  }catch(e){ ign.value=''; ign.readOnly=false; ign.placeholder='Verify busy — type IGN manually'; ign.style.borderColor='#f59e0b'; ign.style.background='var(--dk3)'; ign.focus(); }
-}
-
-async function verifyCOD(){
-  const pid=document.getElementById('cod-pid').value.trim();
-  const ign=document.getElementById('cod-ign');
-  if(!pid){alert('Enter Player ID first.');return;}
-  ign.value='Verifying…'; ign.readOnly=true; ign.style.borderColor='var(--or)';
-  try{
-    const r=await fetch(`/api/verify-cod?id=${pid}`);
-    const d=await r.json();
-    if(r.ok&&d.ign){ ign.value=d.ign; ign.style.borderColor='var(--gr)'; }
-    else { ign.value=''; ign.readOnly=false; ign.placeholder='Not found — type IGN manually'; ign.style.borderColor='#ef4444'; ign.style.background='var(--dk3)'; ign.focus(); }
-  }catch(e){ ign.value=''; ign.readOnly=false; ign.placeholder='Verify unavailable — type manually'; ign.style.borderColor='#f59e0b'; }
-}
-
-async function verifyRoblox(){
-  const u=document.getElementById('roblox-user').value.trim();
-  const disp=document.getElementById('roblox-dispname');
-  if(!u){alert('Enter Roblox username first.');return;}
-  disp.value='Verifying…';
-  try{
-    const r=await fetch(`/api/verify-roblox?username=${encodeURIComponent(u)}`);
-    const d=await r.json();
-    if(r.ok&&d.ign){ disp.value=d.ign; disp.style.borderColor='var(--gr)'; }
-    else { disp.value=''; disp.placeholder='Not found — check spelling'; disp.style.borderColor='#ef4444'; }
-  }catch(e){ disp.value=''; disp.placeholder='Verify unavailable — type manually'; }
-}
-
-// ════════════════════════════════════════════════════════════════
-// SUBMIT ORDER (with reCAPTCHA v3 + rate limiting)
-// ════════════════════════════════════════════════════════════════
-async function submitOrder(game){
-  const btn=document.getElementById(game+'-btn');
-  const errEl=document.getElementById(game+'-err');
-  errEl.style.display='none';
-
-  // Rate limit: max 3 orders per 5 minutes
-  const now=Date.now();
-  let hist=JSON.parse(localStorage.getItem('markShopHistory')||'[]').filter(t=>now-t<300000);
-  if(hist.length>=3){ errEl.innerHTML='🛡️ <b>Slow down!</b> Max 3 orders per 5 minutes to prevent spam. Please wait.'; errEl.style.display='block'; return; }
-
-  const pmVal=document.getElementById('pm-val-'+game).value;
-  const fileInput=document.getElementById(game+'-screenshot');
-  const missingFields=[];
-  if(!pmVal) missingFields.push('Payment Method');
-  if(!fileInput||fileInput.files.length===0) missingFields.push('Payment Receipt');
-
-  let fields={};
-  if(game==='mlbb'){
-    const order=document.getElementById('mlbb-order-display').value;
-    const pid=document.getElementById('mlbb-pid').value.trim();
-    const zid=document.getElementById('mlbb-zid').value.trim();
-    const ign=document.getElementById('mlbb-ign').value.trim();
-    if(!order) missingFields.push('Order/Item');
-    if(!pid)   missingFields.push('Player ID');
-    if(!zid)   missingFields.push('Zone ID');
-    if(!ign)   missingFields.push('IGN (verify first)');
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server:document.getElementById('mlbb-server').value,notes:document.getElementById('mlbb-notes').value.trim()};
-  } else if(game==='cod'){
-    const order=document.getElementById('cod-order-display').value;
-    const pid=document.getElementById('cod-pid').value.trim();
-    const ign=document.getElementById('cod-ign').value.trim();
-    if(!order) missingFields.push('Order/Item');
-    if(!pid)   missingFields.push('Player ID');
-    if(!ign)   missingFields.push('IGN');
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes:document.getElementById('cod-notes').value.trim()};
-  } else if(game==='roblox'){
-    const order=document.getElementById('roblox-order-display').value;
-    const gpid=document.getElementById('roblox-gpid').value.trim();
-    const gpname=document.getElementById('roblox-gpname').value.trim();
-    const user=document.getElementById('roblox-user').value.trim();
-    if(!order||!gpid||!gpname||!user) missingFields.push('Roblox Details');
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes:document.getElementById('roblox-notes').value.trim()};
-  } else if(game==='bs'){
-    const order=document.getElementById('bs-order-display').value;
-    const pid=document.getElementById('bs-pid').value.trim();
-    const ign=document.getElementById('bs-ign').value.trim();
-    if(!order||!pid||!ign) missingFields.push('Required Details');
-    fields={game:'Bloodstrike',order,playerID:pid,ign,notes:document.getElementById('bs-notes').value.trim()};
-  } else if(game==='load'){
-    const order=document.getElementById('load-order-display').value;
-    const number=document.getElementById('load-number').value.trim();
-    if(!order||!number) missingFields.push('Required Details');
-    fields={game:'Load',order,network:document.getElementById('load-network-display').value,mobileNumber:number,notes:document.getElementById('load-notes').value.trim()};
-  } else if(game==='custom'){
-    const desc=document.getElementById('custom-desc').value.trim();
-    const name=document.getElementById('custom-name').value.trim();
-    const contact=document.getElementById('custom-contact').value.trim();
-    if(!desc||!name||!contact) missingFields.push('Required Details');
-    fields={game:document.getElementById('custom-game').value,orderDescription:desc,customerName:name,contactNumberOrFB:contact,playerID_username:document.getElementById('custom-pid').value.trim(),budget:document.getElementById('custom-budget').value.trim(),notes:document.getElementById('custom-notes').value.trim()};
-  }
-
-  if(missingFields.length){ errEl.textContent='⚠️ Please fill in: '+missingFields.join(', '); errEl.style.display='block'; return; }
-
-  const file=fileInput.files[0];
-  if(file.size>4500000){ errEl.textContent='❌ Image too large. Max 4MB.'; errEl.style.display='block'; return; }
-
-  btn.disabled=true; btn.textContent='Securely Uploading…';
-  fields.transactionID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
-  fields.dateTime=new Date().toLocaleString();
-  fields.paymentMethod=pmVal;
-
-  const reader=new FileReader();
-  reader.onload=function(e){
-    fields.fileData=e.target.result.split(',')[1];
-    fields.mimeType=file.type;
-    fields.fileName=file.name;
-
-    grecaptcha.ready(function(){
-      grecaptcha.execute(RECAPTCHA_SITE_KEY,{action:'submitOrder'}).then(async function(token){
-        fields.recaptchaToken=token;
-        try{
-          const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(fields),headers:{'Content-Type':'text/plain;charset=utf-8'}});
-          const txt=await res.text();
-          if(txt.includes('Success')){
-            hist.push(Date.now());
-            localStorage.setItem('markShopHistory',JSON.stringify(hist));
-            const orderDisp=(game!=='custom')?(document.getElementById(game+'-order-display')?.value||''):(fields.orderDescription||'');
-            const priceEx=orderDisp.includes('—')?orderDisp.split('—')[1].trim():'See email';
-            document.getElementById('receipt-summary').innerHTML=`
-              <div style="color:var(--or);font-weight:bold;border-bottom:1px solid var(--dk5);padding-bottom:5px;margin-bottom:10px;display:flex;justify-content:space-between">
-                <span>Receipt Summary</span><span style="font-family:monospace;color:#a78bfa">${fields.transactionID}</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Item:</span><span style="text-align:right;max-width:60%">${fields.order||fields.orderDescription||'—'}</span></div>
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Price:</span><span style="color:#fbbf24;font-weight:bold">${priceEx}</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:var(--mx)">Account:</span><span>${fields.ign||fields.customerName||fields.username||fields.mobileNumber||'Verified ✓'}</span></div>`;
-            const activePanel = document.getElementById('g-'+game);
-            if(activePanel) activePanel.style.display='none';
-            const gameTabs = document.querySelector('.gtabs');
-            if(gameTabs) gameTabs.style.display='none';
-            document.getElementById('ok-msg').style.display='block';
-            window.scrollTo(0,0);
-          } else { throw new Error(txt); }
-        } catch(err){ errEl.textContent='❌ Error: '+err.message; errEl.style.display='block'; btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order'; }
-      });
-    });
-  };
-  reader.readAsDataURL(file);
-}
-
-function resetAll(){
-  const okMsg = document.getElementById('ok-msg');
-  if(okMsg) okMsg.style.display='none';
-  const gameTabs = document.querySelector('.gtabs');
-  if(gameTabs) gameTabs.style.display='';
-  document.querySelectorAll('.gpanel').forEach(panel=>{ panel.style.display=''; });
-
-  const activeTab = document.querySelector('.gtab.active') || document.querySelector('.gtab');
-  const activeGame = activeTab?.dataset.g || 'mlbb';
-  document.querySelectorAll('.gpanel').forEach(panel=>panel.classList.remove('active'));
-  const activePanel = document.getElementById('g-'+activeGame) || document.getElementById('g-mlbb');
-  if(activePanel) activePanel.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// ════════════════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════════════════
-fetchPrices();
-  // --- LOGIN & MEMORY SYSTEM ---
-function showLoggedInUser(username){
-  const cleanName = String(username || '').trim();
-  const authScreen = document.getElementById('auth-screen');
-  if(authScreen) authScreen.style.display='none';
-
-  const liveStatus = document.getElementById('live-status');
-  if(liveStatus && cleanName){
-    liveStatus.textContent = 'User: ' + cleanName;
-    liveStatus.style.display = 'inline-flex';
-  }
-}
-
-// 1. Check if user is already logged in when the page loads
+// ==========================================
+// 2. AUTHENTICATION & LOGIN SYSTEM
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
+  // Check if user is already logged in
   const savedUser = localStorage.getItem('markShopUser');
   if (savedUser) {
-    showLoggedInUser(savedUser);
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('live-status').innerHTML += ` <span style="color: #a78bfa; margin-left: 10px;">👤 ${savedUser}</span>`;
   }
+
+  // Check if returning from a successful PayMongo payment
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('payment') === 'success') {
+    processSuccessfulPayment();
+  }
+
+  // Fetch prices on load
+  fetchPrices();
 });
 
-// 2. Handle Login & Registration
 async function handleAuth(action) {
   const u = document.getElementById('auth-user').value.trim();
   const p = document.getElementById('auth-pass').value.trim();
@@ -1240,36 +739,314 @@ async function handleAuth(action) {
   btn.textContent = "Connecting to database...";
 
   try {
-    const res = await fetch(AUTH_API, {
+    const res = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({ action: action, username: u, password: p }),
       headers: { 'Content-Type': 'text/plain;charset=utf-8' }
     });
     
-    // 💡 FIX 2: We read the raw text first to prevent JSON crash errors
+    // Read raw text to prevent crashes if Google sends an error
     const textResponse = await res.text();
     let data;
     try {
       data = JSON.parse(textResponse);
     } catch (parseErr) {
-      // If Google sends an error message instead of JSON, we catch it here!
       throw new Error("Backend Error: " + textResponse);
     }
     
     if (data.success) {
-      // ✅ Save to browser memory permanently!
       localStorage.setItem('markShopUser', data.username);
-      showLoggedInUser(data.username);
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('live-status').innerHTML += ` <span style="color: #a78bfa; margin-left: 10px;">👤 ${data.username}</span>`;
     } else {
       errDiv.textContent = "❌ " + data.error;
       errDiv.style.display = "block";
     }
   } catch (err) {
-    // This will now show the EXACT error so we know if it's a URL issue or Sheet issue
     errDiv.textContent = "❌ " + err.message;
     errDiv.style.display = "block";
   }
   btn.textContent = oldText;
+}
+
+// ==========================================
+// 3. FETCH PRICES & UPDATE UI
+// ==========================================
+async function fetchPrices() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    
+    if (data["_store_status"]) {
+      document.getElementById('live-status').textContent = data["_store_status"];
+      delete data["_store_status"];
+    }
+    
+    gameData = data;
+    ['mlbb', 'cod', 'roblox', 'load'].forEach(g => {
+      const btn = document.querySelector(`.gbtn[onclick="selectGame('${g}')"]`);
+      if (btn && gameData[g]) btn.innerHTML = btn.innerHTML.replace('Loading...', 'Online');
+    });
+  } catch(e) {
+    console.error("Error loading prices:", e);
+  }
+}
+
+function selectGame(game) {
+  selectedGame = game;
+  document.querySelector('.gtabs').style.display = 'none';
+  document.getElementById('tracker-msg').style.display = 'none';
+  document.getElementById('ok-msg').style.display = 'none';
+  
+  const form = document.getElementById('g-' + game);
+  form.style.display = 'block';
+  if(game !== 'custom') showItemSelection(game);
+}
+
+function showItemSelection(game) {
+  const container = document.getElementById(game + '-items');
+  if(!container) return;
+  container.innerHTML = '';
+  
+  if(!gameData[game]) {
+    container.innerHTML = '<div style="color:var(--mx);padding:20px;text-align:center">Failed to load items. Please refresh.</div>';
+    return;
+  }
+  
+  if(game === 'mlbb' || game === 'load') {
+    for(let cat in gameData[game]) {
+      const title = document.createElement('h4');
+      title.style.cssText = 'color:var(--or);margin:20px 0 10px;text-transform:uppercase;font-size:0.85rem;letter-spacing:1px';
+      title.textContent = cat;
+      container.appendChild(title);
+      
+      const grid = document.createElement('div');
+      grid.className = 'igrid';
+      gameData[game][cat].forEach(i => {
+        const div = document.createElement('div');
+        div.className = 'icard';
+        div.innerHTML = `<strong>${i.n}</strong><span>₱${i.p}</span>${i.d ? `<small style="display:block;margin-top:5px;color:var(--mx);font-size:0.75rem">${i.d}</small>` : ''}`;
+        div.onclick = () => selectItem(game, i.n, i.p, i.d, div);
+        grid.appendChild(div);
+      });
+      container.appendChild(grid);
+    }
+  } else {
+    const grid = document.createElement('div');
+    grid.className = 'igrid';
+    gameData[game].forEach(i => {
+      const div = document.createElement('div');
+      div.className = 'icard';
+      div.innerHTML = `<strong>${i.n}</strong><span>₱${i.p}</span>${i.d ? `<small style="display:block;margin-top:5px;color:var(--mx);font-size:0.75rem">${i.d}</small>` : ''}`;
+      div.onclick = () => selectItem(game, i.n, i.p, i.d, div);
+      grid.appendChild(div);
+    });
+    container.appendChild(grid);
+  }
+}
+
+function selectItem(game, name, price, desc, el) {
+  document.querySelectorAll('#g-'+game+' .icard').forEach(c => {
+    c.style.borderColor = 'var(--dk5)';
+    c.style.background = 'rgba(255,255,255,0.02)';
+  });
+  el.style.borderColor = 'var(--or)';
+  el.style.background = 'rgba(249,115,22,0.1)';
+  
+  const disp = document.getElementById(game+'-order-display');
+  if(disp) disp.value = name + ' — ₱' + price;
+  
+  selectedItem = { name, price, desc };
+  selectedPrice = price;
+}
+
+// ==========================================
+// 4. ORDER TRACKING
+// ==========================================
+function showTracker() {
+  document.querySelectorAll('.g-form').forEach(el => el.style.display = 'none');
+  document.querySelector('.gtabs').style.display = 'none';
+  document.getElementById('ok-msg').style.display = 'none';
+  document.getElementById('tracker-msg').style.display = 'block';
+  document.getElementById('track-result').style.display = 'none';
+}
+
+async function trackOrder() {
+  const txnInput = document.getElementById('track-txn-input').value.trim().toUpperCase();
+  const resDiv = document.getElementById('track-result');
+  const btn = document.getElementById('track-btn');
+  
+  if (!txnInput) return alert("Please enter a TXN ID");
+  
+  btn.textContent = "Searching...";
+  resDiv.style.display = 'block';
+  resDiv.innerHTML = '<span style="color:var(--mx)">Searching database...</span>';
+
+  try {
+    const response = await fetch(`${API_URL}?action=track&id=${txnInput}`);
+    const data = await response.json();
+
+    if (data.found) {
+      let statusColor = data.status.toLowerCase() === 'completed' ? '#10b981' : '#fbbf24';
+      resDiv.innerHTML = `
+        <div style="font-size: 0.85rem; text-align: left;">
+          <p><strong>Game:</strong> ${data.game}</p>
+          <p><strong>Item:</strong> ${data.item}</p>
+          <p style="margin-top: 10px; font-size: 1rem;"><strong>Status:</strong> <span style="color: ${statusColor};">${data.status}</span></p>
+        </div>
+      `;
+    } else {
+      resDiv.innerHTML = `<span style="color: #ef4444;">❌ Order not found. Please check your TXN ID.</span>`;
+    }
+  } catch (err) {
+    resDiv.innerHTML = `<span style="color: #ef4444;">Error connecting to server.</span>`;
+  }
+  btn.textContent = "Check Status";
+}
+
+// ==========================================
+// 5. SUBMIT ORDER & REDIRECT TO PAYMONGO
+// ==========================================
+async function submitOrder(game) {
+  const btn = document.querySelector(`#g-${game} .btn-sub`);
+  const errEl = document.getElementById(game+'-err');
+  errEl.style.display = 'none';
+  
+  let fields = { game: game, transactionID: 'TXN-' + Math.random().toString(36).substr(2,8).toUpperCase() };
+  
+  // Collect Inputs
+  if(game === 'mlbb') {
+    fields.playerID = document.getElementById('mlbb-id').value.trim();
+    fields.zoneID = document.getElementById('mlbb-zone').value.trim();
+    fields.order = document.getElementById('mlbb-order-display').value;
+    if(!fields.playerID || !fields.zoneID || !fields.order) return errEl.textContent='Please fill all fields', errEl.style.display='block';
+  } else if(game === 'cod') {
+    fields.playerID = document.getElementById('cod-id').value.trim();
+    fields.order = document.getElementById('cod-order-display').value;
+    if(!fields.playerID || !fields.order) return errEl.textContent='Please fill all fields', errEl.style.display='block';
+  } else if(game === 'roblox') {
+    fields.playerID = document.getElementById('roblox-gpid').value.trim();
+    fields.order = document.getElementById('roblox-order-display').value;
+    if(!fields.playerID || !fields.order) return errEl.textContent='Please fill all fields', errEl.style.display='block';
+  } else if(game === 'load') {
+    fields.mobileNumber = document.getElementById('load-num').value.trim();
+    fields.order = document.getElementById('load-order-display').value;
+    if(!fields.mobileNumber || !fields.order) return errEl.textContent='Please fill all fields', errEl.style.display='block';
+  } else if(game === 'custom') {
+    fields.customerName = document.getElementById('custom-name').value.trim();
+    fields.orderDescription = document.getElementById('custom-desc').value.trim();
+    fields.priceEx = document.getElementById('custom-budget').value.trim();
+    if(!fields.customerName || !fields.orderDescription || !fields.priceEx) return errEl.textContent='Please fill all fields', errEl.style.display='block';
+  }
+
+  // Add Payment Method 
+  const pmSelect = document.getElementById(game+'-pm');
+  fields.paymentMethod = pmSelect ? pmSelect.value : 'gcash';
+
+  // Attach Logged-In Username if available
+  const savedUser = localStorage.getItem('markShopUser');
+  if(savedUser) fields.username = savedUser;
+
+  btn.disabled = true; 
+  btn.textContent = 'Opening GCash/Maya...';
+
+  // Extract raw price
+  let priceString = game === 'custom' ? fields.priceEx : fields.order.split('—')[1];
+  const rawPrice = parseInt(String(priceString).replace(/[^0-9]/g, ''));
+  
+  if (!rawPrice || rawPrice < 20) {
+    btn.disabled = false; btn.textContent = 'Submit Order';
+    return alert("Error: The minimum transaction amount for automated payments is ₱20.");
+  }
+
+  fields.extractedPrice = rawPrice;
+  localStorage.setItem('pendingOrder', JSON.stringify(fields));
+
+  try {
+    const reqBody = {
+      amount: rawPrice,
+      description: `Order: ${fields.orderDescription || fields.order} (${fields.ign || fields.playerID || fields.username || fields.mobileNumber || 'Mark Shop'})`,
+      method: (fields.paymentMethod).toLowerCase()
+    };
+
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(reqBody)
+    });
+
+    const data = await res.json();
+    
+    if (data.checkoutUrl) {
+      window.location.href = data.checkoutUrl; 
+    } else {
+      throw new Error(data.error || "Failed to generate checkout link.");
+    }
+  } catch (err) {
+    errEl.textContent = '❌ Payment Error: ' + err.message;
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit Order';
+  }
+}
+
+// ==========================================
+// 6. PROCESS SUCCESSFUL PAYMONGO PAYMENT
+// ==========================================
+function processSuccessfulPayment() {
+  const pendingData = localStorage.getItem('pendingOrder');
+  if (!pendingData) return;
+
+  const fields = JSON.parse(pendingData);
+  localStorage.removeItem('pendingOrder'); 
+
+  document.querySelectorAll('.g-form').forEach(el => el.style.display = 'none');
+  document.querySelector('.gtabs').style.display = 'none';
+  const okMsg = document.getElementById('ok-msg');
+  okMsg.style.display = 'block';
+  okMsg.innerHTML = '<div class="ok-ico">💳</div><h4 style="color: #10b981;">PAYMENT VERIFIED!</h4><p style="color: var(--mx);">Saving your order to the database...</p>';
+
+  grecaptcha.ready(function() {
+    grecaptcha.execute('6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR', {action: 'submitOrder'}).then(async function(token) {
+      fields.recaptchaToken = token;
+      fields.fileData = null; 
+      
+      try {
+        await fetch(API_URL, {
+          method: 'POST', body: JSON.stringify(fields), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+        });
+        
+        okMsg.innerHTML = `
+          <div class="ok-ico">✅</div>
+          <h4>ORDER SECURED!</h4>
+          <div id="receipt-summary" style="background: rgba(255,255,255,0.05); border: 1px solid var(--dk5); border-radius: 10px; padding: 15px; margin: 15px 0; text-align: left; font-size: 0.9rem;">
+            <div style="color: var(--or); font-weight: bold; border-bottom: 1px solid var(--dk5); padding-bottom: 5px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+              <span>Receipt Summary</span> <span style="font-family: monospace; color: #a78bfa;">${fields.transactionID}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <span style="color: var(--mx);">Item:</span> <span style="text-align: right; max-width: 60%;">${fields.order || fields.orderDescription}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <span style="color: var(--mx);">Price Paid:</span> <span style="color: #fbbf24; font-weight: bold;">₱${fields.extractedPrice}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--mx);">Account:</span> <span>${fields.ign || fields.customerName || fields.username || fields.mobileNumber || 'Verified'}</span>
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--mx);">Your payment was successfully verified via PayMongo. Mark will process your order shortly! 🎮</p>
+          <button class="btn-sub" style="margin-top:14px" onclick="window.location.href='/'">Place Another Order</button>
+        `;
+      } catch(e) {
+        okMsg.innerHTML = '<h4 style="color: #ef4444;">Database Error</h4><p>Your payment was successful, but the receipt failed to save. Please screenshot this and message Mark immediately: <strong>' + fields.transactionID + '</strong></p>';
+      }
+    });
+  });
+}
+
+function resetAll() { 
+  document.getElementById('ok-msg').style.display='none'; 
+  document.getElementById('tracker-msg').style.display='none'; 
+  document.querySelector('.gtabs').style.display='flex';
+  window.scrollTo({top:0,behavior:'smooth'}); 
 }
 </script>
 </body>
