@@ -7,32 +7,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
---or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
---dk:#09090f;--dk2:#111118;--dk3:#1a1a26;--dk4:#22222f;--dk5:#2c2c3e;
---tx:#e2e8f0;--mx:#94a3b8;--bdr:rgba(255,255,255,0.06);
+  --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
+  --dk:#09090f;--dk2:#111118;--dk3:#1a1a26;--dk4:#22222f;--dk5:#2c2c3e;
+  --tx:#e2e8f0;--mx:#94a3b8;--bdr:rgba(255,255,255,0.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-height:100vh;
-background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
-radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
+  background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
+  radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
 .hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
-border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
-position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
-.hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;
-color:var(--or);letter-spacing:3px;text-transform:uppercase}
+  border-bottom:1px solid rgba(249,115,22,.25);padding:14px 16px;text-align:center;
+  position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
+.hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:var(--or);letter-spacing:3px;text-transform:uppercase}
 .hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
-.gcash-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,.12);
-border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:4px 12px;margin-top:6px;
-font-size:.75rem;color:var(--bl);font-weight:500;cursor:pointer;transition:0.2s}
-.gcash-pill:hover{background:rgba(59,130,246,.2)}
-.gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
-background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
+.gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
 .gtabs::-webkit-scrollbar{display:none}
-.gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);
-border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;
-font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;
-letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
+.gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
 .gtab:hover{color:var(--tx);background:var(--dk4)}
 .gtab.active{background:var(--dk);color:var(--or);border-color:rgba(249,115,22,.5);border-bottom-color:var(--dk)}
 .gtab.custom-tab{color:#a78bfa;border-color:rgba(167,139,250,.2)}
@@ -42,32 +33,30 @@ letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:c
 .main{padding:14px;max-width:580px;margin:0 auto}
 .gpanel{display:none}.gpanel.active{display:block}
 .ctabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-.ctab{padding:5px 12px;border-radius:20px;border:1px solid var(--dk5);background:var(--dk3);
-color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
+.ctab{padding:5px 12px;border-radius:20px;border:1px solid var(--dk5);background:var(--dk3);color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
 .ctab:hover{border-color:var(--or);color:var(--tx)}
 .ctab.active{background:var(--or);border-color:var(--or);color:#fff;font-weight:600}
+.ctab.promo-tab{color:#f87171;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.07)}
+.ctab.promo-tab:hover{border-color:#f87171;color:#fca5a5}
+.ctab.promo-tab.active{background:#dc2626;border-color:#dc2626;color:#fff}
+.ctab.sl-tab{color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.06)}
+.ctab.sl-tab:hover{border-color:#fbbf24;color:#fde68a}
+.ctab.sl-tab.active{background:#d97706;border-color:#d97706;color:#fff}
 .cpanel{display:none}.cpanel.active{display:block}
-.slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;
-text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);
-padding-left:8px;margin-bottom:10px;margin-top:6px}
+.slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);padding-left:8px;margin-bottom:10px;margin-top:6px}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
-.pcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-padding:11px 12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
-.pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-background:linear-gradient(90deg,var(--or),#fbbf24);transform:scaleX(0);
-transition:transform .2s;transform-origin:left}
+.pcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:11px 12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--or),#fbbf24);transform:scaleX(0);transition:transform .2s;transform-origin:left}
 .pcard:hover::after,.pcard.sel::after{transform:scaleX(1)}
 .pcard:hover{border-color:rgba(249,115,22,.45);background:var(--dk4)}
 .pcard.sel{border-color:var(--or);background:rgba(249,115,22,.1)}
 .pcard .pn{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.9rem;color:var(--tx);line-height:1.3}
 .pcard .pd{font-size:.68rem;color:var(--mx);margin-top:2px;line-height:1.4}
 .pcard .pp{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or);margin-top:6px}
-.pcard .chk{position:absolute;top:7px;right:7px;width:18px;height:18px;border-radius:50%;
-background:var(--or);display:none;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
+.pcard .chk{position:absolute;top:7px;right:7px;width:18px;height:18px;border-radius:50%;background:var(--or);display:none;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
 .pcard.sel .chk{display:flex}
 .netgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
-.netcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
+.netcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .netcard:hover{border-color:var(--bl)}
 .netcard.active{border-color:var(--bl);background:rgba(59,130,246,.12)}
 .netcard .nn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.5px;color:var(--tx)}
@@ -75,46 +64,33 @@ padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .netcard .nd{font-size:.62rem;color:var(--mx);margin-top:2px}
 .lpanel{display:none}.lpanel.active{display:block}
 .oform{background:var(--dk2);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-top:6px}
-.oform h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-letter-spacing:2px;color:var(--or);margin-bottom:14px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.sel-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);
-border-radius:8px;padding:10px 14px;margin-bottom:14px}
+.oform h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;color:var(--or);margin-bottom:14px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.sel-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);border-radius:8px;padding:10px 14px;margin-bottom:14px}
 .sel-box .sl{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--mx)}
 .sel-box .sv{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:var(--or);margin-top:2px}
 .sel-box .sp{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1.1rem;color:#fbbf24}
 .fg{margin-bottom:12px}
 .fg label{display:block;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mx);margin-bottom:5px}
 .fg label .req{color:var(--or)}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--dk3);border:1px solid var(--dk5);
-border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem;transition:border-color .18s;-webkit-appearance:none;appearance:none}
-.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem;transition:border-color .18s;-webkit-appearance:none;appearance:none}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--or)}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--dk5)}
 .fg textarea{resize:vertical;min-height:65px}
 .fg select option{background:var(--dk3);color:var(--tx)}
-.btn-sub{width:100%;padding:13px;background:var(--or);color:#fff;border:none;
-border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;
-letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
+.btn-sub{width:100%;padding:13px;background:var(--or);color:#fff;border:none;border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
 .btn-sub:hover{background:var(--or2);transform:translateY(-1px);box-shadow:0 5px 20px rgba(249,115,22,.35)}
 .btn-sub:disabled{background:var(--dk5);color:var(--mx);cursor:not-allowed;transform:none;box-shadow:none}
-.notice{font-size:.7rem;color:var(--mx);text-align:center;margin-top:12px;line-height:1.6}
-.notice b{color:var(--bl)}
-.alert-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);
-border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--bl);margin-bottom:14px;line-height:1.6}
-.ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);
-border-radius:12px;padding:22px;text-align:center;margin-top:12px}
+.alert-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--bl);margin-bottom:14px;line-height:1.6}
+.ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:22px;text-align:center;margin-top:12px}
 .ok-msg .ok-ico{font-size:2.5rem;margin-bottom:8px}
 .ok-msg h4{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--gr);letter-spacing:2px}
 .ok-msg p{font-size:.8rem;color:var(--mx);margin-top:6px;line-height:1.5}
-.err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
-border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
-/* PAYMENT WIDGET */
+.err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
+/* PAYMENT */
 .pm-methods{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.pm-btn{flex:1;min-width:65px;text-align:center;padding:10px 5px;background:var(--dk3);
-border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--mx);transition:.2s}
+.pm-btn{flex:1;min-width:65px;text-align:center;padding:10px 5px;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--mx);transition:.2s}
 .pm-btn.active{background:rgba(249,115,22,.1);border-color:var(--or);color:var(--or)}
-/* FIX: static pm-details block, hidden by default */
 .pm-details{background:var(--dk4);padding:12px;border-radius:8px;font-size:.85rem;margin-bottom:15px;display:none;border-left:4px solid var(--or)}
 .pm-row{display:flex;justify-content:space-between;margin-bottom:5px;color:#fff;font-family:monospace;font-size:.95rem}
 .pm-row span:first-child{color:var(--mx);font-family:'Exo 2',sans-serif;font-size:.8rem}
@@ -122,21 +98,66 @@ border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;fon
 .btn-reveal{background:var(--dk5);color:#fff}
 .btn-reveal:hover{background:var(--dk3)}
 .btn-qr{background:rgba(59,130,246,.1);color:var(--bl);border:1px solid rgba(59,130,246,.3)}
-.btn-qr:hover{background:rgba(59,130,246,.2)}
-/* CUSTOM ORDER */
-.custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));
-border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
-.custom-hero .ch-ico{font-size:2.2rem;margin-bottom:8px}
+/* PROMO CARDS */
+.promo-section-lbl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;padding:6px 10px;border-radius:6px;margin-bottom:10px;margin-top:4px;display:flex;align-items:center;gap:7px}
+.promo-section-lbl.red{color:#f87171;background:rgba(239,68,68,.08);border-left:3px solid #dc2626}
+.promo-section-lbl.gold{color:#fbbf24;background:rgba(251,191,36,.08);border-left:3px solid #d97706}
+.warn-box{background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:12px}
+.warn-box .wi{font-size:1rem;flex-shrink:0;margin-top:1px}
+.warn-box p{font-size:.74rem;color:#fca5a5;line-height:1.6}
+.warn-box b{color:#f87171}
+/* SKIN PROMO CARD */
+.skin-card{background:var(--dk3);border:1.5px solid rgba(220,38,38,.22);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
+.skin-card:hover{border-color:rgba(220,38,38,.5);transform:translateY(-1px);box-shadow:0 4px 16px rgba(239,68,68,.12)}
+.skin-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#dc2626,#f97316)}
+.skin-card.gold-card{border-color:rgba(245,158,11,.3)!important}
+.skin-card.gold-card::before{background:linear-gradient(180deg,#f59e0b,#ef4444)!important}
+.sk-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.sk-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fca5a5;letter-spacing:.5px;line-height:1.3}
+.skin-card.gold-card .sk-name{color:#fbbf24}
+.sk-sub{font-size:.65rem;color:var(--mx);margin-top:2px}
+.sk-tap{font-size:.67rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0;padding:3px 8px;border:1px solid rgba(239,68,68,.3);border-radius:20px;background:rgba(239,68,68,.08)}
+.skin-card.gold-card .sk-tap{color:#fbbf24;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)}
+.sk-prices{display:flex;flex-direction:column;gap:4px}
+.sk-price-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);border-radius:6px;padding:6px 10px;cursor:pointer;transition:background .15s}
+.sk-price-row:hover{background:rgba(249,115,22,.13)}
+.sk-price-row .spr-label{font-size:.72rem;color:var(--mx)}
+.sk-price-row .spr-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:var(--or)}
+.spr-save{font-size:.62rem;color:#4ade80;margin-left:4px}
+.sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:5px 10px;font-size:.69rem;color:#fbbf24}
+.legend-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:1px 7px;font-size:.6rem;color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:5px;vertical-align:middle}
+/* STARLIGHT CARDS */
+.sl-card{background:var(--dk3);border:1.5px solid rgba(251,191,36,.18);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
+.sl-card:hover{border-color:rgba(251,191,36,.45);transform:translateY(-1px)}
+.sl-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#f59e0b,#f97316)}
+.sl-card .sl-head{display:flex;justify-content:space-between;align-items:flex-start}
+.sl-card .sl-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fde68a;letter-spacing:.5px}
+.sl-card .sl-price{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or)}
+.sl-card .sl-sub{font-size:.7rem;color:var(--mx);margin-top:4px;line-height:1.5}
+.slots-row{display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap}
+.slot-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
+.slot-dot.filled{background:#f59e0b;border-color:#f59e0b}
+.slots-lbl{font-size:.67rem;color:var(--mx)}
+.avail-tag{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 8px;font-size:.64rem;font-weight:700;letter-spacing:.4px}
+.avail-tag.avail{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80}
+.avail-tag.low{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
+.avail-tag.sold{background:rgba(100,100,100,.1);border:1px solid rgba(100,100,100,.25);color:#6b7280}
+.avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+.delivery-box{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:10px;padding:12px 14px;margin:12px 0}
+.delivery-box .db-ttl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.8rem;color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.db-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
+.db-row .dr-i{flex-shrink:0;font-size:.88rem}
+.db-row p{font-size:.72rem;color:var(--mx);line-height:1.5}
+.db-row p b{color:var(--tx)}
+/* CUSTOM */
+.custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
 .custom-hero h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:#a78bfa;letter-spacing:2px;text-transform:uppercase}
 .custom-hero p{font-size:.78rem;color:var(--mx);margin-top:6px;line-height:1.6}
-.pulse-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);
-border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:4px 12px;margin-top:10px;
-font-size:.72rem;color:#c4b5fd;font-weight:600;letter-spacing:1px}
-.pulse-dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:pulseAnim 1.4s ease-in-out infinite}
-@keyframes pulseAnim{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.pulse-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:4px 12px;margin-top:10px;font-size:.72rem;color:#c4b5fd;font-weight:600;letter-spacing:1px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:blink 1.4s ease-in-out infinite}
 .custom-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
-.custom-cat{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
-padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
+.custom-cat{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .custom-cat:hover{border-color:rgba(167,139,250,.4)}
 .custom-cat.active{border-color:#a78bfa;background:rgba(167,139,250,.1)}
 .custom-cat .cc-ico{font-size:1.3rem}
@@ -147,14 +168,13 @@ padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .btn-sub.custom-btn{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
 .btn-sub.custom-btn:hover{background:linear-gradient(135deg,#6d28d9,#9b7af0);box-shadow:0 5px 20px rgba(139,92,246,.35)}
 /* MODALS */
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);
-z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.82);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
 .modal-box{background:var(--dk2);border:1px solid var(--dk5);border-radius:16px;padding:20px;width:90%;max-width:350px;text-align:center}
-/* DD WARNING MODAL — FIX: restored */
 .dd-warning-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.35);border-radius:12px;padding:16px;margin-bottom:14px;text-align:left}
 .dd-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
 .dd-check input[type=checkbox]{width:17px;height:17px;accent-color:var(--or);flex-shrink:0;margin-top:2px}
 .dd-check span{font-size:.78rem;color:#fca5a5;line-height:1.5}
+.loading-grid{grid-column:1/-1;text-align:center;padding:20px;color:var(--mx);font-size:.8rem}
 </style>
 </head>
 <body>
@@ -162,18 +182,15 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
   <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
-  <div class="gcash-pill" onclick="toggleHeaderGCash()">
-    <span>💳 GCash</span> <span id="hdr-gcash-reveal" style="display:none;color:var(--bl);font-weight:600"> · Mark Guevarra · 09288978005</span> 👁 Tap to reveal
-  </div>
 </div>
 
-<div class="gtabs" id="gtabs">
-  <div class="gtab active" data-g="mlbb"><span class="ico">🎮</span> MLBB</div>
-  <div class="gtab" data-g="cod"><span class="ico">🎯</span> Garena CoD</div>
-  <div class="gtab" data-g="roblox"><span class="ico">🟥</span> Roblox</div>
-  <div class="gtab" data-g="bs"><span class="ico">🔫</span> Bloodstrike</div>
-  <div class="gtab" data-g="load"><span class="ico">📱</span> Load</div>
-  <div class="gtab custom-tab" data-g="custom"><span class="ico">✏️</span> Custom Order</div>
+<div class="gtabs">
+  <div class="gtab active" data-g="mlbb"><span class="ico">⚔️</span> MLBB</div>
+  <div class="gtab" data-g="cod"><span class="ico">🎖️</span> Garena CoD</div>
+  <div class="gtab" data-g="roblox"><span class="ico">🧱</span> Roblox</div>
+  <div class="gtab" data-g="bs"><span class="ico">🩸</span> Bloodstrike</div>
+  <div class="gtab" data-g="load"><span class="ico">📶</span> Load</div>
+  <div class="gtab custom-tab" data-g="custom"><span class="ico">🛎️</span> Custom Order</div>
 </div>
 
 <div class="main">
@@ -182,64 +199,192 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
+      <div class="ctab promo-tab" data-c="mlbb-promos">🔥 Promos</div>
       <div class="ctab active" data-c="mlbb-dias">💎 Diamonds</div>
       <div class="ctab" data-c="mlbb-denom">📦 Denom. Dias</div>
       <div class="ctab" data-c="mlbb-combo">🔢 Combinations</div>
       <div class="ctab" data-c="mlbb-dd">2x Diamond</div>
       <div class="ctab" data-c="mlbb-bundles">🎁 Bundles & WDP</div>
       <div class="ctab" data-c="mlbb-skins">🎨 Skins & Events</div>
-      <div class="ctab" data-c="mlbb-starlight">⭐ Starlight</div>
+      <div class="ctab sl-tab" data-c="mlbb-starlight">⭐ Starlight</div>
     </div>
   </div>
+
+  <!-- 🔥 PROMOS PANEL -->
+  <div class="cpanel" id="mlbb-promos">
+
+    <!-- STARLIGHT OFFERS -->
+    <div class="promo-section-lbl gold">🌟 Monthly Starlight Offers</div>
+    <div class="warn-box">
+      <div class="wi">⚠️</div>
+      <p><b>Limited Supply — 5 slots per month only!</b> These are <b>not own supply</b> — orders go through a gifter. Secure your slot early!</p>
+    </div>
+
+    <!-- June NSL -->
+    <div class="sl-card" onclick="promoSelectItem('⭐ June NSL (Normal Starlight)','₱160')">
+      <div class="sl-head">
+        <div>
+          <div class="sl-name">⭐ June NSL <span style="font-size:.72rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
+          <div class="slots-row">
+            <div class="slot-dot filled"></div><div class="slot-dot filled"></div>
+            <div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot"></div>
+            <span class="slots-lbl">4/5 slots taken</span>
+            <span class="avail-tag low"><span class="avail-dot"></span> 1 SLOT LEFT</span>
+          </div>
+        </div>
+        <div class="sl-price">₱160</div>
+      </div>
+      <div class="sl-sub"><b>Normal Starlight</b> for June 2026 · Sent via gifter<br>
+        <span style="color:#4ade80;font-size:.67rem">↓ Tap to fill order form below</span></div>
+    </div>
+
+    <div class="delivery-box">
+      <div class="db-ttl">📦 How Delivery Works</div>
+      <div class="db-row"><div class="dr-i">⏳</div><p>Processing takes <b>24–48 hours</b> before the gifter sends.</p></div>
+      <div class="db-row"><div class="dr-i">📅</div><p>Gifter sends within <b>8–9 days</b> after payment confirmation.</p></div>
+      <div class="db-row"><div class="dr-i">🎁</div><p><b>NSL</b> = Normal Starlight — monthly pass with exclusive skins, emotes & rewards.</p></div>
+      <div class="db-row"><div class="dr-i">💳</div><p>Pay only after Mark confirms your slot.</p></div>
+    </div>
+
+    <!-- UPCOMING SKINS -->
+    <div class="promo-section-lbl red">🔥 Upcoming Skins & Pre-Orders</div>
+    <div style="font-size:.73rem;color:var(--mx);margin-bottom:11px">Way cheaper than buying diamonds! Tap any skin to fill the order form below.</div>
+
+    <!-- OBSIDIA -->
+    <div class="skin-card" onclick="promoSelectItem('🌑 OBSIDIA (Premium Starlight)','₱420')">
+      <div class="sk-head">
+        <div><div class="sk-name">🌑 OBSIDIA <span style="font-size:.7rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
+          <div class="sk-sub">8th Day of May Release Gifting</div></div>
+        <span class="sk-tap">Tap to Order</span>
+      </div>
+      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱420 <span class="spr-save">Save ₱300+!</span></span></div></div>
+      <div class="sk-schedule">📅 Gifting: 8th Day of May Release</div>
+    </div>
+
+    <!-- PHARSA ALL-STAR -->
+    <div class="skin-card">
+      <div class="sk-head">
+        <div><div class="sk-name">🦋 PHARSA ALL-STAR</div>
+          <div class="sk-sub">Release: May 17 · Gifting: May 20</div></div>
+        <span class="sk-tap">Choose below ↓</span>
+      </div>
+      <div class="sk-prices">
+        <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱249')">
+          <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span>
+          <span class="spr-val">₱249</span>
+        </div>
+        <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱399')">
+          <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span>
+          <span class="spr-val">₱399</span>
+        </div>
+      </div>
+      <div class="sk-schedule">📅 Gifting: May 20</div>
+    </div>
+
+    <!-- KARINA ZODIAC -->
+    <div class="skin-card" onclick="promoSelectItem('♋ KARINA ZODIAC (899 💎)','₱499')">
+      <div class="sk-head">
+        <div><div class="sk-name">♋ KARINA ZODIAC</div>
+          <div class="sk-sub">Release: May 21 · Original Value: 899 💎 (~₱850)</div></div>
+        <span class="sk-tap">Tap to Order</span>
+      </div>
+      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price <span class="spr-save">Save 400+ in diamonds!</span></span><span class="spr-val">₱499</span></div></div>
+      <div class="sk-schedule">📅 Gifting: May 21</div>
+    </div>
+
+    <!-- LING ALL-STAR -->
+    <div class="skin-card" onclick="promoSelectItem('⚔️ LING ALL-STAR (762 💎)','₱489')">
+      <div class="sk-head">
+        <div><div class="sk-name">⚔️ LING ALL-STAR</div>
+          <div class="sk-sub">Release: June 24 · Original Value: ~749 💎 (~₱710)</div></div>
+        <span class="sk-tap">Tap to Order</span>
+      </div>
+      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱489</span></div></div>
+      <div class="sk-schedule">📅 Gifting: June 26</div>
+    </div>
+
+    <!-- MARTIS EPIC -->
+    <div class="skin-card" onclick="promoSelectItem('🔴 MARTIS EPIC — Wild Renegade (899 💎)','₱549')">
+      <div class="sk-head">
+        <div><div class="sk-name">🔴 MARTIS EPIC <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Wild Renegade)</span></div>
+          <div class="sk-sub">Original Value: 899 💎 (~₱850)</div></div>
+        <span class="sk-tap">Tap to Order</span>
+      </div>
+      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱549</span></div></div>
+    </div>
+
+    <!-- LEGEND LESLEY -->
+    <div class="skin-card gold-card">
+      <div class="sk-head">
+        <div><div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div>
+          <div class="sk-sub">Original Value: 10,000 💎 — Choose your gifting phase</div></div>
+        <span class="sk-tap" style="color:#fbbf24;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)">Choose ↓</span>
+      </div>
+      <div class="sk-prices">
+        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400')">
+          <span class="spr-label">8th Day Gifting <span style="color:#fbbf24;font-size:.62rem">· Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,400</span>
+        </div>
+        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250')">
+          <span class="spr-label">Phase 2 Gifting <span style="color:#fbbf24;font-size:.62rem">· Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,250</span>
+        </div>
+        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — Last Day Gifting','₱6,150')" style="border:1px solid rgba(245,158,11,.2)">
+          <span class="spr-label">Last Day Gifting <span class="spr-save">Best deal · Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,150</span>
+        </div>
+      </div>
+      <div class="sk-schedule">⚠️ Payment required to reserve slot! Sent on gifting date.</div>
+    </div>
+
+    <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.22);border-radius:8px;padding:9px 13px;font-size:.72rem;color:#fca5a5;line-height:1.6;text-align:center;margin-bottom:6px">
+      ⚠️ <b>Tap any skin above</b> → fills the order form below → submit → Mark confirms your slot.
+    </div>
+  </div>
+
+  <!-- Diamonds -->
   <div class="cpanel active" id="mlbb-dias">
     <div class="slbl">Direct Top-Up Diamonds (PH Server)</div>
-    <div class="pgrid" id="grid-mlbb-dias"></div>
+    <div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading prices…</div></div>
   </div>
   <div class="cpanel" id="mlbb-denom">
     <div class="slbl">Denomination Diamonds (Single Purchase)</div>
-    <div class="pgrid" id="grid-mlbb-denom"></div>
+    <div class="pgrid" id="grid-mlbb-denom"><div class="loading-grid">Loading prices…</div></div>
   </div>
   <div class="cpanel" id="mlbb-combo">
     <div class="slbl">Diamond Denomination Combinations</div>
-    <div class="alert-box">💡 These use multiple denomination purchases to get the exact diamond count at a better price.</div>
-    <div class="pgrid" id="grid-mlbb-combo"></div>
+    <div class="alert-box">💡 Multiple denomination purchases to hit the exact count at a better rate.</div>
+    <div class="pgrid" id="grid-mlbb-combo"><div class="loading-grid">Loading prices…</div></div>
   </div>
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus Diamonds)</div>
-    <!-- FIX: Restored warning box -->
     <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
         <span style="font-size:1.2rem">🚫</span>
         <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span>
       </div>
-      <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">
-        Each Double Diamond tier can only be purchased <b style="color:#f87171">ONCE per account</b>.
-        If you have already bought a tier before, <b style="color:#f87171">it will not appear</b> in your shop again.
-        Please make sure you have <b style="color:#f87171">never purchased</b> this tier before ordering.
-      </div>
+      <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">Each Double Diamond tier can only be purchased <b style="color:#f87171">ONCE per account</b>. If already bought, <b style="color:#f87171">it will NOT appear</b> in your shop again.</div>
       <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px">
         <span>💡</span>
-        <span style="font-size:.71rem;color:#fca5a5">During Double Diamond events, you get <b style="color:#fff">2x the listed diamonds</b> — but only if this tier is still available on your account.</span>
+        <span style="font-size:.71rem;color:#fca5a5">During Double Diamond events you get <b style="color:#fff">2x the listed diamonds</b> — only if the tier is still available on your account.</span>
       </div>
     </div>
-    <div class="pgrid" id="grid-mlbb-dd"></div>
+    <div class="pgrid" id="grid-mlbb-dd"><div class="loading-grid">Loading prices…</div></div>
   </div>
   <div class="cpanel" id="mlbb-bundles">
     <div class="slbl">Bundles & Weekly Diamond Pass</div>
-    <div class="pgrid" id="grid-mlbb-bundles"></div>
+    <div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid">Loading prices…</div></div>
   </div>
   <div class="cpanel" id="mlbb-skins">
     <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div>
-    <div class="pgrid" id="grid-mlbb-skins-cosmo"></div>
+    <div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid">Loading prices…</div></div>
     <div class="slbl">Skin Direct Purchase Pricing</div>
-    <div class="pgrid" id="grid-mlbb-skins-direct"></div>
+    <div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading prices…</div></div>
   </div>
+  <!-- STARLIGHT — March/April removed; only current entries from sheet -->
   <div class="cpanel" id="mlbb-starlight">
-    <div class="slbl">Starlight Passes</div>
-    <div class="pgrid" id="grid-mlbb-starlight"></div>
+    <div class="slbl">Starlight Passes — May 2026</div>
+    <div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading prices…</div></div>
   </div>
 
-
+  <!-- MLBB ORDER FORM -->
   <div class="oform" id="mlbb-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="mlbb-sel-box" style="display:none">
@@ -250,7 +395,9 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
     <div class="fg">
-      <label>Player ID <span class="req">*</span> <span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0" onclick="openIDModal()">Help finding ID?</span></label>
+      <label>Player ID <span class="req">*</span>
+        <span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400" onclick="openIDModal()">Help finding ID?</span>
+      </label>
       <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
     </div>
     <div class="fg">
@@ -267,18 +414,16 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
     <div class="fg"><label>Server</label>
       <select id="mlbb-server"><option>PH Server</option><option>Other</option></select></div>
     <div class="fg"><label>Notes (optional)</label>
-      <textarea id="mlbb-notes" placeholder="Any special requests or notes..."></textarea></div>
+      <textarea id="mlbb-notes" placeholder="Any special requests or notes…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
-      <!-- FIX: hidden input for payment value -->
       <input type="hidden" id="pm-val-mlbb">
       <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">GCash</div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">Maya</div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">PayPal</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">🔵 GCash</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">🟣 GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">🔷 PayPal</div>
       </div>
-      <!-- FIX: static pm-details div -->
       <div class="pm-details" id="pm-details-mlbb">
         <div id="pm-label-mlbb" style="font-weight:bold;margin-bottom:10px"></div>
         <div class="pm-row"><span>Account Name:</span><span id="pm-name-mlbb"></span></div>
@@ -288,10 +433,8 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <div id="pm-note-mlbb" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="mlbb-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
-    </div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="mlbb-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
   </div>
@@ -300,13 +443,11 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <!-- ===== COD ===== -->
 <div class="gpanel" id="g-cod">
   <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
-  <div class="pgrid" id="grid-cod"></div>
+  <div class="pgrid" id="grid-cod"><div class="loading-grid">Loading prices…</div></div>
   <div class="oform" id="cod-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="cod-sel-box" style="display:none">
-      <div class="sl">Selected Item</div>
-      <div class="sv" id="cod-sel-item">—</div>
-      <div class="sp" id="cod-sel-price"></div>
+      <div class="sl">Selected Item</div><div class="sv" id="cod-sel-item">—</div><div class="sp" id="cod-sel-price"></div>
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
@@ -317,20 +458,17 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
-    <div class="fg">
-      <label>In-Game Name (IGN) <span class="req">*</span></label>
-      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold">
-    </div>
-    <div class="fg"><label>Notes (optional)</label>
-      <textarea id="cod-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
+      <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
+    <div class="fg"><label>Notes (optional)</label><textarea id="cod-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
       <input type="hidden" id="pm-val-cod">
       <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">GCash</div>
-        <div class="pm-btn" onclick="selectPayment('cod','maya',this)">Maya</div>
-        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">PayPal</div>
+        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div>
+        <div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div>
       </div>
       <div class="pm-details" id="pm-details-cod">
         <div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div>
@@ -341,10 +479,8 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
-    </div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
   </div>
@@ -353,13 +489,11 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <!-- ===== ROBLOX ===== -->
 <div class="gpanel" id="g-roblox">
   <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
-  <div class="pgrid" id="grid-roblox"></div>
+  <div class="pgrid" id="grid-roblox"><div class="loading-grid">Loading prices…</div></div>
   <div class="oform" id="roblox-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="roblox-sel-box" style="display:none">
-      <div class="sl">Selected Item</div>
-      <div class="sv" id="roblox-sel-item">—</div>
-      <div class="sp" id="roblox-sel-price"></div>
+      <div class="sl">Selected Item</div><div class="sv" id="roblox-sel-item">—</div><div class="sp" id="roblox-sel-price"></div>
     </div>
     <div class="fg"><label>Order / Robux Amount <span class="req">*</span></label>
       <input type="text" id="roblox-order-display" placeholder="Select an amount above first" readonly></div>
@@ -374,20 +508,17 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button>
       </div>
     </div>
-    <div class="fg">
-      <label>Display Name (Auto-fill)</label>
-      <input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold">
-    </div>
-    <div class="fg"><label>Notes (optional)</label>
-      <textarea id="roblox-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg"><label>Display Name (Auto-fill)</label>
+      <input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
+    <div class="fg"><label>Notes (optional)</label><textarea id="roblox-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
       <input type="hidden" id="pm-val-roblox">
       <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">GCash</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">Maya</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">PayPal</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div>
       </div>
       <div class="pm-details" id="pm-details-roblox">
         <div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div>
@@ -398,10 +529,8 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
-    </div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
   </div>
@@ -410,13 +539,11 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <!-- ===== BLOODSTRIKE ===== -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
-  <div class="pgrid" id="grid-bs"></div>
+  <div class="pgrid" id="grid-bs"><div class="loading-grid">Loading prices…</div></div>
   <div class="oform" id="bs-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="bs-sel-box" style="display:none">
-      <div class="sl">Selected Item</div>
-      <div class="sv" id="bs-sel-item">—</div>
-      <div class="sp" id="bs-sel-price"></div>
+      <div class="sl">Selected Item</div><div class="sv" id="bs-sel-item">—</div><div class="sp" id="bs-sel-price"></div>
     </div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label>
       <input type="text" id="bs-order-display" placeholder="Select an item above first" readonly></div>
@@ -424,16 +551,15 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
       <input type="text" id="bs-pid" placeholder="Your Bloodstrike Player ID"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label>
       <input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
-    <div class="fg"><label>Notes (optional)</label>
-      <textarea id="bs-notes" placeholder="Any special requests..."></textarea></div>
+    <div class="fg"><label>Notes (optional)</label><textarea id="bs-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
       <input type="hidden" id="pm-val-bs">
       <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">GCash</div>
-        <div class="pm-btn" onclick="selectPayment('bs','maya',this)">Maya</div>
-        <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('bs','paypal',this)">PayPal</div>
+        <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">🔵 GCash</div>
+        <div class="pm-btn" onclick="selectPayment('bs','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">🟣 GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('bs','paypal',this)">🔷 PayPal</div>
       </div>
       <div class="pm-details" id="pm-details-bs">
         <div id="pm-label-bs" style="font-weight:bold;margin-bottom:10px"></div>
@@ -444,10 +570,8 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
-    </div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
   </div>
@@ -457,15 +581,15 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <div class="gpanel" id="g-load">
   <div class="slbl" style="margin:12px 0 8px">Choose Network / Type</div>
   <div class="netgrid">
-    <div class="netcard" data-net="globe-reg" onclick="selectNet(this,'globe-reg')"><div class="nn">🔵 Globe</div><div class="nd">Regular Load</div></div>
-    <div class="netcard" data-net="tm-reg" onclick="selectNet(this,'tm-reg')"><div class="nn">🟢 TM</div><div class="nd">Regular Load</div></div>
-    <div class="netcard" data-net="globe-promo" onclick="selectNet(this,'globe-promo')"><div class="nn">🔵 Globe</div><div class="nd">Promo B</div></div>
-    <div class="netcard" data-net="homesurf" onclick="selectNet(this,'homesurf')"><div class="nn">🏠 HomeSurf</div><div class="nd">WiFi / Fr</div></div>
-    <div class="netcard" data-net="famsurf" onclick="selectNet(this,'famsurf')"><div class="nn">👨‍👩‍👧 FamSurf</div><div class="nd">Family Plan</div></div>
-    <div class="netcard" data-net="tm-promo" onclick="selectNet(this,'tm-promo')"><div class="nn">🟢 TM/ALL</div><div class="nd">Promo & ALL-NET</div></div>
-    <div class="netcard" data-net="gfiber" onclick="selectNet(this,'gfiber')"><div class="nn">📡 GFiber</div><div class="nd">Prepaid</div></div>
-    <div class="netcard" data-net="smart" onclick="selectNet(this,'smart')"><div class="nn">🟡 Smart/TNT</div><div class="nd">Ask for price</div></div>
-    <div class="netcard" data-net="dito" onclick="selectNet(this,'dito')"><div class="nn">🔴 DITO</div><div class="nd">Ask for price</div></div>
+    <div class="netcard" onclick="selectNet(this,'globe-reg')"><div class="nn">🔵 Globe</div><div class="nd">Regular Load</div></div>
+    <div class="netcard" onclick="selectNet(this,'tm-reg')"><div class="nn">🟢 TM</div><div class="nd">Regular Load</div></div>
+    <div class="netcard" onclick="selectNet(this,'globe-promo')"><div class="nn">🔵 Globe</div><div class="nd">Promo B</div></div>
+    <div class="netcard" onclick="selectNet(this,'homesurf')"><div class="nn">🏠 HomeSurf</div><div class="nd">WiFi / Fr</div></div>
+    <div class="netcard" onclick="selectNet(this,'famsurf')"><div class="nn">👨‍👩‍👧 FamSurf</div><div class="nd">Family Plan</div></div>
+    <div class="netcard" onclick="selectNet(this,'tm-promo')"><div class="nn">🟢 TM/ALL</div><div class="nd">Promo & ALL-NET</div></div>
+    <div class="netcard" onclick="selectNet(this,'gfiber')"><div class="nn">📡 GFiber</div><div class="nd">Prepaid</div></div>
+    <div class="netcard" onclick="selectNet(this,'smart')"><div class="nn">🟡 Smart/TNT</div><div class="nd">Ask for price</div></div>
+    <div class="netcard" onclick="selectNet(this,'dito')"><div class="nn">🔴 DITO</div><div class="nd">Ask for price</div></div>
   </div>
   <div class="lpanel" id="lp-globe-reg"><div class="slbl">Globe Regular Load</div><div class="pgrid" id="grid-globe-reg"></div></div>
   <div class="lpanel" id="lp-tm-reg"><div class="slbl">TM Regular Load</div><div class="pgrid" id="grid-tm-reg"></div></div>
@@ -479,9 +603,7 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
   <div class="oform" id="load-oform">
     <h3>📋 Load Order</h3>
     <div class="sel-box" id="load-sel-box" style="display:none">
-      <div class="sl">Selected Promo / Load</div>
-      <div class="sv" id="load-sel-item">—</div>
-      <div class="sp" id="load-sel-price"></div>
+      <div class="sl">Selected Promo / Load</div><div class="sv" id="load-sel-item">—</div><div class="sp" id="load-sel-price"></div>
     </div>
     <div class="fg"><label>Promo / Load Selected <span class="req">*</span></label>
       <input type="text" id="load-order-display" placeholder="Select network & promo above first" readonly></div>
@@ -489,17 +611,16 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
       <input type="text" id="load-network-display" placeholder="Auto-filled when you select above" readonly></div>
     <div class="fg"><label>Mobile Number <span class="req">*</span></label>
       <input type="tel" id="load-number" placeholder="09XXXXXXXXX">
-      <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check your number — wrong number = lost load</div></div>
-    <div class="fg"><label>Notes (optional)</label>
-      <textarea id="load-notes" placeholder="Any special requests..."></textarea></div>
+      <div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check — wrong number = lost load</div></div>
+    <div class="fg"><label>Notes (optional)</label><textarea id="load-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
       <input type="hidden" id="pm-val-load">
       <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('load','gcash',this)">GCash</div>
-        <div class="pm-btn" onclick="selectPayment('load','maya',this)">Maya</div>
-        <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('load','paypal',this)">PayPal</div>
+        <div class="pm-btn" onclick="selectPayment('load','gcash',this)">🔵 GCash</div>
+        <div class="pm-btn" onclick="selectPayment('load','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">🟣 GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('load','paypal',this)">🔷 PayPal</div>
       </div>
       <div class="pm-details" id="pm-details-load">
         <div id="pm-label-load" style="font-weight:bold;margin-bottom:10px"></div>
@@ -510,10 +631,8 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
-    </div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
   </div>
@@ -522,47 +641,47 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 <!-- ===== CUSTOM ORDER ===== -->
 <div class="gpanel" id="g-custom">
   <div class="custom-hero" style="margin-top:12px">
-    <div class="ch-ico">🛎️</div>
+    <div style="font-size:2.2rem;margin-bottom:8px">🛎️</div>
     <h2>Custom Order Request</h2>
-    <p>Can't find what you're looking for? Describe your order below and Mark will personally handle it for you.</p>
+    <p>Can't find what you're looking for? Describe your order and Mark will handle it personally.</p>
     <div class="pulse-badge"><div class="pulse-dot"></div> NOTIFIES MARK DIRECTLY</div>
   </div>
   <div class="slbl" style="margin-bottom:10px">What game / service is this for?</div>
   <div class="custom-cats">
-    <div class="custom-cat active" data-cc="Mobile Legends (MLBB)" onclick="selectCC(this)"><div class="cc-ico">🎮</div><div class="cc-name">MLBB</div></div>
-    <div class="custom-cat" data-cc="Garena Call of Duty" onclick="selectCC(this)"><div class="cc-ico">🎯</div><div class="cc-name">Garena CoD</div></div>
-    <div class="custom-cat" data-cc="Roblox" onclick="selectCC(this)"><div class="cc-ico">🟥</div><div class="cc-name">Roblox</div></div>
-    <div class="custom-cat" data-cc="Bloodstrike" onclick="selectCC(this)"><div class="cc-ico">🔫</div><div class="cc-name">Bloodstrike</div></div>
-    <div class="custom-cat" data-cc="Load / Data" onclick="selectCC(this)"><div class="cc-ico">📱</div><div class="cc-name">Load / Data</div></div>
+    <div class="custom-cat active" data-cc="Mobile Legends (MLBB)" onclick="selectCC(this)"><div class="cc-ico">⚔️</div><div class="cc-name">MLBB</div></div>
+    <div class="custom-cat" data-cc="Garena Call of Duty" onclick="selectCC(this)"><div class="cc-ico">🎖️</div><div class="cc-name">Garena CoD</div></div>
+    <div class="custom-cat" data-cc="Roblox" onclick="selectCC(this)"><div class="cc-ico">🧱</div><div class="cc-name">Roblox</div></div>
+    <div class="custom-cat" data-cc="Bloodstrike" onclick="selectCC(this)"><div class="cc-ico">🩸</div><div class="cc-name">Bloodstrike</div></div>
+    <div class="custom-cat" data-cc="Load / Data" onclick="selectCC(this)"><div class="cc-ico">📶</div><div class="cc-name">Load / Data</div></div>
     <div class="custom-cat" data-cc="Other Game / Service" onclick="selectCC(this)"><div class="cc-ico">🎲</div><div class="cc-name">Other</div></div>
   </div>
   <div class="oform custom-form">
     <h3>✏️ Describe Your Order</h3>
     <div class="alert-box" style="border-color:rgba(167,139,250,.3);color:#c4b5fd;background:rgba(167,139,250,.07)">
-      📢 This form sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> directly to Mark. He will review it and reach out to confirm the price and availability before processing.
+      📢 This form sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> directly to Mark. He will confirm price and availability before processing.
     </div>
     <div class="fg"><label>Game / Service <span class="req">*</span></label>
       <input type="text" id="custom-game" value="Mobile Legends (MLBB)" readonly style="border-color:rgba(167,139,250,.3);color:#a78bfa"></div>
     <div class="fg"><label>What exactly do you want? <span class="req">*</span></label>
-      <textarea id="custom-desc" rows="4" placeholder="Describe your order here..."></textarea></div>
+      <textarea id="custom-desc" rows="4" placeholder="Describe your order here…"></textarea></div>
     <div class="fg"><label>Your Name <span class="req">*</span></label>
       <input type="text" id="custom-name" placeholder="So Mark knows who to reply to"></div>
     <div class="fg"><label>Contact Number / FB Name <span class="req">*</span></label>
       <input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up"></div>
     <div class="fg"><label>Player ID / Username (if applicable)</label>
-      <input type="text" id="custom-pid" placeholder="Game ID, username, or any account info needed"></div>
+      <input type="text" id="custom-pid" placeholder="Game ID, username, or account info needed"></div>
     <div class="fg"><label>Budget (optional)</label>
       <input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'"></div>
     <div class="fg"><label>Additional Notes</label>
-      <textarea id="custom-notes" placeholder="Any extra details Mark should know..."></textarea></div>
+      <textarea id="custom-notes" placeholder="Any extra details Mark should know…"></textarea></div>
     <div class="fg">
       <label>Payment Method <span class="req">*</span></label>
       <input type="hidden" id="pm-val-custom">
       <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">GCash</div>
-        <div class="pm-btn" onclick="selectPayment('custom','maya',this)">Maya</div>
-        <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('custom','paypal',this)">PayPal</div>
+        <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">🔵 GCash</div>
+        <div class="pm-btn" onclick="selectPayment('custom','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">🟣 GoTyme</div>
+        <div class="pm-btn" onclick="selectPayment('custom','paypal',this)">🔷 PayPal</div>
       </div>
       <div class="pm-details" id="pm-details-custom">
         <div id="pm-label-custom" style="font-weight:bold;margin-bottom:10px"></div>
@@ -573,47 +692,52 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
         <div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg">
-      <label>Upload Payment Receipt <span class="req">*</span></label>
-      <input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff">
-    </div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label>
+      <input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">🛎️ Send Custom Request</button>
     <div class="err-msg" id="custom-err"></div>
-    <div class="notice" style="color:#7c6fa0">
-      ⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies to you. Payment only after confirmation.
-    </div>
+    <div style="font-size:.7rem;color:#7c6fa0;text-align:center;margin-top:12px;line-height:1.6">⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies. Payment only after confirmation.</div>
   </div>
 </div>
 
-<!-- SUCCESS MESSAGE -->
+<!-- SUCCESS -->
 <div class="ok-msg" id="ok-msg">
   <div class="ok-ico">✅</div>
   <h4>ORDER SUBMITTED!</h4>
-  <p>Your order has been received. Please send your payment to the confirmed details and wait for confirmation. Thank you! 🎮</p>
+  <p>Your order has been received. Wait for Mark to confirm, then send payment. Thank you! 🎮</p>
   <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
 </div>
 
 </div><!-- /main -->
 
-<!-- ===== QR MODAL ===== -->
-<div id="qr-modal" class="modal-overlay">
+<!-- QR MODAL -->
+<div id="qr-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal-box">
-    <h3 style="color:var(--or);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">Scan QR Code</h3>
+    <h3 style="color:var(--or);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">📷 Scan QR Code</h3>
     <img id="qr-img" src="" style="width:100%;border-radius:10px;margin-bottom:15px;border:1px solid var(--dk5)">
+    <p style="font-size:.8rem;color:var(--mx);margin-bottom:12px">Open your payment app, scan this QR, and enter the exact amount.</p>
     <button class="btn-sub" onclick="document.getElementById('qr-modal').style.display='none'">Close</button>
   </div>
 </div>
 
-<!-- ===== ID MODAL ===== -->
-<div id="id-modal" class="modal-overlay">
+<!-- ID MODAL -->
+<div id="id-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal-box">
-    <h3 style="color:var(--bl);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">How to find ID</h3>
-    <p style="font-size:.9rem;color:var(--mx);margin-bottom:15px;line-height:1.5">Open your game profile. Your Player ID and Zone ID are usually located under your avatar or in the settings page.</p>
-    <button class="btn-sub" onclick="document.getElementById('id-modal').style.display='none'">Got it</button>
+    <h3 style="color:var(--bl);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">🔍 How to Find Your ID</h3>
+    <div style="text-align:left;font-size:.83rem;color:var(--mx);line-height:1.8">
+      <b style="color:var(--tx)">For MLBB:</b><br>
+      1. Open game → tap your <b style="color:var(--tx)">profile picture</b> (top-left)<br>
+      2. <b style="color:#fbbf24">Player ID</b> = long number below your name<br>
+      3. <b style="color:#4ade80">Zone ID</b> = number in brackets ( ) after Player ID<br><br>
+      <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:8px 12px;font-family:monospace">
+        Example: <span style="color:#fbbf24">123456789</span> (<span style="color:#4ade80">1234</span>)
+      </div>
+    </div>
+    <button class="btn-sub" style="margin-top:14px" onclick="document.getElementById('id-modal').style.display='none'">Got it!</button>
   </div>
 </div>
 
-<!-- ===== FIX: DD CONFIRM MODAL (restored) ===== -->
+<!-- DD CONFIRM MODAL -->
 <div id="dd-modal" class="modal-overlay">
   <div class="modal-box" style="text-align:left">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
@@ -622,12 +746,12 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
     </div>
     <div style="font-size:.8rem;color:#fca5a5;line-height:1.7;margin-bottom:16px">
       Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>
-      Once you have bought a specific tier, <b style="color:#f87171">that tier disappears permanently</b> from your shop and can <b style="color:#f87171">never be purchased again</b> — even during the next Double Diamond event.<br><br>
-      Please <b style="color:#fff">check your in-game shop first</b> to confirm the tier is still available before placing an order!
+      Once bought, <b style="color:#f87171">that tier disappears permanently</b> and can <b style="color:#f87171">never be purchased again</b>.<br><br>
+      Please <b style="color:#fff">check your in-game shop first</b> before ordering!
     </div>
     <div class="dd-warning-box">
-      <label class="dd-check"><input type="checkbox" id="dd-chk1"> <span>I confirm this tier is <b>still available</b> in my in-game shop and has <b>never been purchased</b> before.</span></label>
-      <label class="dd-check"><input type="checkbox" id="dd-chk2"> <span>I understand that once purchased, <b>this tier will be gone permanently</b> and cannot be bought again on my account.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk1"> <span>I confirm this tier is <b>still available</b> in my shop and has <b>never been purchased</b> before.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk2"> <span>I understand that once purchased, <b>this tier will be gone permanently</b> from my account.</span></label>
       <label class="dd-check"><input type="checkbox" id="dd-chk3"> <span>I am ordering during an <b>active Double Diamond event</b> or I accept the current pricing.</span></label>
     </div>
     <button class="btn-sub" id="dd-proceed-btn" onclick="proceedDD()" style="background:#dc2626;margin-bottom:8px" disabled>✅ I Understand — Proceed</button>
@@ -637,582 +761,355 @@ z-index:999;display:none;align-items:center;justify-content:center;backdrop-filt
 
 <script>
 // ============================================================
-// DATA
+// CONFIG
 // ============================================================
-const DATA = {
-  mlbb:{
-    dias:[
-      {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:20},{n:"56 Diamonds",p:50},
-      {n:"112 Diamonds",p:100},{n:"168 Diamonds",p:150},{n:"225 Diamonds",p:205},
-      {n:"278 Diamonds",p:255},{n:"301 Diamonds",p:275},{n:"338 Diamonds",p:305},
-      {n:"448 Diamonds",p:410},{n:"570 Diamonds",p:510},{n:"626 Diamonds",p:570},
-      {n:"682 Diamonds",p:620},{n:"738 Diamonds",p:670},{n:"749 Diamonds",p:660},
-      {n:"785 Diamonds",p:720},{n:"946 Diamonds",p:860},{n:"1018 Diamonds",p:920},
-      {n:"1163 Diamonds",p:1050},{n:"1733 Diamonds",p:1550},{n:"2398 Diamonds",p:2150},
-      {n:"3581 Diamonds",p:3150},{n:"4131 Diamonds",p:3700},
-      {n:"6132 Diamonds",p:4500},{n:"8042 Diamonds",p:5200}
-    ],
-    denom:[
-      {n:"11 Diamonds",p:11},{n:"22 Diamonds",p:21},{n:"56 Diamonds",p:51},
-      {n:"112 Diamonds",p:100},{n:"223 Diamonds",p:200},{n:"336 Diamonds",p:300},
-      {n:"570 Diamonds",p:495},{n:"1163 Diamonds",p:985},
-      {n:"2398 Diamonds",p:1960},{n:"5942 Diamonds",p:4900}
-    ],
-    combo:[
-      {n:"168 Diamonds",d:"112 + 56",p:152},{n:"279 Diamonds",d:"223 + 56",p:250},
-      {n:"301 Diamonds",d:"223 + 56 + 22",p:270},{n:"448 Diamonds",d:"336 + 112",p:395},
-      {n:"626 Diamonds",d:"570 + 56",p:545},{n:"682 Diamonds",d:"570 + 112",p:595},
-      {n:"738 Diamonds",d:"570 + 112 + 56",p:645},{n:"749 Diamonds",d:"570 + 112 + 56 + 22",p:665},
-      {n:"793 Diamonds",d:"570 + 223",p:695},{n:"849 Diamonds",d:"570 + 223 + 56",p:745},
-      {n:"906 Diamonds",d:"570 + 336",p:795},{n:"1018 Diamonds",d:"570 + 336 + 112",p:890},
-      {n:"1733 Diamonds",d:"1163 + 570",p:1475},{n:"3561 Diamonds",d:"2398 + 1163",p:2950},
-      {n:"4131 Diamonds",d:"2398 + 1163 + 570",p:3450},{n:"5132 Diamonds",d:"2398×2 + 336",p:4250}
-    ],
-    dd:[
-      {n:"50 & 50 Bonus",d:"= 100 Total Diamonds",p:65},
-      {n:"150 & 150 Bonus",d:"= 300 Total Diamonds",p:200},
-      {n:"250 & 250 Bonus",d:"= 500 Total Diamonds",p:350},
-      {n:"500 & 500 Bonus",d:"= 1000 Total Diamonds",p:650},
-      {n:"Starlight (Monthly)",d:"During Double Diamond",p:160}
-    ],
-    bundles:[
-      {n:"Weekly Diamond Pass",d:"220 Dias/7 Days + Perks (WDP)",p:98},
-      {n:"Weekly Elite Bundle",d:"55 Dias + 20 CoA + Rare Frags",p:70},
-      {n:"Monthly Epic Bundle",d:"275 Dias + 180 CoA + Rare Frags",p:300},
-      {n:"Twilight Pass",d:"Progressive Tickets + Exclusive Skins",p:500}
-    ],
-    skinsC:[
-      {n:"1089 Dia Skin",d:"Shop/Event — CosmoBit",p:590},
-      {n:"888–879 Dia Skin",d:"Shop/Event — CosmoBit",p:480},
-      {n:"782 Dia Skin",d:"Shop/Event — CosmoBit",p:380},
-      {n:"748–729 Dia Skin",d:"Shop/Event — CosmoBit",p:370},
-      {n:"649 Dia Skin",d:"Shop/Event — CosmoBit",p:325},
-      {n:"828–688 Dia Skin",d:"Shop/Event — CosmoBit",p:310},
-      {n:"386 Dia Skin",d:"Shop/Event — CosmoBit",p:195},
-      {n:"288–269 Dia Skin",d:"Shop/Event — CosmoBit",p:155},
-      {n:"Emote (109 Dias)",d:"In-Game Emote",p:65},
-      {n:"Emote (78 Dias)",d:"In-Game Emote",p:50}
-    ],
-    skinsD:[
-      {n:"1089 Dia Skin",d:"Direct Purchase",p:680},
-      {n:"899–879 Dia Skin",d:"Direct Purchase",p:550},
-      {n:"782 Dia Skin",d:"Direct Purchase",p:440},
-      {n:"749–729 Dia Skin",d:"Direct Purchase",p:430},
-      {n:"649 Dia Skin",d:"Direct Purchase",p:380},
-      {n:"629–599 Dia Skin",d:"Direct Purchase",p:360},
-      {n:"399 Dia Skin",d:"Direct Purchase",p:230},
-      {n:"299–269 Dia Skin",d:"Direct Purchase",p:180},
-      {n:"Painted Skins",d:"Direct Purchase",p:120}
-    ],
-    starlight:[
-      {n:"Normal Starlight (NSL)",d:"Current Month",p:160},
-      {n:"Premium Starlight (PSL)",d:"Current Month",p:320},
-      {n:"Normal Starlight — Table 6",d:"Alternative Rate",p:180},
-      {n:"Premium Starlight — Table 6",d:"Alternative Rate",p:360},
-      {n:"Normal Starlight (March)",d:"Month-Specific",p:145},
-      {n:"Premium Starlight (March)",d:"Month-Specific",p:290},
-      {n:"Normal Starlight (April)",d:"Month-Specific",p:145},
-      {n:"Premium Starlight (April)",d:"Month-Specific",p:290}
-    ]
-  },
-  cod:[
-    {n:"10 Garena Shells",p:13},{n:"20 Garena Shells",p:24},{n:"50 Garena Shells",p:55},
-    {n:"100 Garena Shells",p:100},{n:"200 Garena Shells",p:200},{n:"300 Garena Shells",p:300},
-    {n:"500 Garena Shells",p:500},{n:"1000 Garena Shells",p:1000}
-  ],
-  roblox:[
-    {n:"100 Robux",p:65},{n:"200 Robux",p:115},{n:"300 Robux",p:165},
-    {n:"400 Robux",p:215},{n:"500 Robux",p:250},{n:"600 Robux",p:295},
-    {n:"700 Robux",p:340},{n:"800 Robux",p:390},{n:"900 Robux",p:435},
-    {n:"1000 Robux",p:480}
-  ],
-  bs:[
-    {n:"100 + 5 Golds",p:45},{n:"300 + 20 Golds",p:130},{n:"500 + 40 Golds",p:218},
-    {n:"600 + 45 Golds",p:260},{n:"800 + 60 Golds",p:344},{n:"1000 + 100 Golds",p:437},
-    {n:"1200 + 110 Golds",p:520},{n:"1500 + 140 Golds",p:655},
-    {n:"2000 + 260 Golds",p:884},{n:"2500 + 300 Golds",p:1144},
-    {n:"3000 + 360 Golds",p:1302},{n:"4000 + 520 Golds",p:1868},
-    {n:"5000 + 800 Golds",p:2387}
-  ],
-  load:{
-    "globe-reg":{net:"Globe (Regular)",items:[
-      {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36},
-      {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180},
-      {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435}
-    ]},
-    "tm-reg":{net:"TM (Regular)",items:[
-      {n:"₱20 Load",p:18},{n:"₱30 Load",p:27},{n:"₱40 Load",p:36},
-      {n:"₱50 Load",p:45},{n:"₱100 Load",p:90},{n:"₱200 Load",p:180},
-      {n:"₱300 Load",p:265},{n:"₱400 Load",p:350},{n:"₱500 Load",p:435}
-    ]},
-    "globe-promo":{net:"Globe Promo B",items:[
-      {n:"UnliS680",p:70},{n:"GO59",p:53},{n:"GO59 (Students)",p:53},
-      {n:"UnliGO99",p:89},{n:"Go+99",p:90},{n:"Go+109",p:99},
-      {n:"Go+120",p:109},{n:"Go+149",p:135},{n:"Go+179",p:162},
-      {n:"GoExtra59",p:54},{n:"GoExtra89",p:80},{n:"GoExtra109",p:96},
-      {n:"GoExtra179",p:162},{n:"GoExtra199",p:179},
-      {n:"Surf4all09",p:8},{n:"Surf4all249",p:217},
-      {n:"GOUNLI20",p:19},{n:"GOUNLI30",p:28},{n:"GOUNLI50",p:45},
-      {n:"GOUNLI95",p:86},{n:"GOUNLI180",p:165},{n:"GOUNLI350",p:307}
-    ]},
-    "homesurf":{net:"Fr WiFi / Home Surf",items:[
-      {n:"HomeSurf50",p:46},{n:"HomeSurf199",p:178},
-      {n:"HomeSurf599",p:519},{n:"HomeSurf1489",p:1264}
-    ]},
-    "famsurf":{net:"FamSurf",items:[
-      {n:"FamSurf50",p:45},{n:"FamSurf198",p:178},
-      {n:"FamSurf299",p:264},{n:"FamSurf998",p:568}
-    ]},
-    "tm-promo":{net:"TM Promo & ALL-NET",items:[
-      {n:"SURF20",p:19},{n:"ALL-NET SURF30",p:28},{n:"AN20",p:19},
-      {n:"BigBenta",p:19},{n:"Combo10",p:8},{n:"Combo15",p:14},
-      {n:"Combo20",p:19},{n:"PowerSurf20",p:19},{n:"PowerSurf59",p:56},
-      {n:"FEML16",p:15},{n:"EZ50",p:46},{n:"EZ70",p:62},
-      {n:"EZ98",p:88},{n:"EZ110",p:98},{n:"EZ76",p:66},
-      {n:"EZ140",p:129},{n:"EZ299",p:264},{n:"EZ589",p:519},
-      {n:"SurfBest69",p:57},{n:"SurfBest249",p:215},
-      {n:"AllSurf59",p:56},{n:"AllSurf110",p:96},
-      {n:"AllSurf149",p:128},{n:"EasyPlan168",p:148},{n:"EasyPlan350",p:295}
-    ]},
-    "gfiber":{net:"GFiber Prepaid",items:[
-      {n:"UnliSurf249",p:221},{n:"UnliSurf299",p:265},
-      {n:"UnliSurf699",p:619},{n:"UnliSurf999",p:869},
-      {n:"UnliSurf1499",p:1284}
-    ]}
-  }
-};
+const PRICE_API = 'https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec';
+const ORDER_API = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
+let DATA = {};
 
 // ============================================================
-// PAYMENT DATA
+// PAYMENT
 // ============================================================
 const PM_DATA = {
-  gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',         color:'#3b82f6', qr:'gcash-logo.jpg'},
-  maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',         color:'#22c55e', qr:'paymaya-logo.jpg'},
-  gotyme: {label:'GoTyme', name:'Mark Guevarra', num:'09288978005',         color:'#8b5cf6', qr:'gotyme-logo.jpg'},
-  paypal: {label:'PayPal', name:'Mark Guevarra', num:'markguevarra@gmail.com', color:'#0ea5e9', note:'Please select "Friends & Family"'}
+  gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',                  color:'#3b82f6', qr:'gcash-qr.jpg'},
+  maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',                  color:'#22c55e', qr:'maya-qr.jpg'},
+  gotyme: {label:'GoTyme', name:'Mark Guevarra', num:'09288978005',                  color:'#8b5cf6', qr:'gotyme-qr.jpg'},
+  paypal: {label:'PayPal', name:'Mark Guevarra', num:'marcangelguevarra@gmail.com',  color:'#0ea5e9', note:'Please select "Friends & Family"'}
 };
+const currentMethod={}, currentQR={}, pmTimers={};
 
-// Track current method & timer per game
-const currentMethod = {};
-const currentQR = {};
-const pmTimers = {};
-
-// ============================================================
-// HEADER GCASH TOGGLE
-// ============================================================
-let hdrRevealed = false, hdrTimer = null;
-function toggleHeaderGCash(){
-  const el = document.getElementById('hdr-gcash-reveal');
-  clearTimeout(hdrTimer);
-  hdrRevealed = !hdrRevealed;
-  el.style.display = hdrRevealed ? 'inline' : 'none';
-  if(hdrRevealed) hdrTimer = setTimeout(() => { el.style.display='none'; hdrRevealed=false; }, 3000);
-}
-
-// ============================================================
-// PAYMENT SELECTION — FIX: uses static DOM elements
-// ============================================================
 function selectPayment(game, method, btn){
   clearTimeout(pmTimers[game]);
   currentMethod[game] = method;
-
-  // Highlight button
-  document.querySelectorAll(`#g-${game} .pm-btn, #g-custom .pm-btn`).forEach(b => b.classList.remove('active'));
+  const form = document.getElementById(game+'-oform') || document.querySelector('#g-'+game+' .oform');
+  if(form) form.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-
-  const pm = PM_DATA[method];
-  document.getElementById(`pm-val-${game}`).value = pm.label;
-
-  // Show details block
-  const det = document.getElementById(`pm-details-${game}`);
-  det.style.display = 'block';
-  det.style.borderLeftColor = pm.color;
-
-  // Set label
-  document.getElementById(`pm-label-${game}`).innerHTML = `<span style="color:${pm.color}">${pm.label} Selected</span>`;
-
-  // Show masked info
-  const isEmail = method === 'paypal';
-  document.getElementById(`pm-numlbl-${game}`).textContent = isEmail ? 'Email Address:' : 'Account Number:';
-  document.getElementById(`pm-name-${game}`).textContent = 'M*** G*******';
-  document.getElementById(`pm-num-${game}`).textContent  = isEmail ? 'm****@gmail.com' : '0928****005';
-
-  // Reveal button — FIX: use block not flex to avoid display issue
-  const revBtn = document.getElementById(`pm-reveal-btn-${game}`);
-  revBtn.style.display = 'block';
-
-  // QR / note
-  const qrBtn  = document.getElementById(`pm-qr-btn-${game}`);
-  const noteEl = document.getElementById(`pm-note-${game}`);
-  if(pm.qr){
-    currentQR[game] = pm.qr;
-    qrBtn.style.display  = 'block';
-    noteEl.style.display = 'none';
-  } else {
-    qrBtn.style.display  = 'none';
-    noteEl.style.display = pm.note ? 'block' : 'none';
-    noteEl.textContent   = pm.note || '';
-    currentQR[game]      = null;
-  }
+  const pm=PM_DATA[method];
+  document.getElementById('pm-val-'+game).value = pm.label;
+  const det=document.getElementById('pm-details-'+game);
+  det.style.display='block'; det.style.borderLeftColor=pm.color;
+  document.getElementById('pm-label-'+game).innerHTML=`<span style="color:${pm.color}">✅ ${pm.label} Selected</span>`;
+  const isEmail=method==='paypal';
+  document.getElementById('pm-numlbl-'+game).textContent=isEmail?'Email Address:':'Account Number:';
+  document.getElementById('pm-name-'+game).textContent='M*** G*******';
+  document.getElementById('pm-num-'+game).textContent=isEmail?'m****@gmail.com':'0928****005';
+  const revBtn=document.getElementById('pm-reveal-btn-'+game);
+  revBtn.style.display='block'; revBtn.textContent='👁️ Reveal Info';
+  const qrBtn=document.getElementById('pm-qr-btn-'+game);
+  const noteEl=document.getElementById('pm-note-'+game);
+  if(pm.qr){ currentQR[game]=pm.qr; qrBtn.style.display='block'; noteEl.style.display='none'; }
+  else { currentQR[game]=null; qrBtn.style.display='none'; noteEl.style.display=pm.note?'block':'none'; if(pm.note)noteEl.textContent=pm.note; }
 }
 
-// FIX: revealPM uses static element IDs; timer re-shows button correctly
 function revealPM(game){
   clearTimeout(pmTimers[game]);
-  const method  = currentMethod[game];
-  const pm      = PM_DATA[method];
-  const isEmail = method === 'paypal';
-  const revBtn  = document.getElementById(`pm-reveal-btn-${game}`);
-
-  document.getElementById(`pm-name-${game}`).textContent = pm.name;
-  document.getElementById(`pm-num-${game}`).textContent  = pm.num;
-  revBtn.style.display = 'none';
-
-  // FIX: 5-second timer re-shows correctly using block
-  pmTimers[game] = setTimeout(() => {
-    document.getElementById(`pm-name-${game}`).textContent = 'M*** G*******';
-    document.getElementById(`pm-num-${game}`).textContent  = isEmail ? 'm****@gmail.com' : '0928****005';
-    revBtn.style.display = 'block';
+  const method=currentMethod[game]; if(!method)return;
+  const pm=PM_DATA[method]; const isEmail=method==='paypal';
+  const revBtn=document.getElementById('pm-reveal-btn-'+game);
+  document.getElementById('pm-name-'+game).textContent=pm.name;
+  document.getElementById('pm-num-'+game).textContent=pm.num;
+  revBtn.style.display='none';
+  pmTimers[game]=setTimeout(()=>{
+    document.getElementById('pm-name-'+game).textContent='M*** G*******';
+    document.getElementById('pm-num-'+game).textContent=isEmail?'m****@gmail.com':'0928****005';
+    revBtn.style.display='block'; revBtn.textContent='👁️ Reveal Again';
   }, 3000);
 }
 
-function openQRModal(src){
-  if(!src) return;
-  document.getElementById('qr-img').src = src;
-  document.getElementById('qr-modal').style.display = 'flex';
-}
-function openIDModal(){
-  document.getElementById('id-modal').style.display = 'flex';
-}
+function openQRModal(src){ if(!src)return; document.getElementById('qr-img').src=src; document.getElementById('qr-modal').style.display='flex'; }
+function openIDModal(){ document.getElementById('id-modal').style.display='flex'; }
 
 // ============================================================
-// GAME / CATEGORY TABS
+// TABS
 // ============================================================
-document.querySelectorAll('.gtab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.gtab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.gpanel').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.gtab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.gpanel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
-    document.getElementById('g-' + tab.dataset.g).classList.add('active');
+    document.getElementById('g-'+tab.dataset.g).classList.add('active');
   });
 });
-
-document.querySelectorAll('.ctab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    const parent = tab.closest('.gpanel');
-    parent.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
-    parent.querySelectorAll('.cpanel').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.ctab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const parent=tab.closest('.gpanel');
+    parent.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+    parent.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
-    document.getElementById(tab.dataset.c).classList.add('active');
+    const panel=document.getElementById(tab.dataset.c);
+    if(panel) panel.classList.add('active');
   });
 });
 
 // ============================================================
-// RENDER PRICE GRIDS
+// GRID BUILDER
 // ============================================================
-function ph(n){ return '₱' + Number(n).toLocaleString('en-PH'); }
+function ph(n){ return '₱'+Number(n).toLocaleString('en-PH'); }
 
-function makeGrid(containerId, items, game, cat){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  el.innerHTML = '';
-  items.forEach((it, i) => {
-    const c = document.createElement('div');
-    c.className = 'pcard';
-    c.dataset.game  = game;
-    c.dataset.cat   = cat;
-    c.dataset.idx   = i;
-    c.dataset.name  = it.n;
-    c.dataset.price = it.p;
-    c.innerHTML = `<div class="chk">✓</div>
-      <div class="pn">${it.n}</div>
-      ${it.d ? `<div class="pd">${it.d}</div>` : ''}
-      <div class="pp">${ph(it.p)}</div>`;
-    c.onclick = () => {
-      if(game === 'mlbb' && cat === 'dd') openDDModal(c);
-      else selectItem(c, game);
-    };
+function makeGrid(id, items, game, cat){
+  const el=document.getElementById(id); if(!el)return;
+  el.innerHTML='';
+  if(!items||!items.length){ el.innerHTML='<div class="loading-grid">No items found.</div>'; return; }
+  items.forEach(it=>{
+    const c=document.createElement('div');
+    c.className='pcard'; c.dataset.game=game; c.dataset.cat=cat; c.dataset.name=it.n; c.dataset.price=it.p;
+    c.innerHTML=`<div class="chk">✓</div><div class="pn">${it.n}</div>${it.d?`<div class="pd">${it.d}</div>`:''}<div class="pp">${ph(it.p)}</div>`;
+    c.onclick=()=>{ if(game==='mlbb'&&cat==='dd') openDDModal(c); else selectItem(c,game); };
     el.appendChild(c);
   });
 }
 
-function buildAll(){
-  makeGrid('grid-mlbb-dias',       DATA.mlbb.dias,    'mlbb','dias');
-  makeGrid('grid-mlbb-denom',      DATA.mlbb.denom,   'mlbb','denom');
-  makeGrid('grid-mlbb-combo',      DATA.mlbb.combo,   'mlbb','combo');
-  makeGrid('grid-mlbb-dd',         DATA.mlbb.dd,      'mlbb','dd');
-  makeGrid('grid-mlbb-bundles',    DATA.mlbb.bundles,  'mlbb','bundles');
-  makeGrid('grid-mlbb-skins-cosmo',DATA.mlbb.skinsC,  'mlbb','skins');
-  makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsD, 'mlbb','skins');
-  makeGrid('grid-mlbb-starlight',  DATA.mlbb.starlight,'mlbb','starlight');
-  makeGrid('grid-cod',    DATA.cod,    'cod','main');
-  makeGrid('grid-roblox', DATA.roblox, 'roblox','main');
-  makeGrid('grid-bs',     DATA.bs,     'bs','main');
-  Object.keys(DATA.load).forEach(net => {
-    makeGrid('grid-' + net, DATA.load[net].items, 'load', net);
+// Starlight filter: skip March and April entries
+function filterStarlight(items){
+  if(!items) return [];
+  return items.filter(it=>{
+    const n=it.n.toLowerCase();
+    return !n.includes('march') && !n.includes('april');
   });
+}
+
+function buildAll(){
+  if(!DATA||!Object.keys(DATA).length) return;
+  if(DATA.mlbb){
+    makeGrid('grid-mlbb-dias',        DATA.mlbb.dias||DATA.mlbb.Dias,       'mlbb','dias');
+    makeGrid('grid-mlbb-denom',       DATA.mlbb.denom||DATA.mlbb.Denom,     'mlbb','denom');
+    makeGrid('grid-mlbb-combo',       DATA.mlbb.combo||DATA.mlbb.Combo,     'mlbb','combo');
+    makeGrid('grid-mlbb-dd',          DATA.mlbb.dd||DATA.mlbb.DD,           'mlbb','dd');
+    makeGrid('grid-mlbb-bundles',     DATA.mlbb.bundles||DATA.mlbb.Bundles, 'mlbb','bundles');
+    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc||DATA.mlbb.SkinsC,   'mlbb','skins');
+    makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,   'mlbb','skins');
+    makeGrid('grid-mlbb-starlight',   filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight), 'mlbb','starlight');
+  }
+  if(DATA.cod)    makeGrid('grid-cod',    DATA.cod,    'cod',   'main');
+  if(DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox','main');
+  if(DATA.bs)     makeGrid('grid-bs',     DATA.bs,     'bs',    'main');
+  if(DATA.load){
+    Object.keys(DATA.load).forEach(net=>{
+      const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
+      if(items) makeGrid('grid-'+net, items, 'load', net);
+    });
+  }
+}
+
+// ============================================================
+// FETCH PRICES
+// ============================================================
+async function fetchPrices(){
+  try{
+    const r=await fetch(PRICE_API);
+    if(!r.ok) throw new Error();
+    DATA=await r.json();
+    buildAll();
+  }catch(e){
+    document.querySelectorAll('.loading-grid').forEach(el=>{ el.textContent='⚠️ Could not load prices. Please refresh.'; });
+  }
 }
 
 // ============================================================
 // ITEM SELECTION
 // ============================================================
-function selectItem(card, game, manualName, manualPrice){
-  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c => c.classList.remove('sel'));
-  if(card) card.classList.add('sel');
-
-  const name  = manualName  || card.dataset.name;
-  const price = manualPrice || ph(parseInt(card.dataset.price));
-
-  if(game === 'mlbb'){
-    document.getElementById('mlbb-sel-box').style.display  = 'block';
-    document.getElementById('mlbb-sel-item').textContent   = name;
-    document.getElementById('mlbb-sel-price').textContent  = price;
-    document.getElementById('mlbb-order-display').value    = name + ' — ' + price;
-    scrollToForm('mlbb-oform');
-  } else if(game === 'cod'){
-    document.getElementById('cod-sel-box').style.display   = 'block';
-    document.getElementById('cod-sel-item').textContent    = name;
-    document.getElementById('cod-sel-price').textContent   = price;
-    document.getElementById('cod-order-display').value     = name + ' — ' + price;
-    scrollToForm('cod-oform');
-  } else if(game === 'roblox'){
-    document.getElementById('roblox-sel-box').style.display  = 'block';
-    document.getElementById('roblox-sel-item').textContent   = name;
-    document.getElementById('roblox-sel-price').textContent  = price;
-    document.getElementById('roblox-order-display').value    = name + ' — ' + price;
-    scrollToForm('roblox-oform');
-  } else if(game === 'bs'){
-    document.getElementById('bs-sel-box').style.display   = 'block';
-    document.getElementById('bs-sel-item').textContent    = name;
-    document.getElementById('bs-sel-price').textContent   = price;
-    document.getElementById('bs-order-display').value     = name + ' — ' + price;
-    scrollToForm('bs-oform');
-  } else if(game === 'load'){
-    const netKey  = card.dataset.cat;
-    const netName = DATA.load[netKey]?.net || netKey;
-    document.getElementById('load-sel-box').style.display        = 'block';
-    document.getElementById('load-sel-item').textContent         = name;
-    document.getElementById('load-sel-price').textContent        = price;
-    document.getElementById('load-order-display').value          = name + ' — ' + price;
-    document.getElementById('load-network-display').value        = netName;
-    scrollToForm('load-oform');
+function selectItem(card, game){
+  document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
+  card.classList.add('sel');
+  const name=card.dataset.name, price=ph(parseInt(card.dataset.price));
+  fillForm(game, name, price);
+  if(game==='load'){
+    const netKey=card.dataset.cat;
+    const netData=DATA.load?DATA.load[netKey]:null;
+    document.getElementById('load-network-display').value=netData?.net||netKey;
   }
 }
 
-// FIX: scroll helper
+// Promos tap fills MLBB form directly — stays in MLBB, switches to Diamonds tab
+function promoSelectItem(name, price){
+  document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#g-mlbb .cpanel').forEach(p=>p.classList.remove('active'));
+  document.querySelector('#mlbb-ctabs .ctab[data-c="mlbb-dias"]').classList.add('active');
+  document.getElementById('mlbb-dias').classList.add('active');
+  fillForm('mlbb', name, price);
+}
+
+function fillForm(game, name, price){
+  const ids={
+    mlbb:['mlbb-sel-box','mlbb-sel-item','mlbb-sel-price','mlbb-order-display','mlbb-oform'],
+    cod: ['cod-sel-box','cod-sel-item','cod-sel-price','cod-order-display','cod-oform'],
+    roblox:['roblox-sel-box','roblox-sel-item','roblox-sel-price','roblox-order-display','roblox-oform'],
+    bs:  ['bs-sel-box','bs-sel-item','bs-sel-price','bs-order-display','bs-oform'],
+    load:['load-sel-box','load-sel-item','load-sel-price','load-order-display','load-oform'],
+  };
+  const [box,item,priceEl,disp,form]=ids[game];
+  document.getElementById(box).style.display='block';
+  document.getElementById(item).textContent=name;
+  document.getElementById(priceEl).textContent=price;
+  document.getElementById(disp).value=name+' — '+price;
+  scrollToForm(form);
+}
+
 function scrollToForm(id){
-  const el = document.getElementById(id);
-  if(el) setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+  const el=document.getElementById(id);
+  if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
 // ============================================================
-// DOUBLE DIAMOND MODAL — FIX: restored + checkboxes + scroll
+// DD MODAL
 // ============================================================
-let pendingDDCard = null;
-
+let pendingDDCard=null;
 function openDDModal(card){
-  pendingDDCard = card;
-  ['dd-chk1','dd-chk2','dd-chk3'].forEach(id => document.getElementById(id).checked = false);
-  document.getElementById('dd-proceed-btn').disabled = true;
-  document.getElementById('dd-modal').style.display = 'flex';
+  pendingDDCard=card;
+  ['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>document.getElementById(id).checked=false);
+  const btn=document.getElementById('dd-proceed-btn');
+  btn.disabled=true; btn.style.background='#dc2626';
+  document.getElementById('dd-modal').style.display='flex';
 }
-
-function closeDDModal(){
-  document.getElementById('dd-modal').style.display = 'none';
-  pendingDDCard = null;
-}
-
-// Enable proceed only when all 3 boxes checked
-['dd-chk1','dd-chk2','dd-chk3'].forEach(id => {
-  document.getElementById(id).addEventListener('change', () => {
-    const all = ['dd-chk1','dd-chk2','dd-chk3'].every(i => document.getElementById(i).checked);
-    document.getElementById('dd-proceed-btn').disabled = !all;
-    document.getElementById('dd-proceed-btn').style.background = all ? '#16a34a' : '#dc2626';
+function closeDDModal(){ document.getElementById('dd-modal').style.display='none'; pendingDDCard=null; }
+['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',()=>{
+    const all=['dd-chk1','dd-chk2','dd-chk3'].every(i=>document.getElementById(i).checked);
+    const btn=document.getElementById('dd-proceed-btn');
+    btn.disabled=!all; btn.style.background=all?'#16a34a':'#dc2626';
   });
 });
-
 function proceedDD(){
-  document.getElementById('dd-modal').style.display = 'none';
-  if(pendingDDCard){
-    selectItem(pendingDDCard, 'mlbb'); // FIX: now scrolls to form too
-    pendingDDCard = null;
-  }
+  document.getElementById('dd-modal').style.display='none';
+  if(pendingDDCard){ selectItem(pendingDDCard,'mlbb'); pendingDDCard=null; }
 }
 
 // ============================================================
-// LOAD NETWORK SELECTOR
+// LOAD NETWORK
 // ============================================================
 function selectNet(card, net){
-  document.querySelectorAll('.netcard').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active'));
   card.classList.add('active');
-  document.querySelectorAll('.lpanel').forEach(p => p.classList.remove('active'));
-  const lp = document.getElementById('lp-' + net);
-  if(lp) lp.classList.add('active');
+  document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active'));
+  const lp=document.getElementById('lp-'+net); if(lp) lp.classList.add('active');
 }
 
 // ============================================================
-// CUSTOM ORDER CATEGORY
+// CUSTOM CATEGORY
 // ============================================================
 function selectCC(el){
-  document.querySelectorAll('.custom-cat').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('custom-game').value = el.dataset.cc;
+  document.getElementById('custom-game').value=el.dataset.cc;
 }
 
 // ============================================================
-// VERIFY APIs
+// VERIFY
 // ============================================================
 async function verifyMLBB(){
-  const pid = document.getElementById('mlbb-pid').value.trim();
-  const zid = document.getElementById('mlbb-zid').value.trim();
-  if(!pid || !zid){ alert('Enter Player ID and Zone ID first.'); return; }
-  try {
-    const r = await fetch(`https://api.gameofthrones.life/moonton/user?userId=${pid}&zoneId=${zid}`);
-    const d = await r.json();
-    document.getElementById('mlbb-ign').value = d.name || d.username || d.nickName || 'Not found';
-  } catch(e){ document.getElementById('mlbb-ign').value = 'Verification failed'; }
+  const pid=document.getElementById('mlbb-pid').value.trim();
+  const zid=document.getElementById('mlbb-zid').value.trim();
+  const ign=document.getElementById('mlbb-ign');
+  if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
+  ign.value='Verifying…';
+  try{
+    const r=await fetch(`https://api.gameofthrones.life/moonton/user?userId=${pid}&zoneId=${zid}`);
+    const d=await r.json();
+    const name=d.name||d.username||d.nickName;
+    if(name){ ign.value=name; ign.style.borderColor='var(--gr)'; ign.removeAttribute('readonly'); }
+    else { ign.value=''; ign.removeAttribute('readonly'); ign.placeholder='Not found — type IGN manually'; }
+  }catch(e){ ign.value=''; ign.removeAttribute('readonly'); ign.placeholder='Verify unavailable — type IGN manually'; }
 }
 
 async function verifyCOD(){
-  const pid = document.getElementById('cod-pid').value.trim();
-  if(!pid){ alert('Enter Player ID first.'); return; }
-  document.getElementById('cod-ign').value = 'Manual entry required';
+  const ign=document.getElementById('cod-ign');
+  ign.value='Manual entry required'; ign.removeAttribute('readonly');
 }
 
 async function verifyRoblox(){
-  const u = document.getElementById('roblox-user').value.trim();
-  if(!u){ alert('Enter Roblox username first.'); return; }
-  try {
-    const r = await fetch(`https://api.roblox.com/users/get-by-username?username=${u}`);
-    const d = await r.json();
-    document.getElementById('roblox-dispname').value = d.Username || d.username || 'Not found';
-  } catch(e){ document.getElementById('roblox-dispname').value = 'Verification failed'; }
+  const u=document.getElementById('roblox-user').value.trim();
+  const disp=document.getElementById('roblox-dispname');
+  if(!u){alert('Enter Roblox username first.');return;}
+  disp.value='Verifying…';
+  try{
+    const r=await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(u)}`);
+    const d=await r.json();
+    const name=d.Username||d.username;
+    if(name){ disp.value=name; disp.style.borderColor='var(--gr)'; }
+    else { disp.value=''; disp.placeholder='Not found — type manually'; }
+  }catch(e){ disp.value=''; disp.placeholder='Verify unavailable — type manually'; }
 }
 
 // ============================================================
 // SUBMIT ORDER
 // ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIiEGWRVT5GnJRVgR6d5wgxuEhcHr41fjJMmR8wMhZPjOCxhJ2z0CWjLkoxMjdXXnb/exec';
-
 async function submitOrder(game){
-  const btn = document.getElementById(game + '-btn');
-  const err = document.getElementById(game + '-err');
-  err.style.display = 'none';
-
-  // Gather fields
-  let order, pid, ign, notes, network;
-  const pm = document.getElementById(`pm-val-${game}`).value;
-  const fileInput = document.getElementById(game + '-screenshot');
-
-  if(game === 'mlbb'){
-    order   = document.getElementById('mlbb-order-display').value;
-    pid     = document.getElementById('mlbb-pid').value + ' / Zone: ' + document.getElementById('mlbb-zid').value;
-    ign     = document.getElementById('mlbb-ign').value;
-    notes   = document.getElementById('mlbb-notes').value;
-  } else if(game === 'cod'){
-    order   = document.getElementById('cod-order-display').value;
-    pid     = document.getElementById('cod-pid').value;
-    ign     = document.getElementById('cod-ign').value;
-    notes   = document.getElementById('cod-notes').value;
-  } else if(game === 'roblox'){
-    order   = document.getElementById('roblox-order-display').value;
-    pid     = 'GP:' + document.getElementById('roblox-gpid').value + ' (' + document.getElementById('roblox-gpname').value + ')';
-    ign     = document.getElementById('roblox-user').value + ' / ' + document.getElementById('roblox-dispname').value;
-    notes   = document.getElementById('roblox-notes').value;
-  } else if(game === 'bs'){
-    order   = document.getElementById('bs-order-display').value;
-    pid     = document.getElementById('bs-pid').value;
-    ign     = document.getElementById('bs-ign').value;
-    notes   = document.getElementById('bs-notes').value;
-  } else if(game === 'load'){
-    order   = document.getElementById('load-order-display').value;
-    pid     = document.getElementById('load-number').value;
-    ign     = document.getElementById('load-network-display').value;
-    notes   = document.getElementById('load-notes').value;
-  } else if(game === 'custom'){
-    order   = document.getElementById('custom-desc').value;
-    pid     = document.getElementById('custom-pid').value;
-    ign     = document.getElementById('custom-name').value + ' / ' + document.getElementById('custom-contact').value;
-    notes   = document.getElementById('custom-notes').value;
+  const btn=document.getElementById(game+'-btn');
+  const err=document.getElementById(game+'-err');
+  const pm=document.getElementById('pm-val-'+game).value;
+  const fi=document.getElementById(game+'-screenshot');
+  err.style.display='none';
+  let order='',pid='',ign='',notes='';
+  if(game==='mlbb'){
+    order=document.getElementById('mlbb-order-display').value;
+    pid=document.getElementById('mlbb-pid').value+' / Zone: '+document.getElementById('mlbb-zid').value;
+    ign=document.getElementById('mlbb-ign').value; notes=document.getElementById('mlbb-notes').value;
+  }else if(game==='cod'){
+    order=document.getElementById('cod-order-display').value;
+    pid=document.getElementById('cod-pid').value; ign=document.getElementById('cod-ign').value; notes=document.getElementById('cod-notes').value;
+  }else if(game==='roblox'){
+    order=document.getElementById('roblox-order-display').value;
+    pid='GP:'+document.getElementById('roblox-gpid').value+' ('+document.getElementById('roblox-gpname').value+')';
+    ign=document.getElementById('roblox-user').value+' / '+document.getElementById('roblox-dispname').value;
+    notes=document.getElementById('roblox-notes').value;
+  }else if(game==='bs'){
+    order=document.getElementById('bs-order-display').value;
+    pid=document.getElementById('bs-pid').value; ign=document.getElementById('bs-ign').value; notes=document.getElementById('bs-notes').value;
+  }else if(game==='load'){
+    order=document.getElementById('load-order-display').value;
+    pid=document.getElementById('load-number').value; ign=document.getElementById('load-network-display').value; notes=document.getElementById('load-notes').value;
+  }else if(game==='custom'){
+    order=document.getElementById('custom-desc').value;
+    pid=document.getElementById('custom-pid').value;
+    ign=document.getElementById('custom-name').value+' / '+document.getElementById('custom-contact').value;
+    notes=document.getElementById('custom-notes').value;
   }
-
-  if(!order){ showErr(err,'Please select an item first.'); return; }
-  if(!pm){    showErr(err,'Please select a payment method.'); return; }
-
-  // File
-  let fileData = null, fileName = null, mimeType = null;
-  if(fileInput && fileInput.files[0]){
-    const file = fileInput.files[0];
-    if(file.size > 4500000){ showErr(err,'Screenshot too large (max 4.5MB).'); return; }
-    fileName = file.name; mimeType = file.type;
-    fileData = await toBase64(file);
+  if(!order){showErr(err,'Please select or describe your order first.');return;}
+  if(!pm){showErr(err,'Please select a payment method.');return;}
+  let fileData=null,fileName=null,mimeType=null;
+  if(fi&&fi.files[0]){
+    const f=fi.files[0];
+    if(f.size>4500000){showErr(err,'Screenshot too large (max 4.5MB).');return;}
+    fileName=f.name; mimeType=f.type; fileData=await toBase64(f);
   }
-
-  btn.disabled = true; btn.textContent = 'Sending...';
-  try {
-    const gameName = game === 'custom'
-      ? document.getElementById('custom-game').value
-      : game.toUpperCase();
-
-    const payload = {
-      game: gameName,
-      order: order,
-      orderDescription: `Order: ${order}\nPlayer/ID: ${pid || '-'}\nIGN: ${ign || '-'}\nPayment: ${pm}\nNotes: ${notes || '-'}`,
-      fileData, fileName, mimeType
-    };
-
-    const res = await fetch(SCRIPT_URL, {method:'POST', body: JSON.stringify(payload)});
-    const txt = await res.text();
-    if(txt.includes('Success') || txt.toLowerCase().includes('success')){
-      document.getElementById('ok-msg').style.display = 'block';
+  btn.disabled=true; btn.textContent='Sending…';
+  const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
+  const txnID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
+  const payload={game:gameName,order,orderDescription:`Order: ${order}\nPlayer/ID: ${pid||'-'}\nIGN: ${ign||'-'}\nPayment: ${pm}\nNotes: ${notes||'-'}`,transactionID:txnID,dateTime:new Date().toLocaleString(),fileData,fileName,mimeType};
+  try{
+    const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(payload)});
+    const txt=await res.text();
+    if(txt.toLowerCase().includes('success')){
+      document.getElementById('ok-msg').innerHTML=`<div class="ok-ico">✅</div><h4>ORDER SUBMITTED!</h4>
+        <div style="background:rgba(255,255,255,.05);border:1px solid var(--dk5);border-radius:10px;padding:14px;margin:12px 0;text-align:left;font-size:.82rem">
+          <b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>
+          <b>ID:</b> <span style="color:#fbbf24">${txnID}</span><br>
+          <b>Game:</b> ${gameName}<br>
+          <b>Payment:</b> ${pm}<br>
+          <b>Order:</b> ${order}
+        </div>
+        <p>Order received! Wait for Mark to confirm before sending payment. 🎮</p>
+        <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>`;
+      document.getElementById('ok-msg').style.display='block';
       document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
-    } else {
-      showErr(err, 'Server error: ' + txt);
+    }else{
+      showErr(err,'Server error: '+txt);
+      btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
     }
-  } catch(e){
-    showErr(err, 'Network error. Please try again.');
+  }catch(e){
+    showErr(err,'Network error. Please try again.');
+    btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
   }
-  btn.disabled = false; btn.textContent = game === 'custom' ? '🛎️ Send Custom Request' : 'Submit Order';
 }
 
-function showErr(el, msg){ el.textContent = msg; el.style.display = 'block'; }
-
-function toBase64(file){
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
-}
-
-function resetAll(){
-  document.getElementById('ok-msg').style.display = 'none';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-// ============================================================
-// PREFILL CUSTOM ORDER (for promo buttons)
-// ============================================================
-function prefillCustom(desc){
-  // Switch to custom tab
-  document.querySelectorAll('.gtab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.gpanel').forEach(p => p.classList.remove('active'));
-  document.querySelector('.gtab[data-g="custom"]').classList.add('active');
-  document.getElementById('g-custom').classList.add('active');
-  // Pre-fill game + description
-  document.getElementById('custom-game').value = 'Mobile Legends (MLBB)';
-  document.getElementById('custom-desc').value = desc;
-  // Make sure MLBB cat is highlighted
-  document.querySelectorAll('.custom-cat').forEach(c => c.classList.remove('active'));
-  document.querySelector('.custom-cat[data-cc="Mobile Legends (MLBB)"]').classList.add('active');
-  setTimeout(() => document.getElementById('g-custom').scrollIntoView({behavior:'smooth'}), 100);
-}
+function showErr(el,msg){el.textContent=msg;el.style.display='block';}
+function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
+function resetAll(){document.getElementById('ok-msg').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
 
 // ============================================================
 // INIT
 // ============================================================
-buildAll();
+fetchPrices();
 </script>
 </body>
 </html>
