@@ -996,21 +996,44 @@ function selectCC(el){
 // ============================================================
 // VERIFY
 // ============================================================
-async function verifyMLBB(){
-  const pid=document.getElementById('mlbb-pid').value.trim();
-  const zid=document.getElementById('mlbb-zid').value.trim();
-  const ign=document.getElementById('mlbb-ign');
-  if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
-  ign.value='Verifying…';
-  try{
-    const r=await fetch(`https://api.gameofthrones.life/moonton/user?userId=${pid}&zoneId=${zid}`);
-    const d=await r.json();
-    const name=d.name||d.username||d.nickName;
-    if(name){ ign.value=name; ign.style.borderColor='var(--gr)'; ign.removeAttribute('readonly'); }
-    else { ign.value=''; ign.removeAttribute('readonly'); ign.placeholder='Not found — type IGN manually'; }
-  }catch(e){ ign.value=''; ign.removeAttribute('readonly'); ign.placeholder='Verify unavailable — type IGN manually'; }
+async function verifyMLBB() {
+  const pid = document.getElementById('mlbb-pid').value.trim();
+  const zid = document.getElementById('mlbb-zid').value.trim();
+  const ignField = document.getElementById('mlbb-ign');
+  
+  if (!pid || !zid) return alert("Please enter both Player ID and Zone ID first.");
+  
+  ignField.value = "Verifying...";
+  ignField.readOnly = true; 
+  ignField.style.borderColor = "var(--or)";
+  
+  try {
+    const res = await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const data = await res.json();
+    
+    if (res.ok && data.ign) { 
+      ignField.value = data.ign; 
+      ignField.style.borderColor = "var(--gr)"; 
+      ignField.readOnly = true; // Keep it locked if verification worked
+    } else { 
+      // 🚨 THE FAILSAFE: If player not found or API is dead, let them type it!
+      ignField.value = ""; 
+      ignField.readOnly = false; // Unlocks the box!
+      ignField.placeholder = "Server busy. Please type your IGN manually.";
+      ignField.style.borderColor = "#ef4444";
+      ignField.style.background = "var(--dk3)";
+      ignField.focus();
+    }
+  } catch (err) { 
+    // 🚨 THE FAILSAFE (Network Error)
+    ignField.value = ""; 
+    ignField.readOnly = false; 
+    ignField.placeholder = "Network error. Please type your IGN manually.";
+    ignField.style.borderColor = "#ef4444";
+    ignField.style.background = "var(--dk3)";
+    ignField.focus();
+  }
 }
-
 async function verifyCOD(){
   const ign=document.getElementById('cod-ign');
   ign.value='Manual entry required'; ign.removeAttribute('readonly');
