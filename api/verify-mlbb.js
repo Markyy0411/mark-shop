@@ -1,40 +1,40 @@
-// api/verify-mlbb.js
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const { id, zone } = req.query;
 
   if (!id || !zone) return res.status(400).json({ error: 'Missing ID/Zone' });
 
-  // 🛡️ API Fallback Engine: Tries multiple free APIs so your site stays up!
+  // 🛡️ FRESH API Fallback Engine (Updated May 2026)
   const apis = [
-    `https://api.isan.eu.org/nickname/ml?id=${id}&server=${zone}`,
-    `https://api.kyrie25.me/api/checkid/ml?id=${id}&zone=${zone}`,
-    `https://api.vyturex.com/mlbb?id=${id}&zone=${zone}`
+    `https://yanjiestore.com/submitt.php?ID=${id}&server=${zone}`,
+    `https://api.sanzy.dev/mlbb/check?id=${id}&zone=${zone}`,
+    `https://api.elxyz.me/api/mlbb?id=${id}&zone=${zone}`
   ];
 
   for (let url of apis) {
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }});
+      
+      // Some APIs return text, some return JSON. We handle both.
+      const text = await response.text();
+      let ign = "";
 
-      // Different APIs use different JSON labels
-      const ign = data.name || data.nickname || data.userName || data.username || data.result;
+      try {
+        const data = JSON.parse(text);
+        ign = data.name || data.nickname || data.userName || data.username || data.result || "";
+      } catch(e) {
+        // If it's plain text (like yanjiestore)
+        ign = text.trim();
+      }
 
-      if (ign && ign !== "Unknown" && ign !== "Not found" && !ign.includes("Error")) {
-        const z = parseInt(zone);
-        const isPH = (z >= 3000 && z <= 4500) || (z >= 9000 && z <= 11000) || (z >= 13000);
-        return res.status(200).json({ 
-          ign: ign, 
-          verified: true,
-          region: isPH ? "PH Server 🇵🇭" : "Global/Other 🌎"
-        });
+      if (ign && ign.length > 0 && !ign.toLowerCase().includes("not found") && !ign.includes("Error") && !ign.includes("<")) {
+        return res.status(200).json({ ign: ign, verified: true });
       }
     } catch (e) {
-      // If one API fails, ignore it and automatically try the next one
-      continue;
+      continue; // Try the next API in the list
     }
   }
 
-  return res.status(404).json({ error: 'Player not found or verification servers are currently down.' });
+  // If all APIs are dead, send a specific error flag to the frontend
+  return res.status(404).json({ error: 'Servers busy', allowManual: true });
 }
