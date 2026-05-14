@@ -4,37 +4,23 @@ export default async function handler(req, res) {
 
   if (!id || !zone) return res.status(400).json({ error: 'Missing ID/Zone' });
 
-  // 🛡️ FRESH API Fallback Engine (Updated May 2026)
-  const apis = [
-    `https://yanjiestore.com/submitt.php?ID=${id}&server=${zone}`,
-    `https://api.sanzy.dev/mlbb/check?id=${id}&zone=${zone}`,
-    `https://api.elxyz.me/api/mlbb?id=${id}&zone=${zone}`
-  ];
+  try {
+    const response = await fetch(`https://api.isan.eu.org/nickname/ml?id=${id}&server=${zone}`);
+    const data = await response.json();
 
-  for (let url of apis) {
-    try {
-      const response = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }});
+    if (data.success && data.name) {
+      // 🇵🇭 Region Logic: Checking common PH Zone ranges
+      const z = parseInt(zone);
+      const isPH = (z >= 3000 && z <= 4500) || (z >= 9000 && z <= 11000) || (z >= 13000);
       
-      // Some APIs return text, some return JSON. We handle both.
-      const text = await response.text();
-      let ign = "";
-
-      try {
-        const data = JSON.parse(text);
-        ign = data.name || data.nickname || data.userName || data.username || data.result || "";
-      } catch(e) {
-        // If it's plain text (like yanjiestore)
-        ign = text.trim();
-      }
-
-      if (ign && ign.length > 0 && !ign.toLowerCase().includes("not found") && !ign.includes("Error") && !ign.includes("<")) {
-        return res.status(200).json({ ign: ign, verified: true });
-      }
-    } catch (e) {
-      continue; // Try the next API in the list
+      return res.status(200).json({ 
+        ign: data.name, 
+        verified: true,
+        region: isPH ? "PH Server 🇵🇭" : "Global/Other 🌎"
+      });
     }
+    return res.status(404).json({ error: 'Player not found.' });
+  } catch (error) {
+    return res.status(500).json({ error: 'Server busy.' });
   }
-
-  // If all APIs are dead, send a specific error flag to the frontend
-  return res.status(404).json({ error: 'Servers busy', allowManual: true });
 }
