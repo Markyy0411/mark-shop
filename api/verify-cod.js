@@ -3,7 +3,7 @@
 
 export default async function handler(req, res) {
   // Allow the frontend to talk to this backend
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://mark-shop-beryl.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
