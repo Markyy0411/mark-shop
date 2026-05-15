@@ -294,6 +294,13 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </style>
 </head>
 <body>
+  <script>
+(function() {
+  var guest    = new URLSearchParams(window.location.search).get('guest') === '1';
+  var loggedIn = localStorage.getItem('ms_user');
+  if (!loggedIn && !guest) window.location.replace('login.html');
+})();
+</script>
 
 <!-- ══════════════════════════════════════════════════════════
      AUTH SCREEN — shown first, hidden after login/register
@@ -1266,6 +1273,24 @@ function showSP(){
 }
 function startSocialProof(){
   setTimeout(()=>{showSP();setInterval(showSP,18000);},6000);
+}
+</script>
+  <script>
+(function() {
+  var user = localStorage.getItem('ms_user');
+  var bar  = document.getElementById('hdr-user-bar');
+  var nameEl = document.getElementById('hdr-username');
+  if (user) {
+    nameEl.textContent = user;
+  } else {
+    if (bar) bar.style.display = 'none';
+  }
+})();
+
+function doLogout() {
+  localStorage.removeItem('ms_user');
+  localStorage.removeItem('ms_role');
+  window.location.href = 'login.html';
 }
 </script>
 </body>
