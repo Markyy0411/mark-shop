@@ -954,7 +954,7 @@ function openTrackModal(){document.getElementById('track-input').value='';docume
 // ============================================================
 async function fetchPrices(){
   try{
-    const r=await fetch(PRICE_API); if(!r.ok)throw new Error();
+    const r=await fetch(PRICE_API+'?action=getPrices'); if(!r.ok)throw new Error();
     DATA=await r.json(); buildAll(); updateStatus(DATA._status||'online');
   }catch(e){
     document.querySelectorAll('.loading-grid').forEach(el=>{el.textContent='⚠️ Could not load prices. Refresh to try again.';});
