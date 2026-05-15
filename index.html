@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mark Guevarra | Game Top-Up Shop</title>
+<script src="https://www.google.com/recaptcha/api.js?render=6LfHPOksAAAAK9cMdUlxE1e68vrm-DcnLebVekR"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://www.google.com/recaptcha/api.js?render=6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR"></script>
 <style>
 :root{
   --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
@@ -18,126 +18,189 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
   radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
 
-/* ── HEADER ── */
+/* ── AUTH SCREEN ───────────────────────────────────────── */
+#auth-screen{position:fixed;inset:0;background:var(--dk);z-index:9999;
+  display:flex;align-items:center;justify-content:center;padding:20px}
+#auth-screen.hidden{display:none}
+.auth-card{background:var(--dk2);border:1px solid rgba(249,115,22,.25);border-radius:18px;
+  padding:32px 24px;width:100%;max-width:380px;text-align:center}
+.auth-logo{font-family:'Rajdhani',sans-serif;font-size:2rem;font-weight:700;
+  color:var(--or);letter-spacing:3px;margin-bottom:4px}
+.auth-tagline{font-size:.75rem;color:var(--mx);margin-bottom:24px}
+.auth-tabs{display:flex;gap:0;background:var(--dk3);border-radius:10px;padding:3px;margin-bottom:20px}
+.auth-tab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;
+  color:var(--mx);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;
+  letter-spacing:1px;cursor:pointer;transition:.2s}
+.auth-tab.active{background:var(--or);color:#fff}
+.auth-fg{text-align:left;margin-bottom:12px}
+.auth-fg label{display:block;font-size:.68rem;font-weight:600;letter-spacing:1px;
+  text-transform:uppercase;color:var(--mx);margin-bottom:5px}
+.auth-fg input{width:100%;background:var(--dk3);border:1px solid var(--dk5);
+  border-radius:8px;padding:10px 13px;color:var(--tx);font-family:'Exo 2',sans-serif;
+  font-size:.9rem;transition:.2s}
+.auth-fg input:focus{outline:none;border-color:var(--or)}
+.auth-btn{width:100%;padding:13px;background:var(--or);color:#fff;border:none;
+  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
+  letter-spacing:2px;cursor:pointer;transition:.2s;margin-top:4px}
+.auth-btn:hover{background:var(--or2)}
+.auth-btn:disabled{background:var(--dk5);color:var(--mx);cursor:not-allowed}
+.auth-err{font-size:.75rem;color:#f87171;margin-top:8px;min-height:18px;text-align:center}
+.auth-badges{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.auth-badge{font-size:.65rem;color:var(--mx);display:flex;align-items:center;gap:4px}
+.guest-link{font-size:.72rem;color:var(--mx);margin-top:14px;cursor:pointer;text-decoration:underline}
+.guest-link:hover{color:var(--tx)}
+
+/* ── HEADER ────────────────────────────────────────────── */
 .hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
-  border-bottom:1px solid rgba(249,115,22,.25);padding:10px 16px;text-align:center;
+  border-bottom:1px solid rgba(249,115,22,.25);padding:12px 16px;text-align:center;
   position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
-.hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:var(--or);letter-spacing:3px;text-transform:uppercase}
-.hdr-sub{font-size:.72rem;color:var(--mx);margin-top:2px}
-.hdr-badges{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;
+  color:var(--or);letter-spacing:3px;text-transform:uppercase}
+.hdr-sub{font-size:.72rem;color:var(--mx);margin-top:1px}
+.hdr-user-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:7px;flex-wrap:wrap}
+.user-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);
+  border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:3px 12px;
+  font-size:.72rem;color:#4ade80;font-weight:600}
+.coins-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);
+  border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:3px 11px;
+  font-size:.72rem;color:#fbbf24;font-weight:600}
+.status-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;
+  padding:3px 12px;font-size:.72rem;font-weight:600;border:1px solid}
+.status-pill.online{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:#4ade80}
+.status-pill.offline{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#f87171}
+.status-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.status-dot.pulse{animation:blink 1.2s ease-in-out infinite}
+.logout-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;
+  border-radius:20px;padding:3px 10px;font-size:.68rem;font-weight:600;cursor:pointer;
+  font-family:'Exo 2',sans-serif}
+.logout-btn:hover{background:rgba(239,68,68,.2)}
+.track-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(59,130,246,.1);
+  border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:3px 11px;
+  font-size:.72rem;color:var(--bl);font-weight:600;cursor:pointer}
+.track-btn:hover{background:rgba(59,130,246,.2)}
 
-/* ── ONLINE INDICATOR ── */
-.status-pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;
-  padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:.2s}
-.status-pill.online{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#4ade80}
-.status-pill.offline{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
-.status-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
-.status-pill.online .status-dot{animation:blink 1.4s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
-
-/* ── TRACK ORDER BUTTON ── */
-.track-btn{display:inline-flex;align-items:center;gap:5px;border-radius:20px;
-  padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;cursor:pointer;
-  background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);color:#a78bfa;transition:.2s}
-.track-btn:hover{background:rgba(167,139,250,.2)}
-
-/* ── USER BADGE ── */
-.user-badge{display:inline-flex;align-items:center;gap:5px;border-radius:20px;
-  padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.5px;
-  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80}
-.user-badge .logout-btn{background:none;border:none;color:#f87171;cursor:pointer;
-  font-size:.65rem;padding:0 0 0 4px;line-height:1;opacity:.8;transition:opacity .2s}
-.user-badge .logout-btn:hover{opacity:1}
-
-/* ── GAME TABS ── */
-.gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
+/* ── GAME TABS ──────────────────────────────────────────── */
+.gtabs{display:flex;overflow-x:auto;gap:2px;padding:10px 10px 0;
+  background:var(--dk2);border-bottom:1px solid var(--bdr);scrollbar-width:none}
 .gtabs::-webkit-scrollbar{display:none}
-.gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;letter-spacing:1px;color:var(--mx);transition:all .2s;display:flex;align-items:center;gap:5px}
+.gtab{flex-shrink:0;padding:8px 12px;background:var(--dk3);border:1px solid var(--bdr);
+  border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-family:'Rajdhani',sans-serif;
+  font-weight:600;font-size:.82rem;letter-spacing:1px;color:var(--mx);transition:all .2s;
+  display:flex;align-items:center;gap:5px}
 .gtab:hover{color:var(--tx);background:var(--dk4)}
 .gtab.active{background:var(--dk);color:var(--or);border-color:rgba(249,115,22,.5);border-bottom-color:var(--dk)}
 .gtab.custom-tab{color:#a78bfa;border-color:rgba(167,139,250,.2)}
 .gtab.custom-tab:hover{color:#c4b5fd;border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.05)}
 .gtab.custom-tab.active{color:#a78bfa;border-color:rgba(167,139,250,.6);border-bottom-color:var(--dk);background:var(--dk)}
-.gtab .ico{font-size:1rem}
 
-/* ── MAIN ── */
+/* ── MAIN ───────────────────────────────────────────────── */
 .main{padding:14px;max-width:580px;margin:0 auto}
 .gpanel{display:none}.gpanel.active{display:block}
 .ctabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-.ctab{padding:5px 12px;border-radius:20px;border:1px solid var(--dk5);background:var(--dk3);color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
+.ctab{padding:5px 12px;border-radius:20px;border:1px solid var(--dk5);background:var(--dk3);
+  color:var(--mx);font-size:.75rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
 .ctab:hover{border-color:var(--or);color:var(--tx)}
 .ctab.active{background:var(--or);border-color:var(--or);color:#fff;font-weight:600}
 .ctab.promo-tab{color:#f87171;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.07)}
-.ctab.promo-tab:hover{border-color:#f87171;color:#fca5a5}
+.ctab.promo-tab:hover{border-color:#f87171}
 .ctab.promo-tab.active{background:#dc2626;border-color:#dc2626;color:#fff}
 .ctab.sl-tab{color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.06)}
 .ctab.sl-tab.active{background:#d97706;border-color:#d97706;color:#fff}
 .cpanel{display:none}.cpanel.active{display:block}
-.slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);padding-left:8px;margin-bottom:10px;margin-top:6px}
+.slbl{font-family:'Rajdhani',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--mx);border-left:3px solid var(--or);padding-left:8px;
+  margin-bottom:10px;margin-top:6px}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:16px}
-.pcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:11px 12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
-.pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--or),#fbbf24);transform:scaleX(0);transition:transform .2s;transform-origin:left}
+.pcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:11px 12px;
+  cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--or),#fbbf24);transform:scaleX(0);
+  transition:transform .2s;transform-origin:left}
 .pcard:hover::after,.pcard.sel::after{transform:scaleX(1)}
 .pcard:hover{border-color:rgba(249,115,22,.45);background:var(--dk4)}
 .pcard.sel{border-color:var(--or);background:rgba(249,115,22,.1)}
 .pcard .pn{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.9rem;color:var(--tx);line-height:1.3}
 .pcard .pd{font-size:.68rem;color:var(--mx);margin-top:2px;line-height:1.4}
 .pcard .pp{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or);margin-top:6px}
-.pcard .chk{position:absolute;top:7px;right:7px;width:18px;height:18px;border-radius:50%;background:var(--or);display:none;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
+.pcard .chk{position:absolute;top:7px;right:7px;width:18px;height:18px;border-radius:50%;
+  background:var(--or);display:none;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
 .pcard.sel .chk{display:flex}
 .netgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
-.netcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
+.netcard{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
+  padding:9px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .netcard:hover{border-color:var(--bl)}
 .netcard.active{border-color:var(--bl);background:rgba(59,130,246,.12)}
 .netcard .nn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.5px;color:var(--tx)}
 .netcard.active .nn{color:var(--bl)}
 .netcard .nd{font-size:.62rem;color:var(--mx);margin-top:2px}
 .lpanel{display:none}.lpanel.active{display:block}
+
+/* ── ORDER FORM ─────────────────────────────────────────── */
 .oform{background:var(--dk2);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-top:6px}
-.oform h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;color:var(--or);margin-bottom:14px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.sel-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);border-radius:8px;padding:10px 14px;margin-bottom:14px}
+.oform h3{font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;letter-spacing:2px;
+  color:var(--or);margin-bottom:14px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.sel-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);
+  border-radius:8px;padding:10px 14px;margin-bottom:14px}
 .sel-box .sl{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--mx)}
 .sel-box .sv{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:var(--or);margin-top:2px}
 .sel-box .sp{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1.1rem;color:#fbbf24}
 .fg{margin-bottom:12px}
-.fg label{display:block;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mx);margin-bottom:5px}
+.fg label{display:block;font-size:.7rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--mx);margin-bottom:5px}
 .fg label .req{color:var(--or)}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem;transition:border-color .18s;-webkit-appearance:none;appearance:none}
-.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--dk3);border:1px solid var(--dk5);
+  border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem;
+  transition:border-color .18s;-webkit-appearance:none;appearance:none}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:18px;padding-right:34px}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--or)}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--dk5)}
 .fg textarea{resize:vertical;min-height:65px}
 .fg select option{background:var(--dk3);color:var(--tx)}
-.btn-sub{width:100%;padding:13px;background:var(--or);color:#fff;border:none;border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
+.btn-sub{width:100%;padding:13px;background:var(--or);color:#fff;border:none;
+  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
 .btn-sub:hover{background:var(--or2);transform:translateY(-1px);box-shadow:0 5px 20px rgba(249,115,22,.35)}
 .btn-sub:disabled{background:var(--dk5);color:var(--mx);cursor:not-allowed;transform:none;box-shadow:none}
-.alert-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--bl);margin-bottom:14px;line-height:1.6}
-.ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:22px;text-align:center;margin-top:12px}
-.ok-msg .ok-ico{font-size:2.5rem;margin-bottom:8px}
-.ok-msg h4{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--gr);letter-spacing:2px}
-.err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
-.loading-grid{grid-column:1/-1;text-align:center;padding:20px;color:var(--mx);font-size:.8rem}
+.alert-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);
+  border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--bl);margin-bottom:14px;line-height:1.6}
+.ok-msg{display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);
+  border-radius:12px;padding:22px;text-align:center;margin-top:12px}
+.ok-msg h4{font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--gr);letter-spacing:2px;margin:8px 0 0}
+.ok-msg p{font-size:.8rem;color:var(--mx);margin-top:6px;line-height:1.5}
+.err-msg{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
+  border-radius:8px;padding:10px 14px;font-size:.8rem;color:#ef4444;margin-top:8px}
 
-/* ── PAYMENT ── */
+/* ── PAYMENT ────────────────────────────────────────────── */
 .pm-methods{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.pm-btn{flex:1;min-width:65px;text-align:center;padding:10px 5px;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--mx);transition:.2s}
+.pm-btn{flex:1;min-width:65px;text-align:center;padding:10px 5px;background:var(--dk3);
+  border:1px solid var(--dk5);border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;
+  color:var(--mx);transition:.2s}
 .pm-btn.active{background:rgba(249,115,22,.1);border-color:var(--or);color:var(--or)}
-.pm-details{background:var(--dk4);padding:12px;border-radius:8px;font-size:.85rem;margin-bottom:15px;display:none;border-left:4px solid var(--or)}
-.pm-row{display:flex;justify-content:space-between;margin-bottom:5px;color:#fff;font-family:monospace;font-size:.95rem}
+.pm-details{background:var(--dk4);padding:12px;border-radius:8px;font-size:.85rem;
+  margin-bottom:15px;display:none;border-left:4px solid var(--or)}
+.pm-row{display:flex;justify-content:space-between;margin-bottom:5px;color:#fff;
+  font-family:monospace;font-size:.95rem}
 .pm-row span:first-child{color:var(--mx);font-family:'Exo 2',sans-serif;font-size:.8rem}
-.btn-reveal,.btn-qr{width:100%;padding:10px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.85rem;margin-top:8px;transition:.2s}
-.btn-reveal{background:var(--dk5);color:#fff}.btn-reveal:hover{background:var(--dk3)}
+.btn-reveal,.btn-qr{width:100%;padding:10px;border-radius:8px;border:none;cursor:pointer;
+  font-weight:600;font-size:.85rem;margin-top:8px;transition:.2s}
+.btn-reveal{background:var(--dk5);color:#fff}
+.btn-reveal:hover{background:var(--dk3)}
 .btn-qr{background:rgba(59,130,246,.1);color:var(--bl);border:1px solid rgba(59,130,246,.3)}
 
-/* ── PROMO CARDS ── */
-.promo-section-lbl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;padding:6px 10px;border-radius:6px;margin-bottom:10px;margin-top:4px;display:flex;align-items:center;gap:7px}
+/* ── PROMO CARDS ────────────────────────────────────────── */
+.promo-section-lbl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;
+  letter-spacing:2px;text-transform:uppercase;padding:6px 10px;border-radius:6px;
+  margin-bottom:10px;margin-top:4px;display:flex;align-items:center;gap:7px}
 .promo-section-lbl.red{color:#f87171;background:rgba(239,68,68,.08);border-left:3px solid #dc2626}
 .promo-section-lbl.gold{color:#fbbf24;background:rgba(251,191,36,.08);border-left:3px solid #d97706}
-.warn-box{background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:12px}
+.warn-box{background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.3);border-radius:10px;
+  padding:10px 13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:12px}
 .warn-box .wi{font-size:1rem;flex-shrink:0;margin-top:1px}
 .warn-box p{font-size:.74rem;color:#fca5a5;line-height:1.6}
 .warn-box b{color:#f87171}
-.skin-card{background:var(--dk3);border:1.5px solid rgba(220,38,38,.22);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
+.skin-card{background:var(--dk3);border:1.5px solid rgba(220,38,38,.22);border-radius:12px;
+  padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
 .skin-card:hover{border-color:rgba(220,38,38,.5);transform:translateY(-1px);box-shadow:0 4px 16px rgba(239,68,68,.12)}
 .skin-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#dc2626,#f97316)}
 .skin-card.gold-card{border-color:rgba(245,158,11,.3)!important}
@@ -146,23 +209,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .sk-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fca5a5;letter-spacing:.5px;line-height:1.3}
 .skin-card.gold-card .sk-name{color:#fbbf24}
 .sk-sub{font-size:.65rem;color:var(--mx);margin-top:2px}
-.sk-tap{font-size:.67rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0;padding:3px 8px;border:1px solid rgba(239,68,68,.3);border-radius:20px;background:rgba(239,68,68,.08)}
+.sk-tap{font-size:.67rem;color:#f87171;font-weight:600;white-space:nowrap;flex-shrink:0;
+  padding:3px 8px;border:1px solid rgba(239,68,68,.3);border-radius:20px;background:rgba(239,68,68,.08)}
 .skin-card.gold-card .sk-tap{color:#fbbf24;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)}
 .sk-prices{display:flex;flex-direction:column;gap:4px}
-.sk-price-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);border-radius:6px;padding:6px 10px;cursor:pointer;transition:background .15s}
+.sk-price-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.04);
+  border-radius:6px;padding:6px 10px;cursor:pointer;transition:background .15s}
 .sk-price-row:hover{background:rgba(249,115,22,.13)}
 .sk-price-row .spr-label{font-size:.72rem;color:var(--mx)}
 .sk-price-row .spr-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:var(--or)}
 .spr-save{font-size:.62rem;color:#4ade80;margin-left:4px}
-.sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:5px 10px;font-size:.69rem;color:#fbbf24}
-.legend-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:1px 7px;font-size:.6rem;color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:5px;vertical-align:middle}
-.sl-card{background:var(--dk3);border:1.5px solid rgba(251,191,36,.18);border-radius:12px;padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
+.sk-schedule{display:flex;align-items:center;gap:5px;margin-top:8px;background:rgba(245,158,11,.07);
+  border:1px solid rgba(245,158,11,.2);border-radius:6px;padding:5px 10px;font-size:.69rem;color:#fbbf24}
+.legend-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.15);
+  border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:1px 7px;font-size:.6rem;
+  color:#fbbf24;font-weight:700;letter-spacing:.5px;margin-left:5px;vertical-align:middle}
+.sl-card{background:var(--dk3);border:1.5px solid rgba(251,191,36,.18);border-radius:12px;
+  padding:13px 15px;margin-bottom:9px;position:relative;overflow:hidden;transition:all .2s;cursor:pointer}
 .sl-card:hover{border-color:rgba(251,191,36,.45);transform:translateY(-1px)}
 .sl-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#f59e0b,#f97316)}
-.sl-card .sl-head{display:flex;justify-content:space-between;align-items:flex-start}
-.sl-card .sl-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fde68a;letter-spacing:.5px}
-.sl-card .sl-price{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or)}
-.sl-card .sl-sub{font-size:.7rem;color:var(--mx);margin-top:4px;line-height:1.5}
+.sl-head{display:flex;justify-content:space-between;align-items:flex-start}
+.sl-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fde68a;letter-spacing:.5px}
+.sl-price{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;color:var(--or)}
+.sl-sub{font-size:.7rem;color:var(--mx);margin-top:4px;line-height:1.5}
 .slots-row{display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap}
 .slot-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
 .slot-dot.filled{background:#f59e0b;border-color:#f59e0b}
@@ -170,161 +239,134 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 .avail-tag{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:2px 8px;font-size:.64rem;font-weight:700;letter-spacing:.4px}
 .avail-tag.low{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
 .avail-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:blink 1.2s ease-in-out infinite}
-.delivery-box{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:10px;padding:12px 14px;margin:12px 0}
-.delivery-box .db-ttl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.8rem;color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.delivery-box{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);
+  border-radius:10px;padding:12px 14px;margin:12px 0}
+.delivery-box .db-ttl{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.8rem;
+  color:var(--bl);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
 .db-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
 .db-row .dr-i{flex-shrink:0;font-size:.88rem}
 .db-row p{font-size:.72rem;color:var(--mx);line-height:1.5}
 .db-row p b{color:var(--tx)}
 
-/* ── CUSTOM ORDER ── */
-.custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
-.custom-hero h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:#a78bfa;letter-spacing:2px;text-transform:uppercase}
+/* ── CUSTOM ORDER ───────────────────────────────────────── */
+.custom-hero{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(249,115,22,.06));
+  border:1px solid rgba(167,139,250,.2);border-radius:14px;padding:20px 18px;margin-bottom:16px;text-align:center}
+.custom-hero h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;
+  color:#a78bfa;letter-spacing:2px;text-transform:uppercase}
 .custom-hero p{font-size:.78rem;color:var(--mx);margin-top:6px;line-height:1.6}
-.pulse-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:4px 12px;margin-top:10px;font-size:.72rem;color:#c4b5fd;font-weight:600;letter-spacing:1px}
+.pulse-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);
+  border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:4px 12px;margin-top:10px;
+  font-size:.72rem;color:#c4b5fd;font-weight:600;letter-spacing:1px}
 .pulse-dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:blink 1.4s ease-in-out infinite}
 .custom-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
-.custom-cat{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
+.custom-cat{background:var(--dk3);border:1.5px solid var(--bdr);border-radius:10px;
+  padding:10px 6px;text-align:center;cursor:pointer;transition:all .18s}
 .custom-cat:hover{border-color:rgba(167,139,250,.4)}
 .custom-cat.active{border-color:#a78bfa;background:rgba(167,139,250,.1)}
 .custom-cat .cc-ico{font-size:1.3rem}
-.custom-cat .cc-name{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.78rem;color:var(--mx);margin-top:3px;letter-spacing:.5px}
+.custom-cat .cc-name{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.78rem;
+  color:var(--mx);margin-top:3px;letter-spacing:.5px}
 .custom-cat.active .cc-name{color:#a78bfa}
 .oform.custom-form{border-color:rgba(167,139,250,.2)}
 .oform.custom-form h3{color:#a78bfa}
 .btn-sub.custom-btn{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
 .btn-sub.custom-btn:hover{background:linear-gradient(135deg,#6d28d9,#9b7af0);box-shadow:0 5px 20px rgba(139,92,246,.35)}
 
-/* ── MODALS ── */
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.82);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
-.modal-box{background:var(--dk2);border:1px solid var(--dk5);border-radius:16px;padding:20px;width:90%;max-width:380px;text-align:center}
-.dd-warning-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.35);border-radius:12px;padding:16px;margin-bottom:14px;text-align:left}
+/* ── MODALS ─────────────────────────────────────────────── */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.82);
+  z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.modal-box{background:var(--dk2);border:1px solid var(--dk5);border-radius:16px;
+  padding:20px;width:90%;max-width:360px;text-align:center}
+.dd-warning-box{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.35);
+  border-radius:12px;padding:16px;margin-bottom:14px;text-align:left}
 .dd-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
 .dd-check input[type=checkbox]{width:17px;height:17px;accent-color:var(--or);flex-shrink:0;margin-top:2px}
 .dd-check span{font-size:.78rem;color:#fca5a5;line-height:1.5}
 
-/* ── ORDER TRACKER MODAL ── */
-.tracker-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.tracker-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
-.tracker-circle.done{background:var(--gr);color:#fff}
-.tracker-circle.pending{background:var(--or);color:#fff}
-.tracker-circle.wait{background:var(--dk5);color:var(--mx)}
-.tracker-line{width:2px;height:20px;background:var(--dk5);margin-left:13px;margin-bottom:-8px}
-.tracker-info{font-size:.8rem;color:var(--tx);padding-top:4px}
-.tracker-info small{color:var(--mx);font-size:.7rem}
-
-/* ── AUTH SCREEN ── */
-#auth-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dk2);z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.auth-card{background:var(--dk3);padding:30px;border-radius:12px;border:1px solid var(--dk5);
-  width:100%;max-width:380px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.8)}
-.auth-logo{margin-bottom:20px;font-size:2.5rem;color:white;font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;font-family:'Rajdhani',sans-serif}
-.auth-logo span{color:var(--or)}
-.auth-card h3{color:#fbbf24;margin-bottom:10px;font-family:'Rajdhani',sans-serif;
-  font-size:1.1rem;letter-spacing:1px}
-.auth-card p{color:var(--mx);margin-bottom:25px;font-size:.85rem}
-.auth-input{width:100%;padding:12px;background:var(--dk4);border:1px solid var(--dk5);
-  color:var(--tx);border-radius:8px;margin-bottom:10px;outline:none;text-align:center;
-  font-size:1rem;font-family:'Exo 2',sans-serif;transition:border-color .2s}
-.auth-input:focus{border-color:var(--or)}
-.auth-input::placeholder{color:var(--mx)}
-.btn-login{width:100%;padding:12px;background:var(--or);color:#fff;border:none;border-radius:8px;
-  cursor:pointer;font-weight:700;font-size:.95rem;font-family:'Rajdhani',sans-serif;
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;transition:all .2s}
-.btn-login:hover{background:var(--or2)}
-.btn-login:disabled{background:var(--dk5);color:var(--mx);cursor:not-allowed}
-.btn-register{width:100%;padding:12px;border-radius:8px;background:transparent;color:var(--or);
-  border:1px solid var(--or);cursor:pointer;font-weight:600;font-size:.9rem;transition:.2s;
-  font-family:'Exo 2',sans-serif}
-.btn-register:hover{background:rgba(249,115,22,.08)}
-.btn-register:disabled{opacity:.5;cursor:not-allowed}
-.auth-error{color:#ef4444;margin-top:12px;font-size:.85rem;font-weight:600;display:none;
-  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:8px 12px}
-.auth-divider{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--mx);font-size:.72rem}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--dk5)}
-
-/* ── PHASE 1: LIVE PURCHASE TOAST ── */
-.purchase-toast{position:fixed;bottom:22px;left:16px;z-index:990;
-  background:var(--dk2);border:1px solid rgba(34,197,94,.3);border-radius:12px;
-  padding:10px 14px;max-width:220px;box-shadow:0 6px 24px rgba(0,0,0,.5);
-  animation:slideInLeft .4s ease;display:none}
-@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
-.toast-row{display:flex;align-items:center;gap:8px}
-.toast-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--or),#fbbf24);
-  display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
-.toast-body{flex:1;min-width:0}
-.toast-body .tb-who{font-size:.7rem;color:var(--mx)}
-.toast-body .tb-item{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;color:var(--tx);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.toast-body .tb-price{font-size:.7rem;color:var(--gr);font-weight:600}
-.toast-dismiss{position:absolute;top:4px;right:6px;background:none;border:none;color:var(--mx);cursor:pointer;font-size:.8rem;line-height:1}
-
-@media(max-width:380px){.pgrid{grid-template-columns:1fr}.netgrid{grid-template-columns:1fr 1fr}}
+/* ── SOCIAL PROOF ───────────────────────────────────────── */
+.sp-popup{position:fixed;bottom:20px;left:16px;z-index:500;background:var(--dk2);
+  border:1px solid rgba(249,115,22,.3);border-radius:12px;padding:10px 14px;max-width:230px;
+  font-size:.75rem;display:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.sp-popup.show{display:flex;align-items:center;gap:8px;animation:slideUp .35s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+.loading-grid{grid-column:1/-1;text-align:center;padding:20px;color:var(--mx);font-size:.8rem}
 </style>
 </head>
 <body>
 
-<!-- ── AUTH SCREEN ── -->
-<div id="auth-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dk2); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; font-family: 'Rajdhani', sans-serif;">
-  
-  <div style="margin-bottom: 25px; font-size: 3rem; color: var(--tx); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">
-    MARK'S <span style="color: var(--or);">SHOP</span>
-  </div>
-  
-  <div style="background: var(--dk3); padding: 35px 30px; border-radius: 16px; border: 1px solid var(--dk5); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6);">
-    <h3 style="color: var(--tx); margin-bottom: 8px; font-size: 1.5rem;">👋 Welcome, Player!</h3>
-    <p style="color: var(--mx); margin-bottom: 30px; font-size: 0.95rem; font-family: 'Exo 2', sans-serif;">Login or create an account to access the fastest top-up shop.</p>
-
-    <div style="margin-bottom: 15px;">
-      <input type="text" id="auth-user" placeholder="Username" style="text-align: center; font-family: 'Exo 2', sans-serif; font-size: 1rem; width: 100%; padding: 14px; background: var(--dk4); border: 1px solid var(--dk5); color: var(--tx); border-radius: 10px; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--dk5)'">
+<!-- ══════════════════════════════════════════════════════════
+     AUTH SCREEN — shown first, hidden after login/register
+═══════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">⚡ MARK'S SHOP</div>
+    <div class="auth-tagline">Affordable Top-Ups · Fast Delivery · Trusted</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login"    onclick="switchAuthTab('login')">LOGIN</button>
+      <button class="auth-tab"        id="tab-register" onclick="switchAuthTab('register')">REGISTER</button>
     </div>
-    
-    <div style="margin-bottom: 25px;">
-      <input type="password" id="auth-pass" placeholder="Password" style="text-align: center; font-family: 'Exo 2', sans-serif; font-size: 1rem; width: 100%; padding: 14px; background: var(--dk4); border: 1px solid var(--dk5); color: var(--tx); border-radius: 10px; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--dk5)'">
+    <div class="auth-fg"><label>Username <span style="color:var(--or)">*</span></label>
+      <input type="text" id="auth-username" placeholder="Enter your username" autocomplete="username"></div>
+    <div class="auth-fg"><label>Password <span style="color:var(--or)">*</span></label>
+      <input type="password" id="auth-password" placeholder="Enter your password" autocomplete="current-password"></div>
+    <div class="auth-err" id="auth-err"></div>
+    <button class="auth-btn" id="auth-submit-btn" onclick="handleAuth()">LOGIN TO SHOP</button>
+    <div class="auth-badges">
+      <span class="auth-badge">🔒 Secure Login</span>
+      <span class="auth-badge">💬 24/7 Support</span>
+      <span class="auth-badge">⚡ Instant Top-Up</span>
     </div>
-
-    <button id="btn-login" onclick="handleAuth('login')" style="width: 100%; padding: 14px; background: var(--or); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 15px; transition: 0.2s; font-family: 'Rajdhani', sans-serif;" onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">LOGIN TO SHOP</button>
-    
-    <button id="btn-register" onclick="handleAuth('register')" style="width: 100%; padding: 14px; background: transparent; color: var(--or); border: 1px solid var(--or); border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: 'Exo 2', sans-serif;" onmouseover="this.style.background='rgba(249,115,22,0.1)'" onmouseout="this.style.background='transparent'">Create New Account</button>
-    
-    <div id="auth-error" style="color: #ef4444; margin-top: 20px; font-size: 0.9rem; display: none; font-weight: 600; background: rgba(239,68,68,0.1); padding: 10px; border-radius: 8px; font-family: 'Exo 2', sans-serif;"></div>
+    <div class="guest-link" onclick="enterAsGuest()">Continue as Guest (no account needed)</div>
   </div>
 </div>
 
-<!-- ── HEADER ── -->
+<!-- ══════════════════════════════════════════════════════════
+     MAIN SHOP (hidden until auth)
+═══════════════════════════════════════════════════════════ -->
+<div id="shop-wrapper" style="display:none">
+
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
   <div class="hdr-sub">Affordable Top-Ups · Fast Delivery · Trusted Seller</div>
-  <div class="hdr-badges">
-    <div class="status-pill" id="status-pill" onclick="document.getElementById('status-modal').style.display='flex'" title="Click for details">
-      <span class="status-dot"></span>
+  <div class="hdr-user-row">
+    <!-- Status pill — updated by fetchPrices -->
+    <div class="status-pill online" id="status-pill">
+      <span class="status-dot pulse" id="status-dot"></span>
       <span id="status-text">Checking…</span>
     </div>
-    <div class="track-btn" onclick="document.getElementById('tracker-modal').style.display='flex'">
-      🔍 Track Order
+    <!-- User pill — shown when logged in -->
+    <div class="user-pill" id="user-pill" style="display:none">
+      <span>👤</span><span id="user-display-name"></span>
     </div>
-    <!-- FIX: user badge injected here by showLoggedInUser() -->
+    <!-- MarkCoins — shown when logged in -->
+    <div class="coins-pill" id="coins-pill" style="display:none">
+      🪙 <span id="coins-count">0</span> MarkCoins
+    </div>
+    <!-- Logout — shown when logged in -->
+    <button class="logout-btn" id="logout-btn" style="display:none" onclick="logout()">Logout</button>
+    <!-- Track order button -->
+    <div class="track-btn" onclick="openTrackModal()">🔍 Track Order</div>
   </div>
 </div>
 
-<div class="gtabs">
-  <div class="gtab active" data-g="mlbb"><span class="ico">⚔️</span> MLBB</div>
-  <div class="gtab" data-g="cod"><span class="ico">🎖️</span> Garena CoD</div>
-  <div class="gtab" data-g="roblox"><span class="ico">🧱</span> Roblox</div>
-  <div class="gtab" data-g="bs"><span class="ico">🩸</span> Bloodstrike</div>
-  <div class="gtab" data-g="load"><span class="ico">📶</span> Load</div>
-  <div class="gtab custom-tab" data-g="custom"><span class="ico">🛎️</span> Custom Order</div>
+<div class="gtabs" id="gtabs">
+  <div class="gtab active" data-g="mlbb"><span>⚔️</span> MLBB</div>
+  <div class="gtab" data-g="cod"><span>🎖️</span> Garena CoD</div>
+  <div class="gtab" data-g="roblox"><span>🧱</span> Roblox</div>
+  <div class="gtab" data-g="bs"><span>🩸</span> Bloodstrike</div>
+  <div class="gtab" data-g="load"><span>📶</span> Load</div>
+  <div class="gtab custom-tab" data-g="custom"><span>🛎️</span> Custom Order</div>
 </div>
 
-<div class="main">
+<div class="main" id="main-content">
 
-<!-- ===== MLBB ===== -->
+<!-- ── MLBB ──────────────────────────────────────────────── -->
 <div class="gpanel active" id="g-mlbb">
   <div style="margin:12px 0 10px">
     <div class="ctabs" id="mlbb-ctabs">
       <div class="ctab promo-tab" data-c="mlbb-promos">🔥 Promos</div>
-      <div class="ctab active" data-c="mlbb-dias">💎 Diamonds</div>
+      <div class="ctab active"   data-c="mlbb-dias">💎 Diamonds</div>
       <div class="ctab" data-c="mlbb-denom">📦 Denom. Dias</div>
       <div class="ctab" data-c="mlbb-combo">🔢 Combinations</div>
       <div class="ctab" data-c="mlbb-dd">2x Diamond</div>
@@ -334,24 +376,20 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
   </div>
 
-  <!-- 🔥 PROMOS PANEL -->
+  <!-- PROMOS -->
   <div class="cpanel" id="mlbb-promos">
     <div class="promo-section-lbl gold">🌟 Monthly Starlight Offers</div>
-    <div class="warn-box">
-      <div class="wi">⚠️</div>
-      <p><b>Limited Supply — 5 slots per month only!</b> Not own supply — orders go through a gifter. Secure your slot early!</p>
-    </div>
+    <div class="warn-box"><div class="wi">⚠️</div>
+      <p><b>Limited Supply — 5 slots per month only!</b> Not own supply — orders go through a gifter.</p></div>
     <div class="sl-card" onclick="promoSelectItem('⭐ June NSL (Normal Starlight)','₱160')">
       <div class="sl-head">
-        <div>
-          <div class="sl-name">⭐ June NSL <span style="font-size:.72rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
+        <div><div class="sl-name">⭐ June NSL <span style="font-size:.72rem;font-weight:500;color:var(--mx)">(Normal Starlight)</span></div>
           <div class="slots-row">
             <div class="slot-dot filled"></div><div class="slot-dot filled"></div>
             <div class="slot-dot filled"></div><div class="slot-dot filled"></div><div class="slot-dot"></div>
             <span class="slots-lbl">4/5 slots taken</span>
             <span class="avail-tag low"><span class="avail-dot"></span> 1 SLOT LEFT</span>
-          </div>
-        </div>
+          </div></div>
         <div class="sl-price">₱160</div>
       </div>
       <div class="sl-sub"><b>Normal Starlight</b> for June 2026 · Sent via gifter<br>
@@ -359,112 +397,86 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
     <div class="delivery-box">
       <div class="db-ttl">📦 How Delivery Works</div>
-      <div class="db-row"><div class="dr-i">⏳</div><p>Processing takes <b>24–48 hours</b> before the gifter sends.</p></div>
-      <div class="db-row"><div class="dr-i">📅</div><p>Gifter sends within <b>8–9 days</b> after payment confirmation.</p></div>
-      <div class="db-row"><div class="dr-i">🎁</div><p><b>NSL</b> = Normal Starlight — monthly pass with exclusive skins, emotes & rewards.</p></div>
+      <div class="db-row"><div class="dr-i">⏳</div><p>Processing takes <b>24–48 hours</b> before gifter sends.</p></div>
+      <div class="db-row"><div class="dr-i">📅</div><p>Gifter sends within <b>8–9 days</b> after payment.</p></div>
+      <div class="db-row"><div class="dr-i">🎁</div><p><b>NSL</b> = Normal Starlight — monthly skins, emotes & rewards.</p></div>
       <div class="db-row"><div class="dr-i">💳</div><p>Pay only after Mark confirms your slot.</p></div>
     </div>
     <div class="promo-section-lbl red">🔥 Upcoming Skins & Pre-Orders</div>
-    <div style="font-size:.73rem;color:var(--mx);margin-bottom:11px">Way cheaper than buying diamonds! Tap any skin to fill the order form below.</div>
+    <div style="font-size:.73rem;color:var(--mx);margin-bottom:11px">Way cheaper than buying diamonds! Tap to fill the order form.</div>
     <div class="skin-card" onclick="promoSelectItem('🌑 OBSIDIA (Premium Starlight)','₱420')">
-      <div class="sk-head">
-        <div><div class="sk-name">🌑 OBSIDIA <span style="font-size:.7rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div><div class="sk-sub">8th Day of May Release Gifting</div></div>
-        <span class="sk-tap">Tap to Order</span>
-      </div>
+      <div class="sk-head"><div><div class="sk-name">🌑 OBSIDIA <span style="font-size:.7rem;color:var(--mx);font-weight:500">(Premium Starlight)</span></div>
+        <div class="sk-sub">8th Day of May Release</div></div><span class="sk-tap">Tap to Order</span></div>
       <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱420 <span class="spr-save">Save ₱300+!</span></span></div></div>
       <div class="sk-schedule">📅 Gifting: 8th Day of May Release</div>
     </div>
     <div class="skin-card">
-      <div class="sk-head">
-        <div><div class="sk-name">🦋 PHARSA ALL-STAR</div><div class="sk-sub">Release: May 17 · Gifting: May 20</div></div>
-        <span class="sk-tap">Choose below ↓</span>
-      </div>
+      <div class="sk-head"><div><div class="sk-name">🦋 PHARSA ALL-STAR</div><div class="sk-sub">Release: May 17 · Gifting: May 20</div></div><span class="sk-tap">Choose below ↓</span></div>
       <div class="sk-prices">
-        <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Normal Version (349 💎)','₱249')">
-          <span class="spr-label">Normal Version (349 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span><span class="spr-val">₱249</span>
-        </div>
-        <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Premium Version (599 💎)','₱399')">
-          <span class="spr-label">Premium Version (599 💎) <span style="color:#f87171;font-size:.62rem">· Tap</span></span><span class="spr-val">₱399</span>
-        </div>
+        <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Normal (349 💎)','₱249')"><span class="spr-label">Normal (349 💎) · Tap</span><span class="spr-val">₱249</span></div>
+        <div class="sk-price-row" onclick="promoSelectItem('🦋 PHARSA ALL-STAR — Premium (599 💎)','₱399')"><span class="spr-label">Premium (599 💎) · Tap</span><span class="spr-val">₱399</span></div>
       </div>
       <div class="sk-schedule">📅 Gifting: May 20</div>
     </div>
     <div class="skin-card" onclick="promoSelectItem('♋ KARINA ZODIAC (899 💎)','₱499')">
-      <div class="sk-head">
-        <div><div class="sk-name">♋ KARINA ZODIAC</div><div class="sk-sub">Release: May 21 · Original Value: 899 💎 (~₱850)</div></div>
-        <span class="sk-tap">Tap to Order</span>
-      </div>
-      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price <span class="spr-save">Save 400+ in diamonds!</span></span><span class="spr-val">₱499</span></div></div>
+      <div class="sk-head"><div><div class="sk-name">♋ KARINA ZODIAC</div><div class="sk-sub">Release: May 21 · Original: 899 💎 (~₱850)</div></div><span class="sk-tap">Tap to Order</span></div>
+      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price <span class="spr-save">Save 400+ diamonds!</span></span><span class="spr-val">₱499</span></div></div>
       <div class="sk-schedule">📅 Gifting: May 21</div>
     </div>
     <div class="skin-card" onclick="promoSelectItem('⚔️ LING ALL-STAR (762 💎)','₱489')">
-      <div class="sk-head">
-        <div><div class="sk-name">⚔️ LING ALL-STAR</div><div class="sk-sub">Release: June 24 · Original Value: ~762 💎 (~₱720)</div></div>
-        <span class="sk-tap">Tap to Order</span>
-      </div>
+      <div class="sk-head"><div><div class="sk-name">⚔️ LING ALL-STAR</div><div class="sk-sub">Release: June 24 · Original: ~762 💎 (~₱720)</div></div><span class="sk-tap">Tap to Order</span></div>
       <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱489</span></div></div>
       <div class="sk-schedule">📅 Gifting: June 26</div>
     </div>
+    <div class="skin-card" onclick="promoSelectItem('🔴 MARTIS EPIC — Wild Renegade (899 💎)','₱549')">
+      <div class="sk-head"><div><div class="sk-name">🔴 MARTIS EPIC <span style="font-size:.72rem;color:var(--mx);font-weight:500">(Wild Renegade)</span></div><div class="sk-sub">Original: 899 💎 (~₱850)</div></div><span class="sk-tap">Tap to Order</span></div>
+      <div class="sk-prices"><div class="sk-price-row"><span class="spr-label">Price</span><span class="spr-val">₱549</span></div></div>
+    </div>
     <div class="skin-card gold-card">
-      <div class="sk-head">
-        <div><div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div><div class="sk-sub">Original Value: 10,000 💎 — Choose your gifting phase</div></div>
-        <span class="sk-tap" style="color:#fbbf24;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)">Choose ↓</span>
-      </div>
+      <div class="sk-head"><div><div class="sk-name">👑 LEGEND LESLEY <span class="legend-badge">⚡ LEGEND</span></div><div class="sk-sub">Original: 10,000 💎 — Choose gifting phase</div></div><span class="sk-tap" style="color:#fbbf24;border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08)">Choose ↓</span></div>
       <div class="sk-prices">
-        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400')">
-          <span class="spr-label">8th Day Gifting <span style="color:#fbbf24;font-size:.62rem">· Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,400</span>
-        </div>
-        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250')">
-          <span class="spr-label">Phase 2 Gifting <span style="color:#fbbf24;font-size:.62rem">· Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,250</span>
-        </div>
-        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — Last Day Gifting','₱6,150')" style="border:1px solid rgba(245,158,11,.2)">
-          <span class="spr-label">Last Day Gifting <span class="spr-save">Best deal · Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,150</span>
-        </div>
+        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — 8th Day Gifting','₱6,400')"><span class="spr-label">8th Day Gifting · Tap</span><span class="spr-val" style="color:#fbbf24">₱6,400</span></div>
+        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — Phase 2 Gifting','₱6,250')"><span class="spr-label">Phase 2 Gifting · Tap</span><span class="spr-val" style="color:#fbbf24">₱6,250</span></div>
+        <div class="sk-price-row" onclick="promoSelectItem('👑 LEGEND LESLEY — Last Day Gifting','₱6,150')" style="border:1px solid rgba(245,158,11,.2)"><span class="spr-label">Last Day <span class="spr-save">Best deal · Tap</span></span><span class="spr-val" style="color:#fbbf24">₱6,150</span></div>
       </div>
-      <div class="sk-schedule">⚠️ Payment required to reserve slot! Sent on gifting date.</div>
+      <div class="sk-schedule">⚠️ Payment required to reserve slot!</div>
     </div>
     <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.22);border-radius:8px;padding:9px 13px;font-size:.72rem;color:#fca5a5;line-height:1.6;text-align:center;margin-bottom:6px">
-      ⚠️ <b>Tap any skin above</b> → fills the order form below → submit → Mark confirms your slot.
+      ⚠️ <b>Tap any item above</b> → fills order form below → submit → Mark confirms slot.
     </div>
   </div>
 
-  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading prices…</div></div></div>
-  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds</div><div class="pgrid" id="grid-mlbb-denom"><div class="loading-grid">Loading prices…</div></div></div>
-  <div class="cpanel" id="mlbb-combo"><div class="slbl">Diamond Combinations</div><div class="alert-box">💡 Multiple denomination purchases to hit the exact count at a better rate.</div><div class="pgrid" id="grid-mlbb-combo"><div class="loading-grid">Loading prices…</div></div></div>
+  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading…</div></div></div>
+  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds</div><div class="pgrid" id="grid-mlbb-denom"><div class="loading-grid">Loading…</div></div></div>
+  <div class="cpanel" id="mlbb-combo"><div class="slbl">Diamond Combinations</div><div class="alert-box">💡 Multiple denomination purchases to hit the exact count at a better rate.</div><div class="pgrid" id="grid-mlbb-combo"><div class="loading-grid">Loading…</div></div></div>
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus)</div>
     <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:1.2rem">🚫</span><span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Only</span></div>
-      <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">Each Double Diamond tier can only be purchased <b style="color:#f87171">ONCE per account</b>. If already bought, <b style="color:#f87171">it will NOT appear</b> in your shop again.</div>
-      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px"><span>💡</span><span style="font-size:.71rem;color:#fca5a5">During Double Diamond events you get <b style="color:#fff">2x the listed diamonds</b> — only if the tier is still available on your account.</span></div>
+      <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">Each DD tier can only be purchased <b style="color:#f87171">ONCE per account</b>. If already bought, <b style="color:#f87171">it will NOT appear</b> again.</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px"><span>💡</span><span style="font-size:.71rem;color:#fca5a5">During DD events you get <b style="color:#fff">2x the listed diamonds</b> — only if tier is still available.</span></div>
     </div>
-    <div class="pgrid" id="grid-mlbb-dd"><div class="loading-grid">Loading prices…</div></div>
+    <div class="pgrid" id="grid-mlbb-dd"><div class="loading-grid">Loading…</div></div>
   </div>
-  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & Weekly Diamond Pass</div><div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid">Loading prices…</div></div></div>
+  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & Weekly Diamond Pass</div><div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid">Loading…</div></div></div>
   <div class="cpanel" id="mlbb-skins">
-    <div class="slbl">Shop / Event Skins — CosmoBit Pricing</div><div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid">Loading prices…</div></div>
-    <div class="slbl">Skin Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading prices…</div></div>
+    <div class="slbl">CosmoBit Pricing</div><div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid">Loading…</div></div>
+    <div class="slbl">Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading…</div></div>
   </div>
-  <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading prices…</div></div></div>
+  <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading…</div></div></div>
 
   <div class="oform" id="mlbb-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="mlbb-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="mlbb-sel-item">—</div><div class="sp" id="mlbb-sel-price"></div></div>
     <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
-    <div class="fg">
-      <label>Player ID <span class="req">*</span><span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400" onclick="openIDModal()">Help finding ID?</span></label>
-      <input type="text" id="mlbb-pid" placeholder="e.g. 123456789">
-    </div>
-    <div class="fg">
-      <label>Zone ID <span class="req">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="mlbb-zid" placeholder="1234" style="flex:1"><button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
-    </div>
+    <div class="fg"><label>Player ID <span class="req">*</span><span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400" onclick="openIDModal()">Help finding ID?</span></label><input type="text" id="mlbb-pid" placeholder="e.g. 123456789"></div>
+    <div class="fg"><label>Zone ID <span class="req">*</span></label>
+      <div style="display:flex;gap:8px"><input type="text" id="mlbb-zid" placeholder="1234" style="flex:1">
+        <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
     <div class="fg"><label>Server</label><select id="mlbb-server"><option>PH Server</option><option>Other</option></select></div>
-    <div class="fg"><label>Notes (optional)</label><textarea id="mlbb-notes" placeholder="Any special requests or notes…"></textarea></div>
-    <div class="fg">
-      <label>Payment Method <span class="req">*</span></label>
-      <input type="hidden" id="pm-val-mlbb">
+    <div class="fg"><label>Notes (optional)</label><textarea id="mlbb-notes" placeholder="Any special requests…"></textarea></div>
+    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-mlbb">
       <div class="pm-methods">
         <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">🔵 GCash</div>
         <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">🟢 Maya</div>
@@ -486,22 +498,31 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- ===== COD ===== -->
+<!-- ── CoD ───────────────────────────────────────────────── -->
 <div class="gpanel" id="g-cod">
   <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
-  <div class="pgrid" id="grid-cod"><div class="loading-grid">Loading prices…</div></div>
+  <div class="pgrid" id="grid-cod"><div class="loading-grid">Loading…</div></div>
   <div class="oform" id="cod-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="cod-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="cod-sel-item">—</div><div class="sp" id="cod-sel-price"></div></div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="cod-order-display" placeholder="Select an item above first" readonly></div>
+    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="cod-order-display" placeholder="Select an item above" readonly></div>
     <div class="fg"><label>Player ID (UID) <span class="req">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1"><button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
-    </div>
+      <div style="display:flex;gap:8px"><input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1">
+        <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="cod-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-cod">
-      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div></div>
-      <div class="pm-details" id="pm-details-cod"><div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div><div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR Code</button><div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-cod"><div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR</button>
+        <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
     </div>
     <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
@@ -509,31 +530,34 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- ===== ROBLOX ===== -->
+<!-- ── Roblox ─────────────────────────────────────────────── -->
 <div class="gpanel" id="g-roblox">
   <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
-  <div class="pgrid" id="grid-roblox"><div class="loading-grid">Loading prices…</div></div>
+  <div class="pgrid" id="grid-roblox"><div class="loading-grid">Loading…</div></div>
   <div class="oform" id="roblox-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="roblox-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="roblox-sel-item">—</div><div class="sp" id="roblox-sel-price"></div></div>
-    <div class="fg"><label>Order / Robux Amount <span class="req">*</span></label><input type="text" id="roblox-order-display" placeholder="Select an amount above first" readonly></div>
-    <div style="background:rgba(249,115,22,.1);border-left:4px solid var(--or);padding:12px;border-radius:8px;margin-bottom:16px">
-      <div style="color:#fbbf24;font-weight:bold;font-size:.9rem;margin-bottom:6px">⚠️ IMPORTANT ROBLOX RULES</div>
-      <ul style="margin:0;padding-left:20px;font-size:.85rem;color:#d1d5db;line-height:1.5">
-        <li><strong>Non-Covered Tax:</strong> Your order will be deducted <strong>30%</strong> by Roblox due to marketplace tax.</li>
-        <li><strong>Regional Pricing:</strong> Make sure <strong>Regional Pricing is DISABLED</strong> on your Gamepass before submitting.</li>
-      </ul>
-    </div>
+    <div class="fg"><label>Order / Robux Amount <span class="req">*</span></label><input type="text" id="roblox-order-display" placeholder="Select an amount above" readonly></div>
+    <div class="alert-box" style="font-size:.73rem">⚠️ <b>Non-Covered Tax:</b> Your order will be deducted <b>30%</b> by Roblox marketplace tax. <b>Regional Pricing must be DISABLED</b> on your Gamepass.</div>
     <div class="fg"><label>Gamepass ID <span class="req">*</span></label><input type="text" id="roblox-gpid" placeholder="Your Roblox Gamepass ID"></div>
     <div class="fg"><label>Gamepass Name <span class="req">*</span></label><input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
     <div class="fg"><label>Roblox Username <span class="req">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1"><button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div>
-    </div>
-    <div class="fg"><label>Display Name (Auto-fill)</label><input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check username" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
+      <div style="display:flex;gap:8px"><input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1">
+        <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
+    <div class="fg"><label>Display Name</label><input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="roblox-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-roblox">
-      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div></div>
-      <div class="pm-details" id="pm-details-roblox"><div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div><div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR Code</button><div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-roblox"><div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR</button>
+        <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
     </div>
     <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
@@ -541,20 +565,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- ===== BLOODSTRIKE ===== -->
+<!-- ── Bloodstrike ────────────────────────────────────────── -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
-  <div class="pgrid" id="grid-bs"><div class="loading-grid">Loading prices…</div></div>
+  <div class="pgrid" id="grid-bs"><div class="loading-grid">Loading…</div></div>
   <div class="oform" id="bs-oform">
     <h3>📋 Place Order</h3>
     <div class="sel-box" id="bs-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="bs-sel-item">—</div><div class="sp" id="bs-sel-price"></div></div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="bs-order-display" placeholder="Select an item above first" readonly></div>
+    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="bs-order-display" placeholder="Select an item above" readonly></div>
     <div class="fg"><label>Player ID <span class="req">*</span></label><input type="text" id="bs-pid" placeholder="Your Bloodstrike Player ID"></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="bs-ign" placeholder="Your IGN in Bloodstrike"></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="bs-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-bs">
-      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('bs','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('bs','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('bs','paypal',this)">🔷 PayPal</div></div>
-      <div class="pm-details" id="pm-details-bs"><div id="pm-label-bs" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-bs"></span></div><div class="pm-row"><span id="pm-numlbl-bs">Account Number:</span><span id="pm-num-bs"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-bs" onclick="revealPM('bs')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-bs" onclick="openQRModal(currentQR['bs'])" style="display:none">📷 View QR Code</button><div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('bs','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('bs','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('bs','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('bs','paypal',this)">🔷 PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-bs"><div id="pm-label-bs" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-bs"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-bs">Account Number:</span><span id="pm-num-bs"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-bs" onclick="revealPM('bs')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-bs" onclick="openQRModal(currentQR['bs'])" style="display:none">📷 View QR</button>
+        <div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
     </div>
     <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
@@ -562,7 +595,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- ===== LOAD ===== -->
+<!-- ── Load ───────────────────────────────────────────────── -->
 <div class="gpanel" id="g-load">
   <div class="slbl" style="margin:12px 0 8px">Choose Network / Type</div>
   <div class="netgrid">
@@ -588,13 +621,22 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   <div class="oform" id="load-oform">
     <h3>📋 Load Order</h3>
     <div class="sel-box" id="load-sel-box" style="display:none"><div class="sl">Selected Promo / Load</div><div class="sv" id="load-sel-item">—</div><div class="sp" id="load-sel-price"></div></div>
-    <div class="fg"><label>Promo / Load Selected <span class="req">*</span></label><input type="text" id="load-order-display" placeholder="Select network & promo above first" readonly></div>
+    <div class="fg"><label>Promo / Load Selected <span class="req">*</span></label><input type="text" id="load-order-display" placeholder="Select network & promo above" readonly></div>
     <div class="fg"><label>Network <span class="req">*</span></label><input type="text" id="load-network-display" placeholder="Auto-filled when you select above" readonly></div>
     <div class="fg"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="load-number" placeholder="09XXXXXXXXX"><div style="font-size:.65rem;color:var(--mx);margin-top:3px">⚠️ Double-check — wrong number = lost load</div></div>
     <div class="fg"><label>Notes (optional)</label><textarea id="load-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-load">
-      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('load','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('load','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('load','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('load','paypal',this)">🔷 PayPal</div></div>
-      <div class="pm-details" id="pm-details-load"><div id="pm-label-load" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-load"></span></div><div class="pm-row"><span id="pm-numlbl-load">Account Number:</span><span id="pm-num-load"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-load" onclick="revealPM('load')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-load" onclick="openQRModal(currentQR['load'])" style="display:none">📷 View QR Code</button><div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('load','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('load','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('load','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('load','paypal',this)">🔷 PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-load"><div id="pm-label-load" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-load"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-load">Account Number:</span><span id="pm-num-load"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-load" onclick="revealPM('load')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-load" onclick="openQRModal(currentQR['load'])" style="display:none">📷 View QR</button>
+        <div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
     </div>
     <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
@@ -602,12 +644,12 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- ===== CUSTOM ORDER ===== -->
+<!-- ── Custom Order ───────────────────────────────────────── -->
 <div class="gpanel" id="g-custom">
   <div class="custom-hero" style="margin-top:12px">
     <div style="font-size:2.2rem;margin-bottom:8px">🛎️</div>
     <h2>Custom Order Request</h2>
-    <p>Can't find what you're looking for? Describe your order and Mark will handle it personally.</p>
+    <p>Can't find what you need? Describe it and Mark will handle it personally.</p>
     <div class="pulse-badge"><div class="pulse-dot"></div> NOTIFIES MARK DIRECTLY</div>
   </div>
   <div class="slbl" style="margin-bottom:10px">What game / service is this for?</div>
@@ -621,75 +663,67 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
   <div class="oform custom-form">
     <h3>✏️ Describe Your Order</h3>
-    <div class="alert-box" style="border-color:rgba(167,139,250,.3);color:#c4b5fd;background:rgba(167,139,250,.07)">📢 This form sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> to Mark. He will confirm price and availability before processing.</div>
+    <div class="alert-box" style="border-color:rgba(167,139,250,.3);color:#c4b5fd;background:rgba(167,139,250,.07)">📢 This sends a <b style="color:#a78bfa">CUSTOM REQUEST</b> to Mark. He confirms price before processing.</div>
     <div class="fg"><label>Game / Service <span class="req">*</span></label><input type="text" id="custom-game" value="Mobile Legends (MLBB)" readonly style="border-color:rgba(167,139,250,.3);color:#a78bfa"></div>
-    <div class="fg"><label>What exactly do you want? <span class="req">*</span></label><textarea id="custom-desc" rows="4" placeholder="Describe your order here…"></textarea></div>
+    <div class="fg"><label>What exactly do you want? <span class="req">*</span></label><textarea id="custom-desc" rows="4" placeholder="Describe your order…"></textarea></div>
     <div class="fg"><label>Your Name <span class="req">*</span></label><input type="text" id="custom-name" placeholder="So Mark knows who to reply to"></div>
-    <div class="fg"><label>Contact Number / FB Name <span class="req">*</span></label><input type="text" id="custom-contact" placeholder="Your number or Facebook name for follow-up"></div>
-    <div class="fg"><label>Player ID / Username (if applicable)</label><input type="text" id="custom-pid" placeholder="Game ID, username, or account info needed"></div>
-    <div class="fg"><label>Budget (optional)</label><input type="text" id="custom-budget" placeholder="e.g. ₱500 or 'around ₱300'"></div>
-    <div class="fg"><label>Additional Notes</label><textarea id="custom-notes" placeholder="Any extra details Mark should know…"></textarea></div>
+    <div class="fg"><label>Contact / FB Name <span class="req">*</span></label><input type="text" id="custom-contact" placeholder="Your number or Facebook name"></div>
+    <div class="fg"><label>Player ID / Username (if applicable)</label><input type="text" id="custom-pid" placeholder="Game ID, username, etc."></div>
+    <div class="fg"><label>Budget (optional)</label><input type="text" id="custom-budget" placeholder="e.g. ₱500"></div>
+    <div class="fg"><label>Additional Notes</label><textarea id="custom-notes" placeholder="Any extra details…"></textarea></div>
     <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-custom">
-      <div class="pm-methods"><div class="pm-btn" onclick="selectPayment('custom','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('custom','maya',this)">🟢 Maya</div><div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('custom','paypal',this)">🔷 PayPal</div></div>
-      <div class="pm-details" id="pm-details-custom"><div id="pm-label-custom" style="font-weight:bold;margin-bottom:10px"></div><div class="pm-row"><span>Account Name:</span><span id="pm-name-custom"></span></div><div class="pm-row"><span id="pm-numlbl-custom">Account Number:</span><span id="pm-num-custom"></span></div><button type="button" class="btn-reveal" id="pm-reveal-btn-custom" onclick="revealPM('custom')">👁️ Reveal Info</button><button type="button" class="btn-qr" id="pm-qr-btn-custom" onclick="openQRModal(currentQR['custom'])" style="display:none">📷 View QR Code</button><div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div></div>
+      <div class="pm-methods">
+        <div class="pm-btn" onclick="selectPayment('custom','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('custom','maya',this)">🟢 Maya</div>
+        <div class="pm-btn" onclick="selectPayment('custom','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('custom','paypal',this)">🔷 PayPal</div>
+      </div>
+      <div class="pm-details" id="pm-details-custom"><div id="pm-label-custom" style="font-weight:bold;margin-bottom:10px"></div>
+        <div class="pm-row"><span>Account Name:</span><span id="pm-name-custom"></span></div>
+        <div class="pm-row"><span id="pm-numlbl-custom">Account Number:</span><span id="pm-num-custom"></span></div>
+        <button type="button" class="btn-reveal" id="pm-reveal-btn-custom" onclick="revealPM('custom')">👁️ Reveal Info</button>
+        <button type="button" class="btn-qr" id="pm-qr-btn-custom" onclick="openQRModal(currentQR['custom'])" style="display:none">📷 View QR</button>
+        <div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      </div>
     </div>
     <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">🛎️ Send Custom Request</button>
     <div class="err-msg" id="custom-err"></div>
-    <div style="font-size:.7rem;color:#7c6fa0;text-align:center;margin-top:12px;line-height:1.6">⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies. Payment only after confirmation.</div>
+    <div style="font-size:.7rem;color:#7c6fa0;text-align:center;margin-top:12px;line-height:1.6">⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies.</div>
   </div>
 </div>
 
-<!-- SUCCESS -->
+<!-- SUCCESS MESSAGE -->
 <div class="ok-msg" id="ok-msg">
-  <div class="ok-ico">✅</div>
+  <div style="font-size:2.5rem">✅</div>
   <h4>ORDER SUBMITTED!</h4>
-  <div id="receipt-summary" style="background:rgba(255,255,255,.05);border:1px solid var(--dk5);border-radius:10px;padding:15px;margin:15px 0;text-align:left;font-size:.9rem"></div>
-  <p style="font-size:.85rem;color:var(--mx)">Your order and receipt have been received. Wait for Mark to confirm. Thank you! 🎮</p>
+  <div id="ok-receipt" style="background:rgba(255,255,255,.05);border:1px solid var(--dk5);border-radius:10px;padding:14px;margin:12px 0;text-align:left;font-size:.82rem"></div>
+  <p>Wait for Mark to confirm before sending payment. 🎮</p>
   <button class="btn-sub" style="margin-top:14px" onclick="resetAll()">Place Another Order</button>
 </div>
 
-</div><!-- /main -->
+</div><!-- /main-content -->
 
-<!-- ── PHASE 1: LIVE PURCHASE TOAST ── -->
-<div class="purchase-toast" id="purchase-toast">
-  <button class="toast-dismiss" onclick="document.getElementById('purchase-toast').style.display='none'">✕</button>
-  <div class="toast-row">
-    <div class="toast-avatar" id="toast-avatar">💎</div>
-    <div class="toast-body">
-      <div class="tb-who" id="toast-who">Someone from PH</div>
-      <div class="tb-item" id="toast-item">570 Diamonds</div>
-      <div class="tb-price" id="toast-price">₱510 · just now</div>
-    </div>
+<!-- SOCIAL PROOF POP-UP -->
+<div class="sp-popup" id="sp-popup">
+  <span id="sp-ico" style="font-size:1.3rem;flex-shrink:0"></span>
+  <div><div id="sp-text" style="color:var(--tx);font-weight:500;line-height:1.4"></div>
+    <div id="sp-time" style="color:var(--mx);font-size:.68rem;margin-top:2px"></div></div>
+</div>
+
+</div><!-- /shop-wrapper -->
+
+<!-- ── MODALS ─────────────────────────────────────────────── -->
+<div id="track-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box" style="max-width:400px">
+    <h3 style="color:var(--bl);margin-bottom:12px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">🔍 Track Your Order</h3>
+    <p style="font-size:.78rem;color:var(--mx);margin-bottom:14px">Enter your Transaction ID from your order confirmation.</p>
+    <input type="text" id="track-input" placeholder="TXN-XXXXXXX" style="width:100%;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;padding:10px 13px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.95rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">
+    <button class="btn-sub" onclick="trackOrder()" style="margin-top:0">Track</button>
+    <div id="track-result" style="margin-top:12px;font-size:.82rem;text-align:center"></div>
+    <p style="font-size:.68rem;color:var(--mx);margin-top:12px">💡 Your TXN ID is shown on your order confirmation screen.</p>
+    <button class="btn-sub" onclick="document.getElementById('track-modal').style.display='none'" style="background:var(--dk5);margin-top:8px">Close</button>
   </div>
 </div>
 
-<!-- ── STATUS DETAIL MODAL ── -->
-<div id="status-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal-box">
-    <div id="status-modal-content" style="text-align:left"></div>
-    <button class="btn-sub" style="margin-top:14px" onclick="document.getElementById('status-modal').style.display='none'">Close</button>
-  </div>
-</div>
-
-<!-- ── ORDER TRACKER MODAL ── -->
-<div id="tracker-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal-box" style="text-align:left">
-    <h3 style="color:#a78bfa;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:4px">🔍 Track Your Order</h3>
-    <p style="font-size:.75rem;color:var(--mx);margin-bottom:14px">Enter your Transaction ID from your order confirmation.</p>
-    <div style="display:flex;gap:8px;margin-bottom:14px">
-      <input type="text" id="txn-input" placeholder="e.g. TXN-AB3X9K2" style="flex:1;background:var(--dk3);border:1px solid var(--dk5);border-radius:8px;padding:9px 12px;color:var(--tx);font-family:'Exo 2',sans-serif;font-size:.88rem" oninput="this.value=this.value.toUpperCase()">
-      <button onclick="trackOrder()" style="padding:0 16px;background:var(--bl);color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;white-space:nowrap">Track</button>
-    </div>
-    <div id="tracker-result" style="display:none"></div>
-    <div style="font-size:.7rem;color:var(--mx);margin-top:10px;line-height:1.6">
-      💡 Your TXN ID is shown on your order confirmation screen and in the email Mark receives.
-    </div>
-    <button class="btn-sub" style="margin-top:12px;background:var(--dk5)" onclick="document.getElementById('tracker-modal').style.display='none'">Close</button>
-  </div>
-</div>
-
-<!-- QR MODAL -->
 <div id="qr-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal-box">
     <h3 style="color:var(--or);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">📷 Scan QR Code</h3>
@@ -699,13 +733,11 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- ID MODAL -->
 <div id="id-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal-box">
     <h3 style="color:var(--bl);margin-bottom:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1px">🔍 How to Find Your ID</h3>
     <div style="text-align:left;font-size:.83rem;color:var(--mx);line-height:1.8">
-      <b style="color:var(--tx)">For MLBB:</b><br>
-      1. Open game → tap your <b style="color:var(--tx)">profile picture</b> (top-left)<br>
+      <b style="color:var(--tx)">For MLBB:</b><br>1. Open game → tap <b style="color:var(--tx)">profile picture</b> (top-left)<br>
       2. <b style="color:#fbbf24">Player ID</b> = long number below your name<br>
       3. <b style="color:#4ade80">Zone ID</b> = number in brackets ( ) after Player ID<br><br>
       <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:8px;padding:8px 12px;font-family:monospace">
@@ -716,15 +748,19 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 </div>
 
-<!-- DD CONFIRM MODAL -->
 <div id="dd-modal" class="modal-overlay">
   <div class="modal-box" style="text-align:left">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="font-size:1.4rem">🚫</span><span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Warning</span></div>
-    <div style="font-size:.8rem;color:#fca5a5;line-height:1.7;margin-bottom:16px">Double Diamond tiers are a <b style="color:#f87171">one-time purchase per account</b>.<br><br>Once bought, <b style="color:#f87171">that tier disappears permanently</b> and can <b style="color:#f87171">never be purchased again</b>.<br><br>Please <b style="color:#fff">check your in-game shop first</b> before ordering!</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+      <span style="font-size:1.4rem">🚫</span>
+      <span style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:#f87171;letter-spacing:1px;text-transform:uppercase">One-Time Purchase Warning</span>
+    </div>
+    <div style="font-size:.8rem;color:#fca5a5;line-height:1.7;margin-bottom:16px">
+      DD tiers are a <b style="color:#f87171">one-time purchase per account</b>. Once bought, <b style="color:#f87171">that tier disappears permanently</b>. Please <b style="color:#fff">check your in-game shop first!</b>
+    </div>
     <div class="dd-warning-box">
-      <label class="dd-check"><input type="checkbox" id="dd-chk1"> <span>I confirm this tier is <b>still available</b> in my shop and has <b>never been purchased</b> before.</span></label>
-      <label class="dd-check"><input type="checkbox" id="dd-chk2"> <span>I understand that once purchased, <b>this tier will be gone permanently</b> from my account.</span></label>
-      <label class="dd-check"><input type="checkbox" id="dd-chk3"> <span>I am ordering during an <b>active Double Diamond event</b> or I accept the current pricing.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk1"> <span>I confirm this tier is <b>still available</b> and has <b>never been purchased</b> before.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk2"> <span>I understand that once purchased, <b>this tier is gone permanently</b> from my account.</span></label>
+      <label class="dd-check"><input type="checkbox" id="dd-chk3"> <span>I am ordering during an <b>active Double Diamond event</b> or accept current pricing.</span></label>
     </div>
     <button class="btn-sub" id="dd-proceed-btn" onclick="proceedDD()" style="background:#dc2626;margin-bottom:8px" disabled>✅ I Understand — Proceed</button>
     <button class="btn-sub" onclick="closeDDModal()" style="background:var(--dk5)">Cancel — Go Back</button>
@@ -732,243 +768,146 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 // CONFIG
-// ════════════════════════════════════════════════════════════════
+// ============================================================
+const ORDER_API = 'https://script.google.com/macros/s/AKfycbwKbrB6Cb0s-fyY83bkBtgcGgzP_SAmhrPJH5fYQXmlPituBOMvK-ygKXzmLr9uHTa9/exec';
 const PRICE_API = 'https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec';
-const ORDER_API = 'https://script.google.com/macros/s/AKfycbwN_HQmpMJ2MzWq6WR-2xxv2c1W0qS3zbWFKCBYF1bUFMZT8vFZKeXMS1FsF4wdH1Z9/exec';
-const RECAPTCHA_SITE_KEY = '6LfHPOksAAAAAK9cMdUIxE1e68vrm-DcnLebVekR';
+const RC_SITE_KEY = '6LfHPOksAAAAK9cMdUlxE1e68vrm-DcnLebVekR';
+
+// ============================================================
+// SESSION — stores logged-in user in sessionStorage
+// ============================================================
+let SESSION = JSON.parse(sessionStorage.getItem('markshop_user') || 'null');
 let DATA = {};
-let lastActiveGame = 'mlbb'; // FIX: track active game for resetAll
-
-// ════════════════════════════════════════════════════════════════
-// AUTH — FIX: complete rewrite of login/register system
-// ════════════════════════════════════════════════════════════════
-
-// FIX: show logged-in username in header badges
-function showLoggedInUser(username) {
-  // Remove existing badge if any
-  const existing = document.getElementById('user-badge');
-  if (existing) existing.remove();
-
-  const badge = document.createElement('div');
-  badge.id = 'user-badge';
-  badge.className = 'user-badge';
-  badge.innerHTML = `👤 ${username} <button class="logout-btn" onclick="logoutUser()" title="Logout">✕</button>`;
-  document.querySelector('.hdr-badges').appendChild(badge);
-}
-
-// FIX: logout clears saved session and reloads
-function logoutUser() {
-  localStorage.removeItem('markShopUser');
-  location.reload();
-}
-
-// FIX: handleAuth now correctly parses JSON, shows errors, and updates the header
-async function handleAuth(action) {
-  const u = document.getElementById('auth-user').value.trim();
-  const p = document.getElementById('auth-pass').value.trim();
-  const errDiv = document.getElementById('auth-error');
-  errDiv.style.display = 'none';
-
-  if (!u || !p) {
-    errDiv.textContent = 'Please fill in both fields!';
-    errDiv.style.display = 'block';
-    return;
-  }
-
-  const loginBtn    = document.getElementById('btn-login');
-  const registerBtn = document.getElementById('btn-register');
-  loginBtn.disabled = true;
-  registerBtn.disabled = true;
-  loginBtn.textContent = action === 'login' ? 'Logging in…' : 'Login to Shop';
-  registerBtn.textContent = action === 'register' ? 'Creating account…' : 'Create Account';
-
-  try {
-    // FIX: send to ORDER_API (same GAS endpoint), which now routes auth before reCAPTCHA
-    const res = await fetch(ORDER_API, {
-      method: 'POST',
-      body: JSON.stringify({ action, username: u, password: p }),
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-    });
-
-    // FIX: GAS auth handler returns JSON, not plain text
-    const data = await res.json();
-
-    if (data.success) {
-      localStorage.setItem('markShopUser', data.username);
-      document.getElementById('auth-screen').style.display = 'none';
-      showLoggedInUser(data.username); // FIX: call the correct function
-    } else {
-      errDiv.textContent = '❌ ' + (data.error || 'Something went wrong.');
-      errDiv.style.display = 'block';
-    }
-  } catch (err) {
-    errDiv.textContent = '❌ Connection error. Please try again.';
-    errDiv.style.display = 'block';
-  }
-
-  loginBtn.disabled = false;
-  registerBtn.disabled = false;
-  loginBtn.textContent = 'Login to Shop';
-  registerBtn.textContent = 'Create Account';
-}
-
-// Allow pressing Enter to submit auth form
-document.getElementById('auth-pass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleAuth('login');
-});
-
-// FIX: check saved session on page load (DOMContentLoaded)
-document.addEventListener('DOMContentLoaded', () => {
-  const savedUser = localStorage.getItem('markShopUser');
-  if (savedUser) {
-    document.getElementById('auth-screen').style.display = 'none';
-    showLoggedInUser(savedUser); // FIX: use correct function, not missing live-status element
-  }
-});
-
-// ════════════════════════════════════════════════════════════════
-// ONLINE/OFFLINE INDICATOR
-// ════════════════════════════════════════════════════════════════
-function updateOnlineStatus() {
-  const now  = new Date();
-  const pht  = new Date(now.toLocaleString('en-US', {timeZone:'Asia/Manila'}));
-  const hour = pht.getHours();
-  const pill = document.getElementById('status-pill');
-  const txt  = document.getElementById('status-text');
-  const override = localStorage.getItem('markShopStatus');
-
-  let isOnline;
-  if (override === 'online')       isOnline = true;
-  else if (override === 'offline') isOnline = false;
-  else                             isOnline = hour >= 8 && hour < 23;
-
-  if (isOnline) {
-    pill.className = 'status-pill online';
-    txt.textContent = '🟢 Online — Orders: 5–30 min';
-  } else {
-    pill.className = 'status-pill offline';
-    txt.textContent = '🔴 Offline — Orders processed at 8 AM';
-  }
-
-  document.getElementById('status-modal-content').innerHTML = isOnline
-    ? `<h3 style="color:#4ade80;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:10px">🟢 Mark is Online</h3>
-       <p style="font-size:.82rem;color:var(--mx);line-height:1.7">Orders are currently being processed. Expect your top-up within <b style="color:var(--tx)">5–30 minutes</b> after payment confirmation.</p>
-       <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:10px;margin-top:12px;font-size:.78rem;color:#4ade80">✅ You can place your order now!</div>`
-    : `<h3 style="color:#f87171;font-family:'Rajdhani',sans-serif;letter-spacing:1px;margin-bottom:10px">🔴 Mark is Offline</h3>
-       <p style="font-size:.82rem;color:var(--mx);line-height:1.7">Mark is currently unavailable. Orders placed now will be <b style="color:var(--tx)">processed starting 8:00 AM PHT</b>.</p>
-       <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px;margin-top:12px;font-size:.78rem;color:#f87171">⚠️ Your order is safe — it will be processed when Mark is back online.</div>`;
-}
-updateOnlineStatus();
-setInterval(updateOnlineStatus, 60000);
-
-// ════════════════════════════════════════════════════════════════
-// ORDER TRACKER
-// ════════════════════════════════════════════════════════════════
-async function trackOrder() {
-  const txn    = document.getElementById('txn-input').value.trim().toUpperCase();
-  const result = document.getElementById('tracker-result');
-  if (!txn || !txn.startsWith('TXN-')) {
-    result.style.display = 'block';
-    result.innerHTML = '<div style="color:#f87171;font-size:.82rem;padding:10px;background:rgba(239,68,68,.08);border-radius:8px">⚠️ Please enter a valid Transaction ID (e.g. TXN-AB3X9K2)</div>';
-    return;
-  }
-  result.style.display = 'block';
-  result.innerHTML = '<div style="color:var(--mx);font-size:.82rem;padding:10px;text-align:center">🔍 Looking up your order…</div>';
-
-  try {
-    const r    = await fetch(`${PRICE_API}?txn=${encodeURIComponent(txn)}`);
-    const data = await r.json();
-    if (data && data.found) {
-      const statusColor = data.status==='Completed' ? '#4ade80' : data.status==='Processing' ? '#fbbf24' : '#94a3b8';
-      result.innerHTML = `
-        <div style="background:var(--dk3);border:1px solid var(--bdr);border-radius:10px;padding:14px">
-          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:${statusColor};margin-bottom:10px">
-            ${data.status==='Completed'?'✅':data.status==='Processing'?'⏳':'📋'} Status: ${data.status}
-          </div>
-          <div style="font-size:.8rem;color:var(--mx);line-height:1.8">
-            <b style="color:var(--tx)">TXN ID:</b> ${txn}<br>
-            <b style="color:var(--tx)">Game:</b> ${data.game||'N/A'}<br>
-            <b style="color:var(--tx)">Order:</b> ${data.order||'N/A'}<br>
-            <b style="color:var(--tx)">Date:</b> ${data.date||'N/A'}
-          </div>
-        </div>`;
-    } else {
-      result.innerHTML = `
-        <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px">
-          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fbbf24;margin-bottom:8px">⏳ Pending / Not Yet Updated</div>
-          <div style="font-size:.8rem;color:var(--mx);line-height:1.7">
-            Your order <b style="color:var(--tx)">${txn}</b> was received but hasn't been updated in the tracker yet.<br><br>
-            If you just placed your order, <b style="color:var(--tx)">please wait 10–30 minutes</b> for Mark to process.
-          </div>
-        </div>`;
-    }
-  } catch(e) {
-    result.innerHTML = `
-      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px">
-        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;color:#fbbf24;margin-bottom:8px">⏳ Order Received</div>
-        <div style="font-size:.8rem;color:var(--mx);line-height:1.7">
-          Your TXN ID <b style="color:var(--tx)">${txn}</b> was found! Mark will process your order shortly.<br><br>
-          Tracker updates every 30 minutes. Check back later.
-        </div>
-      </div>`;
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
-// LIVE RECENT PURCHASES TOAST
-// ════════════════════════════════════════════════════════════════
-const RECENT_PURCHASES = [
-  {ico:'💎',who:'Player from Quezon City',item:'570 Diamonds',price:'₱510'},
-  {ico:'⭐',who:'Player from Manila',item:'June NSL — Normal Starlight',price:'₱160'},
-  {ico:'🎖️',who:'Player from Cebu',item:'100 Garena Shells',price:'₱100'},
-  {ico:'💎',who:'Player from Davao',item:'1163 Diamonds',price:'₱1,050'},
-  {ico:'🧱',who:'Player from Pasig',item:'500 Robux',price:'₱250'},
-  {ico:'📶',who:'Player from Batangas',item:'GOUNLI50',price:'₱45'},
-  {ico:'💎',who:'Player from Iloilo',item:'2398 Diamonds',price:'₱2,150'},
-  {ico:'🩸',who:'Player from Taguig',item:'1000 + 100 Golds',price:'₱437'},
-  {ico:'⭐',who:'Player from Makati',item:'PSL — Premium Starlight',price:'₱320'},
-  {ico:'💎',who:'Player from Laguna',item:'448 Diamonds',price:'₱410'},
-  {ico:'🎖️',who:'Player from Pampanga',item:'200 Garena Shells',price:'₱200'},
-  {ico:'🧱',who:'Player from Rizal',item:'1000 Robux',price:'₱480'},
-];
-let toastIndex = 0;
-function showNextToast() {
-  const t = RECENT_PURCHASES[toastIndex % RECENT_PURCHASES.length];
-  toastIndex++;
-  const toast = document.getElementById('purchase-toast');
-  document.getElementById('toast-avatar').textContent  = t.ico;
-  document.getElementById('toast-who').textContent     = t.who;
-  document.getElementById('toast-item').textContent    = t.item;
-  document.getElementById('toast-price').textContent   = t.price + ' · just now';
-  toast.style.display = 'block';
-  toast.style.animation = 'none';
-  void toast.offsetWidth;
-  toast.style.animation = 'slideInLeft .4s ease';
-  setTimeout(() => { toast.style.display = 'none'; }, 5000);
-}
-setTimeout(() => { showNextToast(); setInterval(showNextToast, 18000); }, 8000);
-
-// ════════════════════════════════════════════════════════════════
-// PAYMENT
-// ════════════════════════════════════════════════════════════════
-const PM_DATA = {
-  gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',                  color:'#3b82f6', qr:'gcash-qr.jpg'},
-  maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',                  color:'#22c55e', qr:'maya-qr.jpg'},
-  gotyme: {label:'GoTyme', name:'Mark Guevarra', num:'09288978005',                  color:'#8b5cf6', qr:'gotyme-qr.jpg'},
-  paypal: {label:'PayPal', name:'Mark Guevarra', num:'marcangelguevarra@gmail.com',  color:'#0ea5e9', note:'Please select "Friends & Family"'}
-};
 const currentMethod={}, currentQR={}, pmTimers={};
 
-function selectPayment(game, method, btn){
+// ============================================================
+// AUTH — switch tabs
+// ============================================================
+let authMode = 'login';
+function switchAuthTab(mode) {
+  authMode = mode;
+  document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+  document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+  document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'LOGIN TO SHOP' : 'CREATE ACCOUNT';
+  document.getElementById('auth-err').textContent = '';
+  document.getElementById('auth-password').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+}
+
+// ── FIX 1: handleAuth posts to ORDER_API (which handles login/register actions)
+//            and always parses response as JSON (GAS now always returns JSON for auth)
+async function handleAuth() {
+  const btn  = document.getElementById('auth-submit-btn');
+  const err  = document.getElementById('auth-err');
+  const user = document.getElementById('auth-username').value.trim();
+  const pass = document.getElementById('auth-password').value.trim();
+  err.textContent = '';
+  if (!user || !pass) { err.textContent = 'Please fill in both fields.'; return; }
+  btn.disabled = true; btn.textContent = 'Please wait…';
+  try {
+    const res  = await fetch(ORDER_API, {
+      method: 'POST',
+      body: JSON.stringify({ action: authMode, username: user, password: pass })
+    });
+    // FIX 2: GAS now always returns JSON for auth — safe to call .json()
+    const data = await res.json();
+    if (data.success) {
+      saveSession({ username: data.username, mlbbId: data.mlbbId||'', mlbbZone: data.mlbbZone||'', markcoins: data.markcoins||0 });
+      enterShop();
+    } else {
+      err.textContent = data.error || 'Something went wrong. Try again.';
+    }
+  } catch (e) {
+    err.textContent = 'Network error. Please check your connection.';
+  }
+  btn.disabled = false; btn.textContent = authMode === 'login' ? 'LOGIN TO SHOP' : 'CREATE ACCOUNT';
+}
+
+function enterAsGuest() {
+  saveSession({ username: 'Guest', mlbbId:'', mlbbZone:'', markcoins:0 });
+  enterShop();
+}
+
+function saveSession(user) {
+  SESSION = user;
+  sessionStorage.setItem('markshop_user', JSON.stringify(user));
+}
+
+// ── FIX 3: showLoggedInUser — defined, updates header pills correctly
+function showLoggedInUser() {
+  if (!SESSION) return;
+  const isGuest = SESSION.username === 'Guest';
+  document.getElementById('user-display-name').textContent = SESSION.username;
+  document.getElementById('user-pill').style.display   = 'inline-flex';
+  document.getElementById('logout-btn').style.display  = 'inline-flex';
+  if (!isGuest) {
+    document.getElementById('coins-count').textContent   = SESSION.markcoins || 0;
+    document.getElementById('coins-pill').style.display  = 'inline-flex';
+  }
+  // Auto-fill saved MLBB fields
+  if (SESSION.mlbbId)   document.getElementById('mlbb-pid').value  = SESSION.mlbbId;
+  if (SESSION.mlbbZone) document.getElementById('mlbb-zid').value  = SESSION.mlbbZone;
+}
+
+function enterShop() {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('shop-wrapper').style.display = 'block';
+  showLoggedInUser();
+  fetchPrices();
+  startSocialProof();
+}
+
+function logout() {
+  SESSION = null;
+  sessionStorage.removeItem('markshop_user');
+  // Hide shop, show auth
+  document.getElementById('shop-wrapper').style.display = 'none';
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('auth-err').textContent = '';
+  document.getElementById('auth-username').value  = '';
+  document.getElementById('auth-password').value  = '';
+  switchAuthTab('login');
+}
+
+// ── FIX 4: resetAll — properly restores ALL panels and tabs
+function resetAll() {
+  // Hide success
+  document.getElementById('ok-msg').style.display = 'none';
+  // Restore shop layout
+  document.getElementById('gtabs').style.display       = '';
+  document.getElementById('main-content').style.display = '';
+  // Scroll to top
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ============================================================
+// ENTER SHOP IMMEDIATELY IF ALREADY LOGGED IN THIS SESSION
+// ============================================================
+if (SESSION) enterShop();
+
+// ── Enter key on auth inputs
+document.getElementById('auth-username').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('auth-password').focus(); });
+document.getElementById('auth-password').addEventListener('keydown', e => { if(e.key==='Enter') handleAuth(); });
+
+// ============================================================
+// PAYMENT DATA
+// ============================================================
+const PM_DATA = {
+  gcash:  {label:'GCash',  name:'Mark Guevarra', num:'09288978005',                 color:'#3b82f6', qr:'gcash-qr.jpg'},
+  maya:   {label:'Maya',   name:'Mark Guevarra', num:'09288978005',                 color:'#22c55e', qr:'maya-qr.jpg'},
+  gotyme: {label:'GoTyme', name:'Mark Guevarra', num:'09288978005',                 color:'#8b5cf6', qr:'gotyme-qr.jpg'},
+  paypal: {label:'PayPal', name:'Mark Guevarra', num:'marcangelguevarra@gmail.com', color:'#0ea5e9', note:'Please select "Friends & Family"'}
+};
+
+function selectPayment(game, method, btn) {
   clearTimeout(pmTimers[game]);
-  currentMethod[game]=method;
-  const form=document.getElementById(game+'-oform')||document.querySelector('#g-'+game+' .oform');
+  currentMethod[game] = method;
+  const form = document.getElementById(game+'-oform') || document.querySelector('#g-'+game+' .oform');
   if(form) form.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const pm=PM_DATA[method];
-  document.getElementById('pm-val-'+game).value=pm.label;
+  document.getElementById('pm-val-'+game).value = pm.label;
   const det=document.getElementById('pm-details-'+game);
   det.style.display='block'; det.style.borderLeftColor=pm.color;
   document.getElementById('pm-label-'+game).innerHTML=`<span style="color:${pm.color}">✅ ${pm.label} Selected</span>`;
@@ -980,8 +919,8 @@ function selectPayment(game, method, btn){
   revBtn.style.display='block'; revBtn.textContent='👁️ Reveal Info';
   const qrBtn=document.getElementById('pm-qr-btn-'+game);
   const noteEl=document.getElementById('pm-note-'+game);
-  if(pm.qr){ currentQR[game]=pm.qr; qrBtn.style.display='block'; noteEl.style.display='none'; }
-  else { currentQR[game]=null; qrBtn.style.display='none'; noteEl.style.display=pm.note?'block':'none'; if(pm.note)noteEl.textContent=pm.note; }
+  if(pm.qr){currentQR[game]=pm.qr;qrBtn.style.display='block';noteEl.style.display='none';}
+  else{currentQR[game]=null;qrBtn.style.display='none';noteEl.style.display=pm.note?'block':'none';if(pm.note)noteEl.textContent=pm.note;}
 }
 
 function revealPM(game){
@@ -996,21 +935,51 @@ function revealPM(game){
     document.getElementById('pm-name-'+game).textContent='M*** G*******';
     document.getElementById('pm-num-'+game).textContent=isEmail?'m****@gmail.com':'0928****005';
     revBtn.style.display='block'; revBtn.textContent='👁️ Reveal Again';
-  }, 3000);
+  },3000);
 }
 
-function openQRModal(src){ if(!src)return; document.getElementById('qr-img').src=src; document.getElementById('qr-modal').style.display='flex'; }
-function openIDModal(){ document.getElementById('id-modal').style.display='flex'; }
+function openQRModal(src){if(!src)return;document.getElementById('qr-img').src=src;document.getElementById('qr-modal').style.display='flex';}
+function openIDModal(){document.getElementById('id-modal').style.display='flex';}
+function openTrackModal(){document.getElementById('track-input').value='';document.getElementById('track-result').innerHTML='';document.getElementById('track-modal').style.display='flex';}
 
-// ════════════════════════════════════════════════════════════════
+// ============================================================
+// FETCH PRICES + STATUS
+// ============================================================
+async function fetchPrices(){
+  try{
+    const r=await fetch(PRICE_API); if(!r.ok)throw new Error();
+    DATA=await r.json(); buildAll(); updateStatus(DATA._status||'online');
+  }catch(e){
+    document.querySelectorAll('.loading-grid').forEach(el=>{el.textContent='⚠️ Could not load prices. Refresh to try again.';});
+    updateStatus('offline');
+  }
+}
+
+// ── FIX 5: updateStatus uses #status-pill (which EXISTS in DOM) not #live-status
+function updateStatus(st){
+  const pill=document.getElementById('status-pill');
+  const dot =document.getElementById('status-dot');
+  const txt =document.getElementById('status-text');
+  if(!pill)return;
+  if(st==='offline'){
+    pill.className='status-pill offline';
+    dot.className='status-dot'; // no pulse when offline
+    txt.textContent='🔴 Mark is Offline · Orders processed at 8 AM';
+  }else{
+    pill.className='status-pill online';
+    dot.className='status-dot pulse';
+    txt.textContent='🟢 Online · Delivery: 1–5 mins';
+  }
+}
+
+// ============================================================
 // TABS
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 document.querySelectorAll('.gtab').forEach(tab=>{
   tab.addEventListener('click',()=>{
     document.querySelectorAll('.gtab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.gpanel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
-    lastActiveGame = tab.dataset.g; // FIX: track active game
     document.getElementById('g-'+tab.dataset.g).classList.add('active');
   });
 });
@@ -1021,303 +990,283 @@ document.querySelectorAll('.ctab').forEach(tab=>{
     parent.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
     const panel=document.getElementById(tab.dataset.c);
-    if(panel) panel.classList.add('active');
+    if(panel)panel.classList.add('active');
   });
 });
 
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 // GRID BUILDER
-// ════════════════════════════════════════════════════════════════
-function ph(n){ return '₱'+Number(n).toLocaleString('en-PH'); }
-
-function makeGrid(id, items, game, cat){
-  const el=document.getElementById(id); if(!el)return;
+// ============================================================
+function ph(n){return '₱'+Number(n).toLocaleString('en-PH');}
+function makeGrid(id,items,game,cat){
+  const el=document.getElementById(id);if(!el)return;
   el.innerHTML='';
-  if(!items||!items.length){ el.innerHTML='<div class="loading-grid">No items found.</div>'; return; }
+  if(!items||!items.length){el.innerHTML='<div class="loading-grid">No items found.</div>';return;}
   items.forEach(it=>{
     const c=document.createElement('div');
-    c.className='pcard'; c.dataset.game=game; c.dataset.cat=cat; c.dataset.name=it.n; c.dataset.price=it.p;
+    c.className='pcard';c.dataset.game=game;c.dataset.cat=cat;c.dataset.name=it.n;c.dataset.price=it.p;
     c.innerHTML=`<div class="chk">✓</div><div class="pn">${it.n}</div>${it.d?`<div class="pd">${it.d}</div>`:''}<div class="pp">${ph(it.p)}</div>`;
-    c.onclick=()=>{ if(game==='mlbb'&&cat==='dd') openDDModal(c); else selectItem(c,game); };
+    c.onclick=()=>{if(game==='mlbb'&&cat==='dd')openDDModal(c);else selectItem(c,game);};
     el.appendChild(c);
   });
 }
-
 function filterStarlight(items){
-  if(!items) return [];
-  return items.filter(it=>{ const n=it.n.toLowerCase(); return !n.includes('march')&&!n.includes('april'); });
+  if(!items)return[];
+  return items.filter(it=>{const n=it.n.toLowerCase();return !n.includes('march')&&!n.includes('april');});
 }
-
 function buildAll(){
-  if(!DATA||!Object.keys(DATA).length) return;
+  if(!DATA||!Object.keys(DATA).length)return;
   if(DATA.mlbb){
-    makeGrid('grid-mlbb-dias',        DATA.mlbb.dias||DATA.mlbb.Dias,       'mlbb','dias');
-    makeGrid('grid-mlbb-denom',       DATA.mlbb.denom||DATA.mlbb.Denom,     'mlbb','denom');
-    makeGrid('grid-mlbb-combo',       DATA.mlbb.combo||DATA.mlbb.Combo,     'mlbb','combo');
-    makeGrid('grid-mlbb-dd',          DATA.mlbb.dd||DATA.mlbb.DD,           'mlbb','dd');
-    makeGrid('grid-mlbb-bundles',     DATA.mlbb.bundles||DATA.mlbb.Bundles, 'mlbb','bundles');
-    makeGrid('grid-mlbb-skins-cosmo', DATA.mlbb.skinsc||DATA.mlbb.SkinsC,   'mlbb','skins');
-    makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,   'mlbb','skins');
-    makeGrid('grid-mlbb-starlight', filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight), 'mlbb','starlight');
+    makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
+    makeGrid('grid-mlbb-denom',DATA.mlbb.denom||DATA.mlbb.Denom,'mlbb','denom');
+    makeGrid('grid-mlbb-combo',DATA.mlbb.combo||DATA.mlbb.Combo,'mlbb','combo');
+    makeGrid('grid-mlbb-dd',DATA.mlbb.dd||DATA.mlbb.DD,'mlbb','dd');
+    makeGrid('grid-mlbb-bundles',DATA.mlbb.bundles||DATA.mlbb.Bundles,'mlbb','bundles');
+    makeGrid('grid-mlbb-skins-cosmo',DATA.mlbb.skinsc||DATA.mlbb.SkinsC,'mlbb','skins');
+    makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,'mlbb','skins');
+    makeGrid('grid-mlbb-starlight',filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight),'mlbb','starlight');
   }
-  if(DATA.cod)    makeGrid('grid-cod',    DATA.cod,    'cod','main');
-  if(DATA.roblox) makeGrid('grid-roblox', DATA.roblox, 'roblox','main');
-  if(DATA.bs)     makeGrid('grid-bs',     DATA.bs,     'bs','main');
+  if(DATA.cod)    makeGrid('grid-cod',DATA.cod,'cod','main');
+  if(DATA.roblox) makeGrid('grid-roblox',DATA.roblox,'roblox','main');
+  if(DATA.bs)     makeGrid('grid-bs',DATA.bs,'bs','main');
   if(DATA.load){
     Object.keys(DATA.load).forEach(net=>{
       const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
-      if(items) makeGrid('grid-'+net, items,'load',net);
+      if(items)makeGrid('grid-'+net,items,'load',net);
     });
   }
 }
 
-async function fetchPrices(){
-  try{
-    const r=await fetch(PRICE_API);
-    if(!r.ok) throw new Error();
-    DATA=await r.json();
-    buildAll();
-  }catch(e){
-    document.querySelectorAll('.loading-grid').forEach(el=>{ el.textContent='⚠️ Could not load prices. Please refresh.'; });
-  }
-}
-
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 // ITEM SELECTION
-// ════════════════════════════════════════════════════════════════
-function selectItem(card, game){
+// ============================================================
+const formMap={
+  mlbb:['mlbb-sel-box','mlbb-sel-item','mlbb-sel-price','mlbb-order-display','mlbb-oform'],
+  cod: ['cod-sel-box', 'cod-sel-item', 'cod-sel-price', 'cod-order-display', 'cod-oform'],
+  roblox:['roblox-sel-box','roblox-sel-item','roblox-sel-price','roblox-order-display','roblox-oform'],
+  bs:  ['bs-sel-box',  'bs-sel-item',  'bs-sel-price',  'bs-order-display',  'bs-oform'],
+  load:['load-sel-box','load-sel-item','load-sel-price','load-order-display','load-oform'],
+};
+function fillForm(game,name,price){
+  const [box,item,priceEl,disp,form]=formMap[game];
+  document.getElementById(box).style.display='block';
+  document.getElementById(item).textContent=name;
+  document.getElementById(priceEl).textContent=price;
+  document.getElementById(disp).value=name+' — '+price;
+  scrollToForm(form);
+}
+function selectItem(card,game){
   document.querySelectorAll(`.pcard[data-game="${game}"]`).forEach(c=>c.classList.remove('sel'));
   card.classList.add('sel');
   const name=card.dataset.name, price=ph(parseInt(card.dataset.price));
   fillForm(game,name,price);
   if(game==='load'){
-    const netData=DATA.load?DATA.load[card.dataset.cat]:null;
-    document.getElementById('load-network-display').value=netData?.net||card.dataset.cat;
+    const nd=DATA.load?DATA.load[card.dataset.cat]:null;
+    document.getElementById('load-network-display').value=nd?.net||card.dataset.cat;
   }
 }
-
-function promoSelectItem(name, price){
+function promoSelectItem(name,price){
   document.querySelectorAll('#mlbb-ctabs .ctab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('#g-mlbb .cpanel').forEach(p=>p.classList.remove('active'));
   document.querySelector('#mlbb-ctabs .ctab[data-c="mlbb-dias"]').classList.add('active');
   document.getElementById('mlbb-dias').classList.add('active');
   fillForm('mlbb',name,price);
 }
-
-const FORM_IDS = {
-  mlbb:  ['mlbb-sel-box','mlbb-sel-item','mlbb-sel-price','mlbb-order-display','mlbb-oform'],
-  cod:   ['cod-sel-box','cod-sel-item','cod-sel-price','cod-order-display','cod-oform'],
-  roblox:['roblox-sel-box','roblox-sel-item','roblox-sel-price','roblox-order-display','roblox-oform'],
-  bs:    ['bs-sel-box','bs-sel-item','bs-sel-price','bs-order-display','bs-oform'],
-  load:  ['load-sel-box','load-sel-item','load-sel-price','load-order-display','load-oform'],
-};
-function fillForm(game,name,price){
-  const [box,item,priceEl,disp,form]=FORM_IDS[game];
-  document.getElementById(box).style.display='block';
-  document.getElementById(item).textContent=name;
-  document.getElementById(priceEl).textContent=price;
-  document.getElementById(disp).value=name+' — '+price;
-  const el=document.getElementById(form);
-  if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+function scrollToForm(id){
+  const el=document.getElementById(id);
+  if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 // DD MODAL
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 let pendingDDCard=null;
-function openDDModal(card){ pendingDDCard=card; ['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>document.getElementById(id).checked=false); const btn=document.getElementById('dd-proceed-btn'); btn.disabled=true; btn.style.background='#dc2626'; document.getElementById('dd-modal').style.display='flex'; }
-function closeDDModal(){ document.getElementById('dd-modal').style.display='none'; pendingDDCard=null; }
-['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>{ document.getElementById(id).addEventListener('change',()=>{ const all=['dd-chk1','dd-chk2','dd-chk3'].every(i=>document.getElementById(i).checked); const btn=document.getElementById('dd-proceed-btn'); btn.disabled=!all; btn.style.background=all?'#16a34a':'#dc2626'; }); });
-function proceedDD(){ document.getElementById('dd-modal').style.display='none'; if(pendingDDCard){ selectItem(pendingDDCard,'mlbb'); pendingDDCard=null; } }
+function openDDModal(card){
+  pendingDDCard=card;
+  ['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>document.getElementById(id).checked=false);
+  const btn=document.getElementById('dd-proceed-btn');
+  btn.disabled=true;btn.style.background='#dc2626';
+  document.getElementById('dd-modal').style.display='flex';
+}
+function closeDDModal(){document.getElementById('dd-modal').style.display='none';pendingDDCard=null;}
+['dd-chk1','dd-chk2','dd-chk3'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',()=>{
+    const all=['dd-chk1','dd-chk2','dd-chk3'].every(i=>document.getElementById(i).checked);
+    const btn=document.getElementById('dd-proceed-btn');
+    btn.disabled=!all;btn.style.background=all?'#16a34a':'#dc2626';
+  });
+});
+function proceedDD(){
+  document.getElementById('dd-modal').style.display='none';
+  if(pendingDDCard){selectItem(pendingDDCard,'mlbb');pendingDDCard=null;}
+}
 
-// ════════════════════════════════════════════════════════════════
-// LOAD NETWORK
-// ════════════════════════════════════════════════════════════════
-function selectNet(card,net){ document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active')); card.classList.add('active'); document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active')); const lp=document.getElementById('lp-'+net); if(lp) lp.classList.add('active'); }
+// ============================================================
+// LOAD NETWORK + CUSTOM CATEGORY
+// ============================================================
+function selectNet(card,net){
+  document.querySelectorAll('.netcard').forEach(c=>c.classList.remove('active'));
+  card.classList.add('active');
+  document.querySelectorAll('.lpanel').forEach(p=>p.classList.remove('active'));
+  const lp=document.getElementById('lp-'+net);if(lp)lp.classList.add('active');
+}
+function selectCC(el){
+  document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('custom-game').value=el.dataset.cc;
+}
 
-// ════════════════════════════════════════════════════════════════
-// CUSTOM CATEGORY
-// ════════════════════════════════════════════════════════════════
-function selectCC(el){ document.querySelectorAll('.custom-cat').forEach(c=>c.classList.remove('active')); el.classList.add('active'); document.getElementById('custom-game').value=el.dataset.cc; }
-
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 // VERIFY APIs
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 async function verifyMLBB(){
   const pid=document.getElementById('mlbb-pid').value.trim();
   const zid=document.getElementById('mlbb-zid').value.trim();
   const ign=document.getElementById('mlbb-ign');
   if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
-  ign.value='Verifying…'; ign.readOnly=true; ign.style.borderColor='var(--or)';
+  ign.value='Verifying…';
   try{
-    const r=await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const r=await fetch(`https://api.gameofthrones.life/moonton/user?userId=${pid}&zoneId=${zid}`);
     const d=await r.json();
-    if(r.ok&&d.ign){ ign.value=d.ign+(d.region?' · '+d.region:''); ign.style.borderColor='var(--gr)'; ign.readOnly=true; }
-    else { ign.value=''; ign.readOnly=false; ign.placeholder='Not found — type IGN manually'; ign.style.borderColor='#ef4444'; ign.style.background='var(--dk3)'; ign.focus(); }
-  }catch(e){ ign.value=''; ign.readOnly=false; ign.placeholder='Verify busy — type IGN manually'; ign.style.borderColor='#f59e0b'; ign.style.background='var(--dk3)'; ign.focus(); }
+    const name=d.name||d.username||d.nickName;
+    if(name){ign.value=name;ign.style.borderColor='var(--gr)';ign.removeAttribute('readonly');}
+    else{ign.value='';ign.removeAttribute('readonly');ign.placeholder='Not found — type IGN manually';}
+  }catch(e){ign.value='';ign.removeAttribute('readonly');ign.placeholder='Verify unavailable — type manually';}
 }
-
 async function verifyCOD(){
-  const pid=document.getElementById('cod-pid').value.trim();
   const ign=document.getElementById('cod-ign');
-  if(!pid){alert('Enter Player ID first.');return;}
-  ign.value='Verifying…'; ign.readOnly=true; ign.style.borderColor='var(--or)';
-  try{
-    const r=await fetch(`/api/verify-cod?id=${pid}`);
-    const d=await r.json();
-    if(r.ok&&d.ign){ ign.value=d.ign; ign.style.borderColor='var(--gr)'; }
-    else { ign.value=''; ign.readOnly=false; ign.placeholder='Not found — type IGN manually'; ign.style.borderColor='#ef4444'; ign.style.background='var(--dk3)'; ign.focus(); }
-  }catch(e){ ign.value=''; ign.readOnly=false; ign.placeholder='Verify unavailable — type manually'; ign.style.borderColor='#f59e0b'; }
+  ign.value='Manual entry required';ign.removeAttribute('readonly');
 }
-
 async function verifyRoblox(){
   const u=document.getElementById('roblox-user').value.trim();
   const disp=document.getElementById('roblox-dispname');
   if(!u){alert('Enter Roblox username first.');return;}
   disp.value='Verifying…';
   try{
-    const r=await fetch(`/api/verify-roblox?username=${encodeURIComponent(u)}`);
+    const r=await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(u)}`);
     const d=await r.json();
-    if(r.ok&&d.ign){ disp.value=d.ign; disp.style.borderColor='var(--gr)'; }
-    else { disp.value=''; disp.placeholder='Not found — check spelling'; disp.style.borderColor='#ef4444'; }
-  }catch(e){ disp.value=''; disp.placeholder='Verify unavailable — type manually'; }
+    const name=d.Username||d.username;
+    if(name){disp.value=name;disp.style.borderColor='var(--gr)';}
+    else{disp.value='';disp.placeholder='Not found — type manually';}
+  }catch(e){disp.value='';disp.placeholder='Verify unavailable — type manually';}
 }
 
-// ════════════════════════════════════════════════════════════════
+// ============================================================
+// ORDER TRACKER
+// ============================================================
+async function trackOrder(){
+  const txn=document.getElementById('track-input').value.trim().toUpperCase();
+  const res=document.getElementById('track-result');
+  if(!txn||!txn.startsWith('TXN-')){res.innerHTML='<span style="color:#f87171">Please enter a valid TXN-XXXXXXX code.</span>';return;}
+  res.innerHTML='<span style="color:var(--mx)">🔍 Looking up your order…</span>';
+  try{
+    const r=await fetch(PRICE_API+'?track='+encodeURIComponent(txn));
+    const d=await r.json();
+    if(d.error){res.innerHTML='<span style="color:#f87171">❌ Order not found. Check your TXN ID.</span>';return;}
+    const stColors={pending:'#f59e0b',processing:'#3b82f6',completed:'#22c55e'};
+    const stIcons= {pending:'⏳',processing:'⚙️',completed:'✅'};
+    const stMsgs= {pending:'Your order is received and awaiting processing.',processing:'Mark is processing your order now!',completed:'Done! Check your in-game mailbox.'};
+    const st=(d.status||'pending').toLowerCase();
+    res.innerHTML=`<div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px;text-align:left">
+      <div style="font-size:1.6rem;text-align:center">${stIcons[st]||'⏳'}</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:${stColors[st]||'#94a3b8'};text-align:center;letter-spacing:1px;margin:4px 0 10px">${(d.status||'PENDING').toUpperCase()}</div>
+      <div style="font-size:.75rem;color:var(--mx);margin-bottom:8px">${stMsgs[st]||''}</div>
+      <b style="color:var(--or)">TXN:</b> ${d.txn||txn}<br>
+      <b style="color:var(--or)">Game:</b> ${d.game||'—'}<br>
+      <b style="color:var(--or)">Order:</b> ${d.order||'—'}<br>
+      <b style="color:var(--or)">Date:</b> ${d.date||'—'}
+    </div>`;
+  }catch(e){res.innerHTML='<span style="color:#f87171">⚠️ Connection error. Try again.</span>';}
+}
+
+// ============================================================
 // SUBMIT ORDER
-// ════════════════════════════════════════════════════════════════
+// ============================================================
 async function submitOrder(game){
   const btn=document.getElementById(game+'-btn');
-  const errEl=document.getElementById(game+'-err');
-  errEl.style.display='none';
+  const err=document.getElementById(game+'-err');
+  const pm =document.getElementById('pm-val-'+game).value;
+  const fi =document.getElementById(game+'-screenshot');
+  err.style.display='none';
+  let order='',pid='',ign='',notes='',network='';
 
-  const now=Date.now();
-  let hist=JSON.parse(localStorage.getItem('markShopHistory')||'[]').filter(t=>now-t<300000);
-  if(hist.length>=3){ errEl.innerHTML='🛡️ <b>Slow down!</b> Max 3 orders per 5 minutes. Please wait.'; errEl.style.display='block'; return; }
+  if(game==='mlbb'){order=document.getElementById('mlbb-order-display').value;pid=document.getElementById('mlbb-pid').value;ign=document.getElementById('mlbb-ign').value;notes=document.getElementById('mlbb-notes').value;}
+  else if(game==='cod'){order=document.getElementById('cod-order-display').value;pid=document.getElementById('cod-pid').value;ign=document.getElementById('cod-ign').value;notes=document.getElementById('cod-notes').value;}
+  else if(game==='roblox'){order=document.getElementById('roblox-order-display').value;pid='GP:'+document.getElementById('roblox-gpid').value+' ('+document.getElementById('roblox-gpname').value+')';ign=document.getElementById('roblox-user').value+'/'+document.getElementById('roblox-dispname').value;notes=document.getElementById('roblox-notes').value;}
+  else if(game==='bs'){order=document.getElementById('bs-order-display').value;pid=document.getElementById('bs-pid').value;ign=document.getElementById('bs-ign').value;notes=document.getElementById('bs-notes').value;}
+  else if(game==='load'){order=document.getElementById('load-order-display').value;pid=document.getElementById('load-number').value;network=document.getElementById('load-network-display').value;notes=document.getElementById('load-notes').value;}
+  else if(game==='custom'){order=document.getElementById('custom-desc').value;pid=document.getElementById('custom-pid').value;ign=document.getElementById('custom-name').value+'/'+document.getElementById('custom-contact').value;notes=document.getElementById('custom-notes').value;}
 
-  const pmVal=document.getElementById('pm-val-'+game).value;
-  const fileInput=document.getElementById(game+'-screenshot');
-  const missingFields=[];
-  if(!pmVal) missingFields.push('Payment Method');
-  if(!fileInput||fileInput.files.length===0) missingFields.push('Payment Receipt');
+  if(!order){showErr(err,'Please select or describe your order first.');return;}
+  if(!pm)   {showErr(err,'Please select a payment method.');return;}
 
-  let fields={};
-  if(game==='mlbb'){
-    const order=document.getElementById('mlbb-order-display').value;
-    const pid=document.getElementById('mlbb-pid').value.trim();
-    const zid=document.getElementById('mlbb-zid').value.trim();
-    const ign=document.getElementById('mlbb-ign').value.trim();
-    if(!order) missingFields.push('Order/Item');
-    if(!pid)   missingFields.push('Player ID');
-    if(!zid)   missingFields.push('Zone ID');
-    if(!ign)   missingFields.push('IGN (verify first)');
-    fields={game:'Mobile Legends (MLBB)',order,playerID:pid,zoneID:zid,ign,server:document.getElementById('mlbb-server').value,notes:document.getElementById('mlbb-notes').value.trim()};
-  } else if(game==='cod'){
-    const order=document.getElementById('cod-order-display').value;
-    const pid=document.getElementById('cod-pid').value.trim();
-    const ign=document.getElementById('cod-ign').value.trim();
-    if(!order) missingFields.push('Order/Item');
-    if(!pid)   missingFields.push('Player ID');
-    if(!ign)   missingFields.push('IGN');
-    fields={game:'Garena Call of Duty',order,playerID:pid,ign,notes:document.getElementById('cod-notes').value.trim()};
-  } else if(game==='roblox'){
-    const order=document.getElementById('roblox-order-display').value;
-    const gpid=document.getElementById('roblox-gpid').value.trim();
-    const gpname=document.getElementById('roblox-gpname').value.trim();
-    const user=document.getElementById('roblox-user').value.trim();
-    if(!order||!gpid||!gpname||!user) missingFields.push('Roblox Details');
-    fields={game:'Roblox',order,gamepassID:gpid,gamepassName:gpname,username:user,notes:document.getElementById('roblox-notes').value.trim()};
-  } else if(game==='bs'){
-    const order=document.getElementById('bs-order-display').value;
-    const pid=document.getElementById('bs-pid').value.trim();
-    const ign=document.getElementById('bs-ign').value.trim();
-    if(!order||!pid||!ign) missingFields.push('Required Details');
-    fields={game:'Bloodstrike',order,playerID:pid,ign,notes:document.getElementById('bs-notes').value.trim()};
-  } else if(game==='load'){
-    const order=document.getElementById('load-order-display').value;
-    const number=document.getElementById('load-number').value.trim();
-    if(!order||!number) missingFields.push('Required Details');
-    fields={game:'Load',order,network:document.getElementById('load-network-display').value,mobileNumber:number,notes:document.getElementById('load-notes').value.trim()};
-  } else if(game==='custom'){
-    const desc=document.getElementById('custom-desc').value.trim();
-    const name=document.getElementById('custom-name').value.trim();
-    const contact=document.getElementById('custom-contact').value.trim();
-    if(!desc||!name||!contact) missingFields.push('Required Details');
-    fields={game:document.getElementById('custom-game').value,orderDescription:desc,customerName:name,contactNumberOrFB:contact,playerID_username:document.getElementById('custom-pid').value.trim(),budget:document.getElementById('custom-budget').value.trim(),notes:document.getElementById('custom-notes').value.trim()};
+  let fileData=null,fileName=null,mimeType=null;
+  if(fi&&fi.files[0]){
+    const f=fi.files[0];
+    if(f.size>4500000){showErr(err,'Screenshot too large (max 4MB).');return;}
+    fileName=f.name;mimeType=f.type;fileData=await toBase64(f);
   }
 
-  if(missingFields.length){ errEl.textContent='⚠️ Please fill in: '+missingFields.join(', '); errEl.style.display='block'; return; }
+  btn.disabled=true;btn.textContent='Sending…';
 
-  const file=fileInput.files[0];
-  if(file.size>4500000){ errEl.textContent='❌ Image too large. Max 4MB.'; errEl.style.display='block'; return; }
+  try{
+    // Get reCAPTCHA token
+    const rcToken=await grecaptcha.execute(RC_SITE_KEY,{action:'submit_order'});
+    const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
+    const txnID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
+    const zoneID=game==='mlbb'?document.getElementById('mlbb-zid').value:'';
+    const payload={
+      action:'order',game:gameName,order,
+      playerID:pid,zoneID,ign,network,notes,
+      paymentMethod:pm,transactionID:txnID,
+      dateTime:new Date().toLocaleString(),
+      recaptchaToken:rcToken,fileData,fileName,mimeType
+    };
+    const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(payload)});
+    const txt=await res.text();
+    if(txt.toLowerCase().includes('success')){
+      document.getElementById('ok-receipt').innerHTML=
+        `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>
+        <b>ID:</b> <span style="color:#fbbf24">${txnID}</span><br>
+        <b>Game:</b> ${gameName}<br><b>Payment:</b> ${pm}<br><b>Order:</b> ${order}`;
+      document.getElementById('ok-msg').style.display='block';
+      document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
+    }else{showErr(err,'Server error: '+txt);}
+  }catch(e){showErr(err,'Network error. Please try again.');}
 
-  btn.disabled=true; btn.textContent='Securely Uploading…';
-  fields.transactionID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
-  fields.dateTime=new Date().toLocaleString();
-  fields.paymentMethod=pmVal;
-
-  const reader=new FileReader();
-  reader.onload=function(e){
-    fields.fileData=e.target.result.split(',')[1];
-    fields.mimeType=file.type;
-    fields.fileName=file.name;
-
-    grecaptcha.ready(function(){
-      grecaptcha.execute(RECAPTCHA_SITE_KEY,{action:'submitOrder'}).then(async function(token){
-        fields.recaptchaToken=token;
-        try{
-          const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(fields),headers:{'Content-Type':'text/plain;charset=utf-8'}});
-          const txt=await res.text();
-          if(txt.includes('Success')){
-            hist.push(Date.now());
-            localStorage.setItem('markShopHistory',JSON.stringify(hist));
-            const orderDisp=(game!=='custom')?(document.getElementById(game+'-order-display')?.value||''):(fields.orderDescription||'');
-            const priceEx=orderDisp.includes('—')?orderDisp.split('—')[1].trim():'See email';
-            document.getElementById('receipt-summary').innerHTML=`
-              <div style="color:var(--or);font-weight:bold;border-bottom:1px solid var(--dk5);padding-bottom:5px;margin-bottom:10px;display:flex;justify-content:space-between">
-                <span>Receipt Summary</span><span style="font-family:monospace;color:#a78bfa">${fields.transactionID}</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Item:</span><span style="text-align:right;max-width:60%">${fields.order||fields.orderDescription||'—'}</span></div>
-              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:var(--mx)">Price:</span><span style="color:#fbbf24;font-weight:bold">${priceEx}</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:var(--mx)">Account:</span><span>${fields.ign||fields.customerName||fields.username||fields.mobileNumber||'Verified ✓'}</span></div>`;
-
-            // FIX: hide panel and tabs properly, track which game was active
-            lastActiveGame = game;
-            document.getElementById('g-'+game).style.display='none';
-            document.querySelector('.gtabs').style.display='none';
-            document.getElementById('ok-msg').style.display='block';
-            window.scrollTo(0,0);
-          } else { throw new Error(txt); }
-        } catch(err){ errEl.textContent='❌ Error: '+err.message; errEl.style.display='block'; btn.disabled=false; btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order'; }
-      });
-    });
-  };
-  reader.readAsDataURL(file);
+  btn.disabled=false;
+  btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
 }
 
-// FIX: resetAll now properly restores the game panel and tabs
-function resetAll(){
-  document.getElementById('ok-msg').style.display='none';
+function showErr(el,msg){el.textContent=msg;el.style.display='block';}
+function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
 
-  // Restore tabs
-  const gtabs = document.querySelector('.gtabs');
-  gtabs.style.display='flex';
-
-  // Restore the previously active game panel
-  document.querySelectorAll('.gpanel').forEach(p => p.style.display='');
-  document.querySelectorAll('.gtab').forEach(t => t.classList.remove('active'));
-  const targetPanel = document.getElementById('g-'+lastActiveGame);
-  const targetTab   = document.querySelector(`.gtab[data-g="${lastActiveGame}"]`);
-  if(targetPanel) targetPanel.style.display='block';
-  if(targetTab)   targetTab.classList.add('active');
-
-  window.scrollTo({top:0,behavior:'smooth'});
+// ============================================================
+// SOCIAL PROOF
+// ============================================================
+const SP=[
+  {ico:'💎',text:'User ***45 bought 500 MLBB Diamonds',t:'2 mins ago'},
+  {ico:'⭐',text:'User ***12 bought Normal Starlight',t:'5 mins ago'},
+  {ico:'🎯',text:'User ***78 bought 100 Garena Shells',t:'8 mins ago'},
+  {ico:'🧱',text:'User ***33 bought 400 Robux',t:'11 mins ago'},
+  {ico:'📶',text:'User ***91 bought Globe GoSURF50',t:'14 mins ago'},
+  {ico:'💎',text:'User ***67 bought 1163 MLBB Diamonds',t:'18 mins ago'},
+  {ico:'🔴',text:'User ***55 bought MARTIS EPIC skin',t:'22 mins ago'},
+  {ico:'⭐',text:'User ***20 bought June NSL Starlight',t:'27 mins ago'},
+];
+let spIdx=0;
+function showSP(){
+  const ev=SP[spIdx%SP.length];spIdx++;
+  const el=document.getElementById('sp-popup');
+  document.getElementById('sp-ico').textContent=ev.ico;
+  document.getElementById('sp-text').textContent=ev.text;
+  document.getElementById('sp-time').textContent=ev.t;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),4000);
 }
-
-// ════════════════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════════════════
-fetchPrices();
+function startSocialProof(){
+  setTimeout(()=>{showSP();setInterval(showSP,18000);},6000);
+}
 </script>
 </body>
 </html>
