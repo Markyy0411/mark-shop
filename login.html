@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark's Shop — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --or:#f97316; --or2:#ea6c0a;
+    --dk:#09090f; --dk2:#111118; --dk3:#1a1a26; --dk4:#22222f; --dk5:#2c2c3e;
+    --tx:#e2e8f0; --mx:#94a3b8; --bdr:rgba(255,255,255,0.06);
+    --gr:#22c55e; --rd:#ef4444; --bl:#3b82f6;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background:var(--dk); color:var(--tx); font-family:'Exo 2',sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(249,115,22,.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 10%, rgba(59,130,246,.05) 0%, transparent 50%);
+  }
+
+  .card {
+    background:linear-gradient(135deg, var(--dk2), rgba(249,115,22,.04));
+    border:1px solid rgba(249,115,22,.2);
+    border-radius:18px;
+    padding:32px 28px;
+    width:100%; max-width:380px;
+    margin:20px;
+    box-shadow:0 25px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(249,115,22,.06);
+  }
+
+  .logo { text-align:center; margin-bottom:24px; }
+  .logo h1 {
+    font-family:'Rajdhani',sans-serif;
+    font-size:1.6rem; font-weight:700;
+    color:var(--or); letter-spacing:3px; text-transform:uppercase;
+  }
+  .logo-sub { font-size:.72rem; color:var(--mx); margin-top:3px; letter-spacing:.5px; }
+
+  .tabs {
+    display:flex; background:var(--dk3); border-radius:10px;
+    padding:3px; margin-bottom:22px; border:1px solid var(--bdr);
+  }
+  .tab {
+    flex:1; padding:9px; text-align:center;
+    font-family:'Rajdhani',sans-serif; font-weight:600;
+    font-size:.88rem; letter-spacing:1px; text-transform:uppercase;
+    color:var(--mx); cursor:pointer; border-radius:8px; transition:all .2s;
+  }
+  .tab.active { background:var(--or); color:#fff; box-shadow:0 4px 12px rgba(249,115,22,.3); }
+
+  .form { display:none; }
+  .form.active { display:block; }
+
+  .fg { margin-bottom:14px; }
+  .fg label {
+    display:block; font-size:.68rem; font-weight:600;
+    letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--mx); margin-bottom:5px;
+  }
+  .fg label .req { color:var(--or); }
+  .fg input {
+    width:100%; background:var(--dk3);
+    border:1px solid var(--dk5); border-radius:8px;
+    padding:10px 13px; color:var(--tx);
+    font-family:'Exo 2',sans-serif; font-size:.9rem;
+    transition:border-color .18s; outline:none;
+  }
+  .fg input:focus { border-color:var(--or); }
+  .fg input::placeholder { color:var(--dk5); }
+
+  .btn {
+    width:100%; padding:13px;
+    background:var(--or); color:#fff; border:none;
+    border-radius:10px; font-family:'Rajdhani',sans-serif;
+    font-size:1.05rem; font-weight:700; letter-spacing:2px;
+    text-transform:uppercase; cursor:pointer; transition:all .2s;
+    margin-top:4px; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn:hover:not(:disabled) { background:var(--or2); transform:translateY(-1px); box-shadow:0 5px 20px rgba(249,115,22,.35); }
+  .btn:disabled { background:var(--dk5); color:var(--mx); cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .msg {
+    border-radius:8px; padding:10px 13px;
+    font-size:.8rem; margin-top:10px; line-height:1.5;
+    text-align:center; display:none;
+  }
+  .msg.err { background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.3); color:var(--rd); display:block; }
+  .msg.ok  { background:rgba(34,197,94,.08);  border:1px solid rgba(34,197,94,.3);  color:var(--gr); display:block; }
+
+  .guest-link {
+    text-align:center; margin-top:16px;
+    font-size:.75rem; color:var(--mx);
+  }
+  .guest-link a { color:var(--bl); text-decoration:none; font-weight:500; }
+  .guest-link a:hover { text-decoration:underline; }
+
+  .spinner {
+    width:15px; height:15px; flex-shrink:0;
+    border:2px solid rgba(255,255,255,.3);
+    border-top-color:#fff; border-radius:50%;
+    animation:spin .6s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo">
+    <h1>⚡ Mark's Shop</h1>
+    <div class="logo-sub">Affordable Top-Ups · Fast Delivery · Trusted</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-login"    onclick="switchTab('login')">Login</div>
+    <div class="tab"        id="tab-register" onclick="switchTab('register')">Register</div>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div class="form active" id="form-login">
+    <div class="fg">
+      <label>Username <span class="req">*</span></label>
+      <input type="text" id="login-user" placeholder="Enter your username" autocomplete="username">
+    </div>
+    <div class="fg">
+      <label>Password <span class="req">*</span></label>
+      <input type="password" id="login-pass" placeholder="Enter your password" autocomplete="current-password">
+    </div>
+    <button class="btn" id="login-btn" onclick="doLogin()">Login to Shop</button>
+    <div class="msg" id="login-msg"></div>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div class="form" id="form-register">
+    <div class="fg">
+      <label>Username <span class="req">*</span></label>
+      <input type="text" id="reg-user" placeholder="Choose a username" autocomplete="username">
+    </div>
+    <div class="fg">
+      <label>Password <span class="req">*</span></label>
+      <input type="password" id="reg-pass" placeholder="Create a password (min. 6 chars)" autocomplete="new-password">
+    </div>
+    <div class="fg">
+      <label>Confirm Password <span class="req">*</span></label>
+      <input type="password" id="reg-pass2" placeholder="Re-enter your password" autocomplete="new-password">
+    </div>
+    <button class="btn" id="reg-btn" onclick="doRegister()">Create Account</button>
+    <div class="msg" id="reg-msg"></div>
+  </div>
+
+  <div class="guest-link">
+    <a href="index.html?guest=1">Continue as Guest (no account needed)</a>
+  </div>
+
+</div>
+
+<script>
+// ================================================================
+// ⚠️  STEP: Paste your Google Apps Script Web App URL below
+//     In your Google Sheet → Extensions → Apps Script
+//     → Deploy → New Deployment → Web App → Copy URL → paste here
+// ================================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbwQeAgSsDPtOvg7SAlMTvKHYRsIGh6I68_7oyz_MO6FWevk767HcEdy0XnYXN_ow2eo_w/exec';
+// ================================================================
+
+// Redirect if already logged in
+(function() {
+  if (localStorage.getItem('ms_user')) window.location.href = 'index.html';
+})();
+
+// ── TAB SWITCHER ─────────────────────────────────────────────
+function switchTab(tab) {
+  ['login','register'].forEach(t => {
+    document.getElementById('tab-'  + t).classList.toggle('active', t === tab);
+    document.getElementById('form-' + t).classList.toggle('active', t === tab);
+  });
+  clearMsg('login-msg');
+  clearMsg('reg-msg');
+}
+
+// ── HELPERS ──────────────────────────────────────────────────
+function showMsg(id, text, type) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'msg ' + type;
+}
+function clearMsg(id) {
+  const el = document.getElementById(id);
+  el.className = 'msg';
+  el.textContent = '';
+}
+function setLoading(btnId, loading, label) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<span class="spinner"></span> Please wait...'
+    : label;
+}
+
+// ── CALL APPS SCRIPT API ──────────────────────────────────────
+async function callAPI(params) {
+  const url = new URL(API_URL);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res  = await fetch(url.toString(), { redirect: 'follow' });
+  const data = await res.json();
+  return data;
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────
+async function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value.trim();
+
+  if (!username || !password) {
+    return showMsg('login-msg', '⚠️ Please enter your username and password.', 'err');
+  }
+
+  setLoading('login-btn', true, 'Login to Shop');
+
+  try {
+    const data = await callAPI({ action: 'login', username, password });
+
+    if (data.ok) {
+      localStorage.setItem('ms_user', data.username);
+      localStorage.setItem('ms_role', data.role || 'user');
+      showMsg('login-msg', '✅ Welcome back, ' + data.username + '! Redirecting...', 'ok');
+      setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    } else {
+      setLoading('login-btn', false, 'Login to Shop');
+      showMsg('login-msg', '❌ ' + (data.error || 'Login failed.'), 'err');
+    }
+
+  } catch (err) {
+    setLoading('login-btn', false, 'Login to Shop');
+    showMsg('login-msg', '⚠️ Could not reach server. Check your connection.', 'err');
+  }
+}
+
+// ── REGISTER ─────────────────────────────────────────────────
+async function doRegister() {
+  const username  = document.getElementById('reg-user').value.trim();
+  const password  = document.getElementById('reg-pass').value.trim();
+  const password2 = document.getElementById('reg-pass2').value.trim();
+
+  if (!username || !password || !password2) {
+    return showMsg('reg-msg', '⚠️ Please fill in all fields.', 'err');
+  }
+  if (username.length < 3) {
+    return showMsg('reg-msg', '⚠️ Username must be at least 3 characters.', 'err');
+  }
+  if (password.length < 6) {
+    return showMsg('reg-msg', '⚠️ Password must be at least 6 characters.', 'err');
+  }
+  if (password !== password2) {
+    return showMsg('reg-msg', '⚠️ Passwords do not match.', 'err');
+  }
+
+  setLoading('reg-btn', true, 'Create Account');
+
+  try {
+    const data = await callAPI({ action: 'register', username, password });
+
+    if (data.ok) {
+      localStorage.setItem('ms_user', data.username);
+      localStorage.setItem('ms_role', data.role || 'user');
+      showMsg('reg-msg', '✅ Account created! Redirecting to shop...', 'ok');
+      setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    } else {
+      setLoading('reg-btn', false, 'Create Account');
+      showMsg('reg-msg', '❌ ' + (data.error || 'Registration failed.'), 'err');
+    }
+
+  } catch (err) {
+    setLoading('reg-btn', false, 'Create Account');
+    showMsg('reg-msg', '⚠️ Could not reach server. Check your connection.', 'err');
+  }
+}
+
+// ── ENTER KEY ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const loginActive = document.getElementById('form-login').classList.contains('active');
+  if (loginActive) doLogin(); else doRegister();
+});
+</script>
+
+</body>
+</html>
