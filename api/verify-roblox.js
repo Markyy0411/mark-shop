@@ -2,7 +2,7 @@
 // Vercel Serverless Function — Roblox Username Verification
 // Uses Roblox's official public API (no key needed)
 
-export default async function handler(req, res) {
+module.exports = async function (req, res) {
  res.setHeader('Access-Control-Allow-Origin', 'https://mark-shop-beryl.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
