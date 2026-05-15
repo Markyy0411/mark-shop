@@ -1,7 +1,7 @@
 // api/verify-cod.js
 // Vercel Serverless Function — Call of Duty Mobile Player Verification
 
-export default async function handler(req, res) {
+module.exports = async function (req, res) {
   // Allow the frontend to talk to this backend
   res.setHeader('Access-Control-Allow-Origin', 'https://mark-shop-beryl.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
