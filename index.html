@@ -954,14 +954,23 @@ function openTrackModal(){document.getElementById('track-input').value='';docume
 // ============================================================
 async function fetchPrices(){
   try{
-    const r=await fetch(PRICE_API+'?action=getPrices'); if(!r.ok)throw new Error();
-    DATA=await r.json(); buildAll(); updateStatus(DATA._status||'online');
+    const r=await fetch(PRICE_API+'?action=getPrices');
+    if(!r.ok)throw new Error();
+    const json=await r.json();
+    // Transform flat array into the nested DATA structure buildAll() expects
+    DATA={};
+    json.prices.forEach(item=>{
+      const g=item.game, c=item.category;
+      if(!DATA[g])DATA[g]={};
+      if(!DATA[g][c])DATA[g][c]=[];
+      DATA[g][c].push({n:item.name, p:item.price, d:item.description||''});
+    });
+    buildAll(); updateStatus(json.status||'online');
   }catch(e){
     document.querySelectorAll('.loading-grid').forEach(el=>{el.textContent='⚠️ Could not load prices. Refresh to try again.';});
     updateStatus('offline');
   }
 }
-
 // ── FIX 5: updateStatus uses #status-pill (which EXISTS in DOM) not #live-status
 function updateStatus(st){
   const pill=document.getElementById('status-pill');
