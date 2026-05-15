@@ -266,20 +266,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <body>
 
 <!-- ── AUTH SCREEN ── -->
-<div id="auth-screen">
-  <div class="auth-logo">MARK'S <span>SHOP</span></div>
-  <div class="auth-card">
-    <h3>👋 Welcome, Player!</h3>
-    <p>Login or create an account to access the fastest top-up shop.</p>
+<div id="auth-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dk2); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; font-family: 'Rajdhani', sans-serif;">
+  
+  <div style="margin-bottom: 25px; font-size: 3rem; color: var(--tx); font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">
+    MARK'S <span style="color: var(--or);">SHOP</span>
+  </div>
+  
+  <div style="background: var(--dk3); padding: 35px 30px; border-radius: 16px; border: 1px solid var(--dk5); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6);">
+    <h3 style="color: var(--tx); margin-bottom: 8px; font-size: 1.5rem;">👋 Welcome, Player!</h3>
+    <p style="color: var(--mx); margin-bottom: 30px; font-size: 0.95rem; font-family: 'Exo 2', sans-serif;">Login or create an account to access the fastest top-up shop.</p>
 
-    <input type="text" id="auth-user" class="auth-input" placeholder="Username" autocomplete="username" autocapitalize="none">
-    <input type="password" id="auth-pass" class="auth-input" placeholder="Password" autocomplete="current-password">
+    <div style="margin-bottom: 15px;">
+      <input type="text" id="auth-user" placeholder="Username" style="text-align: center; font-family: 'Exo 2', sans-serif; font-size: 1rem; width: 100%; padding: 14px; background: var(--dk4); border: 1px solid var(--dk5); color: var(--tx); border-radius: 10px; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--dk5)'">
+    </div>
+    
+    <div style="margin-bottom: 25px;">
+      <input type="password" id="auth-pass" placeholder="Password" style="text-align: center; font-family: 'Exo 2', sans-serif; font-size: 1rem; width: 100%; padding: 14px; background: var(--dk4); border: 1px solid var(--dk5); color: var(--tx); border-radius: 10px; outline: none; transition: 0.3s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--dk5)'">
+    </div>
 
-    <button id="btn-login" class="btn-login" onclick="handleAuth('login')">Login to Shop</button>
-    <div class="auth-divider">or</div>
-    <button id="btn-register" class="btn-register" onclick="handleAuth('register')">Create Account</button>
-
-    <div id="auth-error" class="auth-error"></div>
+    <button id="btn-login" onclick="handleAuth('login')" style="width: 100%; padding: 14px; background: var(--or); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 15px; transition: 0.2s; font-family: 'Rajdhani', sans-serif;" onmouseover="this.style.background='var(--or2)'" onmouseout="this.style.background='var(--or)'">LOGIN TO SHOP</button>
+    
+    <button id="btn-register" onclick="handleAuth('register')" style="width: 100%; padding: 14px; background: transparent; color: var(--or); border: 1px solid var(--or); border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: 'Exo 2', sans-serif;" onmouseover="this.style.background='rgba(249,115,22,0.1)'" onmouseout="this.style.background='transparent'">Create New Account</button>
+    
+    <div id="auth-error" style="color: #ef4444; margin-top: 20px; font-size: 0.9rem; display: none; font-weight: 600; background: rgba(239,68,68,0.1); padding: 10px; border-radius: 8px; font-family: 'Exo 2', sans-serif;"></div>
   </div>
 </div>
 
