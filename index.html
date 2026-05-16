@@ -960,12 +960,12 @@ async function fetchPrices(){
     // Transform flat array into the nested DATA structure buildAll() expects
     DATA={};
     json.prices.forEach(item=>{
-      const g=item.game, c=item.category;
+      const g=item.game.trim().toLowerCase(), c=item.category.trim().toLowerCase();
       if(!DATA[g])DATA[g]={};
       if(!DATA[g][c])DATA[g][c]=[];
       DATA[g][c].push({n:item.name, p:item.price, d:item.description||''});
     });
-    buildAll(); updateStatus(json.status||'online');
+    DATA.status=json.status||'online'; buildAll(); updateStatus(DATA.status);
   }catch(e){
     document.querySelectorAll('.loading-grid').forEach(el=>{el.textContent='⚠️ Could not load prices. Refresh to try again.';});
     updateStatus('offline');
