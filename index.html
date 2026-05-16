@@ -1135,6 +1135,9 @@ function selectCC(el){
 // ============================================================
 // VERIFY APIs
 // ============================================================
+// ============================================================
+// VERIFY APIs (Fixed to use Vercel Backend)
+// ============================================================
 async function verifyMLBB(){
   const pid=document.getElementById('mlbb-pid').value.trim();
   const zid=document.getElementById('mlbb-zid').value.trim();
@@ -1142,31 +1145,41 @@ async function verifyMLBB(){
   if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
   ign.value='Verifying…';
   try{
-    const r=await fetch(`https://api.gameofthrones.life/moonton/user?userId=${pid}&zoneId=${zid}`);
+    // Calling your custom Vercel MLBB API
+    const r=await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
     const d=await r.json();
-    const name=d.name||d.username||d.nickName;
-    if(name){ign.value=name;ign.style.borderColor='var(--gr)';ign.removeAttribute('readonly');}
+    if(d.ign){ign.value=d.ign;ign.style.borderColor='var(--gr)';ign.removeAttribute('readonly');}
     else{ign.value='';ign.removeAttribute('readonly');ign.placeholder='Not found — type IGN manually';}
   }catch(e){ign.value='';ign.removeAttribute('readonly');ign.placeholder='Verify unavailable — type manually';}
 }
+
 async function verifyCOD(){
+  const pid=document.getElementById('cod-pid').value.trim();
   const ign=document.getElementById('cod-ign');
-  ign.value='Manual entry required';ign.removeAttribute('readonly');
+  if(!pid){alert('Enter Player ID first.');return;}
+  ign.value='Verifying…';
+  try{
+    // Calling your custom Vercel CoD API
+    const r=await fetch(`/api/verify-cod?id=${pid}`);
+    const d=await r.json();
+    if(d.ign){ign.value=d.ign;ign.style.borderColor='var(--gr)';ign.removeAttribute('readonly');}
+    else{ign.value='';ign.removeAttribute('readonly');ign.placeholder='Not found — type IGN manually';}
+  }catch(e){ign.value='';ign.removeAttribute('readonly');ign.placeholder='Verify unavailable — type manually';}
 }
+
 async function verifyRoblox(){
   const u=document.getElementById('roblox-user').value.trim();
   const disp=document.getElementById('roblox-dispname');
   if(!u){alert('Enter Roblox username first.');return;}
   disp.value='Verifying…';
   try{
-    const r=await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(u)}`);
+    // Calling your custom Vercel Roblox API
+    const r=await fetch(`/api/verify-roblox?username=${encodeURIComponent(u)}`);
     const d=await r.json();
-    const name=d.Username||d.username;
-    if(name){disp.value=name;disp.style.borderColor='var(--gr)';}
+    if(d.ign){disp.value=d.ign;disp.style.borderColor='var(--gr)';}
     else{disp.value='';disp.placeholder='Not found — type manually';}
   }catch(e){disp.value='';disp.placeholder='Verify unavailable — type manually';}
 }
-
 // ============================================================
 // ORDER TRACKER
 // ============================================================
