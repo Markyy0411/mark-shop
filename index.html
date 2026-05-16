@@ -351,7 +351,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       🪙 <span id="coins-count">0</span> MarkCoins
     </div>
     <!-- Logout — shown when logged in -->
-    <button class="logout-btn" id="logout-btn" style="display:none" onclick="logout()">Logout</button>
+    <button class="logout-btn" id="logout-btn" style="display:none" onclick="doLogout()">Logout</button>
     <!-- Track order button -->
     <div class="track-btn" onclick="openTrackModal()">🔍 Track Order</div>
   </div>
@@ -1042,9 +1042,9 @@ function buildAll(){
     makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,'mlbb','skins');
     makeGrid('grid-mlbb-starlight',filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight),'mlbb','starlight');
   }
-  if(DATA.cod)    makeGrid('grid-cod',DATA.cod,'cod','main');
-  if(DATA.roblox) makeGrid('grid-roblox',DATA.roblox,'roblox','main');
-  if(DATA.bs)     makeGrid('grid-bs',DATA.bs,'bs','main');
+  if(DATA.cod&&DATA.cod.main)    makeGrid('grid-cod',DATA.cod.main,'cod','main');
+  if(DATA.roblox&&DATA.roblox.main) makeGrid('grid-roblox',DATA.roblox.main,'roblox','main');
+  if(DATA.bs&&DATA.bs.main)     makeGrid('grid-bs',DATA.bs.main,'bs','main');
   if(DATA.load){
     Object.keys(DATA.load).forEach(net=>{
       const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
@@ -1300,18 +1300,16 @@ function startSocialProof(){
   <script>
 (function() {
   var user = localStorage.getItem('ms_user');
-  var bar  = document.getElementById('hdr-user-bar');
-  var nameEl = document.getElementById('hdr-username');
-  if (user) {
-    nameEl.textContent = user;
-  } else {
-    if (bar) bar.style.display = 'none';
+  // Sync localStorage session into sessionStorage so existing SESSION logic works
+  if (user && !sessionStorage.getItem('markshop_user')) {
+    sessionStorage.setItem('markshop_user', JSON.stringify({ username: user, role: localStorage.getItem('ms_role')||'user' }));
   }
 })();
 
 function doLogout() {
   localStorage.removeItem('ms_user');
   localStorage.removeItem('ms_role');
+  sessionStorage.removeItem('markshop_user');
   window.location.href = 'login.html';
 }
 </script>
