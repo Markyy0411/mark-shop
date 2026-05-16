@@ -296,9 +296,19 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <body>
   <script>
 (function() {
-  var guest    = new URLSearchParams(window.location.search).get('guest') === '1';
-  var loggedIn = localStorage.getItem('ms_user');
+  var guest      = new URLSearchParams(window.location.search).get('guest') === '1';
+  var lsUser     = localStorage.getItem('ms_user');
+  var ssUser     = sessionStorage.getItem('markshop_user');
+  var loggedIn   = lsUser || ssUser;
   if (!loggedIn && !guest) window.location.replace('login.html');
+  // Sync localStorage → sessionStorage so SESSION variable picks it up
+  if (lsUser && !ssUser) {
+    sessionStorage.setItem('markshop_user', JSON.stringify({
+      username: lsUser,
+      role: localStorage.getItem('ms_role') || 'user',
+      mlbbId:'', mlbbZone:'', markcoins:0
+    }));
+  }
 })();
 </script>
 
@@ -374,8 +384,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="ctabs" id="mlbb-ctabs">
       <div class="ctab promo-tab" data-c="mlbb-promos">🔥 Promos</div>
       <div class="ctab active"   data-c="mlbb-dias">💎 Diamonds</div>
-      <div class="ctab" data-c="mlbb-denom">📦 Denom. Dias</div>
-      <div class="ctab" data-c="mlbb-combo">🔢 Combinations</div>
+
       <div class="ctab" data-c="mlbb-dd">2x Diamond</div>
       <div class="ctab" data-c="mlbb-bundles">🎁 Bundles & WDP</div>
       <div class="ctab" data-c="mlbb-skins">🎨 Skins & Events</div>
@@ -454,8 +463,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   </div>
 
   <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading…</div></div></div>
-  <div class="cpanel" id="mlbb-denom"><div class="slbl">Denomination Diamonds</div><div class="pgrid" id="grid-mlbb-denom"><div class="loading-grid">Loading…</div></div></div>
-  <div class="cpanel" id="mlbb-combo"><div class="slbl">Diamond Combinations</div><div class="alert-box">💡 Multiple denomination purchases to hit the exact count at a better rate.</div><div class="pgrid" id="grid-mlbb-combo"><div class="loading-grid">Loading…</div></div></div>
+
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus)</div>
     <div style="background:rgba(239,68,68,.1);border:1.5px solid rgba(239,68,68,.4);border-radius:12px;padding:14px;margin-bottom:12px">
@@ -808,7 +816,7 @@ async function handleAuth() {
   const btn  = document.getElementById('auth-submit-btn');
   const err  = document.getElementById('auth-err');
   const user = document.getElementById('auth-username').value.trim();
-  const pass = document.getElementById('auth-password').value.trim();
+  const pass = document.getElementById('auth-password').value; // no trim — passwords can have spaces
   err.textContent = '';
   if (!user || !pass) { err.textContent = 'Please fill in both fields.'; return; }
   btn.disabled = true; btn.textContent = 'Please wait…';
@@ -868,6 +876,8 @@ function enterShop() {
 function logout() {
   SESSION = null;
   sessionStorage.removeItem('markshop_user');
+  localStorage.removeItem('ms_user');
+  localStorage.removeItem('ms_role');
   // Hide shop, show auth
   document.getElementById('shop-wrapper').style.display = 'none';
   document.getElementById('auth-screen').classList.remove('hidden');
@@ -1034,8 +1044,7 @@ function buildAll(){
   if(!DATA||!Object.keys(DATA).length)return;
   if(DATA.mlbb){
     makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
-    makeGrid('grid-mlbb-denom',DATA.mlbb.denom||DATA.mlbb.Denom,'mlbb','denom');
-    makeGrid('grid-mlbb-combo',DATA.mlbb.combo||DATA.mlbb.Combo,'mlbb','combo');
+
     makeGrid('grid-mlbb-dd',DATA.mlbb.dd||DATA.mlbb.DD,'mlbb','dd');
     makeGrid('grid-mlbb-bundles',DATA.mlbb.bundles||DATA.mlbb.Bundles,'mlbb','bundles');
     makeGrid('grid-mlbb-skins-cosmo',DATA.mlbb.skinsc||DATA.mlbb.SkinsC,'mlbb','skins');
@@ -1242,7 +1251,7 @@ async function submitOrder(game){
     // Get reCAPTCHA token
     const rcToken=await grecaptcha.execute(RC_SITE_KEY,{action:'submit_order'});
     const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
-    const txnID='TXN-'+Math.random().toString(36).substr(2,7).toUpperCase();
+    const txnID='TXN-'+(crypto.randomUUID?crypto.randomUUID().replace(/-/g,'').substr(0,8).toUpperCase():Math.random().toString(36).substr(2,8).toUpperCase());
     const zoneID=game==='mlbb'?document.getElementById('mlbb-zid').value:'';
     const payload={
       action:'order',game:gameName,order,
@@ -1254,10 +1263,12 @@ async function submitOrder(game){
     const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(payload)});
     const txt=await res.text();
     if(txt.toLowerCase().includes('success')){
+      // Safe: use textContent for user-supplied values to prevent XSS
+      const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       document.getElementById('ok-receipt').innerHTML=
         `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>
-        <b>ID:</b> <span style="color:#fbbf24">${txnID}</span><br>
-        <b>Game:</b> ${gameName}<br><b>Payment:</b> ${pm}<br><b>Order:</b> ${order}`;
+        <b>ID:</b> <span style="color:#fbbf24">${esc(txnID)}</span><br>
+        <b>Game:</b> ${esc(gameName)}<br><b>Payment:</b> ${esc(pm)}<br><b>Order:</b> ${esc(order)}`;
       document.getElementById('ok-msg').style.display='block';
       document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
     }else{showErr(err,'Server error: '+txt);}
@@ -1307,6 +1318,7 @@ function startSocialProof(){
 })();
 
 function doLogout() {
+  SESSION = null;
   localStorage.removeItem('ms_user');
   localStorage.removeItem('ms_role');
   sessionStorage.removeItem('markshop_user');
