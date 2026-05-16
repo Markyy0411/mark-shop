@@ -203,9 +203,11 @@ function setLoading(btnId, loading, label) {
 
 // ── CALL APPS SCRIPT API ──────────────────────────────────────
 async function callAPI(params) {
-  const url = new URL(API_URL);
-  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const res  = await fetch(url.toString(), { redirect: 'follow' });
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    body: JSON.stringify(params),
+    redirect: 'follow'
+  });
   const data = await res.json();
   return data;
 }
@@ -224,7 +226,7 @@ async function doLogin() {
   try {
     const data = await callAPI({ action: 'login', username, password });
 
-    if (data.ok) {
+    if (data.success) {
       localStorage.setItem('ms_user', data.username);
       localStorage.setItem('ms_role', data.role || 'user');
       showMsg('login-msg', '✅ Welcome back, ' + data.username + '! Redirecting...', 'ok');
@@ -264,7 +266,7 @@ async function doRegister() {
   try {
     const data = await callAPI({ action: 'register', username, password });
 
-    if (data.ok) {
+    if (data.success) {
       localStorage.setItem('ms_user', data.username);
       localStorage.setItem('ms_role', data.role || 'user');
       showMsg('reg-msg', '✅ Account created! Redirecting to shop...', 'ok');
