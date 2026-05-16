@@ -296,12 +296,10 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 <body>
   <script>
 (function() {
-  var guest      = new URLSearchParams(window.location.search).get('guest') === '1';
-  var lsUser     = localStorage.getItem('ms_user');
-  var ssUser     = sessionStorage.getItem('markshop_user');
-  var loggedIn   = lsUser || ssUser;
-  if (!loggedIn && !guest) window.location.replace('login.html');
-  // Sync localStorage → sessionStorage so SESSION variable picks it up
+  // If already logged in via localStorage, sync to sessionStorage
+  // so SESSION variable auto-loads and skips the auth screen
+  var lsUser = localStorage.getItem('ms_user');
+  var ssUser = sessionStorage.getItem('markshop_user');
   if (lsUser && !ssUser) {
     sessionStorage.setItem('markshop_user', JSON.stringify({
       username: lsUser,
