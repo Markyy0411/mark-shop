@@ -997,7 +997,7 @@ async function loadFreshPrices(silent){
       const g=item.game.trim().toLowerCase(),c=item.category.trim().toLowerCase();
       if(!d[g])d[g]={};
       if(!d[g][c])d[g][c]=[];
-      d[g][c].push({n:item.name,p:item.price,desc:item.description||''});
+      d[g][c].push({n:item.name,p:item.price,d:item.description||''});
     });
     d._status=json.status||'online';
     try{ localStorage.setItem(PRICE_CACHE_KEY,JSON.stringify({data:d,ts:Date.now()})); }catch(_){}
