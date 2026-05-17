@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mark Guevarra | Game Top-Up Shop</title>
+<title>Mark's Game Shop — MLBB, CoD, Roblox Top-Up Philippines</title>
+<meta name="description" content="Affordable game top-ups in the Philippines. MLBB Diamonds, Garena Shells, Robux, Bloodstrike Golds, and Load. Fast delivery, trusted seller.">
+<meta property="og:title" content="Mark's Game Shop — Affordable Top-Ups PH">
+<meta property="og:description" content="Fast & trusted game top-up shop. MLBB, CoD, Roblox, Bloodstrike & Load. Delivery 1-5 mins.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mark-shop-beryl.vercel.app">
+<meta name="theme-color" content="#f97316">
 <script src="https://www.google.com/recaptcha/api.js?render=6LfHPOksAAAAK9cMdUlxE1e68vrm-DcnLebVekR"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -359,7 +365,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       🪙 <span id="coins-count">0</span> MarkCoins
     </div>
     <!-- Logout — shown when logged in -->
-    <button class="logout-btn" id="logout-btn" style="display:none" onclick="doLogout()">Logout</button>
+    <button class="logout-btn" id="logout-btn" style="display:none" onclick="logout()">Logout</button>
     <!-- Track order button -->
     <div class="track-btn" onclick="openTrackModal()">🔍 Track Order</div>
   </div>
@@ -505,7 +511,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-mlbb" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="mlbb-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="mlbb-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
     <div class="err-msg" id="mlbb-err"></div>
   </div>
@@ -537,7 +543,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="cod-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="cod-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
     <div class="err-msg" id="cod-err"></div>
   </div>
@@ -572,7 +578,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="roblox-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="roblox-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
     <div class="err-msg" id="roblox-err"></div>
   </div>
@@ -602,7 +608,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-bs" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="bs-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="bs-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="bs-btn" onclick="submitOrder('bs')">Submit Order</button>
     <div class="err-msg" id="bs-err"></div>
   </div>
@@ -651,7 +657,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-load" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="load-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="load-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub" id="load-btn" onclick="submitOrder('load')">Submit Order</button>
     <div class="err-msg" id="load-err"></div>
   </div>
@@ -697,7 +703,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
         <div id="pm-note-custom" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="custom-screenshot" accept="image/*" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
+    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="custom-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
     <button class="btn-sub custom-btn" id="custom-btn" onclick="submitOrder('custom')">🛎️ Send Custom Request</button>
     <div class="err-msg" id="custom-err"></div>
     <div style="font-size:.7rem;color:#7c6fa0;text-align:center;margin-top:12px;line-height:1.6">⚠️ Custom orders are <b style="color:#a78bfa">not confirmed</b> until Mark personally replies.</div>
@@ -960,25 +966,53 @@ function openTrackModal(){document.getElementById('track-input').value='';docume
 // ============================================================
 // FETCH PRICES + STATUS
 // ============================================================
+// Priority 4 — PRICE CACHING (15 min localStorage cache)
+const PRICE_CACHE_KEY='markshop_prices';
+const PRICE_CACHE_TTL=15*60*1000;
+
 async function fetchPrices(){
+  const cached=getCachedPrices();
+  if(cached){ applyPriceData(cached); loadFreshPrices(true); return; }
+  await loadFreshPrices(false);
+}
+
+function getCachedPrices(){
+  try{
+    const raw=localStorage.getItem(PRICE_CACHE_KEY);
+    if(!raw)return null;
+    const {data,ts}=JSON.parse(raw);
+    if(Date.now()-ts>PRICE_CACHE_TTL)return null;
+    return data;
+  }catch(_){return null;}
+}
+
+async function loadFreshPrices(silent){
   try{
     const r=await fetch(PRICE_API+'?action=getPrices');
     if(!r.ok)throw new Error();
     const json=await r.json();
-    // Transform flat array into the nested DATA structure buildAll() expects
-    DATA={};
+    if(!json.success||!json.prices)throw new Error();
+    const d={};
     json.prices.forEach(item=>{
-      const g=item.game.trim().toLowerCase(), c=item.category.trim().toLowerCase();
-      if(!DATA[g])DATA[g]={};
-      if(!DATA[g][c])DATA[g][c]=[];
-      DATA[g][c].push({n:item.name, p:item.price, d:item.description||''});
+      const g=item.game.trim().toLowerCase(),c=item.category.trim().toLowerCase();
+      if(!d[g])d[g]={};
+      if(!d[g][c])d[g][c]=[];
+      d[g][c].push({n:item.name,p:item.price,desc:item.description||''});
     });
-    DATA.status=json.status||'online'; buildAll(); updateStatus(DATA.status);
+    d._status=json.status||'online';
+    try{ localStorage.setItem(PRICE_CACHE_KEY,JSON.stringify({data:d,ts:Date.now()})); }catch(_){}
+    applyPriceData(d);
   }catch(e){
-    document.querySelectorAll('.loading-grid').forEach(el=>{el.textContent='⚠️ Could not load prices. Refresh to try again.';});
-    updateStatus('offline');
+    if(!silent){
+      document.querySelectorAll('.loading-grid').forEach(el=>{
+        el.innerHTML='⚠️ Could not load prices. <span style="color:var(--or);cursor:pointer;text-decoration:underline" onclick="fetchPrices()">Retry</span>';
+      });
+      updateStatus('offline');
+    }
   }
 }
+
+function applyPriceData(d){ DATA=d; buildAll(); updateStatus(d._status||'online'); }
 // ── FIX 5: updateStatus uses #status-pill (which EXISTS in DOM) not #live-status
 function updateStatus(st){
   const pill=document.getElementById('status-pill');
@@ -1236,42 +1270,65 @@ async function submitOrder(game){
   if(!order){showErr(err,'Please select or describe your order first.');return;}
   if(!pm)   {showErr(err,'Please select a payment method.');return;}
 
-  let fileData=null,fileName=null,mimeType=null;
+  // Priority 2: Require receipt for all non-custom orders
+  if(game!=='custom'&&(!fi||!fi.files[0])){
+    showErr(err,'Please upload your payment receipt.');return;
+  }
+  // Validate file type
   if(fi&&fi.files[0]){
     const f=fi.files[0];
     if(f.size>4500000){showErr(err,'Screenshot too large (max 4MB).');return;}
-    fileName=f.name;mimeType=f.type;fileData=await toBase64(f);
+    if(!f.type.startsWith('image/')){showErr(err,'Please upload an image file.');return;}
   }
 
   btn.disabled=true;btn.textContent='Sending…';
 
   try{
-    // Get reCAPTCHA token
     const rcToken=await grecaptcha.execute(RC_SITE_KEY,{action:'submit_order'});
     const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
     const txnID='TXN-'+(crypto.randomUUID?crypto.randomUUID().replace(/-/g,'').substr(0,8).toUpperCase():Math.random().toString(36).substr(2,8).toUpperCase());
     const zoneID=game==='mlbb'?document.getElementById('mlbb-zid').value:'';
+
+    // Priority 2: NO fileData/base64 in payload — just a flag
     const payload={
-      action:'order',game:gameName,order,
-      playerID:pid,zoneID,ign,network,notes,
-      paymentMethod:pm,transactionID:txnID,
+      action:'order', game:gameName, order,
+      playerID:pid, zoneID, ign, network, notes,
+      paymentMethod:pm, transactionID:txnID,
+      username: SESSION ? SESSION.username : 'guest',
       dateTime:new Date().toLocaleString(),
-      recaptchaToken:rcToken,fileData,fileName,mimeType
+      recaptchaToken:rcToken,
+      hasReceipt: !!(fi&&fi.files[0]),
+      fileName: fi&&fi.files[0] ? fi.files[0].name : ''
     };
+
     const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(payload)});
-    const txt=await res.text();
-    if(txt.toLowerCase().includes('success')){
-      // Safe: use textContent for user-supplied values to prevent XSS
+
+    // Priority 2: Parse JSON properly, not fragile text check
+    let data;
+    try{ data=await res.json(); } catch(_){ throw new Error('Invalid server response'); }
+
+    if(data.success){
       const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       document.getElementById('ok-receipt').innerHTML=
-        `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>
-        <b>ID:</b> <span style="color:#fbbf24">${esc(txnID)}</span><br>
-        <b>Game:</b> ${esc(gameName)}<br><b>Payment:</b> ${esc(pm)}<br><b>Order:</b> ${esc(order)}`;
+        `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>`+
+        `<b>ID:</b> <span id="txn-copy-id" style="color:#fbbf24;cursor:pointer" title="Click to copy">${esc(txnID)}</span> 📋<br>`+
+        `<b>Game:</b> ${esc(gameName)}<br><b>Payment:</b> ${esc(pm)}<br><b>Order:</b> ${esc(order)}`;
       document.getElementById('ok-msg').style.display='block';
       document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
-    }else{showErr(err,'Server error: '+txt);}
+      // Priority 2: copy TXN on click
+      setTimeout(()=>{
+        const el=document.getElementById('txn-copy-id');
+        if(el) el.addEventListener('click',()=>{
+          navigator.clipboard.writeText(txnID).then(()=>{ el.textContent=txnID+' ✅'; });
+        });
+      },100);
+      return; // Priority 2: don't re-enable button on success
+    } else {
+      showErr(err, data.error||'Server error. Please try again.');
+    }
   }catch(e){showErr(err,'Network error. Please try again.');}
 
+  // Only re-enable on failure
   btn.disabled=false;
   btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
 }
@@ -1306,22 +1363,6 @@ function startSocialProof(){
   setTimeout(()=>{showSP();setInterval(showSP,18000);},6000);
 }
 </script>
-  <script>
-(function() {
-  var user = localStorage.getItem('ms_user');
-  // Sync localStorage session into sessionStorage so existing SESSION logic works
-  if (user && !sessionStorage.getItem('markshop_user')) {
-    sessionStorage.setItem('markshop_user', JSON.stringify({ username: user, role: localStorage.getItem('ms_role')||'user' }));
-  }
-})();
 
-function doLogout() {
-  SESSION = null;
-  localStorage.removeItem('ms_user');
-  localStorage.removeItem('ms_role');
-  sessionStorage.removeItem('markshop_user');
-  window.location.href = 'login.html';
-}
-</script>
 </body>
 </html>
