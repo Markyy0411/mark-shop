@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mark-shop-beryl.vercel.app">
 <meta name="theme-color" content="#f97316">
-<script src="https://www.google.com/recaptcha/api.js?render=6LfHPOksAAAAK9cMdUlxE1e68vrm-DcnLebVekR"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -792,7 +792,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 // ============================================================
 const ORDER_API = 'https://script.google.com/macros/s/AKfycbymHhomzky-F8dLk1Fx42V7JadjA8wvhYUdiDydv7dqCSXhD86yFsK50DbW9Atx4AUCgA/exec';
 const PRICE_API = 'https://script.google.com/macros/s/AKfycbymHhomzky-F8dLk1Fx42V7JadjA8wvhYUdiDydv7dqCSXhD86yFsK50DbW9Atx4AUCgA/exec';
-const RC_SITE_KEY = '6LfHPOksAAAAK9cMdUlxE1e68vrm-DcnLebVekR';
+
 
 // ============================================================
 // SESSION — stores logged-in user in sessionStorage
@@ -997,7 +997,7 @@ async function loadFreshPrices(silent){
       const g=item.game.trim().toLowerCase(),c=item.category.trim().toLowerCase();
       if(!d[g])d[g]={};
       if(!d[g][c])d[g][c]=[];
-      d[g][c].push({n:item.name,p:item.price,d:item.description||''});
+      d[g][c].push({n:item.name,p:item.price,desc:item.description||''});
     });
     d._status=json.status||'online';
     try{ localStorage.setItem(PRICE_CACHE_KEY,JSON.stringify({data:d,ts:Date.now()})); }catch(_){}
@@ -1284,45 +1284,66 @@ async function submitOrder(game){
   btn.disabled=true;btn.textContent='Sending…';
 
   try{
-    const rcToken=await grecaptcha.execute(RC_SITE_KEY,{action:'submit_order'});
+
     const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
     const txnID='TXN-'+(crypto.randomUUID?crypto.randomUUID().replace(/-/g,'').substr(0,8).toUpperCase():Math.random().toString(36).substr(2,8).toUpperCase());
     const zoneID=game==='mlbb'?document.getElementById('mlbb-zid').value:'';
 
-    // Priority 2: NO fileData/base64 in payload — just a flag
+    // Get price from selected item for MarkCoins calculation
+    const priceEl=document.getElementById(game+'-sel-price')||document.getElementById('load-sel-price');
+    const rawPrice=priceEl?priceEl.textContent.replace(/[^0-9.]/g,''):'0';
+    const orderPrice=parseFloat(rawPrice)||0;
+
     const payload={
       action:'order', game:gameName, order,
       playerID:pid, zoneID, ign, network, notes,
       paymentMethod:pm, transactionID:txnID,
       username: SESSION ? SESSION.username : 'guest',
+      orderPrice: orderPrice,
       dateTime:new Date().toLocaleString(),
-      recaptchaToken:rcToken,
       hasReceipt: !!(fi&&fi.files[0]),
       fileName: fi&&fi.files[0] ? fi.files[0].name : ''
     };
 
-    const res=await fetch(ORDER_API,{method:'POST',body:JSON.stringify(payload)});
-
-    // Priority 2: Parse JSON properly, not fragile text check
     let data;
-    try{ data=await res.json(); } catch(_){ throw new Error('Invalid server response'); }
+    try{
+      const res=await fetch(ORDER_API,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload),
+        redirect:'follow'
+      });
+      data=await res.json();
+    }catch(fetchErr){
+      showErr(err,'Could not reach server. Check your connection and try again.');
+      btn.disabled=false;
+      btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
+      return;
+    }
 
     if(data.success){
       const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const earned = data.coinsEarned || 0;
+      const newTotal = data.newCoinTotal || 0;
+      if(SESSION && SESSION.username !== 'Guest' && earned > 0){
+        SESSION.markcoins = newTotal;
+        saveSession(SESSION);
+        document.getElementById('coins-count').textContent = newTotal;
+      }
       document.getElementById('ok-receipt').innerHTML=
         `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>`+
         `<b>ID:</b> <span id="txn-copy-id" style="color:#fbbf24;cursor:pointer" title="Click to copy">${esc(txnID)}</span> 📋<br>`+
-        `<b>Game:</b> ${esc(gameName)}<br><b>Payment:</b> ${esc(pm)}<br><b>Order:</b> ${esc(order)}`;
+        `<b>Game:</b> ${esc(gameName)}<br><b>Payment:</b> ${esc(pm)}<br><b>Order:</b> ${esc(order)}`+
+        (earned>0?`<br><br><span style="color:#fbbf24;font-weight:600">🪙 +${earned} MarkCoins earned! Total: ${newTotal}</span>`:'');
       document.getElementById('ok-msg').style.display='block';
       document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
-      // Priority 2: copy TXN on click
       setTimeout(()=>{
         const el=document.getElementById('txn-copy-id');
         if(el) el.addEventListener('click',()=>{
           navigator.clipboard.writeText(txnID).then(()=>{ el.textContent=txnID+' ✅'; });
         });
       },100);
-      return; // Priority 2: don't re-enable button on success
+      return;
     } else {
       showErr(err, data.error||'Server error. Please try again.');
     }
