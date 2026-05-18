@@ -1184,42 +1184,75 @@ async function verifyMLBB(){
   const zid=document.getElementById('mlbb-zid').value.trim();
   const ign=document.getElementById('mlbb-ign');
   if(!pid||!zid){alert('Enter Player ID and Zone ID first.');return;}
-  ign.value='Verifying…';
+  ign.value='Verifying…';ign.style.borderColor='';
   try{
-    // Calling your custom Vercel MLBB API
-    const r=await fetch(`/api/verify-mlbb?id=${pid}&zone=${zid}`);
+    const r=await fetch(`/api/verify-mlbb?id=${encodeURIComponent(pid)}&zone=${encodeURIComponent(zid)}`);
     const d=await r.json();
-    if(d.ign){ign.value=d.ign;ign.style.borderColor='var(--gr)';ign.removeAttribute('readonly');}
-    else{ign.value='';ign.removeAttribute('readonly');ign.placeholder='Not found — type IGN manually';}
-  }catch(e){ign.value='';ign.removeAttribute('readonly');ign.placeholder='Verify unavailable — type manually';}
+    // API returns { ign, verified, region } or { error }
+    if(d.verified&&d.ign){
+      ign.value=d.ign;
+      ign.style.borderColor='var(--gr)';
+      ign.setAttribute('readonly','');
+    } else {
+      ign.value='';
+      ign.removeAttribute('readonly');
+      ign.placeholder=d.error||'Not found — type IGN manually';
+      ign.style.borderColor='var(--rd)';
+    }
+  }catch(e){
+    ign.value='';
+    ign.removeAttribute('readonly');
+    ign.placeholder='Verify unavailable — type manually';
+  }
 }
 
 async function verifyCOD(){
   const pid=document.getElementById('cod-pid').value.trim();
   const ign=document.getElementById('cod-ign');
   if(!pid){alert('Enter Player ID first.');return;}
-  ign.value='Verifying…';
+  ign.value='Verifying…';ign.style.borderColor='';
   try{
-    // Calling your custom Vercel CoD API
-    const r=await fetch(`/api/verify-cod?id=${pid}`);
+    const r=await fetch(`/api/verify-cod?id=${encodeURIComponent(pid)}`);
     const d=await r.json();
-    if(d.ign){ign.value=d.ign;ign.style.borderColor='var(--gr)';ign.removeAttribute('readonly');}
-    else{ign.value='';ign.removeAttribute('readonly');ign.placeholder='Not found — type IGN manually';}
-  }catch(e){ign.value='';ign.removeAttribute('readonly');ign.placeholder='Verify unavailable — type manually';}
+    // API returns { ign, verified } or { error }
+    if(d.verified&&d.ign){
+      ign.value=d.ign;
+      ign.style.borderColor='var(--gr)';
+      ign.setAttribute('readonly','');
+    } else {
+      ign.value='';
+      ign.removeAttribute('readonly');
+      ign.placeholder=d.error||'Not found — type IGN manually';
+      ign.style.borderColor='var(--rd)';
+    }
+  }catch(e){
+    ign.value='';
+    ign.removeAttribute('readonly');
+    ign.placeholder='Verify unavailable — type manually';
+  }
 }
 
 async function verifyRoblox(){
   const u=document.getElementById('roblox-user').value.trim();
   const disp=document.getElementById('roblox-dispname');
   if(!u){alert('Enter Roblox username first.');return;}
-  disp.value='Verifying…';
+  disp.value='Verifying…';disp.style.borderColor='';
   try{
-    // Calling your custom Vercel Roblox API
     const r=await fetch(`/api/verify-roblox?username=${encodeURIComponent(u)}`);
     const d=await r.json();
-    if(d.ign){disp.value=d.ign;disp.style.borderColor='var(--gr)';}
-    else{disp.value='';disp.placeholder='Not found — type manually';}
-  }catch(e){disp.value='';disp.placeholder='Verify unavailable — type manually';}
+    // API returns { ign, username, id, verified } or { error }
+    if(d.verified&&d.ign){
+      disp.value=d.ign;
+      disp.style.borderColor='var(--gr)';
+    } else {
+      disp.value='';
+      disp.placeholder=d.error||'Not found — type manually';
+      disp.style.borderColor='var(--rd)';
+    }
+  }catch(e){
+    disp.value='';
+    disp.placeholder='Verify unavailable — type manually';
+  }
 }
 // ============================================================
 // ORDER TRACKER
@@ -1230,21 +1263,24 @@ async function trackOrder(){
   if(!txn||!txn.startsWith('TXN-')){res.innerHTML='<span style="color:#f87171">Please enter a valid TXN-XXXXXXX code.</span>';return;}
   res.innerHTML='<span style="color:var(--mx)">🔍 Looking up your order…</span>';
   try{
-    const r=await fetch(PRICE_API+'?track='+encodeURIComponent(txn));
+    // Use ORDER_API with action=trackOrder
+    const r=await fetch(ORDER_API+'?action=trackOrder&txn='+encodeURIComponent(txn));
     const d=await r.json();
-    if(d.error){res.innerHTML='<span style="color:#f87171">❌ Order not found. Check your TXN ID.</span>';return;}
+    if(!d.success){res.innerHTML='<span style="color:#f87171">❌ '+(d.error||'Order not found. Check your TXN ID.')+'</span>';return;}
     const stColors={pending:'#f59e0b',processing:'#3b82f6',completed:'#22c55e'};
     const stIcons= {pending:'⏳',processing:'⚙️',completed:'✅'};
     const stMsgs= {pending:'Your order is received and awaiting processing.',processing:'Mark is processing your order now!',completed:'Done! Check your in-game mailbox.'};
     const st=(d.status||'pending').toLowerCase();
+    const esc=s=>String(s||'—').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     res.innerHTML=`<div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px;text-align:left">
       <div style="font-size:1.6rem;text-align:center">${stIcons[st]||'⏳'}</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:${stColors[st]||'#94a3b8'};text-align:center;letter-spacing:1px;margin:4px 0 10px">${(d.status||'PENDING').toUpperCase()}</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:${stColors[st]||'#94a3b8'};text-align:center;letter-spacing:1px;margin:4px 0 10px">${st.toUpperCase()}</div>
       <div style="font-size:.75rem;color:var(--mx);margin-bottom:8px">${stMsgs[st]||''}</div>
-      <b style="color:var(--or)">TXN:</b> ${d.txn||txn}<br>
-      <b style="color:var(--or)">Game:</b> ${d.game||'—'}<br>
-      <b style="color:var(--or)">Order:</b> ${d.order||'—'}<br>
-      <b style="color:var(--or)">Date:</b> ${d.date||'—'}
+      <b style="color:var(--or)">TXN:</b> ${esc(d.txnID)}<br>
+      <b style="color:var(--or)">Game:</b> ${esc(d.game)}<br>
+      <b style="color:var(--or)">Order:</b> ${esc(d.order)}<br>
+      <b style="color:var(--or)">Payment:</b> ${esc(d.payment)}<br>
+      <b style="color:var(--or)">Date:</b> ${esc(d.date)}
     </div>`;
   }catch(e){res.innerHTML='<span style="color:#f87171">⚠️ Connection error. Try again.</span>';}
 }
