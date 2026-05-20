@@ -297,6 +297,37 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
 .loading-grid{grid-column:1/-1;text-align:center;padding:20px;color:var(--mx);font-size:.8rem}
+  /* --- NEW UI UPGRADES --- */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+.skeleton-card {
+  height: 90px; width: 100%; border-radius: 10px;
+  background: var(--dk3);
+  background-image: linear-gradient(to right, var(--dk3) 0%, var(--dk4) 20%, var(--dk3) 40%, var(--dk3) 100%);
+  background-repeat: no-repeat; background-size: 1000px 100%; 
+  animation: shimmer 1.5s infinite linear forwards;
+  border: 1.5px solid var(--bdr);
+}
+#toast {
+  position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+  background: #00d26a; color: #000; padding: 12px 24px; border-radius: 30px;
+  font-weight: 700; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0,210,106,0.3); z-index: 9999;
+  transition: top 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.toast-visible { top: 20px !important; }
+
+#coin-dashboard {
+  position: fixed; bottom: 20px; right: 20px;
+  background: rgba(20, 20, 20, 0.9); border: 1px solid #fbbf24;
+  backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 30px;
+  display: flex; align-items: center; gap: 10px; color: white;
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2); z-index: 1000;
+  transition: transform 0.2s;
+}
+#coin-dashboard:hover { transform: scale(1.05); }
 </style>
 </head>
 <body>
@@ -391,6 +422,16 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
      MAIN SHOP (hidden until auth)
 ═══════════════════════════════════════════════════════════ -->
 <div id="shop-wrapper" style="display:none">
+
+  <div id="toast"><span id="toast-message">Message here</span></div>
+
+<div id="coin-dashboard" style="display: none;">
+  <div style="font-size: 22px;">🪙</div>
+  <div style="line-height: 1.1;">
+    <span style="font-size: 9px; opacity: 0.8; letter-spacing: 1px;">YOUR MARKCOINS</span><br>
+    <strong id="user-coin-balance" style="font-size: 1.1rem; color: #fbbf24;">0</strong>
+  </div>
+</div>
 
 <div class="hdr">
   <h1>⚡ Mark's Game Shop</h1>
@@ -512,7 +553,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     </div>
   </div>
 
-  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid">Loading…</div></div></div>
+  <div class="cpanel active" id="mlbb-dias"><div class="slbl">Direct Top-Up Diamonds (PH Server)</div><div class="pgrid" id="grid-mlbb-dias"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div></div>
 
   <div class="cpanel" id="mlbb-dd">
     <div class="slbl">Double Diamond Tier (2x Bonus)</div>
@@ -521,15 +562,15 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div style="font-size:.76rem;color:#fca5a5;line-height:1.7">Each DD tier can only be purchased <b style="color:#f87171">ONCE per account</b>. If already bought, <b style="color:#f87171">it will NOT appear</b> again.</div>
       <div style="display:flex;align-items:center;gap:6px;margin-top:9px;background:rgba(239,68,68,.12);border-radius:8px;padding:7px 10px"><span>💡</span><span style="font-size:.71rem;color:#fca5a5">During DD events you get <b style="color:#fff">2x the listed diamonds</b> — only if tier is still available.</span></div>
     </div>
-    <div class="pgrid" id="grid-mlbb-dd"><div class="loading-grid">Loading…</div></div>
+    <div class="pgrid" id="grid-mlbb-dd"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div>
   </div>
-  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & Weekly Diamond Pass</div><div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid">Loading…</div></div></div>
+  <div class="cpanel" id="mlbb-bundles"><div class="slbl">Bundles & Weekly Diamond Pass</div><div class="pgrid" id="grid-mlbb-bundles"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div></div>
   <div class="cpanel" id="mlbb-skins">
-    <div class="slbl">CosmoBit Pricing</div><div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid">Loading…</div></div>
-    <div class="slbl">Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading…</div></div>
+    <div class="slbl">CosmoBit Pricing</div><div class="pgrid" id="grid-mlbb-skins-cosmo"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div>
+    <div class="slbl">Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div>
   </div>
-  <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading…</div></div></div>
-  <div class="cpanel" id="mlbb-charisma"><div class="slbl">Charisma Boosting (Via ID Only)</div><div class="pgrid" id="grid-mlbb-charisma"><div class="loading-grid">Loading…</div></div></div>
+  <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div></div>
+  <div class="cpanel" id="mlbb-charisma"><div class="slbl">Charisma Boosting (Via ID Only)</div><div class="pgrid" id="grid-mlbb-charisma"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div></div>
 
   <div class="oform" id="mlbb-oform">
     <h3>📋 Place Order</h3>
@@ -994,6 +1035,11 @@ function showLoggedInUser() {
   if (!isGuest) {
     document.getElementById('coins-count').textContent   = SESSION.markcoins || 0;
     document.getElementById('coins-pill').style.display  = 'inline-flex';
+    // Update floating dashboard
+    document.getElementById('user-coin-balance').textContent = SESSION.markcoins || 0;
+    document.getElementById('coin-dashboard').style.display  = 'flex';
+  } else {
+    document.getElementById('coin-dashboard').style.display  = 'none';
   }
   // Auto-fill saved MLBB fields
   if (SESSION.mlbbId)   document.getElementById('mlbb-pid').value  = SESSION.mlbbId;
@@ -1019,6 +1065,7 @@ function logout() {
   document.getElementById('auth-err').textContent = '';
   document.getElementById('auth-username').value  = '';
   document.getElementById('auth-password').value  = '';
+  document.getElementById('coin-dashboard').style.display = 'none';
   switchAuthTab('login');
 }
 
@@ -1534,6 +1581,16 @@ async function submitOrder(game){
 
 function showErr(el,msg){el.textContent=msg;el.style.display='block';}
 function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
+
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-message').innerText = message;
+  toast.classList.add('toast-visible');
+  setTimeout(() => toast.classList.remove('toast-visible'), 3000);
+}
 
 // ============================================================
 // SOCIAL PROOF
