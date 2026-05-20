@@ -399,7 +399,17 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="auth-fg" id="email-fg" style="display:none"><label>Email <span style="color:var(--or)">*</span></label>
       <input type="email" id="auth-email" placeholder="Your email (for password recovery)" autocomplete="email"></div>
     <div class="auth-err" id="auth-err"></div>
-    <button class="auth-btn" id="auth-submit-btn" onclick="handleAuth()">LOGIN TO SHOP</button>
+    <button class="auth-btn" id="auth-submit-btn" onclick="handleAuth()">LOGIN TO SHOP
+
+      <div style="margin-top: 15px; text-align: center; color: gray; font-size: 0.9rem;">OR</div>
+
+<button type="button" onclick="loginWithGoogle()" style="margin-top: 15px; background: #ffffff; color: #000000; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; border: 1px solid #ccc; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" style="width: 18px; height: 18px;">
+  Sign in with Google
+</button>
+    
+    
+    </button>
     <!-- Forgot password link — shown only on login tab -->
     <div id="forgot-link" style="text-align:center;margin-top:10px;font-size:.75rem">
       <span style="color:var(--mx)">Forgot password? </span>
