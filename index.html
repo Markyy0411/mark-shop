@@ -1416,6 +1416,8 @@ async function verifyMLBB(){
       ign.value=d.ign;
       ign.style.borderColor='var(--gr)';
       ign.setAttribute('readonly','');
+
+      saveMlbbIdsLocally();
     } else {
       ign.value='';
       ign.removeAttribute('readonly');
@@ -1635,6 +1637,29 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove('toast-visible'), 3000);
 }
 
+// ============================================================
+// AUTO-SAVE MLBB IDs (Frictionless Checkout)
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const savedPlayerId = localStorage.getItem('mlbb_player_id');
+    const savedZoneId = localStorage.getItem('mlbb_zone_id');
+    if (savedPlayerId && savedZoneId) {
+        document.getElementById('mlbb-pid').value = savedPlayerId;
+        document.getElementById('mlbb-zid').value = savedZoneId;
+    }
+});
+
+function saveMlbbIdsLocally() {
+    const playerId = document.getElementById('mlbb-pid').value;
+    const zoneId = document.getElementById('mlbb-zid').value;
+    if (playerId && zoneId) {
+        localStorage.setItem('mlbb_player_id', playerId);
+        localStorage.setItem('mlbb_zone_id', zoneId);
+        showToast("ID Saved! Next time it will auto-fill.");
+    }
+}
+
+  
 // ============================================================
 // SOCIAL PROOF
 // ============================================================
