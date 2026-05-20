@@ -329,6 +329,39 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 }
 #coin-dashboard:hover { transform: scale(1.05); }
 </style>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  // 👇 YOUR REAL FIREBASE CONFIG 👇
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8GjMjHcnRTl1fmYHUo6tztdzDHGzWuH0",
+    authDomain: "mark-shop-a494e.firebaseapp.com",
+    projectId: "mark-shop-a494e",
+    storageBucket: "mark-shop-a494e.firebasestorage.app",
+    messagingSenderId: "771553527287",
+    appId: "1:771553527287:web:c8003f95d6c650c37d9af2",
+    measurementId: "G-536G2S0JZP"
+  };
+  // 👆 ------------------------------------------ 👆
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  window.loginWithGoogle = () => {
+    signInWithPopup(auth, provider).then((result) => {
+      const user = result.user;
+      showToast(`Welcome back, ${user.displayName}!`);
+      
+      // Update the UI to show they are logged in
+      document.getElementById('coin-dashboard').style.display = 'flex';
+      
+    }).catch((error) => {
+      showToast(`Login failed: ${error.message}`);
+    });
+  };
+</script>
 </head>
 <body>
   <script>
