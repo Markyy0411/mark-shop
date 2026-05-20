@@ -438,6 +438,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div class="ctab" data-c="mlbb-bundles">🎁 Bundles & WDP</div>
       <div class="ctab" data-c="mlbb-skins">🎨 Skins & Events</div>
       <div class="ctab sl-tab" data-c="mlbb-starlight">⭐ Starlight</div>
+      <div class="ctab" data-c="mlbb-charisma">✨ Charisma</div>
     </div>
   </div>
 
@@ -528,6 +529,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     <div class="slbl">Direct Purchase Pricing</div><div class="pgrid" id="grid-mlbb-skins-direct"><div class="loading-grid">Loading…</div></div>
   </div>
   <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid">Loading…</div></div></div>
+  <div class="cpanel" id="mlbb-charisma"><div class="slbl">Charisma Boosting (Via ID Only)</div><div class="pgrid" id="grid-mlbb-charisma"><div class="loading-grid">Loading…</div></div></div>
 
   <div class="oform" id="mlbb-oform">
     <h3>📋 Place Order</h3>
@@ -1212,6 +1214,7 @@ function buildAll(){
     makeGrid('grid-mlbb-skins-cosmo',DATA.mlbb.skinsc||DATA.mlbb.SkinsC,'mlbb','skins');
     makeGrid('grid-mlbb-skins-direct',DATA.mlbb.skinsd||DATA.mlbb.SkinsD,'mlbb','skins');
     makeGrid('grid-mlbb-starlight',filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight),'mlbb','starlight');
+    makeGrid('grid-mlbb-charisma', DATA.mlbb.charisma || DATA.mlbb.Charisma, 'mlbb', 'charisma');
   }
   if(DATA.cod&&DATA.cod.main)    makeGrid('grid-cod',DATA.cod.main,'cod','main');
   if(DATA.roblox&&DATA.roblox.main) makeGrid('grid-roblox',DATA.roblox.main,'roblox','main');
