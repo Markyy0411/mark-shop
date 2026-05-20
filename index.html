@@ -624,7 +624,18 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
       <div style="display:flex;gap:8px"><input type="text" id="mlbb-zid" placeholder="1234" style="flex:1">
         <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
     <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
-    <div class="fg"><label>Server</label><select id="mlbb-server"><option>PH Server</option><option>Other</option></select></div>
+   <div class="fg">
+      <label>Server</label>
+      <select id="mlbb-server">
+        <option value="" disabled selected>Select your Server...</option>
+        <option value="global">Global Server</option>
+        <option value="indonesia">Indonesia Server</option>
+        <option value="russia">Russia</option>
+        <option value="usa">USA</option>
+        <option value="singapore">Singapore</option>
+        <option value="malaysia">Malaysia</option>
+      </select>
+    </div>
     <div class="fg"><label>Notes (optional)</label><textarea id="mlbb-notes" placeholder="Any special requests…"></textarea></div>
     <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-mlbb">
       <div class="pm-methods">
