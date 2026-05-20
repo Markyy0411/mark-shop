@@ -378,6 +378,65 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
     }));
   }
 })();
+
+
+
+    // ============================================================
+// DYNAMIC MULTI-SERVER PRICING
+// ============================================================
+window.handleServerChange = function() {
+  const srv = document.getElementById('mlbb-server').value;
+  let cat = 'dias'; // Default PH catalog
+
+  // 1. Map dropdown choice to your CSV Categories
+  if (srv === 'indo') cat = 'dias-indo';
+  if (srv === 'global') cat = 'dias-global';
+  if (srv === 'sg') cat = 'dias-sg';
+  if (srv === 'my') cat = 'dias-my';
+
+  // 2. Clear any previously selected items
+  const selBox = document.getElementById('mlbb-sel-box');
+  const orderDisplay = document.getElementById('mlbb-order-display');
+  if(selBox) selBox.style.display = 'none';
+  if(orderDisplay) orderDisplay.value = '';
+
+  // 3. Fetch the correct catalog from your Apps Script DATA
+  let newItems = [];
+  if (typeof DATA !== 'undefined' && DATA.mlbb) {
+      if (DATA.mlbb[cat]) {
+          newItems = DATA.mlbb[cat];
+      } else if (DATA.mlbb['dias']) {
+          newItems = DATA.mlbb['dias']; 
+      }
+  }
+
+  // 4. Redraw your grid
+  const gridContainer = document.getElementById('grid-mlbb-dias');
+  if(gridContainer && typeof makeGrid === 'function') {
+      makeGrid('grid-mlbb-dias', newItems, 'mlbb', cat);
+      
+      const titleMap = {
+        'ph': 'Direct Top-Up (PH Server)',
+        'indo': 'Direct Top-Up (Indonesia Server)',
+        'global': 'Direct Top-Up (Global/USA Server)',
+        'sg': 'Direct Top-Up (Singapore Server)',
+        'my': 'Direct Top-Up (Malaysia Server)'
+      };
+      
+      if (gridContainer.previousElementSibling) {
+          gridContainer.previousElementSibling.textContent = titleMap[srv] || 'Direct Top-Up';
+      }
+  }
+
+  // 5. Alert and redirect user
+  if (srv !== 'ph') {
+      if(typeof showToast === 'function') {
+          showToast("Server updated! Displaying " + srv.toUpperCase() + " rates.");
+      }
+      const ctabs = document.getElementById('mlbb-ctabs');
+      if(ctabs) ctabs.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+};
 </script>
 
 <!-- ══════════════════════════════════════════════════════════
