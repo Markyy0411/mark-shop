@@ -1404,63 +1404,66 @@ function openTrackModal(){document.getElementById('track-input').value='';docume
 const PRICE_CACHE_KEY='markshop_prices';
 const PRICE_CACHE_TTL=15*60*1000;
 
-async function fetchPrices(){
-  const cached=getCachedPrices();
-  if(cached){ applyPriceData(cached); loadFreshPrices(true); return; }
-  await loadFreshPrices(false);
+// ============================================================
+// FETCH PRICES + STATUS (Robust Fix)
+// ============================================================
+const PRICE_CACHE_KEY = 'markshop_prices';
+const PRICE_CACHE_TTL = 15 * 60 * 1000;
+
+async function fetchPrices() {
+  const cached = getCachedPrices();
+  if (cached) {
+    applyPriceData(cached);
+  }
+  // Always try to load fresh data
+  await loadFreshPrices();
 }
 
-function getCachedPrices(){
-  try{
-    const raw=localStorage.getItem(PRICE_CACHE_KEY);
-    if(!raw)return null;
-    const {data,ts}=JSON.parse(raw);
-    if(Date.now()-ts>PRICE_CACHE_TTL)return null;
+function getCachedPrices() {
+  try {
+    const raw = localStorage.getItem(PRICE_CACHE_KEY);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    if (Date.now() - ts > PRICE_CACHE_TTL) return null;
     return data;
-  }catch(_){return null;}
+  } catch (_) { return null; }
 }
 
-async function loadFreshPrices(silent){
-  try{
-    const r=await fetch(PRICE_API+'?action=getPrices');
-    if(!r.ok)throw new Error();
-    const json=await r.json();
-    if(!json.success||!json.prices)throw new Error();
-    const d={};
-    json.prices.forEach(item=>{
-      const g=item.game.trim().toLowerCase(),c=item.category.trim().toLowerCase();
-      if(!d[g])d[g]={};
-      if(!d[g][c])d[g][c]=[];
-      d[g][c].push({n:item.name,p:item.price,desc:item.description||''});
+async function loadFreshPrices() {
+  try {
+    const r = await fetch(PRICE_API + '?action=getPrices');
+    if (!r.ok) throw new Error('Network error');
+    const json = await r.json();
+    if (!json.success || !json.prices) throw new Error('Invalid format');
+
+    const d = {};
+    json.prices.forEach(item => {
+      const g = item.game.trim().toLowerCase();
+      const c = item.category.trim().toLowerCase();
+      if (!d[g]) d[g] = {};
+      if (!d[g][c]) d[g][c] = [];
+      d[g][c].push({ n: item.name, p: item.price, desc: item.description || '' });
     });
-    d._status=json.status||'online';
-    try{ localStorage.setItem(PRICE_CACHE_KEY,JSON.stringify({data:d,ts:Date.now()})); }catch(_){}
+    d._status = json.status || 'online';
+    
+    localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify({ data: d, ts: Date.now() }));
     applyPriceData(d);
-  }catch(e){
-    if(!silent){
-      document.querySelectorAll('.loading-grid').forEach(el=>{
-        el.innerHTML='⚠️ Could not load prices. <span style="color:var(--or);cursor:pointer;text-decoration:underline" onclick="fetchPrices()">Retry</span>';
-      });
-      updateStatus('offline');
-    }
+  } catch (e) {
+    console.error("Price Load Error:", e);
+    // Error feedback
+    document.querySelectorAll('.loading-grid').forEach(el => {
+      el.innerHTML = '⚠️ Could not load. <span style="color:var(--or);cursor:pointer;text-decoration:underline" onclick="fetchPrices()">Retry</span>';
+    });
   }
 }
 
-function applyPriceData(d){ DATA=d; buildAll(); updateStatus(d._status||'online'); }
-// ── FIX 5: updateStatus uses #status-pill (which EXISTS in DOM) not #live-status
-function updateStatus(st){
-  const pill=document.getElementById('status-pill');
-  const dot =document.getElementById('status-dot');
-  const txt =document.getElementById('status-text');
-  if(!pill)return;
-  if(st==='offline'){
-    pill.className='status-pill offline';
-    dot.className='status-dot'; // no pulse when offline
-    txt.textContent='🔴 Mark is Offline · Orders processed at 8 AM';
-  }else{
-    pill.className='status-pill online';
-    dot.className='status-dot pulse';
-    txt.textContent='🟢 Online · Delivery: 1–5 mins';
+function applyPriceData(d) {
+  window.DATA = d;
+  if(typeof buildAll === 'function') {
+      buildAll();
+  }
+  if(typeof updateStatus === 'function') {
+      updateStatus(d._status || 'online');
   }
 }
 
