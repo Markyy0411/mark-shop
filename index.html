@@ -859,7 +859,11 @@ window.handleServerChange = function() {
   </div>
 
 <!-- ── Roblox ─────────────────────────────────────────────── -->
-<div class="oform" id="roblox-oform" style="background:transparent; border:none; padding:0; margin-top:16px;">
+<div class="gpanel" id="g-roblox">
+  <div class="slbl" style="margin:12px 0 10px">Robux — Roblox Top-Up</div>
+  <div class="pgrid" id="grid-roblox"><div class="loading-grid" id="loading-roblox">Loading…</div></div>
+
+  <div class="oform" id="roblox-oform" style="background:transparent; border:none; padding:0; margin-top:16px;">
     
     <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
       <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--bl);"></div>
@@ -923,6 +927,7 @@ window.handleServerChange = function() {
       <div class="err-msg" id="roblox-err"></div>
     </div>
   </div>
+</div>
 <!-- ── Bloodstrike ────────────────────────────────────────── -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
@@ -1514,9 +1519,18 @@ function buildAll(){
     makeGrid('grid-mlbb-starlight',filterStarlight(DATA.mlbb.starlight||DATA.mlbb.Starlight),'mlbb','starlight');
     makeGrid('grid-mlbb-charisma', DATA.mlbb.charisma || DATA.mlbb.Charisma, 'mlbb', 'charisma');
   }
-  if(DATA.cod&&DATA.cod.main)    makeGrid('grid-cod',DATA.cod.main,'cod','main');
-  if(DATA.roblox&&DATA.roblox.main) makeGrid('grid-roblox',DATA.roblox.main,'roblox','main');
-  if(DATA.bs&&DATA.bs.main)     makeGrid('grid-bs',DATA.bs.main,'bs','main');
+  if(DATA.cod) {
+    const codItems = DATA.cod.main || DATA.cod.shells || DATA.cod.Shells || Object.values(DATA.cod)[0];
+    if(codItems) makeGrid('grid-cod', codItems, 'cod', 'main');
+  }
+  if(DATA.roblox) {
+    const rxItems = DATA.roblox.main || DATA.roblox.robux || DATA.roblox.Robux || Object.values(DATA.roblox)[0];
+    if(rxItems) makeGrid('grid-roblox', rxItems, 'roblox', 'main');
+  }
+  if(DATA.bs) {
+    const bsItems = DATA.bs.main || DATA.bs.golds || DATA.bs.Golds || Object.values(DATA.bs)[0];
+    if(bsItems) makeGrid('grid-bs', bsItems, 'bs', 'main');
+  }
   if(DATA.load){
     Object.keys(DATA.load).forEach(net=>{
       const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
@@ -1731,7 +1745,12 @@ async function submitOrder(game){
 
   if(game==='mlbb'){order=document.getElementById('mlbb-order-display').value;pid=document.getElementById('mlbb-pid').value;ign=document.getElementById('mlbb-ign').value;notes=document.getElementById('mlbb-notes').value;}
   else if(game==='cod'){order=document.getElementById('cod-order-display').value;pid=document.getElementById('cod-pid').value;ign=document.getElementById('cod-ign').value;notes=document.getElementById('cod-notes').value;}
-  else if(game==='roblox'){order=document.getElementById('roblox-order-display').value;pid='GP:'+document.getElementById('roblox-gpid').value+' ('+document.getElementById('roblox-gpname').value+')';ign=document.getElementById('roblox-user').value+'/'+document.getElementById('roblox-dispname').value;notes=document.getElementById('roblox-notes').value;}
+  else if(game==='roblox') {
+    order=document.getElementById('roblox-order-display').value;
+    pid=document.getElementById('roblox-user').value;
+    ign=document.getElementById('roblox-ign').value;
+    notes=document.getElementById('roblox-notes').value;
+  }  
   else if(game==='bs'){order=document.getElementById('bs-order-display').value;pid=document.getElementById('bs-pid').value;ign=document.getElementById('bs-ign').value;notes=document.getElementById('bs-notes').value;}
   else if(game==='load'){order=document.getElementById('load-order-display').value;pid=document.getElementById('load-number').value;network=document.getElementById('load-network-display').value;notes=document.getElementById('load-notes').value;}
   else if(game==='custom'){order=document.getElementById('custom-desc').value;pid=document.getElementById('custom-pid').value;ign=document.getElementById('custom-name').value+'/'+document.getElementById('custom-contact').value;notes=document.getElementById('custom-notes').value;}
