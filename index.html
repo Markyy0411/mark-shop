@@ -793,69 +793,136 @@ window.handleServerChange = function() {
 <div class="gpanel" id="g-cod">
   <div class="slbl" style="margin:12px 0 10px">Garena Shells — Call of Duty Mobile (PH)</div>
   <div class="pgrid" id="grid-cod"><div class="loading-grid" id="loading-cod">Loading…</div></div>
-  <div class="oform" id="cod-oform">
-    <h3>📋 Place Order</h3>
-    <div class="sel-box" id="cod-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="cod-sel-item">—</div><div class="sp" id="cod-sel-price"></div></div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="cod-order-display" placeholder="Select an item above" readonly></div>
-    <div class="fg"><label>Player ID (UID) <span class="req">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="cod-pid" placeholder="e.g. 674219836491" style="flex:1">
-        <button type="button" onclick="verifyCOD()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
-    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
-    <div class="fg"><label>Notes (optional)</label><textarea id="cod-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-cod">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div>
+ <div class="oform" id="cod-oform" style="background:transparent; border:none; padding:0; margin-top:16px;">
+    
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--bl);"></div>
+      <h3 style="color:var(--bl); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(59,130,246,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">1</span> Account Info
+      </h3>
+      
+      <div class="fg">
+        <label>Player ID (OpenID) <span class="req">*</span></label>
+        <input type="text" id="cod-pid" placeholder="Enter your CoD OpenID">
       </div>
-      <div class="pm-details" id="pm-details-cod"><div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR</button>
-        <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      <button type="button" onclick="verifyCOD()" style="width:100%; background:var(--bl); color:#fff; border:none; border-radius:8px; padding:11px; font-weight:bold; cursor:pointer; margin-bottom:12px; transition:0.2s;">🔍 Verify ID</button>
+      <div class="fg" style="margin-bottom:0;">
+        <label>In-Game Name (IGN) <span class="req">*</span></label>
+        <input type="text" id="cod-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05); border-color:var(--dk5); color:#fbbf24; font-weight:bold; text-align:center;">
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="cod-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
-    <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')">Submit Order</button>
-    <div class="err-msg" id="cod-err"></div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#fbbf24;"></div>
+      <h3 style="color:#fbbf24; font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(251,191,36,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">2</span> Order Summary
+      </h3>
+      <div class="sel-box" id="cod-sel-box" style="display:none; margin-bottom:12px; border-color:rgba(251,191,36,0.3); background:rgba(251,191,36,0.05);">
+        <div class="sl" style="color:var(--mx);">Selected Item</div><div class="sv" id="cod-sel-item" style="color:#fbbf24;">—</div><div class="sp" id="cod-sel-price" style="color:#fff;"></div>
+      </div>
+      <div class="fg" style="margin-bottom:0;"><label>Order / Item <span class="req">*</span></label><input type="text" id="cod-order-display" placeholder="Select an item from the catalog above" readonly></div>
+    </div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--gr);"></div>
+      <h3 style="color:var(--gr); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(34,197,94,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">3</span> Payment
+      </h3>
+      <div class="fg" style="margin-bottom:0;"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-cod">
+        <div class="pm-methods">
+          <div class="pm-btn" onclick="selectPayment('cod','gcash',this)">🔵 GCash</div>
+          <div class="pm-btn" onclick="selectPayment('cod','maya',this)">🟢 Maya</div>
+          <div class="pm-btn" onclick="selectPayment('cod','gotyme',this)">🟣 GoTyme</div>
+          <div class="pm-btn" onclick="selectPayment('cod','paypal',this)">🔷 PayPal</div>
+        </div>
+        <div class="pm-details" id="pm-details-cod">
+          <div id="pm-label-cod" style="font-weight:bold;margin-bottom:10px"></div>
+          <div class="pm-row"><span>Account Name:</span><span id="pm-name-cod"></span></div>
+          <div class="pm-row"><span id="pm-numlbl-cod">Account Number:</span><span id="pm-num-cod"></span></div>
+          <button type="button" class="btn-reveal" id="pm-reveal-btn-cod" onclick="revealPM('cod')">👁️ Reveal Info</button>
+          <button type="button" class="btn-qr" id="pm-qr-btn-cod" onclick="openQRModal(currentQR['cod'])" style="display:none">📷 View QR Code</button>
+          <div id="pm-note-cod" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:14px;"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="cod-screenshot" accept="image/*" capture="environment" style="padding:8px 12px; background:rgba(34,197,94,.08); border-color:var(--gr); color:#fff; border-radius:8px;"></div>
+    </div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--or);"></div>
+      <h3 style="color:var(--or); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(249,115,22,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">4</span> Checkout
+      </h3>
+      <div class="fg"><label>Notes (optional)</label><textarea id="cod-notes" placeholder="Any special requests…"></textarea></div>
+      <button class="btn-sub" id="cod-btn" onclick="submitOrder('cod')" style="font-size:1.15rem; padding:16px; margin-top:8px;">🛍️ SUBMIT ORDER</button>
+      <div class="err-msg" id="cod-err"></div>
+    </div>
   </div>
-</div>
 
 <!-- ── Roblox ─────────────────────────────────────────────── -->
-<div class="gpanel" id="g-roblox">
-  <div class="slbl" style="margin:12px 0 10px">Robux Top-Up</div>
-  <div class="pgrid" id="grid-roblox"><div class="loading-grid" id="loading-roblox">Loading…</div></div>
-  <div class="oform" id="roblox-oform">
-    <h3>📋 Place Order</h3>
-    <div class="sel-box" id="roblox-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="roblox-sel-item">—</div><div class="sp" id="roblox-sel-price"></div></div>
-    <div class="fg"><label>Order / Robux Amount <span class="req">*</span></label><input type="text" id="roblox-order-display" placeholder="Select an amount above" readonly></div>
-    <div class="alert-box" style="font-size:.73rem">⚠️ <b>Non-Covered Tax:</b> Your order will be deducted <b>30%</b> by Roblox marketplace tax. <b>Regional Pricing must be DISABLED</b> on your Gamepass.</div>
-    <div class="fg"><label>Gamepass ID <span class="req">*</span></label><input type="text" id="roblox-gpid" placeholder="Your Roblox Gamepass ID"></div>
-    <div class="fg"><label>Gamepass Name <span class="req">*</span></label><input type="text" id="roblox-gpname" placeholder="Name of the Gamepass"></div>
-    <div class="fg"><label>Roblox Username <span class="req">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="roblox-user" placeholder="Enter Username" style="flex:1">
-        <button type="button" onclick="verifyRoblox()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
-    <div class="fg"><label>Display Name</label><input type="text" id="roblox-dispname" placeholder="Click 'Verify' to check" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
-    <div class="fg"><label>Notes (optional)</label><textarea id="roblox-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-roblox">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div><div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div><div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div>
+<div class="oform" id="roblox-oform" style="background:transparent; border:none; padding:0; margin-top:16px;">
+    
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--bl);"></div>
+      <h3 style="color:var(--bl); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(59,130,246,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">1</span> Account Info
+      </h3>
+      
+      <div class="fg">
+        <label>Roblox Username <span class="req">*</span></label>
+        <input type="text" id="roblox-user" placeholder="Enter your Roblox Username">
       </div>
-      <div class="pm-details" id="pm-details-roblox"><div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR</button>
-        <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      <button type="button" onclick="verifyRoblox()" style="width:100%; background:var(--bl); color:#fff; border:none; border-radius:8px; padding:11px; font-weight:bold; cursor:pointer; margin-bottom:12px; transition:0.2s;">🔍 Verify User</button>
+      <div class="fg" style="margin-bottom:0;">
+        <label>Display Name <span class="req">*</span></label>
+        <input type="text" id="roblox-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05); border-color:var(--dk5); color:#fbbf24; font-weight:bold; text-align:center;">
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="roblox-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
-    <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')">Submit Order</button>
-    <div class="err-msg" id="roblox-err"></div>
-  </div>
-</div>
 
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#fbbf24;"></div>
+      <h3 style="color:#fbbf24; font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(251,191,36,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">2</span> Order Summary
+      </h3>
+      <div class="sel-box" id="roblox-sel-box" style="display:none; margin-bottom:12px; border-color:rgba(251,191,36,0.3); background:rgba(251,191,36,0.05);">
+        <div class="sl" style="color:var(--mx);">Selected Item</div><div class="sv" id="roblox-sel-item" style="color:#fbbf24;">—</div><div class="sp" id="roblox-sel-price" style="color:#fff;"></div>
+      </div>
+      <div class="fg" style="margin-bottom:0;"><label>Order / Item <span class="req">*</span></label><input type="text" id="roblox-order-display" placeholder="Select an item from the catalog above" readonly></div>
+    </div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--gr);"></div>
+      <h3 style="color:var(--gr); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(34,197,94,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">3</span> Payment
+      </h3>
+      <div class="fg" style="margin-bottom:0;"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-roblox">
+        <div class="pm-methods">
+          <div class="pm-btn" onclick="selectPayment('roblox','gcash',this)">🔵 GCash</div>
+          <div class="pm-btn" onclick="selectPayment('roblox','maya',this)">🟢 Maya</div>
+          <div class="pm-btn" onclick="selectPayment('roblox','gotyme',this)">🟣 GoTyme</div>
+          <div class="pm-btn" onclick="selectPayment('roblox','paypal',this)">🔷 PayPal</div>
+        </div>
+        <div class="pm-details" id="pm-details-roblox">
+          <div id="pm-label-roblox" style="font-weight:bold;margin-bottom:10px"></div>
+          <div class="pm-row"><span>Account Name:</span><span id="pm-name-roblox"></span></div>
+          <div class="pm-row"><span id="pm-numlbl-roblox">Account Number:</span><span id="pm-num-roblox"></span></div>
+          <button type="button" class="btn-reveal" id="pm-reveal-btn-roblox" onclick="revealPM('roblox')">👁️ Reveal Info</button>
+          <button type="button" class="btn-qr" id="pm-qr-btn-roblox" onclick="openQRModal(currentQR['roblox'])" style="display:none">📷 View QR Code</button>
+          <div id="pm-note-roblox" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:14px;"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="roblox-screenshot" accept="image/*" capture="environment" style="padding:8px 12px; background:rgba(34,197,94,.08); border-color:var(--gr); color:#fff; border-radius:8px;"></div>
+    </div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--or);"></div>
+      <h3 style="color:var(--or); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(249,115,22,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">4</span> Checkout
+      </h3>
+      <div class="fg"><label>Notes (optional)</label><textarea id="roblox-notes" placeholder="Any special requests…"></textarea></div>
+      <button class="btn-sub" id="roblox-btn" onclick="submitOrder('roblox')" style="font-size:1.15rem; padding:16px; margin-top:8px;">🛍️ SUBMIT ORDER</button>
+      <div class="err-msg" id="roblox-err"></div>
+    </div>
+  </div>
 <!-- ── Bloodstrike ────────────────────────────────────────── -->
 <div class="gpanel" id="g-bs">
   <div class="slbl" style="margin:12px 0 10px">Bloodstrike Golds Top-Up</div>
