@@ -331,7 +331,7 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
 </style>
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   // 👇 YOUR REAL FIREBASE CONFIG 👇
   const firebaseConfig = {
@@ -352,13 +352,29 @@ body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-hei
   window.loginWithGoogle = () => {
     signInWithPopup(auth, provider).then((result) => {
       const user = result.user;
-      showToast(`Welcome back, ${user.displayName}!`);
       
-      // Update the UI to show they are logged in
-      document.getElementById('coin-dashboard').style.display = 'flex';
+      if(typeof showToast === 'function') {
+        showToast(`Welcome back, ${user.displayName}!`);
+      }
+
+      // INTEGRATION: Save the Google user to your existing shop session
+      saveSession({ 
+        username: user.displayName, // Uses their Google Account name
+        role: 'user',
+        mlbbId: '', 
+        mlbbZone: '', 
+        markcoins: 0 
+      });
+
+      // INTEGRATION: Hide the Auth screen and show the Shop
+      enterShop();
       
     }).catch((error) => {
-      showToast(`Login failed: ${error.message}`);
+      if(typeof showToast === 'function') {
+        showToast(`Login failed: ${error.message}`);
+      } else {
+        console.error("Google Login Error:", error.message);
+      }
     });
   };
 </script>
