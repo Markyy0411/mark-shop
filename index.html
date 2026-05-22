@@ -13,16 +13,40 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --or:#f97316;--or2:#ea6c0a;--bl:#3b82f6;--gr:#22c55e;
-  --dk:#09090f;--dk2:#111118;--dk3:#1a1a26;--dk4:#22222f;--dk5:#2c2c3e;
-  --tx:#e2e8f0;--mx:#94a3b8;--bdr:rgba(255,255,255,0.06);
+:root {
+  /* Core Colors */
+  --or: #f97316; --or2: #ea6c0a; --bl: #3b82f6; --gr: #22c55e;
+  
+  /* Premium Nexone Esports Navy Theme */
+  --dk: #0f172a;       /* Main Background (Deep Navy) */
+  --dk2: #1e293b;      /* Panel Background (Lighter Navy) */
+  --dk3: #334155;      /* Hover States */
+  --dk4: #3f3f5a;      /* Kept your dk4 for safe fallback */
+  --dk5: #475569;      /* Input Backgrounds */
+  
+  /* Text & Borders */
+  --tx: #f8fafc;       /* Crisp White */
+  --mx: #94a3b8;       /* Muted Text */
+  --bdr: #334155;      /* Premium solid border */
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--dk);color:var(--tx);font-family:'Exo 2',sans-serif;min-height:100vh;
-  background-image:radial-gradient(ellipse at 15% 60%,rgba(249,115,22,.06) 0%,transparent 50%),
-  radial-gradient(ellipse at 85% 10%,rgba(59,130,246,.06) 0%,transparent 50%)}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dk);
+  color: var(--tx);
+  font-family: 'Exo 2', sans-serif;
+  min-height: 100vh;
+  
+  /* Kept your awesome glowing edge effect! */
+  background-image: 
+    radial-gradient(ellipse at 15% 60%, rgba(249,115,22,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 10%, rgba(59,130,246,.08) 0%, transparent 50%);
+    
+  /* Nexone crisp text upgrade */
+  -webkit-font-smoothing: antialiased; 
+}
 
 /* ── AUTH SCREEN ───────────────────────────────────────── */
 #auth-screen{position:fixed;inset:0;background:var(--dk);z-index:9999;
