@@ -690,47 +690,80 @@ window.handleServerChange = function() {
   <div class="cpanel" id="mlbb-starlight"><div class="slbl">Starlight Passes — May 2026</div><div class="pgrid" id="grid-mlbb-starlight"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div></div>
   <div class="cpanel" id="mlbb-charisma"><div class="slbl">Charisma Boosting (Via ID Only)</div><div class="pgrid" id="grid-mlbb-charisma"><div class="loading-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:7px; width:100%; padding:0; text-align:left;"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div></div></div>
 
-  <div class="oform" id="mlbb-oform">
-    <h3>📋 Place Order</h3>
-    <div class="sel-box" id="mlbb-sel-box" style="display:none"><div class="sl">Selected Item</div><div class="sv" id="mlbb-sel-item">—</div><div class="sp" id="mlbb-sel-price"></div></div>
-    <div class="fg"><label>Order / Item <span class="req">*</span></label><input type="text" id="mlbb-order-display" placeholder="Select an item above first" readonly></div>
-    <div class="fg"><label>Player ID <span class="req">*</span><span style="float:right;color:var(--bl);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:400" onclick="openIDModal()">Help finding ID?</span></label><input type="text" id="mlbb-pid" placeholder="e.g. 123456789"></div>
-    <div class="fg"><label>Zone ID <span class="req">*</span></label>
-      <div style="display:flex;gap:8px"><input type="text" id="mlbb-zid" placeholder="1234" style="flex:1">
-        <button type="button" onclick="verifyMLBB()" style="background:var(--bl);color:#fff;border:none;border-radius:8px;padding:0 15px;font-weight:bold;cursor:pointer">Verify</button></div></div>
-    <div class="fg"><label>In-Game Name (IGN) <span class="req">*</span></label><input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05);border-color:var(--dk5);color:#fbbf24;font-weight:bold"></div>
-  <div class="fg">
-      <label>Server <span class="req">*</span></label>
-      <select id="mlbb-server" onchange="handleServerChange()">
-        <option value="ph">PH Server</option>
-        <option value="indo">Indonesia Server</option>
-        <option value="global">Global / USA Server</option>
-        <option value="sg">Singapore Server</option>
-        <option value="my">Malaysia Server</option>
-      </select>
-    </div>
-    <div class="fg"><label>Notes (optional)</label><textarea id="mlbb-notes" placeholder="Any special requests…"></textarea></div>
-    <div class="fg"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-mlbb">
-      <div class="pm-methods">
-        <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">🔵 GCash</div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">🟢 Maya</div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">🟣 GoTyme</div>
-        <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">🔷 PayPal</div>
+<div class="oform" id="mlbb-oform" style="background:transparent; border:none; padding:0; margin-top:16px;">
+    
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--bl);"></div>
+      <h3 style="color:var(--bl); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(59,130,246,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">1</span> Account Info
+      </h3>
+      
+      <div class="fg">
+        <label>Server <span class="req">*</span></label>
+        <select id="mlbb-server" onchange="handleServerChange()">
+          <option value="ph">PH Server</option>
+          <option value="indo">Indonesia Server</option>
+          <option value="global">Global / USA Server</option>
+          <option value="sg">Singapore Server</option>
+          <option value="my">Malaysia Server</option>
+        </select>
       </div>
-      <div class="pm-details" id="pm-details-mlbb">
-        <div id="pm-label-mlbb" style="font-weight:bold;margin-bottom:10px"></div>
-        <div class="pm-row"><span>Account Name:</span><span id="pm-name-mlbb"></span></div>
-        <div class="pm-row"><span id="pm-numlbl-mlbb">Account Number:</span><span id="pm-num-mlbb"></span></div>
-        <button type="button" class="btn-reveal" id="pm-reveal-btn-mlbb" onclick="revealPM('mlbb')">👁️ Reveal Info</button>
-        <button type="button" class="btn-qr" id="pm-qr-btn-mlbb" onclick="openQRModal(currentQR['mlbb'])" style="display:none">📷 View QR Code</button>
-        <div id="pm-note-mlbb" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="fg"><label>Player ID <span class="req">*</span></label><input type="text" id="mlbb-pid" placeholder="123456789"></div>
+        <div class="fg"><label>Zone ID <span class="req">*</span></label><input type="text" id="mlbb-zid" placeholder="1234"></div>
+      </div>
+      <button type="button" onclick="verifyMLBB()" style="width:100%; background:var(--bl); color:#fff; border:none; border-radius:8px; padding:11px; font-weight:bold; cursor:pointer; margin-bottom:12px; transition:0.2s;">🔍 Verify ID</button>
+      <div class="fg" style="margin-bottom:0;">
+        <label>In-Game Name (IGN) <span class="req">*</span></label>
+        <input type="text" id="mlbb-ign" placeholder="Click 'Verify' to auto-fill" readonly style="background:rgba(255,255,255,.05); border-color:var(--dk5); color:#fbbf24; font-weight:bold; text-align:center;">
       </div>
     </div>
-    <div class="fg"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="mlbb-screenshot" accept="image/*" capture="environment" style="padding:6px 12px;background:rgba(59,130,246,.1);border-color:var(--bl);color:#fff"></div>
-    <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')">Submit Order</button>
-    <div class="err-msg" id="mlbb-err"></div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:#fbbf24;"></div>
+      <h3 style="color:#fbbf24; font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(251,191,36,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">2</span> Order Summary
+      </h3>
+      <div class="sel-box" id="mlbb-sel-box" style="display:none; margin-bottom:12px; border-color:rgba(251,191,36,0.3); background:rgba(251,191,36,0.05);">
+        <div class="sl" style="color:var(--mx);">Selected Item</div><div class="sv" id="mlbb-sel-item" style="color:#fbbf24;">—</div><div class="sp" id="mlbb-sel-price" style="color:#fff;"></div>
+      </div>
+      <div class="fg" style="margin-bottom:0;"><label>Order / Item <span class="req">*</span></label><input type="text" id="mlbb-order-display" placeholder="Select an item from the catalog above" readonly></div>
+    </div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; margin-bottom:14px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--gr);"></div>
+      <h3 style="color:var(--gr); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(34,197,94,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">3</span> Payment
+      </h3>
+      <div class="fg" style="margin-bottom:0;"><label>Payment Method <span class="req">*</span></label><input type="hidden" id="pm-val-mlbb">
+        <div class="pm-methods">
+          <div class="pm-btn" onclick="selectPayment('mlbb','gcash',this)">🔵 GCash</div>
+          <div class="pm-btn" onclick="selectPayment('mlbb','maya',this)">🟢 Maya</div>
+          <div class="pm-btn" onclick="selectPayment('mlbb','gotyme',this)">🟣 GoTyme</div>
+          <div class="pm-btn" onclick="selectPayment('mlbb','paypal',this)">🔷 PayPal</div>
+        </div>
+        <div class="pm-details" id="pm-details-mlbb">
+          <div id="pm-label-mlbb" style="font-weight:bold;margin-bottom:10px"></div>
+          <div class="pm-row"><span>Account Name:</span><span id="pm-name-mlbb"></span></div>
+          <div class="pm-row"><span id="pm-numlbl-mlbb">Account Number:</span><span id="pm-num-mlbb"></span></div>
+          <button type="button" class="btn-reveal" id="pm-reveal-btn-mlbb" onclick="revealPM('mlbb')">👁️ Reveal Info</button>
+          <button type="button" class="btn-qr" id="pm-qr-btn-mlbb" onclick="openQRModal(currentQR['mlbb'])" style="display:none">📷 View QR Code</button>
+          <div id="pm-note-mlbb" style="font-size:.75rem;color:var(--or);margin-top:8px;text-align:center;display:none"></div>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:14px;"><label>Upload Payment Receipt <span class="req">*</span></label><input type="file" id="mlbb-screenshot" accept="image/*" capture="environment" style="padding:8px 12px; background:rgba(34,197,94,.08); border-color:var(--gr); color:#fff; border-radius:8px;"></div>
+    </div>
+
+    <div style="background:var(--dk2); border:1px solid var(--bdr); border-radius:14px; padding:18px; position:relative; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+      <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--or);"></div>
+      <h3 style="color:var(--or); font-family:'Rajdhani', sans-serif; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; display:flex; align-items:center;">
+        <span style="background:rgba(249,115,22,0.15); padding:2px 9px; border-radius:6px; margin-right:10px; font-weight:700;">4</span> Checkout
+      </h3>
+      <div class="fg"><label>Notes (optional)</label><textarea id="mlbb-notes" placeholder="Any special requests…"></textarea></div>
+      <button class="btn-sub" id="mlbb-btn" onclick="submitOrder('mlbb')" style="font-size:1.15rem; padding:16px; margin-top:8px;">🛍️ SUBMIT ORDER</button>
+      <div class="err-msg" id="mlbb-err"></div>
+    </div>
   </div>
-</div>
 
 <!-- ── CoD ───────────────────────────────────────────────── -->
 <div class="gpanel" id="g-cod">
