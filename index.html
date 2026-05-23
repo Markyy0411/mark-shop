@@ -1,100 +1,167 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mark's Game Shop — MLBB, CoD, Roblox Top-Up Philippines</title>
-<meta name="description" content="Affordable game top-ups in the Philippines. MLBB Diamonds, Garena Shells, Robux, Bloodstrike Golds, and Load. Fast delivery, trusted seller.">
-<meta property="og:title" content="Mark's Game Shop — Affordable Top-Ups PH">
-<meta property="og:description" content="Fast & trusted game top-up shop. MLBB, CoD, Roblox, Bloodstrike & Load. Delivery 1-5 mins.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mark-shop-beryl.vercel.app">
-<meta name="theme-color" content="#f97316">
+    if(!f.type.startsWith('image/')){showErr(err,'Please upload an image file.');return;}
+  }
 
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  /* Core Colors */
-  --or: #f97316; --or2: #ea6c0a; --bl: #3b82f6; --gr: #22c55e;
-  
-  /* Premium Nexone Esports Navy Theme */
-  --dk: #0f172a;       /* Main Background (Deep Navy) */
-  --dk2: #1e293b;      /* Panel Background (Lighter Navy) */
-  --dk3: #334155;      /* Hover States */
-  --dk4: #3f3f5a;      /* Kept your dk4 for safe fallback */
-  --dk5: #475569;      /* Input Backgrounds */
-  
-  /* Text & Borders */
-  --tx: #f8fafc;       /* Crisp White */
-  --mx: #94a3b8;       /* Muted Text */
-  --bdr: #334155;      /* Premium solid border */
+  btn.disabled=true;btn.textContent='Sending…';
+
+  try{
+
+    const gameName=game==='custom'?document.getElementById('custom-game').value:game.toUpperCase();
+    const txnID='TXN-'+(crypto.randomUUID?crypto.randomUUID().replace(/-/g,'').substr(0,8).toUpperCase():Math.random().toString(36).substr(2,8).toUpperCase());
+    const zoneID=game==='mlbb'?document.getElementById('mlbb-zid').value:'';
+
+    // Get price from selected item for MarkCoins calculation
+    const priceEl=document.getElementById(game+'-sel-price')||document.getElementById('load-sel-price');
+    const rawPrice=priceEl?priceEl.textContent.replace(/[^0-9.]/g,''):'0';
+    const orderPrice=parseFloat(rawPrice)||0;
+
+    const payload={
+      action:'order', game:gameName, order,
+      playerID:pid, zoneID, ign, network, notes,
+      paymentMethod:pm, transactionID:txnID,
+      username: SESSION ? SESSION.username : 'guest',
+      orderPrice: orderPrice,
+      dateTime:new Date().toLocaleString(),
+      hasReceipt: !!(fi&&fi.files[0]),
+      fileName: fi&&fi.files[0] ? fi.files[0].name : ''
+    };
+
+    let data;
+    try{
+      // Apps Script works best with no-cors-triggering headers
+      // Send as text/plain to avoid CORS preflight, Apps Script reads body fine
+      const res=await fetch(ORDER_API,{
+        method:'POST',
+        body:JSON.stringify(payload)
+      });
+      const txt=await res.text();
+      try{ data=JSON.parse(txt); }
+      catch(_){ 
+        // If JSON parse fails, check if it contains success
+        if(txt.includes('"success":true')){
+          data={success:true,txnID:payload.transactionID,coinsEarned:0,newCoinTotal:0};
+        } else {
+          throw new Error('Bad response: '+txt.substring(0,100));
+        }
+      }
+    }catch(fetchErr){
+      showErr(err,'Could not reach server. Check your connection and try again.');
+      btn.disabled=false;
+      btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
+      return;
+    }
+
+    if(data.success){
+      const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const earned = data.coinsEarned || 0;
+      const newTotal = data.newCoinTotal || 0;
+      if(SESSION && SESSION.username !== 'Guest' && earned > 0){
+        SESSION.markcoins = newTotal;
+        saveSession(SESSION);
+        document.getElementById('coins-count').textContent = newTotal;
+        const dashCoins = document.getElementById('user-coin-balance');
+        if (dashCoins) dashCoins.textContent = newTotal;
+      }
+      document.getElementById('ok-receipt').innerHTML=
+        `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>`+
+        `<b>ID:</b> <span id="txn-copy-id" style="color:#fbbf24;cursor:pointer" title="Click to copy">${esc(txnID)}</span> 📋<br>`+
+        `<b>Game:</b> ${esc(gameName)}<br><b>Payment:</b> ${esc(pm)}<br><b>Order:</b> ${esc(order)}`+
+        (earned>0?`<br><br><span style="color:#fbbf24;font-weight:600">🪙 +${earned} MarkCoins earned! Total: ${newTotal}</span>`:'');
+      document.getElementById('ok-msg').style.display='block';
+      document.getElementById('ok-msg').scrollIntoView({behavior:'smooth'});
+      setTimeout(()=>{
+        const el=document.getElementById('txn-copy-id');
+        if(el) el.addEventListener('click',()=>{
+          navigator.clipboard.writeText(txnID).then(()=>{ el.textContent=txnID+' ✅'; });
+        });
+      },100);
+      return;
+    } else {
+      showErr(err, data.error||'Server error. Please try again.');
+    }
+  }catch(e){showErr(err,'Network error. Please try again.');}
+
+  // Only re-enable on failure
+  btn.disabled=false;
+  btn.textContent=game==='custom'?'🛎️ Send Custom Request':'Submit Order';
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+function showErr(el,msg){el.textContent=msg;el.style.display='block';}
+function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f);});}
 
-body {
-  background: var(--dk);
-  color: var(--tx);
-  font-family: 'Exo 2', sans-serif;
-  min-height: 100vh;
-  
-  /* Kept your awesome glowing edge effect! */
-  background-image: 
-    radial-gradient(ellipse at 15% 60%, rgba(249,115,22,.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 10%, rgba(59,130,246,.08) 0%, transparent 50%);
-    
-  /* Nexone crisp text upgrade */
-  -webkit-font-smoothing: antialiased; 
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toast-message').innerText = message;
+  toast.classList.add('toast-visible');
+  setTimeout(() => toast.classList.remove('toast-visible'), 3000);
 }
 
-/* ── AUTH SCREEN ───────────────────────────────────────── */
-#auth-screen{position:fixed;inset:0;background:var(--dk);z-index:9999;
-  display:flex;align-items:center;justify-content:center;padding:20px}
-#auth-screen.hidden{display:none}
-.auth-card{background:var(--dk2);border:1px solid rgba(249,115,22,.25);border-radius:18px;
-  padding:32px 24px;width:100%;max-width:380px;text-align:center}
-.auth-logo{font-family:'Rajdhani',sans-serif;font-size:2rem;font-weight:700;
-  color:var(--or);letter-spacing:3px;margin-bottom:4px}
-.auth-tagline{font-size:.75rem;color:var(--mx);margin-bottom:24px}
-.auth-tabs{display:flex;gap:0;background:var(--dk3);border-radius:10px;padding:3px;margin-bottom:20px}
-.auth-tab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;
-  color:var(--mx);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;
-  letter-spacing:1px;cursor:pointer;transition:.2s}
-.auth-tab.active{background:var(--or);color:#fff}
-.auth-fg{text-align:left;margin-bottom:12px}
-.auth-fg label{display:block;font-size:.68rem;font-weight:600;letter-spacing:1px;
-  text-transform:uppercase;color:var(--mx);margin-bottom:5px}
-.auth-fg input{width:100%;background:var(--dk3);border:1px solid var(--dk5);
-  border-radius:8px;padding:10px 13px;color:var(--tx);font-family:'Exo 2',sans-serif;
-  font-size:.9rem;transition:.2s}
-.auth-fg input:focus{outline:none;border-color:var(--or)}
-.auth-btn{width:100%;padding:13px;background:var(--or);color:#fff;border:none;
-  border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:700;
-  letter-spacing:2px;cursor:pointer;transition:.2s;margin-top:4px}
-.auth-btn:hover{background:var(--or2)}
-.auth-btn:disabled{background:var(--dk5);color:var(--mx);cursor:not-allowed}
-.auth-err{font-size:.75rem;color:#f87171;margin-top:8px;min-height:18px;text-align:center}
-.auth-badges{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}
-.auth-badge{font-size:.65rem;color:var(--mx);display:flex;align-items:center;gap:4px}
-.guest-link{font-size:.72rem;color:var(--mx);margin-top:14px;cursor:pointer;text-decoration:underline}
-.guest-link:hover{color:var(--tx)}
+// ============================================================
+// AUTO-SAVE MLBB IDs (Frictionless Checkout)
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const savedPlayerId = localStorage.getItem('mlbb_player_id');
+    const savedZoneId = localStorage.getItem('mlbb_zone_id');
+    if (savedPlayerId && savedZoneId) {
+        document.getElementById('mlbb-pid').value = savedPlayerId;
+        document.getElementById('mlbb-zid').value = savedZoneId;
+    }
+});
 
-/* ── HEADER ────────────────────────────────────────────── */
-.hdr{background:linear-gradient(135deg,var(--dk2),rgba(249,115,22,.08));
-  border-bottom:1px solid rgba(249,115,22,.25);padding:12px 16px;text-align:center;
-  position:sticky;top:0;z-index:200;backdrop-filter:blur(12px)}
-.hdr h1{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;
-  color:var(--or);letter-spacing:3px;text-transform:uppercase}
-.hdr-sub{font-size:.72rem;color:var(--mx);margin-top:1px}
-.hdr-user-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:7px;flex-wrap:wrap}
-.user-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);
-  border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:3px 12px;
-  font-size:.72rem;color:#4ade80;font-weight:600}
-.coins-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);
-  border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:3px 11px;
-  font-size:.72rem;color:#fbbf24;font-weight:600}
-.status-pill{display:inline-flex;align-items:center;gap:6px;border-radius:20px;
-  padding:3px 12px;font-size:.72rem;font-weight:600;border:1px solid}
-.status-pill.online{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:#4ade80}
-.status-pill.offline{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#f87171}
+function saveMlbbIdsLocally() {
+    const playerId = document.getElementById('mlbb-pid').value;
+    const zoneId = document.getElementById('mlbb-zid').value;
+    if (playerId && zoneId) {
+        localStorage.setItem('mlbb_player_id', playerId);
+        localStorage.setItem('mlbb_zone_id', zoneId);
+        showToast("ID Saved! Next time it will auto-fill.");
+    }
+}
+
+  
+// ============================================================
+// SOCIAL PROOF
+// ============================================================
+const SP=[
+  {ico:'💎',text:'User ***45 bought 500 MLBB Diamonds',t:'2 mins ago'},
+  {ico:'⭐',text:'User ***12 bought Normal Starlight',t:'5 mins ago'},
+  {ico:'🎯',text:'User ***78 bought 100 Garena Shells',t:'8 mins ago'},
+  {ico:'🧱',text:'User ***33 bought 400 Robux',t:'11 mins ago'},
+  {ico:'📶',text:'User ***91 bought Globe GoSURF50',t:'14 mins ago'},
+  {ico:'💎',text:'User ***67 bought 1163 MLBB Diamonds',t:'18 mins ago'},
+  {ico:'🔴',text:'User ***55 bought MARTIS EPIC skin',t:'22 mins ago'},
+  {ico:'⭐',text:'User ***20 bought June NSL Starlight',t:'27 mins ago'},
+];
+let spIdx=0;
+function showSP(){
+  const ev=SP[spIdx%SP.length];spIdx++;
+  const el=document.getElementById('sp-popup');
+  document.getElementById('sp-ico').textContent=ev.ico;
+  document.getElementById('sp-text').textContent=ev.text;
+  document.getElementById('sp-time').textContent=ev.t;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),4000);
+}
+function startSocialProof(){
+  setTimeout(()=>{showSP();setInterval(showSP,18000);},6000);
+}
+  // GLOBAL FUNCTION EXPOSURE
+window.switchAuthTab = switchAuthTab;
+window.handleAuth = handleAuth;
+window.requestPasswordReset = requestPasswordReset;
+window.submitPasswordReset = submitPasswordReset;
+window.enterAsGuest = enterAsGuest;
+window.verifyMLBB = verifyMLBB;
+window.verifyCOD = verifyCOD;
+window.verifyRoblox = verifyRoblox;
+window.submitOrder = submitOrder;
+window.selectPayment = selectPayment;
+window.revealPM = revealPM;
+window.selectNet = selectNet;
+window.selectCC = selectCC;
+</script>
+
+</body>
+</html>
