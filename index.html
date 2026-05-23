@@ -499,7 +499,7 @@ window.handleServerChange = function() {
     <div class="auth-fg" id="email-fg" style="display:none"><label>Email <span style="color:var(--or)">*</span></label>
       <input type="email" id="auth-email" placeholder="Your email (for password recovery)" autocomplete="email"></div>
     <div class="auth-err" id="auth-err"></div>
-    <button class="auth-btn" id="auth-submit-btn" onclick="handleAuth()">LOGIN TO SHOP</button>
+   <button class="auth-btn" id="auth-submit-btn" onclick="handleAuth()">LOGIN TO SHOP</button>
 
     <div style="margin-top: 15px; text-align: center; color: gray; font-size: 0.9rem;">OR</div>
 
@@ -1398,15 +1398,9 @@ function openQRModal(src){if(!src)return;document.getElementById('qr-img').src=s
 function openIDModal(){document.getElementById('id-modal').style.display='flex';}
 function openTrackModal(){document.getElementById('track-input').value='';document.getElementById('track-result').innerHTML='';document.getElementById('track-modal').style.display='flex';}
 
+  
 // ============================================================
 // FETCH PRICES + STATUS
-// ============================================================
-// Priority 4 — PRICE CACHING (15 min localStorage cache)
-const PRICE_CACHE_KEY='markshop_prices';
-const PRICE_CACHE_TTL=15*60*1000;
-
-// ============================================================
-// FETCH PRICES + STATUS (Robust Fix)
 // ============================================================
 const PRICE_CACHE_KEY = 'markshop_prices';
 const PRICE_CACHE_TTL = 15 * 60 * 1000;
@@ -1917,6 +1911,20 @@ function showSP(){
 function startSocialProof(){
   setTimeout(()=>{showSP();setInterval(showSP,18000);},6000);
 }
+  // GLOBAL FUNCTION EXPOSURE
+window.switchAuthTab = switchAuthTab;
+window.handleAuth = handleAuth;
+window.requestPasswordReset = requestPasswordReset;
+window.submitPasswordReset = submitPasswordReset;
+window.enterAsGuest = enterAsGuest;
+window.verifyMLBB = verifyMLBB;
+window.verifyCOD = verifyCOD;
+window.verifyRoblox = verifyRoblox;
+window.submitOrder = submitOrder;
+window.selectPayment = selectPayment;
+window.revealPM = revealPM;
+window.selectNet = selectNet;
+window.selectCC = selectCC;
 </script>
 
 </body>
