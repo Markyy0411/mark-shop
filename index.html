@@ -374,52 +374,21 @@ body {
   const provider = new GoogleAuthProvider();
 
   window.loginWithGoogle = () => {
-    signInWithPopup(auth, provider).then(async (result) => {
+    signInWithPopup(auth, provider).then((result) => {
       const user = result.user;
-      const friendlyName = user.displayName || user.email || 'Google user';
-
+      
       if(typeof showToast === 'function') {
-        showToast(`Welcome back, ${friendlyName}!`);
-      }
-
-      let shopUser = {
-        username: user.email || user.displayName || 'Google User',
-        displayName: friendlyName,
-        role: 'user',
-        mlbbId: '',
-        mlbbZone: '',
-        markcoins: 0
-      };
-
-      try {
-        if (window.MARKSHOP_API_URL) {
-          const res = await fetch(window.MARKSHOP_API_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-              action: 'googleLogin',
-              uid: user.uid,
-              email: user.email || '',
-              displayName: user.displayName || ''
-            })
-          });
-          const data = await res.json();
-          if (data.success) {
-            shopUser = {
-              username: data.username,
-              displayName: data.displayName || friendlyName || data.username,
-              role: data.role || 'user',
-              mlbbId: '',
-              mlbbZone: '',
-              markcoins: data.markcoins || 0
-            };
-          }
-        }
-      } catch (syncError) {
-        console.warn('Google account sync skipped:', syncError);
+        showToast(`Welcome back, ${user.displayName}!`);
       }
 
       // INTEGRATION: Save the Google user to your existing shop session
-      saveSession(shopUser);
+      saveSession({ 
+        username: user.displayName, // Uses their Google Account name
+        role: 'user',
+        mlbbId: '', 
+        mlbbZone: '', 
+        markcoins: 0 
+      });
 
       // INTEGRATION: Hide the Auth screen and show the Shop
       enterShop();
@@ -1168,7 +1137,6 @@ window.handleServerChange = function() {
 // ============================================================
 const ORDER_API = 'https://script.google.com/macros/s/AKfycbymHhomzky-F8dLk1Fx42V7JadjA8wvhYUdiDydv7dqCSXhD86yFsK50DbW9Atx4AUCgA/exec';
 const PRICE_API = 'https://script.google.com/macros/s/AKfycbymHhomzky-F8dLk1Fx42V7JadjA8wvhYUdiDydv7dqCSXhD86yFsK50DbW9Atx4AUCgA/exec';
-window.MARKSHOP_API_URL = ORDER_API;
 
 
 // ============================================================
@@ -1317,8 +1285,8 @@ function saveSession(user) {
 // ── FIX 3: showLoggedInUser — defined, updates header pills correctly
 function showLoggedInUser() {
   if (!SESSION) return;
-  const isGuest = String(SESSION.username || '').toLowerCase() === 'guest';
-  document.getElementById('user-display-name').textContent = SESSION.displayName || SESSION.username;
+  const isGuest = SESSION.username === 'Guest';
+  document.getElementById('user-display-name').textContent = SESSION.username;
   document.getElementById('user-pill').style.display   = 'inline-flex';
   document.getElementById('logout-btn').style.display  = 'inline-flex';
   if (!isGuest) {
@@ -1328,7 +1296,6 @@ function showLoggedInUser() {
     document.getElementById('user-coin-balance').textContent = SESSION.markcoins || 0;
     document.getElementById('coin-dashboard').style.display  = 'flex';
   } else {
-    document.getElementById('coins-pill').style.display = 'none';
     document.getElementById('coin-dashboard').style.display  = 'none';
   }
   // Auto-fill saved MLBB fields
@@ -1339,6 +1306,8 @@ function showLoggedInUser() {
 function enterShop() {
   document.getElementById('auth-screen').classList.add('hidden');
   document.getElementById('shop-wrapper').style.display = 'block';
+  document.getElementById('gtabs').style.display = '';
+  document.getElementById('main-content').style.display = '';
   showLoggedInUser();
   fetchPrices();
   startSocialProof();
@@ -1435,7 +1404,7 @@ function openTrackModal(){document.getElementById('track-input').value='';docume
 // ============================================================
 // FETCH PRICES + STATUS
 // ============================================================
-const PRICE_CACHE_KEY = 'markshop_prices';
+const PRICE_CACHE_KEY = 'markshop_prices_v2';
 const PRICE_CACHE_TTL = 15 * 60 * 1000;
 
 async function fetchPrices() {
@@ -1466,8 +1435,8 @@ async function loadFreshPrices() {
 
     const d = {};
     json.prices.forEach(item => {
-      const g = item.game.trim().toLowerCase();
-      const c = item.category.trim().toLowerCase();
+      const g = normalizeGameKey(item.game);
+      const c = normalizeCategoryKey(item.category);
       if (!d[g]) d[g] = {};
       if (!d[g][c]) d[g][c] = [];
       d[g][c].push({ n: item.name, p: item.price, desc: item.description || '' });
@@ -1485,6 +1454,39 @@ async function loadFreshPrices() {
   }
 }
 
+function normalizeDataKey(value) {
+  return String(value || '').trim().toLowerCase().replace(/\s+/g, '-');
+}
+
+function normalizeGameKey(value) {
+  const key = normalizeDataKey(value);
+  if (['cod', 'codm', 'garena-cod', 'garena-codm', 'call-of-duty', 'call-of-duty-mobile'].includes(key)) return 'cod';
+  if (['bs', 'bloodstrike', 'blood-strike'].includes(key)) return 'bs';
+  if (['roblox', 'rbx'].includes(key)) return 'roblox';
+  if (['load', 'mobile-load', 'e-load', 'eload'].includes(key)) return 'load';
+  return key;
+}
+
+function normalizeCategoryKey(value) {
+  const key = normalizeDataKey(value);
+  const aliases = {
+    shells: 'main',
+    shell: 'main',
+    robux: 'main',
+    golds: 'main',
+    gold: 'main',
+    'cod-shells': 'main',
+    'bloodstrike-golds': 'main',
+    'globe-regular': 'globe-reg',
+    'tm-regular': 'tm-reg',
+    'globe-promos': 'globe-promo',
+    'tm-promos': 'tm-promo',
+    'g-fiber': 'gfiber',
+    'gfiber-prepaid': 'gfiber'
+  };
+  return aliases[key] || key;
+}
+
 function applyPriceData(d) {
   DATA = d;
   window.DATA = d;
@@ -1494,6 +1496,16 @@ function applyPriceData(d) {
   if(typeof updateStatus === 'function') {
       updateStatus(d._status || 'online');
   }
+}
+
+function updateStatus(status) {
+  const isOffline = String(status || '').toLowerCase().includes('offline');
+  const pill = document.getElementById('status-pill');
+  const text = document.getElementById('status-text');
+  if (!pill || !text) return;
+  pill.classList.toggle('online', !isOffline);
+  pill.classList.toggle('offline', isOffline);
+  text.textContent = isOffline ? 'Offline' : 'Online';
 }
 
 // ============================================================
@@ -1553,20 +1565,20 @@ function buildAll(){
   }
   if(DATA.cod) {
     const codItems = DATA.cod.main || DATA.cod.shells || DATA.cod.Shells || Object.values(DATA.cod)[0];
-    if(codItems) makeGrid('grid-cod', codItems, 'cod', 'main');
+    makeGrid('grid-cod', codItems || [], 'cod', 'main');
   }
   if(DATA.roblox) {
     const rxItems = DATA.roblox.main || DATA.roblox.robux || DATA.roblox.Robux || Object.values(DATA.roblox)[0];
-    if(rxItems) makeGrid('grid-roblox', rxItems, 'roblox', 'main');
+    makeGrid('grid-roblox', rxItems || [], 'roblox', 'main');
   }
   if(DATA.bs) {
     const bsItems = DATA.bs.main || DATA.bs.golds || DATA.bs.Golds || Object.values(DATA.bs)[0];
-    if(bsItems) makeGrid('grid-bs', bsItems, 'bs', 'main');
+    makeGrid('grid-bs', bsItems || [], 'bs', 'main');
   }
   if(DATA.load){
-    Object.keys(DATA.load).forEach(net=>{
+    ['globe-reg','tm-reg','globe-promo','homesurf','famsurf','tm-promo','gfiber'].forEach(net=>{
       const items=Array.isArray(DATA.load[net])?DATA.load[net]:DATA.load[net]?.items;
-      if(items)makeGrid('grid-'+net,items,'load',net);
+      makeGrid('grid-'+net,items||[],'load',net);
     });
   }
 }
@@ -1858,8 +1870,6 @@ async function submitOrder(game){
         SESSION.markcoins = newTotal;
         saveSession(SESSION);
         document.getElementById('coins-count').textContent = newTotal;
-        const dashCoins = document.getElementById('user-coin-balance');
-        if (dashCoins) dashCoins.textContent = newTotal;
       }
       document.getElementById('ok-receipt').innerHTML=
         `<b style="color:var(--or)">🧾 Transaction Receipt</b><br><br>`+
@@ -1893,7 +1903,7 @@ function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.o
 // ============================================================
 function showToast(message) {
   const toast = document.getElementById('toast');
-  document.getElementById('toast-message').innerText = message; 
+  document.getElementById('toast-message').innerText = message;
   toast.classList.add('toast-visible');
   setTimeout(() => toast.classList.remove('toast-visible'), 3000);
 }
