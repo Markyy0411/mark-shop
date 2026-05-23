@@ -28,6 +28,7 @@
   --tx: #f8fafc;       /* Crisp White */
   --mx: #94a3b8;       /* Muted Text */
   --bdr: #334155;      /* Premium solid border */
+  --rd: #ef4444;       /* Red / Error */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -858,6 +859,7 @@ window.handleServerChange = function() {
       <div class="err-msg" id="cod-err"></div>
     </div>
   </div>
+</div>
 
 <!-- ── Roblox ─────────────────────────────────────────────── -->
 <div class="gpanel" id="g-roblox">
@@ -1725,7 +1727,7 @@ async function verifyCOD(){
 
 async function verifyRoblox(){
   const u=document.getElementById('roblox-user').value.trim();
-  const disp=document.getElementById('roblox-dispname');
+  const disp=document.getElementById('roblox-ign');
   if(!u){alert('Enter Roblox username first.');return;}
   disp.value='Verifying…';disp.style.borderColor='';
   try{
@@ -1963,12 +1965,23 @@ window.handleAuth = handleAuth;
 window.requestPasswordReset = requestPasswordReset;
 window.submitPasswordReset = submitPasswordReset;
 window.enterAsGuest = enterAsGuest;
+window.logout = logout;
+window.resetAll = resetAll;
+window.showForgotPanel = showForgotPanel;
+window.hideForgotPanel = hideForgotPanel;
 window.verifyMLBB = verifyMLBB;
 window.verifyCOD = verifyCOD;
 window.verifyRoblox = verifyRoblox;
 window.submitOrder = submitOrder;
 window.selectPayment = selectPayment;
 window.revealPM = revealPM;
+window.openQRModal = openQRModal;
+window.openIDModal = openIDModal;
+window.openTrackModal = openTrackModal;
+window.trackOrder = trackOrder;
+window.promoSelectItem = promoSelectItem;
+window.proceedDD = proceedDD;
+window.closeDDModal = closeDDModal;
 window.selectNet = selectNet;
 window.selectCC = selectCC;
 </script>
