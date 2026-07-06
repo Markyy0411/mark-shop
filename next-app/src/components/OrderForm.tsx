@@ -4,6 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { submitOrder } from "@/lib/firestore-service";
 
+interface ReceiptData {
+  txnId: string;
+  game: string;
+  productName: string;
+  price: string;
+  playerId: string;
+  zoneId?: string;
+  ign: string;
+  paymentMethod: string;
+}
+
 interface OrderFormProps {
   gameId: string;
   gameLabel: string;
@@ -22,7 +33,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
   const [verifying, setVerifying] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [receipt, setReceipt] = useState<ReceiptData | null>(null);
   const [verificationFailed, setVerificationFailed] = useState(false);
   const [manualIgn, setManualIgn] = useState("");
 
@@ -97,7 +108,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
     setSubmitting(true);
     setError(null);
 
-    const orderId = await submitOrder({
+    const txnId = await submitOrder({
       userId: user ? user.uid : "guest",
       username: userData ? userData.username : "Guest",
       game: gameLabel,
@@ -109,8 +120,17 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
 
     setSubmitting(false);
 
-    if (orderId) {
-      setSuccessMsg(`Order placed successfully! Transaction ID: ${orderId}`);
+    if (txnId) {
+      setReceipt({
+        txnId,
+        game: gameLabel,
+        productName: product.name,
+        price: product.price,
+        playerId,
+        zoneId,
+        ign: ign || manualIgn || playerId,
+        paymentMethod
+      });
     } else {
       setError("Failed to place order. Please try again.");
     }
@@ -227,10 +247,49 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
         </div>
       )}
 
-      {successMsg ? (
-        <div className="bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-semibold p-4 rounded-xl text-center">
-          <div className="text-2xl mb-2">🎉</div>
-          {successMsg}
+      {receipt ? (
+        <div className="bg-brand/10 border border-brand/30 p-5 rounded-xl text-left animate-in fade-in slide-in-from-bottom-4">
+          <div className="flex items-center gap-2 mb-4 text-brand font-bold text-lg border-b border-brand/20 pb-2">
+            🧾 Transaction Receipt
+          </div>
+          
+          <div className="space-y-2 text-sm text-tx-main">
+            <div className="flex justify-between">
+              <span className="text-tx-muted">Ticket ID:</span>
+              <span className="font-mono text-brand cursor-pointer hover:underline" onClick={() => navigator.clipboard.writeText(receipt.txnId)} title="Click to copy">{receipt.txnId} 📋</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tx-muted">Game:</span>
+              <span className="font-semibold">{receipt.game}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tx-muted">Order:</span>
+              <span className="font-semibold">{receipt.productName} ({receipt.price})</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tx-muted">Player ID:</span>
+              <span className="font-semibold">{receipt.playerId} {receipt.zoneId ? `(${receipt.zoneId})` : ""}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tx-muted">IGN:</span>
+              <span className="font-semibold text-green-400">{receipt.ign}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-tx-muted">Payment:</span>
+              <span className="font-semibold uppercase">{receipt.paymentMethod}</span>
+            </div>
+          </div>
+
+          <div className="mt-5 text-xs text-tx-muted text-center italic">
+            Please screenshot this receipt and wait for Mark to confirm your order before sending payment.
+          </div>
+
+          <button 
+            onClick={() => { setReceipt(null); setPlayerId(""); setZoneId(""); setIgn(""); setManualIgn(""); setVerificationFailed(false); }}
+            className="w-full mt-4 bg-surface hover:bg-surface-hover text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors border border-dk5"
+          >
+            PLACE ANOTHER ORDER
+          </button>
         </div>
       ) : (
         <button 
