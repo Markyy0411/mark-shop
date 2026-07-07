@@ -15,7 +15,9 @@ export default function AuthModal() {
         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
         
         <div className="relative z-10">
-          <div className="font-rajdhani text-4xl font-bold text-brand tracking-[4px] mb-2 drop-shadow-md">⚡ MARK'S SHOP</div>
+          <h2 className="text-2xl font-bold font-rajdhani text-brand tracking-widest uppercase text-center drop-shadow-md mb-2">
+            ⚡ Mark&apos;s Game Shop
+          </h2>
           <div className="text-sm text-tx-muted mb-8 font-medium">Affordable Top-Ups · Fast Delivery</div>
           
           <button 

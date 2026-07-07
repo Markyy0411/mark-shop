@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-navy-400/80 backdrop-blur-md border-b border-brand/25 p-3 text-center shadow-sm transition-colors duration-300">
       <h1 className="font-rajdhani text-2xl font-bold text-brand tracking-[3px] uppercase drop-shadow-sm">
-        ⚡ Mark's Game Shop
+        ⚡ Mark&apos;s Game Shop
       </h1>
       <p className="text-xs text-tx-muted mt-1 font-medium">The fastest & cheapest top-up center in the PH</p>
       

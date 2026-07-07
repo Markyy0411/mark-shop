@@ -25,7 +25,8 @@ export async function GET(request: Request) {
       }, { status: 200 });
     }
     return NextResponse.json({ error: "User not found." }, { status: 404 });
-  } catch (error) {
-    return NextResponse.json({ error: "Server busy." }, { status: 500 });
+  } catch (error: unknown) {
+    console.error("Roblox verification error:", error);
+    return NextResponse.json({ error: "Failed to verify" }, { status: 500 });
   }
 }

@@ -17,8 +17,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userData, setUserData] = useState<any>(null);
   const [isGuest, setIsGuest] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Check if user previously chose guest mode
     const guestStored = localStorage.getItem("markshop_guest") === "true";
-    if (guestStored) setIsGuest(true);
+    if (guestStored) {
+      setTimeout(() => setIsGuest(true), 0); // avoid synchronous state update in effect
+    }
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);

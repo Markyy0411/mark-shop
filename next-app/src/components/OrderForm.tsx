@@ -81,7 +81,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
         setError(data.error || "Failed to verify player.");
         setVerificationFailed(true);
       }
-    } catch (err) {
+    } catch (_) {
       setError("An error occurred while verifying. Please enter your name manually.");
       setVerificationFailed(true);
     } finally {
