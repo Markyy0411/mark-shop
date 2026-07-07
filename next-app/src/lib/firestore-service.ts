@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, addDoc, serverTimestamp, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export interface Product {
@@ -90,6 +90,20 @@ export async function submitOrder(orderData: any): Promise<string | null> {
     return docRef.id;
   } catch (error) {
     console.error("Error submitting order:", error);
+    return null;
+  }
+}
+
+export async function getOrderById(orderId: string): Promise<Order | null> {
+  try {
+    const docRef = doc(db, "orders", orderId);
+    const snapshot = await getDoc(docRef);
+    if (snapshot.exists()) {
+      return { id: snapshot.id, ...snapshot.data() } as Order;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching order:", error);
     return null;
   }
 }

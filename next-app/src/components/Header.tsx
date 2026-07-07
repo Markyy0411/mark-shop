@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { LogOut, Search, User as UserIcon, Moon, Sun, AlertTriangle } from "lucide-react";
+import TrackOrderModal from "./TrackOrderModal";
 
 export default function Header() {
   const { user, userData, isGuest, logout } = useAuth();
@@ -11,6 +12,7 @@ export default function Header() {
   
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [logoutInput, setLogoutInput] = useState("");
+  const [showTrackOrder, setShowTrackOrder] = useState(false);
 
   const handleConfirmLogout = () => {
     if (logoutInput.toLowerCase() === "logout") {
@@ -62,7 +64,10 @@ export default function Header() {
           </>
         ) : null}
 
-        <button className="inline-flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full px-3 py-1 text-[0.7rem] font-semibold text-blue-400 hover:bg-blue-500/20 transition-colors">
+        <button 
+          onClick={() => setShowTrackOrder(true)}
+          className="inline-flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full px-3 py-1 text-[0.7rem] font-semibold text-blue-400 hover:bg-blue-500/20 transition-colors"
+        >
           <Search size={12} /> Track Order
         </button>
 
@@ -118,6 +123,11 @@ export default function Header() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* TRACK ORDER MODAL */}
+      {showTrackOrder && (
+        <TrackOrderModal onClose={() => setShowTrackOrder(false)} />
       )}
     </header>
   );
