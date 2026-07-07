@@ -99,7 +99,8 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
     const docRef = doc(db, "orders", orderId);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
-      return { id: snapshot.id, ...snapshot.data() } as Order;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return { id: snapshot.id, ...(snapshot.data() as any) } as Order;
     }
     return null;
   } catch (error) {
