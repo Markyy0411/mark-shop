@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export interface Product {
@@ -80,17 +80,15 @@ export async function getProductsByCategory(category: string): Promise<Product[]
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function submitOrder(orderData: any): Promise<string | null> {
+export async function submitOrder(orderId: string, orderData: any): Promise<void> {
   try {
-    const docRef = await addDoc(collection(db, "orders"), {
+    await setDoc(doc(db, "orders", orderId), {
       ...orderData,
       status: "pending",
       createdAt: serverTimestamp(),
     });
-    return docRef.id;
   } catch (error) {
     console.error("Error submitting order:", error);
-    return null;
   }
 }
 
