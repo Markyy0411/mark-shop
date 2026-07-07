@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function RootLayout({
   children,
@@ -35,10 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${rajdhani.variable} ${exo2.variable}`}>
-      <body className="font-sans min-h-screen text-tx-main bg-navy-500">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+      <body className="font-sans min-h-screen text-tx-main bg-navy-500 transition-colors duration-300">
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,13 +1,15 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { LogOut, Search, User as UserIcon } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
+import { LogOut, Search, User as UserIcon, Moon, Sun } from "lucide-react";
 
 export default function Header() {
   const { user, userData, isGuest, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 bg-navy-400/80 backdrop-blur-md border-b border-brand/25 p-3 text-center shadow-sm">
+    <header className="sticky top-0 z-50 bg-navy-400/80 backdrop-blur-md border-b border-brand/25 p-3 text-center shadow-sm transition-colors duration-300">
       <h1 className="font-rajdhani text-2xl font-bold text-brand tracking-[3px] uppercase drop-shadow-sm">
         ⚡ Mark's Game Shop
       </h1>
@@ -50,6 +52,14 @@ export default function Header() {
 
         <button className="inline-flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full px-3 py-1 text-[0.7rem] font-semibold text-blue-400 hover:bg-blue-500/20 transition-colors">
           <Search size={12} /> Track Order
+        </button>
+
+        <button 
+          onClick={toggleTheme}
+          className="ml-2 p-1.5 rounded-full bg-navy-300/30 hover:bg-navy-300/50 text-tx-main transition-colors border border-navy-300/30 flex items-center justify-center"
+          title="Toggle Theme"
+        >
+          {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
         </button>
       </div>
     </header>

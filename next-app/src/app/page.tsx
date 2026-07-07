@@ -68,7 +68,7 @@ export default function Home() {
           {loading ? (
             <div className="text-center text-tx-muted text-sm py-10 animate-pulse">Loading products...</div>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-4">
               {products.map((p) => (
                 <ProductCard 
                   key={p.id} 
