@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { Mail, Phone, ShieldCheck, Zap, Clock } from "lucide-react";
 
 export default function AuthModal() {
   const { user, isGuest, loginWithGoogle, loginAsGuest, loading } = useAuth();
@@ -8,22 +9,84 @@ export default function AuthModal() {
   if (loading || user || isGuest) return null;
 
   return (
-    <div className="fixed inset-0 bg-navy-500/95 z-[9999] flex items-center justify-center p-5 backdrop-blur-md">
-      <div className="bg-navy-400 border border-brand/25 rounded-3xl p-8 w-full max-w-[400px] text-center shadow-[0_0_40px_rgba(249,115,22,0.15)] relative overflow-hidden">
+    <div className="fixed inset-0 bg-navy-500 z-[9999] flex flex-col md:flex-row overflow-hidden">
+      
+      {/* LEFT SIDE: The Pitch / Introduction */}
+      <div className="relative w-full md:w-[55%] lg:w-[60%] flex flex-col justify-center p-8 md:p-16 lg:p-24 bg-gradient-to-br from-navy-500 via-navy-400 to-navy-500 text-tx-main shadow-2xl overflow-y-auto">
         {/* Decorative elements */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-brand/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
         
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold font-rajdhani text-brand tracking-widest uppercase text-center drop-shadow-md mb-2">
+        <div className="relative z-10 max-w-[600px] mx-auto w-full">
+          <h1 className="font-rajdhani text-4xl md:text-5xl lg:text-6xl font-bold text-brand tracking-wide uppercase drop-shadow-lg mb-6">
             ⚡ Mark&apos;s Game Shop
-          </h2>
-          <div className="text-sm text-tx-muted mb-8 font-medium">Affordable Top-Ups · Fast Delivery</div>
+          </h1>
+          
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-semibold text-tx-main mb-2">Tired of getting scammed?</h3>
+              <p className="text-tx-muted leading-relaxed">
+                Gamers lose thousands of pesos every day to fake sellers, unverified top-up centers, and painfully slow processing times that ruin the gaming experience.
+              </p>
+            </div>
+            
+            <div className="border-l-4 border-brand pl-4 py-1">
+              <h3 className="text-xl font-semibold text-white mb-2">We are the solution.</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Welcome to the most trusted, lightning-fast game top-up platform in the Philippines. We process orders instantly so you can get back to the game.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
+            <div className="bg-navy-300/30 p-4 rounded-xl border border-navy-300">
+              <Zap className="text-amber-400 mb-2" size={24} />
+              <h4 className="font-bold text-sm text-tx-main mb-1">Instant Delivery</h4>
+              <p className="text-xs text-tx-muted">Receive your diamonds in seconds.</p>
+            </div>
+            <div className="bg-navy-300/30 p-4 rounded-xl border border-navy-300">
+              <ShieldCheck className="text-green-400 mb-2" size={24} />
+              <h4 className="font-bold text-sm text-tx-main mb-1">100% Legal</h4>
+              <p className="text-xs text-tx-muted">No bans, pure official currency.</p>
+            </div>
+            <div className="bg-navy-300/30 p-4 rounded-xl border border-navy-300">
+              <Clock className="text-blue-400 mb-2" size={24} />
+              <h4 className="font-bold text-sm text-tx-main mb-1">24/7 Support</h4>
+              <p className="text-xs text-tx-muted">We are always online to help.</p>
+            </div>
+          </div>
+
+          <div className="mt-12 bg-navy-500 p-5 rounded-2xl border border-brand/20 shadow-lg">
+            <h4 className="text-sm font-semibold text-tx-muted mb-3 uppercase tracking-wider">Contact Us</h4>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex items-center gap-2.5 text-sm font-medium text-tx-main">
+                <div className="bg-brand/20 p-2 rounded-lg text-brand"><Mail size={16} /></div>
+                marcangelguevarra@gmail.com
+              </div>
+              <div className="flex items-center gap-2.5 text-sm font-medium text-tx-main">
+                <div className="bg-brand/20 p-2 rounded-lg text-brand"><Phone size={16} /></div>
+                +63 928 897 8005
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT SIDE: The Login Box */}
+      <div className="w-full md:w-[45%] lg:w-[40%] bg-navy-500 md:bg-navy-400/30 flex items-center justify-center p-8 border-l border-navy-300/50">
+        <div className="w-full max-w-[360px] bg-navy-400 border border-brand/25 rounded-3xl p-8 text-center shadow-[0_0_40px_rgba(249,115,22,0.15)] relative">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold font-rajdhani text-tx-main tracking-widest uppercase drop-shadow-md mb-2">
+              Sign In
+            </h2>
+            <div className="text-sm text-tx-muted font-medium">To securely track your orders</div>
+          </div>
           
           <button 
             onClick={loginWithGoogle}
             className="w-full bg-white text-black p-3.5 rounded-xl font-bold border border-gray-300 cursor-pointer flex items-center justify-center gap-3 hover:bg-gray-100 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
             Sign in with Google
           </button>
@@ -40,12 +103,6 @@ export default function AuthModal() {
           >
             👤 Continue as Guest
           </button>
-          
-          <div className="flex justify-center gap-4 mt-8 flex-wrap">
-            <span className="text-[0.65rem] text-tx-muted flex items-center gap-1.5"><span className="text-brand">🔒</span> Secure</span>
-            <span className="text-[0.65rem] text-tx-muted flex items-center gap-1.5"><span className="text-brand">💬</span> 24/7 Support</span>
-            <span className="text-[0.65rem] text-tx-muted flex items-center gap-1.5"><span className="text-brand">⚡</span> Instant</span>
-          </div>
         </div>
       </div>
     </div>
