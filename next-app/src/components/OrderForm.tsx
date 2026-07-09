@@ -53,7 +53,8 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
   const isMLBB = gameId === "mlbb";
   const isCoD = gameId === "cod";
   const isRoblox = gameId === "roblox";
-  const needsVerification = isMLBB || isCoD || isRoblox;
+  // Remove CoD from needsVerification because the free API is dead.
+  const needsVerification = isMLBB || isRoblox;
 
   const verifyPlayer = async () => {
     if (!playerId || (isMLBB && !zoneId)) {
@@ -97,6 +98,11 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
 
     if (needsVerification && !ign && !manualIgn) {
       setError("Please verify your account or enter your IGN manually.");
+      return;
+    }
+
+    if (isCoD && !playerId && !manualIgn) {
+      setError("Please enter your Player ID and exact IGN.");
       return;
     }
 
@@ -189,6 +195,21 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
             )}
           </div>
         </div>
+
+        {isCoD && (
+          <div>
+            <label className="block text-[0.7rem] font-semibold tracking-wide uppercase text-tx-muted mb-1">
+              Account Name (Exact IGN) <span className="text-brand">*</span>
+            </label>
+            <input 
+              type="text" 
+              value={manualIgn}
+              onChange={(e) => setManualIgn(e.target.value)}
+              className="w-full bg-navy-300 border border-navy-100 rounded-lg p-2.5 text-sm text-tx-main focus:outline-none focus:border-brand transition-colors"
+              placeholder="e.g. Markyy0411"
+            />
+          </div>
+        )}
         
         {isMLBB && (
           <div>
@@ -308,7 +329,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       ) : (
         <button 
           onClick={handleOrder}
-          disabled={submitting || (needsVerification && !ign && !manualIgn)}
+          disabled={submitting || (needsVerification && !ign && !manualIgn) || (isCoD && (!playerId || !manualIgn))}
           className="w-full bg-brand hover:bg-brand-hover text-white font-rajdhani font-bold text-lg tracking-wider py-3 rounded-xl uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(249,115,22,0.3)]"
         >
           {submitting ? "Processing..." : "Place Order"}
