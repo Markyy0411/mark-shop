@@ -62,7 +62,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
           const formattedPrice = isNaN(priceNum) ? String(p.price) : `₱${Math.round(priceNum)}`;
           
           return {
-            id: `legacy-${pCat}-${idx}`,
+            id: `legacy-${String(p.category).toLowerCase().trim()}-${idx}`,
             name: p.name,
             price: formattedPrice,
             desc: p.description || '',
