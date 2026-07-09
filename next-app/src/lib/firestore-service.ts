@@ -28,7 +28,7 @@ const FALLBACK_API = 'https://script.google.com/macros/s/AKfycbymHhomzky-F8dLk1F
 export async function getProductsByCategory(category: string): Promise<Product[]> {
   // 1. Fetch from Google Apps Script to ensure your products are intact immediately
   try {
-    const res = await fetch(FALLBACK_API);
+    const res = await fetch(FALLBACK_API, { cache: 'no-store' });
     const data = await res.json();
     
     if (data.success && data.prices) {
@@ -37,7 +37,22 @@ export async function getProductsByCategory(category: string): Promise<Product[]
       const filtered = data.prices.filter((p: any) => {
         const pGame = String(p.game).toLowerCase().trim();
         const pCat = String(p.category).toLowerCase().trim();
-        return pGame === gameKey && (pCat === catKey || pCat === 'main');
+        
+        if (pGame !== gameKey) return false;
+
+        // Custom mapping for our tabs
+        if (catKey === "dias") {
+          return pCat === "dias" || pCat === "main";
+        }
+        if (catKey === "starlight") {
+          return pCat === "starlight";
+        }
+        if (catKey === "promos") {
+          // Map all the special offer categories from the spreadsheet to the Promos tab
+          return ["combo", "bundles", "dd", "dias-indo", "dias-global", "skinsc", "skinsd"].includes(pCat);
+        }
+
+        return pCat === catKey || pCat === 'main';
       });
 
       if (filtered.length > 0) {
@@ -47,7 +62,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
           const formattedPrice = isNaN(priceNum) ? String(p.price) : `₱${Math.round(priceNum)}`;
           
           return {
-            id: `legacy-${idx}`,
+            id: `legacy-${pCat}-${idx}`,
             name: p.name,
             price: formattedPrice,
             desc: p.description || '',
