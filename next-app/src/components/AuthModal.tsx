@@ -9,10 +9,10 @@ export default function AuthModal() {
   if (loading || user || isGuest) return null;
 
   return (
-    <div className="fixed inset-0 bg-navy-500 z-[9999] flex flex-col md:flex-row overflow-hidden">
+    <div className="fixed inset-0 bg-gradient-to-br from-navy-500 via-navy-400 to-navy-500 z-[9999] flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
       
       {/* LEFT SIDE: The Pitch / Introduction */}
-      <div className="relative w-full md:w-[55%] lg:w-[60%] flex flex-col justify-center p-8 md:p-16 lg:p-24 bg-gradient-to-br from-navy-500 via-navy-400 to-navy-500 text-tx-main shadow-2xl overflow-y-auto">
+      <div className="relative w-full md:w-[60%] flex flex-col justify-center p-8 md:p-16 lg:p-24 text-tx-main">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-brand/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
@@ -73,8 +73,8 @@ export default function AuthModal() {
       </div>
 
       {/* RIGHT SIDE: The Login Box */}
-      <div className="w-full md:w-[45%] lg:w-[40%] bg-navy-500 md:bg-navy-400/30 flex items-center justify-center p-8 border-l border-navy-300/50">
-        <div className="w-full max-w-[360px] bg-navy-400 border border-brand/25 rounded-3xl p-8 text-center shadow-[0_0_40px_rgba(249,115,22,0.15)] relative">
+      <div className="w-full md:w-[40%] flex items-center justify-center p-8 md:pr-16 lg:pr-24">
+        <div className="w-full max-w-[380px] bg-navy-400/80 backdrop-blur-md border border-brand/20 rounded-3xl p-10 text-center shadow-[0_0_40px_rgba(249,115,22,0.15)] relative">
           <div className="mb-8">
             <h2 className="text-2xl font-bold font-rajdhani text-tx-main tracking-widest uppercase drop-shadow-md mb-2">
               Sign In
