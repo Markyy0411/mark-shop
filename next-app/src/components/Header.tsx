@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
-import { LogOut, Search, User as UserIcon, Moon, Sun, AlertTriangle } from "lucide-react";
+import { LogOut, Search, User as UserIcon, Moon, Sun, AlertTriangle, ShieldAlert } from "lucide-react";
 import TrackOrderModal from "./TrackOrderModal";
+import Link from "next/link";
 
 export default function Header() {
   const { user, userData, isGuest, logout } = useAuth();
@@ -43,6 +44,14 @@ export default function Header() {
             <div className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full px-3 py-1 text-[0.7rem] font-semibold text-amber-400">
               🪙 {userData.markcoins} MarkCoins
             </div>
+            {user.email === "marcangelguevarra@gmail.com" && (
+              <Link 
+                href="/admin"
+                className="inline-flex items-center gap-1.5 bg-purple-500/10 border border-purple-500/30 text-purple-400 rounded-full px-3 py-1 text-[0.7rem] font-semibold hover:bg-purple-500/20 transition-colors"
+              >
+                <ShieldAlert size={12} /> Admin
+              </Link>
+            )}
             <button 
               onClick={() => setShowLogoutConfirm(true)}
               className="inline-flex items-center gap-1 bg-red-500/10 border border-red-500/30 text-red-400 rounded-full px-2.5 py-1 text-[0.7rem] font-semibold hover:bg-red-500/20 transition-colors"

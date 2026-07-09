@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc, serverTimestamp, doc, getDoc, setDoc, increment } from "firebase/firestore";
 import { db } from "./firebase";
 
 export interface Product {
@@ -102,6 +102,12 @@ export async function submitOrder(orderId: string, orderData: any): Promise<void
       status: "pending",
       createdAt: serverTimestamp(),
     });
+
+    if (orderData.userId && orderData.userId !== "guest" && orderData.coinsEarned > 0) {
+      await setDoc(doc(db, "users", orderData.userId), {
+        markcoins: increment(orderData.coinsEarned)
+      }, { merge: true });
+    }
   } catch (error) {
     console.error("Error submitting order:", error);
   }

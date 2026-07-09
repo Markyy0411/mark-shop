@@ -110,8 +110,10 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
 
     const txnId = `TXN-${Math.random().toString(36).substring(2, 9).toUpperCase()}-${Date.now().toString().slice(-4)}`;
 
-    // Fire in background so UI isn't blocked by Firebase errors
-    submitOrder(txnId, {
+    const numericPrice = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+    const coinsEarned = isNaN(numericPrice) ? 0 : Math.floor(numericPrice * 0.01);
+
+    const orderPayload = {
       userId: user ? user.uid : "guest",
       username: userData ? userData.username : "Guest",
       game: gameLabel,
@@ -119,6 +121,18 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       price: product.price,
       playerData: { id: playerId, zone: zoneId, ign: ign || manualIgn || playerId },
       paymentMethod,
+      transactionID: txnId,
+      coinsEarned
+    };
+
+    // Fire in background so UI isn't blocked by Firebase errors
+    submitOrder(txnId, orderPayload).catch(console.error);
+
+    // Send email notification via Resend
+    fetch('/api/send-order-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
     }).catch(console.error);
 
     setTimeout(() => {
