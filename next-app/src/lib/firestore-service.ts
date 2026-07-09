@@ -7,6 +7,7 @@ export interface Product {
   desc?: string;
   price: string;
   category: string; // e.g., 'mlbb-dias', 'mlbb-promos'
+  subCategory?: string;
   orderIndex: number;
 }
 
@@ -45,7 +46,12 @@ export async function getProductsByCategory(category: string): Promise<Product[]
           return pCat === "dias" || pCat === "main";
         }
         if (catKey === "starlight") {
-          return pCat === "starlight";
+          if (pCat === "starlight") {
+            const n = String(p.name).toLowerCase();
+            if (n.includes("may") || n.includes("june")) return false;
+            return true;
+          }
+          return false;
         }
         if (catKey === "promos") {
           // Map all the special offer categories from the spreadsheet to the Promos tab
@@ -67,6 +73,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
             price: formattedPrice,
             desc: p.description || '',
             category: category,
+            subCategory: String(p.category).toLowerCase().trim(),
             orderIndex: idx,
             game: gameKey,
             isAvailable: true

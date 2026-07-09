@@ -12,6 +12,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("mlbb-dias");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSubTab, setActiveSubTab] = useState("all");
   
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -22,6 +23,7 @@ export default function Home() {
       setProducts(data);
       setLoading(false);
       setSelectedProduct(null); // Reset selection when changing tabs
+      setActiveSubTab("all");
     }
     loadProducts();
   }, [activeTab]);
@@ -60,6 +62,36 @@ export default function Home() {
           </div>
         </div>
 
+        {activeTab === "mlbb-promos" && !loading && products.length > 0 && (
+          <div className="mb-4 overflow-x-auto pb-1 scrollbar-hide">
+            <div className="flex gap-2 w-max">
+              <button 
+                onClick={() => setActiveSubTab("all")} 
+                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${activeSubTab === "all" ? "bg-white text-navy-500" : "bg-navy-300 text-tx-muted hover:bg-navy-200"}`}
+              >
+                All
+              </button>
+              {Array.from(new Set(products.map(p => p.subCategory).filter(Boolean))).map((sub) => {
+                let label = sub as string;
+                if (label === 'dd') label = 'Daily Diamonds';
+                else if (label === 'skinsc' || label === 'skinsd') label = 'Skins';
+                else if (label === 'dias-indo' || label === 'dias-global') label = 'Global Dias';
+                else label = label.charAt(0).toUpperCase() + label.slice(1);
+                
+                return (
+                  <button 
+                    key={sub}
+                    onClick={() => setActiveSubTab(sub as string)} 
+                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${activeSubTab === sub ? "bg-white text-navy-500" : "bg-navy-300 text-tx-muted hover:bg-navy-200"}`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div>
           <div className="font-rajdhani text-[0.7rem] font-semibold tracking-[2px] uppercase text-tx-muted border-l-[3px] border-brand pl-2 mb-2.5 mt-1.5">
             {activeTab === "mlbb-dias" ? "Direct Top-Up (PH Server)" : activeTab === "mlbb-promos" ? "Special Promos" : "Starlight & Memberships"}
@@ -69,7 +101,7 @@ export default function Home() {
             <div className="text-center text-tx-muted text-sm py-10 animate-pulse">Loading products...</div>
           ) : products.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-4">
-              {products.map((p) => (
+              {(activeSubTab === "all" ? products : products.filter(p => p.subCategory === activeSubTab)).map((p) => (
                 <ProductCard 
                   key={p.id} 
                   name={p.name} 
