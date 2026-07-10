@@ -40,20 +40,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         const docRef = doc(db, "users", firebaseUser.uid);
         const docSnap = await getDoc(docRef);
+        
+        let finalUserData;
+
         if (docSnap.exists()) {
-          setUserData(docSnap.data());
+          finalUserData = docSnap.data();
+          // Auto-upgrade the owner to admin
+          if (firebaseUser.email === "marcangelguevarra@gmail.com" && finalUserData.role !== "admin") {
+            finalUserData.role = "admin";
+            await setDoc(docRef, { role: "admin" }, { merge: true });
+          }
         } else {
           // Initialize user in Firestore
-          const newUserData = {
+          finalUserData = {
             username: firebaseUser.displayName || "User",
-            role: "user",
+            role: firebaseUser.email === "marcangelguevarra@gmail.com" ? "admin" : "user",
             markcoins: 0,
             mlbbId: "",
             mlbbZone: ""
           };
-          await setDoc(docRef, newUserData);
-          setUserData(newUserData);
+          await setDoc(docRef, finalUserData);
         }
+        
+        setUserData(finalUserData);
       } else {
         setUserData(null);
       }
