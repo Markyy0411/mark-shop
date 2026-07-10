@@ -27,6 +27,43 @@ export async function POST(request: Request) {
 
     const orderData = await request.json();
     
+    // --- Discord Webhook Integration ---
+    const discordWebhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (discordWebhookUrl) {
+      try {
+        const discordPayload = {
+          content: `🚨 **NEW ORDER RECEIVED** 🚨`,
+          embeds: [
+            {
+              title: `Order: ${orderData.productName}`,
+              color: 16742144, // Orange/Brand color
+              fields: [
+                { name: "Ticket ID", value: `\`${orderData.transactionID}\``, inline: true },
+                { name: "Game", value: orderData.game, inline: true },
+                { name: "Price", value: orderData.price, inline: true },
+                { name: "Player IGN", value: orderData.playerData.ign, inline: true },
+                { name: "Player ID", value: `${orderData.playerData.id} ${orderData.playerData.zone ? `(${orderData.playerData.zone})` : ''}`, inline: true },
+                { name: "Payment Method", value: String(orderData.paymentMethod).toUpperCase(), inline: true },
+                { name: "Customer", value: orderData.username || "Guest", inline: true }
+              ],
+              footer: { text: "Mark's Game Shop Admin System" },
+              timestamp: new Date().toISOString()
+            }
+          ]
+        };
+
+        await fetch(discordWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(discordPayload)
+        });
+      } catch (err) {
+        console.error("Failed to send Discord webhook:", err);
+        // Don't fail the whole request if Discord fails
+      }
+    }
+    // -----------------------------------
+
     // Extract variables from the request
     const { 
       transactionID, 

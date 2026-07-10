@@ -134,3 +134,26 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
     return null;
   }
 }
+
+export async function getAllOrders(): Promise<Order[]> {
+  try {
+    const snapshot = await getDocs(collection(db, "orders"));
+    if (!snapshot.empty) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any)) as Order[];
+    }
+    return [];
+  } catch (error) {
+    console.error("Error fetching all orders:", error);
+    return [];
+  }
+}
+
+export async function updateOrderStatus(orderId: string, status: 'pending' | 'processing' | 'completed' | 'cancelled'): Promise<void> {
+  try {
+    await setDoc(doc(db, "orders", orderId), { status }, { merge: true });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    throw error;
+  }
+}

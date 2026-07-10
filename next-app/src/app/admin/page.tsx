@@ -1,158 +1,171 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, query, orderBy, onSnapshot, doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { useAuth } from "@/context/AuthContext";
+import { getAllOrders, updateOrderStatus, Order } from "@/lib/firestore-service";
+import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
-import { Order } from "@/lib/firestore-service";
+
+// Extended Order interface to include the document ID
+interface AdminOrder extends Order {
+  id: string;
+}
 
 export default function AdminDashboard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, userData, loading } = useAuth();
   const router = useRouter();
   
-  // Replace with the real admin email
-  const ADMIN_EMAIL = "marcangelguevarra@gmail.com";
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [orders, setOrders] = useState<(Order & { id: string })[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [fetching, setFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading) {
-      if (!user || user.email !== ADMIN_EMAIL) {
-        router.push("/");
-      } else {
-        setIsAdmin(true);
-      }
+    // If finished loading auth and not admin, kick them out
+    if (!loading && (!user || userData?.role !== "admin")) {
+      router.push("/");
     }
-  }, [user, authLoading, router]);
+  }, [user, userData, loading, router]);
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (userData?.role === "admin") {
+      fetchOrders();
+    }
+  }, [userData]);
 
-    // Listen to orders in real-time
-    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedOrders = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as (Order & { id: string })[];
-      
-      setOrders(fetchedOrders);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [isAdmin]);
-
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  const fetchOrders = async () => {
+    setFetching(true);
     try {
-      await updateDoc(doc(db, "orders", orderId), {
-        status: newStatus
+      const data = await getAllOrders();
+      // Sort by newest first (assuming createdAt is a Firebase Timestamp)
+      const sortedData = (data as AdminOrder[]).sort((a, b) => {
+        const timeA = a.createdAt?.seconds || 0;
+        const timeB = b.createdAt?.seconds || 0;
+        return timeB - timeA;
       });
-    } catch (error) {
-      console.error("Error updating order:", error);
-      alert("Failed to update status");
+      setOrders(sortedData);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch orders.");
+    } finally {
+      setFetching(false);
     }
   };
 
-  if (authLoading || (!isAdmin && loading)) {
-    return <div className="h-screen w-full flex items-center justify-center bg-navy-500 text-brand animate-pulse">Checking credentials...</div>;
+  const handleStatusChange = async (orderId: string, newStatus: 'pending' | 'processing' | 'completed' | 'cancelled') => {
+    try {
+      await updateOrderStatus(orderId, newStatus);
+      // Update local state immediately
+      setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    } catch (err) {
+      console.error("Failed to update status", err);
+      alert("Failed to update status.");
+    }
+  };
+
+  if (loading || fetching) {
+    return (
+      <div className="min-h-screen bg-navy-500 text-tx-main flex items-center justify-center">
+        <div className="animate-spin text-brand text-4xl">⟳</div>
+      </div>
+    );
   }
 
-  if (!isAdmin) return null; // router.push handles redirect
+  if (!user || userData?.role !== "admin") {
+    return null; // Will redirect in useEffect
+  }
 
   return (
-    <div className="min-h-screen bg-navy-500 text-tx-main p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-rajdhani font-bold text-brand uppercase tracking-wider">Admin Dashboard</h1>
-            <p className="text-tx-muted text-sm mt-1">Manage all incoming orders here.</p>
-          </div>
-          <button onClick={() => router.push("/")} className="bg-navy-300 hover:bg-navy-200 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
-            Back to Shop
+    <div className="min-h-screen bg-navy-500 text-tx-main font-poppins selection:bg-brand/30 pb-20">
+      <Header />
+      
+      <main className="max-w-6xl mx-auto px-4 mt-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-rajdhani font-bold text-white uppercase tracking-wider">
+            Admin Dashboard
+          </h1>
+          <button 
+            onClick={fetchOrders}
+            className="bg-navy-300 hover:bg-navy-200 px-4 py-2 rounded-lg text-sm transition-colors border border-navy-100"
+          >
+            ↻ Refresh
           </button>
         </div>
 
-        {loading ? (
-          <div className="text-center text-tx-muted py-10 animate-pulse">Loading orders...</div>
-        ) : (
-          <div className="bg-navy-400 border border-navy-300 rounded-xl overflow-hidden shadow-xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-[800px]">
-                <thead>
-                  <tr className="bg-navy-500/50 text-[0.7rem] uppercase tracking-wider text-tx-muted border-b border-navy-300">
-                    <th className="p-4 font-semibold">Date / TXN ID</th>
-                    <th className="p-4 font-semibold">Customer</th>
-                    <th className="p-4 font-semibold">Order</th>
-                    <th className="p-4 font-semibold">Details</th>
-                    <th className="p-4 font-semibold">Status</th>
-                    <th className="p-4 font-semibold text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-navy-300">
-                  {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-navy-300/30 transition-colors">
-                      <td className="p-4">
-                        <div className="text-xs text-tx-muted mb-1">
-                          {order.createdAt?.toDate ? order.createdAt.toDate().toLocaleString('en-PH', {timeZone: 'Asia/Manila'}) : 'Just now'}
-                        </div>
-                        <div className="font-mono text-brand text-sm font-semibold">{order.id}</div>
-                      </td>
-                      <td className="p-4">
-                        <div className="font-semibold text-sm">{order.username}</div>
-                        <div className="text-xs text-tx-muted bg-navy-500 inline-block px-2 py-0.5 rounded mt-1 border border-navy-200">
-                          {order.paymentMethod.toUpperCase()}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="font-semibold text-sm">{order.game}</div>
-                        <div className="text-amber-400 text-xs font-semibold mt-0.5">{order.productName} ({order.price})</div>
-                      </td>
-                      <td className="p-4">
-                        <div className="text-xs">
-                          <span className="text-tx-muted uppercase tracking-wide text-[0.65rem] block">IGN</span>
-                          <span className="font-semibold text-green-400 block mb-1">{order.playerData?.ign || '—'}</span>
-                          <span className="text-tx-muted uppercase tracking-wide text-[0.65rem] block">ID/Zone</span>
-                          <span className="font-semibold">{order.playerData?.id || '—'} {order.playerData?.zone ? `(${order.playerData.zone})` : ''}</span>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <span className={`px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider rounded-full border whitespace-nowrap
-                          ${order.status === 'completed' ? 'bg-green-500/10 border-green-500/30 text-green-400' : ''}
-                          ${order.status === 'pending' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : ''}
-                          ${order.status === 'processing' ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' : ''}
-                          ${order.status === 'cancelled' ? 'bg-red-500/10 border-red-500/30 text-red-400' : ''}
-                        `}>
-                          {order.status}
-                        </span>
-                      </td>
-                      <td className="p-4 text-right">
-                        <select 
-                          value={order.status}
-                          onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                          className="bg-navy-500 border border-navy-200 rounded p-1.5 text-xs text-tx-main focus:outline-none focus:border-brand cursor-pointer"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="processing">Processing</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
-                      </td>
-                    </tr>
-                  ))}
-                  {orders.length === 0 && (
-                    <tr>
-                      <td colSpan={6} className="text-center p-8 text-tx-muted">No orders found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl mb-6">
+            {error}
           </div>
         )}
-      </div>
+
+        <div className="bg-navy-400 border border-navy-300 rounded-xl overflow-x-auto shadow-xl">
+          <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead>
+              <tr className="bg-navy-300/50 border-b border-navy-300 text-tx-muted uppercase tracking-wider text-[0.7rem] font-semibold">
+                <th className="p-4">Ticket ID</th>
+                <th className="p-4">User</th>
+                <th className="p-4">Order Details</th>
+                <th className="p-4">Price</th>
+                <th className="p-4">Payment</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-navy-300 text-sm">
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-tx-muted">No orders found.</td>
+                </tr>
+              ) : (
+                orders.map((order) => (
+                  <tr key={order.id} className="hover:bg-navy-300/20 transition-colors">
+                    <td className="p-4 font-mono text-xs text-brand">{order.id}</td>
+                    <td className="p-4">
+                      <div className="font-semibold text-white">{order.username}</div>
+                      <div className="text-[0.65rem] text-tx-muted uppercase mt-0.5">{order.playerData?.ign || "N/A"}</div>
+                    </td>
+                    <td className="p-4">
+                      <div className="font-bold text-brand-hover">{order.game}</div>
+                      <div className="text-xs text-tx-main">{order.productName}</div>
+                      <div className="text-[0.65rem] text-tx-muted mt-0.5">
+                        ID: {order.playerData?.id} {order.playerData?.zone ? `(${order.playerData.zone})` : ""}
+                      </div>
+                    </td>
+                    <td className="p-4 font-semibold text-amber-400">{order.price}</td>
+                    <td className="p-4 uppercase text-xs font-bold tracking-wide">{order.paymentMethod}</td>
+                    <td className="p-4">
+                      <span className={`px-2.5 py-1 rounded-md text-[0.65rem] font-bold uppercase tracking-wider border
+                        ${order.status === 'completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 
+                          order.status === 'processing' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 
+                          order.status === 'cancelled' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                          'bg-amber-500/10 text-amber-400 border-amber-500/20'}
+                      `}>
+                        {order.status || 'pending'}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right space-x-2 whitespace-nowrap">
+                      {order.status === 'pending' && (
+                        <button onClick={() => handleStatusChange(order.id, 'processing')} className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors">
+                          Process
+                        </button>
+                      )}
+                      {(order.status === 'pending' || order.status === 'processing') && (
+                        <button onClick={() => handleStatusChange(order.id, 'completed')} className="bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors">
+                          Complete
+                        </button>
+                      )}
+                      {order.status !== 'cancelled' && order.status !== 'completed' && (
+                        <button onClick={() => handleStatusChange(order.id, 'cancelled')} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors">
+                          Cancel
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
   );
 }
