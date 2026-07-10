@@ -4,8 +4,27 @@ import { Resend } from 'resend';
 // Initialize Resend with the API key from environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Simple in-memory rate limiter (persists per serverless container)
+const rateLimit = new Map<string, { count: number, resetTime: number }>();
+const MAX_REQUESTS = 5; // 5 requests
+const WINDOW_MS = 60 * 1000; // per minute
+
 export async function POST(request: Request) {
   try {
+    // 1. IP-based Rate Limiting
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    const now = Date.now();
+    const limit = rateLimit.get(ip);
+    
+    if (limit && now < limit.resetTime) {
+      if (limit.count >= MAX_REQUESTS) {
+        return NextResponse.json({ success: false, error: 'Too many requests. Please wait a minute.' }, { status: 429 });
+      }
+      limit.count++;
+    } else {
+      rateLimit.set(ip, { count: 1, resetTime: now + WINDOW_MS });
+    }
+
     const orderData = await request.json();
     
     // Extract variables from the request

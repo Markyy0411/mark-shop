@@ -1563,6 +1563,10 @@ document.querySelectorAll('.ctab').forEach(tab=>{
   });
 });
 
+function escapeHTML(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 // ============================================================
 // GRID BUILDER
 // ============================================================
@@ -1575,7 +1579,7 @@ function makeGrid(id,items,game,cat){
     const desc=it.desc||it.d||'';
     const c=document.createElement('div');
     c.className='pcard';c.dataset.game=game;c.dataset.cat=cat;c.dataset.name=it.n;c.dataset.price=it.p;
-    c.innerHTML=`<div class="chk">✓</div><div class="pn">${it.n}</div>${desc?`<div class="pd">${desc}</div>`:''}<div class="pp">${ph(it.p)}</div>`;
+    c.innerHTML=`<div class="chk">✓</div><div class="pn">${escapeHTML(it.n)}</div>${desc?`<div class="pd">${escapeHTML(desc)}</div>`:''}<div class="pp">${escapeHTML(ph(it.p))}</div>`;
     c.onclick=()=>{if(game==='mlbb'&&cat==='dd')openDDModal(c);else selectItem(c,game);};
     el.appendChild(c);
   });
@@ -1790,7 +1794,7 @@ async function trackOrder(){
     // Use ORDER_API with action=trackOrder
     const r=await fetch(ORDER_API+'?action=trackOrder&txn='+encodeURIComponent(txn));
     const d=await r.json();
-    if(!d.success){res.innerHTML='<span style="color:#f87171">❌ '+(d.error||'Order not found. Check your TXN ID.')+'</span>';return;}
+    if(!d.success){res.innerHTML='<span style="color:#f87171">❌ '+escapeHTML(d.error||'Order not found. Check your TXN ID.')+'</span>';return;}
     const stColors={pending:'#f59e0b',processing:'#3b82f6',completed:'#22c55e'};
     const stIcons= {pending:'⏳',processing:'⚙️',completed:'✅'};
     const stMsgs= {pending:'Your order is received and awaiting processing.',processing:'Mark is processing your order now!',completed:'Done! Check your in-game mailbox.'};
