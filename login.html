@@ -12,6 +12,16 @@
     --tx:#e2e8f0; --mx:#94a3b8; --bdr:rgba(255,255,255,0.06);
     --gr:#22c55e; --rd:#ef4444; --bl:#3b82f6;
   }
+  body.light-mode {
+    --dk: #f8fafc;
+    --dk2: #ffffff;
+    --dk3: #f1f5f9;
+    --dk4: #e2e8f0;
+    --dk5: #ffffff;
+    --tx: #0f172a;
+    --mx: #475569;
+    --bdr: rgba(15, 23, 42, 0.1);
+  }
   * { box-sizing:border-box; margin:0; padding:0; }
   body {
     background:var(--dk); color:var(--tx); font-family:'Exo 2',sans-serif;
@@ -107,6 +117,28 @@
 </style>
 </head>
 <body>
+<script>
+  function setTheme(theme) {
+    if (theme === 'light') document.body.classList.add('light-mode');
+    else document.body.classList.remove('light-mode');
+    localStorage.setItem('ms_theme', theme);
+    const tb = document.getElementById('theme-toggle');
+    if (tb) tb.innerHTML = theme === 'light' ? '🌙' : '☀️';
+  }
+  function toggleTheme() {
+    const current = localStorage.getItem('ms_theme') || 'dark';
+    setTheme(current === 'dark' ? 'light' : 'dark');
+  }
+  (function() {
+    const saved = localStorage.getItem('ms_theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    setTheme(saved);
+  })();
+</script>
+
+<!-- Theme Toggle Corner Button -->
+<div style="position:fixed; top:20px; right:20px; z-index:999;">
+  <button id="theme-toggle" onclick="toggleTheme()" style="background:var(--dk3); border:1px solid var(--bdr); color:var(--tx); border-radius:50%; width:40px; height:40px; font-size:1.2rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.2s;">☀️</button>
+</div>
 
 <div class="card">
 

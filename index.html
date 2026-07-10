@@ -28,7 +28,18 @@
   --tx: #f8fafc;       /* Crisp White */
   --mx: #94a3b8;       /* Muted Text */
   --bdr: #334155;      /* Premium solid border */
-  --rd: #ef4444;       /* Red / Error */
+  /* Red / Error */
+}
+
+body.light-mode {
+  --dk: #f8fafc;
+  --dk2: #ffffff;
+  --dk3: #f1f5f9;
+  --dk4: #e2e8f0;
+  --dk5: #ffffff;
+  --tx: #0f172a;
+  --mx: #475569;
+  --bdr: #cbd5e1;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -407,6 +418,23 @@ body {
 </head>
 <body>
   <script>
+    function setTheme(theme) {
+      if (theme === 'light') document.body.classList.add('light-mode');
+      else document.body.classList.remove('light-mode');
+      localStorage.setItem('ms_theme', theme);
+      const tb = document.getElementById('theme-toggle');
+      if (tb) tb.innerHTML = theme === 'light' ? '🌙' : '☀️';
+    }
+    function toggleTheme() {
+      const current = localStorage.getItem('ms_theme') || 'dark';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+    (function() {
+      const saved = localStorage.getItem('ms_theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      setTheme(saved);
+    })();
+  </script>
+  <script>
 (function() {
   // If already logged in via localStorage, sync to sessionStorage
   // so SESSION variable auto-loads and skips the auth screen
@@ -598,6 +626,8 @@ window.handleServerChange = function() {
     <button class="logout-btn" id="logout-btn" style="display:none" onclick="logout()">Logout</button>
     <!-- Track order button -->
     <div class="track-btn" onclick="openTrackModal()">🔍 Track Order</div>
+    <!-- Theme Toggle -->
+    <div class="track-btn" style="background:var(--dk3); border:1px solid var(--dk5); color:var(--tx)" id="theme-toggle" onclick="toggleTheme()">☀️</div>
   </div>
 </div>
 

@@ -23,11 +23,11 @@
 }
 
 .light {
-  --color-navy-100: #e2e8f0; /* inputs */
-  --color-navy-200: #cbd5e1; /* fallback */
-  --color-navy-300: #94a3b8; /* hovers, borders */
-  --color-navy-400: #f8fafc; /* panels */
-  --color-navy-500: #ffffff; /* main bg */
+  --color-navy-100: #ffffff; /* inputs */
+  --color-navy-200: #e2e8f0; /* fallback */
+  --color-navy-300: #f1f5f9; /* hovers, borders */
+  --color-navy-400: #ffffff; /* panels */
+  --color-navy-500: #f8fafc; /* main bg */
   
   --color-tx-main: #0f172a;
   --color-tx-muted: #475569;
