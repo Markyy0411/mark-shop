@@ -44,10 +44,10 @@ export default function Home() {
           </div>
           
           <div className="absolute inset-0 z-20 flex flex-col justify-center p-6 sm:p-8">
-            <h2 className="font-rajdhani text-2xl sm:text-3xl font-bold text-white tracking-wide uppercase drop-shadow-lg mb-2 flex items-center gap-2">
+            <h2 className="font-rajdhani text-2xl sm:text-3xl font-bold text-tx-main tracking-wide uppercase drop-shadow-lg mb-2 flex items-center gap-2">
               <span className="text-brand">⚡</span> Mobile Legends
             </h2>
-            <p className="text-xs sm:text-sm text-gray-200 max-w-[280px] sm:max-w-[340px] leading-relaxed drop-shadow-md">
+            <p className="text-xs sm:text-sm text-tx-muted max-w-[280px] sm:max-w-[340px] leading-relaxed drop-shadow-md font-medium">
               Top up MLBB Diamonds in seconds! Just enter your MLBB user ID, select the value of Diamonds you wish to purchase, complete the payment, and your top-up will be processed immediately.
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function Home() {
             <div className="flex gap-2 w-max">
               <button 
                 onClick={() => setActiveSubTab("all")} 
-                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${activeSubTab === "all" ? "bg-white text-navy-500" : "bg-navy-300 text-tx-muted hover:bg-navy-200"}`}
+                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${activeSubTab === "all" ? "bg-navy-100 text-tx-main shadow-sm border border-navy-300" : "bg-navy-300 text-tx-muted hover:bg-navy-200"}`}
               >
                 All
               </button>
@@ -82,7 +82,7 @@ export default function Home() {
                   <button 
                     key={sub}
                     onClick={() => setActiveSubTab(sub as string)} 
-                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${activeSubTab === sub ? "bg-white text-navy-500" : "bg-navy-300 text-tx-muted hover:bg-navy-200"}`}
+                    className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${activeSubTab === sub ? "bg-navy-100 text-tx-main shadow-sm border border-navy-300" : "bg-navy-300 text-tx-muted hover:bg-navy-200"}`}
                   >
                     {label}
                   </button>

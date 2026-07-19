@@ -4,10 +4,66 @@ import { Resend } from 'resend';
 // Initialize Resend with the API key from environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Simple in-memory rate limiter (persists per serverless container)
+const rateLimit = new Map<string, { count: number, resetTime: number }>();
+const MAX_REQUESTS = 5; // 5 requests
+const WINDOW_MS = 60 * 1000; // per minute
+
 export async function POST(request: Request) {
   try {
+    // 1. IP-based Rate Limiting
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    const now = Date.now();
+    const limit = rateLimit.get(ip);
+    
+    if (limit && now < limit.resetTime) {
+      if (limit.count >= MAX_REQUESTS) {
+        return NextResponse.json({ success: false, error: 'Too many requests. Please wait a minute.' }, { status: 429 });
+      }
+      limit.count++;
+    } else {
+      rateLimit.set(ip, { count: 1, resetTime: now + WINDOW_MS });
+    }
+
     const orderData = await request.json();
     
+    // --- Discord Webhook Integration ---
+    const discordWebhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (discordWebhookUrl) {
+      try {
+        const discordPayload = {
+          content: `🚨 **NEW ORDER RECEIVED** 🚨`,
+          embeds: [
+            {
+              title: `Order: ${orderData.productName}`,
+              color: 16742144, // Orange/Brand color
+              fields: [
+                { name: "Ticket ID", value: `\`${orderData.transactionID}\``, inline: true },
+                { name: "Game", value: orderData.game, inline: true },
+                { name: "Price", value: orderData.price, inline: true },
+                { name: "Player IGN", value: orderData.playerData.ign, inline: true },
+                { name: "Player ID", value: `${orderData.playerData.id} ${orderData.playerData.zone ? `(${orderData.playerData.zone})` : ''}`, inline: true },
+                { name: "Payment Method", value: String(orderData.paymentMethod).toUpperCase(), inline: true },
+                { name: "Customer", value: orderData.username || "Guest", inline: true }
+              ],
+              footer: { text: "Mark's Game Shop Admin System" },
+              timestamp: new Date().toISOString()
+            }
+          ]
+        };
+
+        await fetch(discordWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(discordPayload)
+        });
+      } catch (err) {
+        console.error("Failed to send Discord webhook:", err);
+        // Don't fail the whole request if Discord fails
+      }
+    }
+    // -----------------------------------
+
     // Extract variables from the request
     const { 
       transactionID, 

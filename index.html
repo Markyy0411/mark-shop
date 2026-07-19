@@ -28,7 +28,18 @@
   --tx: #f8fafc;       /* Crisp White */
   --mx: #94a3b8;       /* Muted Text */
   --bdr: #334155;      /* Premium solid border */
-  --rd: #ef4444;       /* Red / Error */
+  /* Red / Error */
+}
+
+body.light-mode {
+  --dk: #f8fafc;
+  --dk2: #ffffff;
+  --dk3: #f1f5f9;
+  --dk4: #e2e8f0;
+  --dk5: #ffffff;
+  --tx: #0f172a;
+  --mx: #475569;
+  --bdr: #cbd5e1;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -407,6 +418,23 @@ body {
 </head>
 <body>
   <script>
+    function setTheme(theme) {
+      if (theme === 'light') document.body.classList.add('light-mode');
+      else document.body.classList.remove('light-mode');
+      localStorage.setItem('ms_theme', theme);
+      const tb = document.getElementById('theme-toggle');
+      if (tb) tb.innerHTML = theme === 'light' ? '🌙' : '☀️';
+    }
+    function toggleTheme() {
+      const current = localStorage.getItem('ms_theme') || 'dark';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+    (function() {
+      const saved = localStorage.getItem('ms_theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      setTheme(saved);
+    })();
+  </script>
+  <script>
 (function() {
   // If already logged in via localStorage, sync to sessionStorage
   // so SESSION variable auto-loads and skips the auth screen
@@ -598,6 +626,8 @@ window.handleServerChange = function() {
     <button class="logout-btn" id="logout-btn" style="display:none" onclick="logout()">Logout</button>
     <!-- Track order button -->
     <div class="track-btn" onclick="openTrackModal()">🔍 Track Order</div>
+    <!-- Theme Toggle -->
+    <div class="track-btn" style="background:var(--dk3); border:1px solid var(--dk5); color:var(--tx)" id="theme-toggle" onclick="toggleTheme()">☀️</div>
   </div>
 </div>
 
@@ -1533,6 +1563,10 @@ document.querySelectorAll('.ctab').forEach(tab=>{
   });
 });
 
+function escapeHTML(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 // ============================================================
 // GRID BUILDER
 // ============================================================
@@ -1545,7 +1579,7 @@ function makeGrid(id,items,game,cat){
     const desc=it.desc||it.d||'';
     const c=document.createElement('div');
     c.className='pcard';c.dataset.game=game;c.dataset.cat=cat;c.dataset.name=it.n;c.dataset.price=it.p;
-    c.innerHTML=`<div class="chk">✓</div><div class="pn">${it.n}</div>${desc?`<div class="pd">${desc}</div>`:''}<div class="pp">${ph(it.p)}</div>`;
+    c.innerHTML=`<div class="chk">✓</div><div class="pn">${escapeHTML(it.n)}</div>${desc?`<div class="pd">${escapeHTML(desc)}</div>`:''}<div class="pp">${escapeHTML(ph(it.p))}</div>`;
     c.onclick=()=>{if(game==='mlbb'&&cat==='dd')openDDModal(c);else selectItem(c,game);};
     el.appendChild(c);
   });
@@ -1760,7 +1794,7 @@ async function trackOrder(){
     // Use ORDER_API with action=trackOrder
     const r=await fetch(ORDER_API+'?action=trackOrder&txn='+encodeURIComponent(txn));
     const d=await r.json();
-    if(!d.success){res.innerHTML='<span style="color:#f87171">❌ '+(d.error||'Order not found. Check your TXN ID.')+'</span>';return;}
+    if(!d.success){res.innerHTML='<span style="color:#f87171">❌ '+escapeHTML(d.error||'Order not found. Check your TXN ID.')+'</span>';return;}
     const stColors={pending:'#f59e0b',processing:'#3b82f6',completed:'#22c55e'};
     const stIcons= {pending:'⏳',processing:'⚙️',completed:'✅'};
     const stMsgs= {pending:'Your order is received and awaiting processing.',processing:'Mark is processing your order now!',completed:'Done! Check your in-game mailbox.'};
