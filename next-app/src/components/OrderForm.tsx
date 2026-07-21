@@ -53,8 +53,8 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
   const isMLBB = gameId === "mlbb";
   const isCoD = gameId === "cod";
   const isRoblox = gameId === "roblox";
-  // Remove CoD from needsVerification because the free API is dead.
-  const needsVerification = isMLBB || isRoblox;
+  // Remove MLBB and CoD from needsVerification because the free API is dead.
+  const needsVerification = isRoblox;
 
   const verifyPlayer = async () => {
     if (!playerId || (isMLBB && !zoneId)) {
@@ -101,8 +101,8 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       return;
     }
 
-    if (isCoD && !playerId && !manualIgn) {
-      setError("Please enter your Player ID and exact IGN.");
+    if ((isCoD || isMLBB) && !playerId && !manualIgn) {
+      setError("Please enter your Player details and exact IGN.");
       return;
     }
 
@@ -184,7 +184,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
               className="flex-1 bg-navy-300 border border-navy-100 rounded-lg p-2.5 text-sm text-tx-main focus:outline-none focus:border-brand transition-colors"
               placeholder={isRoblox ? "e.g. myusername" : "e.g. 12345678"}
             />
-            {needsVerification && !isMLBB && (
+            {needsVerification && (
               <button 
                 onClick={verifyPlayer}
                 disabled={verifying}
@@ -196,7 +196,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
           </div>
         </div>
 
-        {isCoD && (
+        {(isCoD || isMLBB) && (
           <div>
             <label className="block text-[0.7rem] font-semibold tracking-wide uppercase text-tx-muted mb-1">
               Account Name (Exact IGN) <span className="text-brand">*</span>
@@ -224,13 +224,6 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
                 className="flex-1 bg-navy-300 border border-navy-100 rounded-lg p-2.5 text-sm text-tx-main focus:outline-none focus:border-brand transition-colors"
                 placeholder="e.g. 3124"
               />
-              <button 
-                onClick={verifyPlayer}
-                disabled={verifying}
-                className="bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-lg px-4 font-semibold text-xs hover:bg-blue-500/20 disabled:opacity-50"
-              >
-                {verifying ? "..." : "Verify"}
-              </button>
             </div>
           </div>
         )}
@@ -329,7 +322,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       ) : (
         <button 
           onClick={handleOrder}
-          disabled={submitting || (needsVerification && !ign && !manualIgn) || (isCoD && (!playerId || !manualIgn))}
+          disabled={submitting || (needsVerification && !ign && !manualIgn) || ((isCoD || isMLBB) && (!playerId || !manualIgn))}
           className="w-full bg-brand hover:bg-brand-hover text-white font-rajdhani font-bold text-lg tracking-wider py-3 rounded-xl uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(249,115,22,0.3)]"
         >
           {submitting ? "Processing..." : "Place Order"}
