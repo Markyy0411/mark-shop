@@ -156,6 +156,23 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
     }, 800); // Tiny simulated delay for UX
   };
 
+  const copyReceiptToClipboard = () => {
+    if (!receipt) return;
+    
+    let phServer = "N/A";
+    if (gameId === "mlbb") {
+      const z = parseInt(receipt.zoneId || "0");
+      const isPH = (z >= 3000 && z <= 4500) || (z >= 9000 && z <= 11000) || (z >= 13000);
+      phServer = isPH ? "Yes" : "No";
+    }
+
+    const textToCopy = `Player ID: ${receipt.playerId}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}\n\nconfirm`;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      alert("Copied to clipboard! Please send this to Mark.");
+    });
+  };
+
   return (
     <div ref={formRef} className="bg-navy-400 border border-navy-300 rounded-xl p-4 mt-4 animate-in fade-in slide-in-from-bottom-2 shadow-xl">
       <div className="flex justify-between items-start mb-4">
@@ -315,13 +332,20 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
             </div>
           </div>
 
-          <div className="mt-5 text-xs text-tx-muted text-center italic">
-            Please screenshot this receipt and wait for Mark to confirm your order before sending payment.
+          <div className="mt-5 text-xs text-tx-muted text-center italic leading-relaxed">
+            Please copy the order details below and send them to Mark. Make sure to reply with <strong>"confirm"</strong> so he knows what to do after!
           </div>
 
           <button 
+            onClick={copyReceiptToClipboard}
+            className="w-full mt-3 bg-blue-600 hover:bg-blue-500 text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            📋 COPY ORDER DETAILS
+          </button>
+
+          <button 
             onClick={() => { setReceipt(null); setPlayerId(""); setZoneId(""); setIgn(""); setManualIgn(""); setVerificationFailed(false); }}
-            className="w-full mt-4 bg-surface hover:bg-surface-hover text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors border border-dk5"
+            className="w-full mt-2 bg-surface hover:bg-surface-hover text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors border border-dk5"
           >
             PLACE ANOTHER ORDER
           </button>
