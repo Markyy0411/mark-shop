@@ -36,6 +36,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
   const [verificationFailed, setVerificationFailed] = useState(false);
   const [manualIgn, setManualIgn] = useState("");
+  const [confirmText, setConfirmText] = useState("");
 
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -166,7 +167,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       phServer = isPH ? "Yes" : "No";
     }
 
-    const textToCopy = `Player ID: ${receipt.playerId}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}`;
+    const textToCopy = `Player ID: ${receipt.playerId}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}\n\nconfirm`;
 
     navigator.clipboard.writeText(textToCopy).then(() => {
       alert("Copied to clipboard! Please send this to Mark.");
@@ -332,25 +333,36 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
             </div>
           </div>
 
-          <div className="mt-5 bg-navy-500/50 rounded-lg p-3 text-xs text-tx-main text-left leading-relaxed border border-navy-300">
-            <div className="font-bold text-amber-400 mb-1 uppercase tracking-wide">Next Steps:</div>
-            <ol className="list-decimal pl-4 space-y-1">
-              <li>Click the <strong>COPY ORDER DETAILS</strong> button below.</li>
-              <li>Send the copied receipt to Mark.</li>
-              <li>Manually type and reply with <strong>"confirm"</strong> so he can process your payment!</li>
-            </ol>
+          <div className="mt-5 bg-navy-500 border border-red-500/30 rounded-xl p-4 text-sm text-tx-main text-left shadow-lg">
+            <div className="font-bold text-red-400 mb-2 flex items-center gap-2">
+              ⚠️ IMPORTANT INSTRUCTIONS
+            </div>
+            <p className="text-tx-muted text-xs leading-relaxed mb-3">
+              Please carefully review your order details above. Once you send payment, it cannot be refunded if the details are incorrect. 
+              To proceed, please type the word <strong className="text-white">"confirm"</strong> in the box below to unlock your receipt.
+            </p>
+            <input 
+              type="text"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              placeholder="Type 'confirm' here..."
+              className="w-full bg-navy-300 border border-navy-100 rounded-lg p-2.5 text-sm text-tx-main focus:outline-none focus:border-red-400 transition-colors mb-4"
+            />
+
+            <button 
+              onClick={copyReceiptToClipboard}
+              disabled={confirmText.trim().toLowerCase() !== "confirm"}
+              className={`w-full py-2.5 rounded-lg font-rajdhani font-bold tracking-wider transition-all flex items-center justify-center gap-2
+                ${confirmText.trim().toLowerCase() === "confirm" ? "bg-blue-600 hover:bg-blue-500 text-white cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.4)]" : "bg-navy-300 border border-navy-100 text-tx-muted opacity-50 cursor-not-allowed"}
+              `}
+            >
+              📋 COPY ORDER DETAILS
+            </button>
           </div>
 
           <button 
-            onClick={copyReceiptToClipboard}
-            className="w-full mt-3 bg-blue-600 hover:bg-blue-500 text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
-          >
-            📋 COPY ORDER DETAILS
-          </button>
-
-          <button 
-            onClick={() => { setReceipt(null); setPlayerId(""); setZoneId(""); setIgn(""); setManualIgn(""); setVerificationFailed(false); }}
-            className="w-full mt-2 bg-surface hover:bg-surface-hover text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors border border-dk5"
+            onClick={() => { setReceipt(null); setPlayerId(""); setZoneId(""); setIgn(""); setManualIgn(""); setConfirmText(""); setVerificationFailed(false); }}
+            className="w-full mt-4 bg-surface hover:bg-surface-hover text-white font-rajdhani font-bold tracking-wider py-2.5 rounded-lg transition-colors border border-dk5"
           >
             PLACE ANOTHER ORDER
           </button>
