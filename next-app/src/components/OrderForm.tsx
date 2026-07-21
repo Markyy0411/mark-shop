@@ -166,7 +166,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       phServer = isPH ? "Yes" : "No";
     }
 
-    const textToCopy = `Player ID: ${receipt.playerId}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}\n\nconfirm`;
+    const textToCopy = `Player ID: ${receipt.playerId}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}`;
 
     navigator.clipboard.writeText(textToCopy).then(() => {
       alert("Copied to clipboard! Please send this to Mark.");
@@ -332,8 +332,13 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
             </div>
           </div>
 
-          <div className="mt-5 text-xs text-tx-muted text-center italic leading-relaxed">
-            Please copy the order details below and send them to Mark. Make sure to reply with <strong>"confirm"</strong> so he knows what to do after!
+          <div className="mt-5 bg-navy-500/50 rounded-lg p-3 text-xs text-tx-main text-left leading-relaxed border border-navy-300">
+            <div className="font-bold text-amber-400 mb-1 uppercase tracking-wide">Next Steps:</div>
+            <ol className="list-decimal pl-4 space-y-1">
+              <li>Click the <strong>COPY ORDER DETAILS</strong> button below.</li>
+              <li>Send the copied receipt to Mark.</li>
+              <li>Manually type and reply with <strong>"confirm"</strong> so he can process your payment!</li>
+            </ol>
           </div>
 
           <button 
