@@ -167,7 +167,7 @@ export default function OrderForm({ gameId, gameLabel, product, onClose }: Order
       phServer = isPH ? "Yes" : "No";
     }
 
-    const textToCopy = `Player ID: ${receipt.playerId}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}\n\nconfirm`;
+    const textToCopy = `Player ID: ${receipt.playerId}\nPlayer Name: ${receipt.ign}\nServer ID: ${receipt.zoneId || "N/A"}\nPH server: ${phServer}\nOrder: ${receipt.productName}\nReceipt number: ${receipt.txnId}`;
 
     navigator.clipboard.writeText(textToCopy).then(() => {
       alert("Copied to clipboard! Please send this to Mark.");
