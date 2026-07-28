@@ -1608,11 +1608,11 @@ function buildAll(){
   
   if(DATA.mlbb){
     // FIX: Prevents auto-refresh from wiping out Global selection
-    if (typeof window.handleServerChange === 'function') {
-        window.handleServerChange(true); 
-    } else {
-        makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
-    }
+if (typeof window.handleServerChange === 'function') {
+    window.handleServerChange(true); 
+} else {
+    makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
+}
 
     makeGrid('grid-mlbb-dd',DATA.mlbb.dd||DATA.mlbb.DD,'mlbb','dd');
     makeGrid('grid-mlbb-bundles',DATA.mlbb.bundles||DATA.mlbb.Bundles,'mlbb','bundles');
