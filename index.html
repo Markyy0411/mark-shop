@@ -509,16 +509,22 @@ window.handleServerChange = function(isAuto = false) {
       }
   }
 
-  // 4. Alert and SCROLL user directly to the new prices
+  // 4. Alert and FOOLPROOF SCROLL to the top of the prices
   if (isAuto !== true && srv !== 'ph') {
       if(typeof showToast === 'function') {
           showToast("Server updated! Displaying " + srv.toUpperCase() + " rates.");
       }
       
-      // Target the title right above the pricing grid
-      const priceHeader = document.querySelector('#mlbb-dias .slbl');
-      if (priceHeader) {
-          priceHeader.scrollIntoView({behavior: 'smooth', block: 'center'});
+      // FIX: Check multiple guaranteed IDs so the scroll never fails
+      const tabs = document.getElementById('mlbb-ctabs');
+      const grid = document.getElementById('grid-mlbb-dias');
+
+      if (tabs) {
+          tabs.scrollIntoView({behavior: 'smooth', block: 'start'});
+      } else if (grid && grid.previousElementSibling) {
+          grid.previousElementSibling.scrollIntoView({behavior: 'smooth', block: 'start'});
+      } else if (grid) {
+          grid.scrollIntoView({behavior: 'smooth', block: 'start'});
       }
   }
 };
