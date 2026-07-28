@@ -472,7 +472,7 @@ window.handleServerChange = function(isAuto = false) {
           newItems = DATA.mlbb['dias'] || DATA.mlbb['Dias'] || [];
           finalCat = 'dias';
       } else {
-          // SMART MATCH: Finds 'global', 'dias-global', etc.
+          // SMART MATCH: Looks for 'global' in Column B of your Sheet
           const possibleKeys = [`dias-${srv}`, `${srv}-dias`, srv, `${srv}-server`];
           
           let found = false;
@@ -485,6 +485,7 @@ window.handleServerChange = function(isAuto = false) {
               }
           }
           if (!found) {
+              console.error("DATABASE ERROR: Could not find the category for " + srv + ". Check your Google Sheet: Column A must be 'mlbb' and Column B must be 'global'.");
               newItems = DATA.mlbb['dias'] || [];
               finalCat = 'dias';
           }
@@ -509,23 +510,20 @@ window.handleServerChange = function(isAuto = false) {
       }
   }
 
-  // 4. Alert and FOOLPROOF SCROLL to the top of the prices
+  // 4. Alert and BULLETPROOF SCROLL to the Dropdown Menu
   if (isAuto !== true && srv !== 'ph') {
       if(typeof showToast === 'function') {
           showToast("Server updated! Displaying " + srv.toUpperCase() + " rates.");
       }
       
-      // FIX: Check multiple guaranteed IDs so the scroll never fails
-      const tabs = document.getElementById('mlbb-ctabs');
-      const grid = document.getElementById('grid-mlbb-dias');
-
-      if (tabs) {
-          tabs.scrollIntoView({behavior: 'smooth', block: 'start'});
-      } else if (grid && grid.previousElementSibling) {
-          grid.previousElementSibling.scrollIntoView({behavior: 'smooth', block: 'start'});
-      } else if (grid) {
-          grid.scrollIntoView({behavior: 'smooth', block: 'start'});
-      }
+      setTimeout(() => {
+          const dropdown = document.getElementById('mlbb-server');
+          if (dropdown) {
+              // Tricks the mobile browser into pulling the screen up to the dropdown natively
+              dropdown.focus();
+              dropdown.blur(); // Instantly un-focus so the keyboard doesn't pop up
+          }
+      }, 100);
   }
 };
 </script>
