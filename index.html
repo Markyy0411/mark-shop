@@ -451,42 +451,53 @@ body {
 
 
 
-    // ============================================================
+// ============================================================
 // DYNAMIC MULTI-SERVER PRICING
 // ============================================================
-window.handleServerChange = function() {
+window.handleServerChange = function(isAuto = false) {
   const srv = document.getElementById('mlbb-server').value;
-  let cat = 'dias'; // Default PH catalog
-
-  // 1. Map dropdown choice to your CSV Categories
-  if (srv === 'indo') cat = 'dias-indo';
-  if (srv === 'global') cat = 'dias-global';
-  if (srv === 'sg') cat = 'dias-sg';
-  if (srv === 'my') cat = 'dias-my';
-
-  // 2. Clear any previously selected items
+  
+  // 1. Clear any previously selected items
   const selBox = document.getElementById('mlbb-sel-box');
   const orderDisplay = document.getElementById('mlbb-order-display');
   if(selBox) selBox.style.display = 'none';
   if(orderDisplay) orderDisplay.value = '';
 
-  // 3. Fetch the correct catalog from your Apps Script DATA
+  // 2. Fetch the correct catalog from your Apps Script DATA
   let newItems = [];
+  let finalCat = 'dias'; 
+
   if (typeof DATA !== 'undefined' && DATA.mlbb) {
-      if (DATA.mlbb[cat]) {
-          newItems = DATA.mlbb[cat];
-      } else if (DATA.mlbb['dias']) {
-          newItems = DATA.mlbb['dias']; 
+      if (srv === 'ph') {
+          newItems = DATA.mlbb['dias'] || DATA.mlbb['Dias'] || [];
+          finalCat = 'dias';
+      } else {
+          // SMART MATCH: Finds 'global', 'dias-global', etc.
+          const possibleKeys = [`dias-${srv}`, `${srv}-dias`, srv, `${srv}-server`];
+          
+          let found = false;
+          for (let k of possibleKeys) {
+              if (DATA.mlbb[k]) {
+                  newItems = DATA.mlbb[k];
+                  finalCat = k;
+                  found = true;
+                  break;
+              }
+          }
+          if (!found) {
+              newItems = DATA.mlbb['dias'] || [];
+              finalCat = 'dias';
+          }
       }
   }
 
-  // 4. Redraw your grid
+  // 3. Redraw your grid with the new items
   const gridContainer = document.getElementById('grid-mlbb-dias');
   if(gridContainer && typeof makeGrid === 'function') {
-      makeGrid('grid-mlbb-dias', newItems, 'mlbb', cat);
+      makeGrid('grid-mlbb-dias', newItems, 'mlbb', finalCat);
       
       const titleMap = {
-        'ph': 'Direct Top-Up (PH Server)',
+        'ph': 'Direct Top-Up Diamonds (PH Server)',
         'indo': 'Direct Top-Up (Indonesia Server)',
         'global': 'Direct Top-Up (Global/USA Server)',
         'sg': 'Direct Top-Up (Singapore Server)',
@@ -498,13 +509,17 @@ window.handleServerChange = function() {
       }
   }
 
-  // 5. Alert and redirect user
-  if (srv !== 'ph') {
+  // 4. Alert and SCROLL user directly to the new prices
+  if (isAuto !== true && srv !== 'ph') {
       if(typeof showToast === 'function') {
           showToast("Server updated! Displaying " + srv.toUpperCase() + " rates.");
       }
-      const ctabs = document.getElementById('mlbb-ctabs');
-      if(ctabs) ctabs.scrollIntoView({behavior: 'smooth', block: 'start'});
+      
+      // Target the title right above the pricing grid
+      const priceHeader = document.querySelector('#mlbb-dias .slbl');
+      if (priceHeader) {
+          priceHeader.scrollIntoView({behavior: 'smooth', block: 'center'});
+      }
   }
 };
 </script>
@@ -1590,8 +1605,14 @@ function filterStarlight(items){
 }
 function buildAll(){
   if(!DATA||!Object.keys(DATA).length)return;
+  
   if(DATA.mlbb){
-    makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
+    // FIX: Prevents auto-refresh from wiping out Global selection
+    if (typeof window.handleServerChange === 'function') {
+        window.handleServerChange(true); 
+    } else {
+        makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
+    }
 
     makeGrid('grid-mlbb-dd',DATA.mlbb.dd||DATA.mlbb.DD,'mlbb','dd');
     makeGrid('grid-mlbb-bundles',DATA.mlbb.bundles||DATA.mlbb.Bundles,'mlbb','bundles');
