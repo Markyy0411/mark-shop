@@ -463,7 +463,7 @@ window.handleServerChange = function(isAuto = false) {
   if(selBox) selBox.style.display = 'none';
   if(orderDisplay) orderDisplay.value = '';
 
-  // 2. Fetch the correct catalog from your Apps Script DATA
+  // 2. Fetch correct catalog from Apps Script DATA (Smart Match for dias-global)
   let newItems = [];
   let finalCat = 'dias'; 
 
@@ -472,7 +472,6 @@ window.handleServerChange = function(isAuto = false) {
           newItems = DATA.mlbb['dias'] || DATA.mlbb['Dias'] || [];
           finalCat = 'dias';
       } else {
-          // SMART MATCH: Looks for 'global' in Column B of your Sheet
           const possibleKeys = [`dias-${srv}`, `${srv}-dias`, srv, `${srv}-server`];
           
           let found = false;
@@ -485,7 +484,6 @@ window.handleServerChange = function(isAuto = false) {
               }
           }
           if (!found) {
-              console.error("DATABASE ERROR: Could not find the category for " + srv + ". Check your Google Sheet: Column A must be 'mlbb' and Column B must be 'global'.");
               newItems = DATA.mlbb['dias'] || [];
               finalCat = 'dias';
           }
@@ -510,7 +508,7 @@ window.handleServerChange = function(isAuto = false) {
       }
   }
 
-  // 4. Alert and BULLETPROOF SCROLL to the Dropdown Menu
+  // 4. Alert and focus back to top
   if (isAuto !== true && srv !== 'ph') {
       if(typeof showToast === 'function') {
           showToast("Server updated! Displaying " + srv.toUpperCase() + " rates.");
@@ -519,9 +517,8 @@ window.handleServerChange = function(isAuto = false) {
       setTimeout(() => {
           const dropdown = document.getElementById('mlbb-server');
           if (dropdown) {
-              // Tricks the mobile browser into pulling the screen up to the dropdown natively
               dropdown.focus();
-              dropdown.blur(); // Instantly un-focus so the keyboard doesn't pop up
+              dropdown.blur();
           }
       }, 100);
   }
@@ -1611,12 +1608,11 @@ function buildAll(){
   if(!DATA||!Object.keys(DATA).length)return;
   
   if(DATA.mlbb){
-    // FIX: Prevents auto-refresh from wiping out Global selection
-if (typeof window.handleServerChange === 'function') {
-    window.handleServerChange(true); 
-} else {
-    makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
-}
+    if (typeof window.handleServerChange === 'function') {
+        window.handleServerChange(true); 
+    } else {
+        makeGrid('grid-mlbb-dias',DATA.mlbb.dias||DATA.mlbb.Dias,'mlbb','dias');
+    }
 
     makeGrid('grid-mlbb-dd',DATA.mlbb.dd||DATA.mlbb.DD,'mlbb','dd');
     makeGrid('grid-mlbb-bundles',DATA.mlbb.bundles||DATA.mlbb.Bundles,'mlbb','bundles');
@@ -1810,32 +1806,57 @@ async function verifyRoblox(){
 // ============================================================
 // ORDER TRACKER
 // ============================================================
-async function trackOrder(){
-  const txn=document.getElementById('track-input').value.trim().toUpperCase();
-  const res=document.getElementById('track-result');
-  if(!txn||!txn.startsWith('TXN-')){res.innerHTML='<span style="color:#f87171">Please enter a valid TXN-XXXXXXX code.</span>';return;}
-  res.innerHTML='<span style="color:var(--mx)">🔍 Looking up your order…</span>';
-  try{
-    // Use ORDER_API with action=trackOrder
-    const r=await fetch(ORDER_API+'?action=trackOrder&txn='+encodeURIComponent(txn));
-    const d=await r.json();
-    if(!d.success){res.innerHTML='<span style="color:#f87171">❌ '+escapeHTML(d.error||'Order not found. Check your TXN ID.')+'</span>';return;}
-    const stColors={pending:'#f59e0b',processing:'#3b82f6',completed:'#22c55e'};
-    const stIcons= {pending:'⏳',processing:'⚙️',completed:'✅'};
-    const stMsgs= {pending:'Your order is received and awaiting processing.',processing:'Mark is processing your order now!',completed:'Done! Check your in-game mailbox.'};
-    const st=(d.status||'pending').toLowerCase();
-    const esc=s=>String(s||'—').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    res.innerHTML=`<div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px;text-align:left">
-      <div style="font-size:1.6rem;text-align:center">${stIcons[st]||'⏳'}</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:${stColors[st]||'#94a3b8'};text-align:center;letter-spacing:1px;margin:4px 0 10px">${st.toUpperCase()}</div>
-      <div style="font-size:.75rem;color:var(--mx);margin-bottom:8px">${stMsgs[st]||''}</div>
+async function trackOrder() {
+  const inputEl = document.getElementById('track-input');
+  const res = document.getElementById('track-result');
+  
+  if (!res) return;
+  
+  const txn = inputEl ? inputEl.value.trim().toUpperCase() : '';
+  
+  if (!txn) {
+    res.innerHTML = '<span style="color:#f87171">Please enter a TXN ID.</span>';
+    res.style.display = 'block';
+    return;
+  }
+
+  res.innerHTML = '<span style="color:var(--mx)">🔍 Looking up your order…</span>';
+  res.style.display = 'block';
+
+  try {
+    const r = await fetch(ORDER_API + '?action=trackOrder&txn=' + encodeURIComponent(txn));
+    const d = await r.json();
+
+    if (!d.success) {
+      res.innerHTML = `<span style="color:#f87171">❌ ${d.error || 'Order not found. Check your TXN ID.'}</span>`;
+      return;
+    }
+
+    const stColors = { pending: '#f59e0b', processing: '#3b82f6', completed: '#22c55e' };
+    const stIcons  = { pending: '⏳', processing: '⚙️', completed: '✅' };
+    const stMsgs   = { 
+      pending: 'Your order is received and awaiting processing.', 
+      processing: 'Mark is processing your order now!', 
+      completed: 'Done! Check your in-game mailbox.' 
+    };
+    
+    const st = (d.status || 'pending').toLowerCase();
+    const esc = s => String(s || '—').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    res.innerHTML = `<div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px;text-align:left">
+      <div style="font-size:1.6rem;text-align:center">${stIcons[st] || '⏳'}</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:${stColors[st] || '#94a3b8'};text-align:center;letter-spacing:1px;margin:4px 0 10px">${st.toUpperCase()}</div>
+      <div style="font-size:.75rem;color:var(--mx);margin-bottom:8px">${stMsgs[st] || ''}</div>
       <b style="color:var(--or)">TXN:</b> ${esc(d.txnID)}<br>
       <b style="color:var(--or)">Game:</b> ${esc(d.game)}<br>
       <b style="color:var(--or)">Order:</b> ${esc(d.order)}<br>
       <b style="color:var(--or)">Payment:</b> ${esc(d.payment)}<br>
       <b style="color:var(--or)">Date:</b> ${esc(d.date)}
     </div>`;
-  }catch(e){res.innerHTML='<span style="color:#f87171">⚠️ Connection error. Try again.</span>';}
+  } catch (e) {
+    console.error("Track Error:", e);
+    res.innerHTML = '<span style="color:#f87171">⚠️ Connection error. Try again.</span>';
+  }
 }
 
 // ============================================================
